@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this codebase, models, or benchmark protocol in your research, please cite our paper."
+title: "Trustworthy electricity theft detection integrating informative missingness learning and certified conformal audits"
+authors:
+  - family-names: "Akram"
+    given-names: "Hafiz Muhammad Azeem"
+    affiliation: "Khazar University"
+  - family-names: "Talatahari"
+    given-names: "Siamak"
+    affiliation: "Macquarie University & University of Technology Sydney"
+  - family-names: "Jhangeer"
+    given-names: "Adil"
+    affiliation: "VSB -- Technical University of Ostrava & Biruni University"
+journal: "Scientific Reports"
+year: 2026
+url: "https://github.com/anonymized-for-review/etd-mamrd-conformal"
+repository-code: "https://github.com/anonymized-for-review/etd-mamrd-conformal"
+keywords:
+  - "electricity theft detection"
+  - "conformal prediction"
+  - "selective state-space models"
+  - "informative missingness"
+  - "smart grids"
+  - "non-technical losses"
+license: "MIT"
+
