@@ -13,8 +13,8 @@ authors:
     affiliation: "VSB -- Technical University of Ostrava & Biruni University"
 journal: "Scientific Reports"
 year: 2026
-url: "https://github.com/anonymized-for-review/etd-mamrd-conformal"
-repository-code: "https://github.com/anonymized-for-review/etd-mamrd-conformal"
+url: "https://github.com/azeem1020/etd-mamrd-conformal"
+repository-code: "https://github.com/azeem1020/etd-mamrd-conformal"
 keywords:
   - "electricity theft detection"
   - "conformal prediction"

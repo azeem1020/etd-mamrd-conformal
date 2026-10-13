@@ -27,3 +27,4 @@ To preserve scientific reproducibility and prevent unauthorized pre-publication 
    PYTHONPATH=.. python generate_high_contrast_fig2.py
    ```
 Generated CSVs, tables, logs, and figures will be output directly into subdirectories here.
+

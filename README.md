@@ -89,7 +89,7 @@ etd-mamrd-conformal/
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/anonymized-for-review/etd-mamrd-conformal.git
+git clone https://github.com/azeem1020/etd-mamrd-conformal.git
 cd etd-mamrd-conformal
 
 # 2. Create conda environment
