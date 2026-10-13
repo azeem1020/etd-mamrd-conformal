@@ -1,5 +1,6 @@
 # MAMRD: Missingness-Aware Multi-Representation Detector
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23344738.svg)](https://doi.org/10.5281/zenodo.23344738)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
@@ -194,6 +195,7 @@ If you use this codebase, benchmark protocols, or models in your research, pleas
   author    = {Akram, Hafiz Muhammad Azeem and Talatahari, Siamak and Jhangeer, Adil},
   journal   = {Scientific Reports},
   year      = {2026},
+  doi       = {10.5281/zenodo.23344738},
   note      = {Under review}
 }
 ```
