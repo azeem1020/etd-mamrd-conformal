@@ -172,7 +172,7 @@ def fig_ceiling(d):
         ("PhenoMoE (label-free)",   +0.0026, -0.004, 0.010),
         ("Periodicity arm (S4)",    +0.0028, -0.008, 0.013),
         ("Differencing arm (S3)",   +0.0141, +0.004, 0.028),
-        ("Full MAMRD stack vs WDCNN",   +0.0135, +0.006, 0.021),
+        ("Full MAMRD stack vs a14 core", +0.0135, +0.006, 0.021),
     ]
     yy = np.arange(len(levers))
     for i, (lab, dlt, lo, hi) in enumerate(levers):

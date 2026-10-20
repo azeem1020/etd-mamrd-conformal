@@ -63,11 +63,12 @@ def run_comparator(arm="a34_NaME", alpha=ALPHA, n_rep=NREP):
                     cm = gp_ci == gname
                     pos = sc_ci[cm & (y_ci == 1)]
                     n = len(pos)
-                    if n < 5:
+                    if n < int(np.ceil(1.0 / alpha)):
                         continue
-                    q_conf = min(np.ceil((n + 1) * (1 - alpha)) / n, 1.0)
-                    thr_conf[gname] = 1.0 - np.quantile(1 - pos, q_conf, method="higher")
-                    thr_emp[gname] = 1.0 - np.quantile(1 - pos, 1 - alpha)
+                    k = int(np.ceil((n + 1) * (1.0 - alpha)))
+                    tau_conf = 1.0 if k > n else float(np.sort(1.0 - pos)[k - 1])
+                    thr_conf[gname] = 1.0 - tau_conf
+                    thr_emp[gname] = 1.0 - float(np.quantile(1.0 - pos, 1.0 - alpha))
                 
                 if len(thr_conf) < 3:
                     continue

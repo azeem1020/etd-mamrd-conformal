@@ -99,9 +99,10 @@ def _conformal_quantile(scores: np.ndarray, alpha: float) -> float:
         return 1.0    # degenerate: empty calibration → include everything
     if not 0.0 < alpha < 1.0:
         raise ValueError(f"alpha must be in (0, 1); got {alpha}")
-    q_level = np.ceil((n + 1) * (1 - alpha)) / n
-    q_level = min(max(q_level, 0.0), 1.0)
-    return float(np.quantile(scores, q_level, method="higher"))
+    k = int(np.ceil((n + 1) * (1.0 - alpha)))
+    if k > n:
+        return 1.0    # conservative fallback when k > n: include all instances
+    return float(np.sort(scores)[k - 1])
 
 
 @dataclass

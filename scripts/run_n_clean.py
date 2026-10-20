@@ -53,9 +53,9 @@ def _safe(fn, y, s):
     return float(fn(y, s)) if (len(y) > 0 and 0 < y.sum() < len(y)) else float("nan")
 
 
-def run_cell(Xc, yc, g, m, seed, fold, kf=0, epochs=30, device="cuda",
-             loss_type="bce", focal_gamma=2.0, focal_alpha=0.5, arm="a14_clean",
-             backbone="a14_no_mixer"):
+def run_cell(Xc, yc, g, m, seed, fold, kf=0, epochs=30, lr=3e-4, device="cuda",
+             loss_type="bce", focal_gamma=2.0, focal_alpha=0.5, arm="a34_generic",
+             backbone="a34_generic"):
     D = Xc.shape[2]
     X_reg, rw = slice_regime(Xc, "full")
     folds = list(KFoldSpec(family="random", n_folds=5, seed=kf).iter_folds(yc))
@@ -66,7 +66,7 @@ def run_cell(Xc, yc, g, m, seed, fold, kf=0, epochs=30, device="cuda",
     seed_everything(seed)
     model = build_arm(backbone, weeks=rw, days=D)
     cfg = TrainConfig(epochs=epochs, patience=8, batch_size=256, pos_fraction=0.5,
-                      lr=3e-4, weight_decay=0.01, warmup_frac=0.05, min_lr_ratio=0.01,
+                      lr=lr, weight_decay=0.01, warmup_frac=0.05, min_lr_ratio=0.01,
                       grad_clip_norm=1.0, device=device,
                       loss_type=loss_type, focal_gamma=focal_gamma, focal_alpha=focal_alpha)
     t0 = time.time()
@@ -103,23 +103,30 @@ def run_cell(Xc, yc, g, m, seed, fold, kf=0, epochs=30, device="cuda",
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--seeds", nargs="+", type=int, default=[0, 1, 2, 3, 4])
+    ap.add_argument("--seeds", nargs="+", type=int, default=[0, 1, 2])
     ap.add_argument("--folds", nargs="+", type=int, default=[0, 1, 2])
     ap.add_argument("--kfolds", nargs="+", type=int, default=[0])
     ap.add_argument("--epochs", type=int, default=30)
+    ap.add_argument("--lr", type=float, default=3e-4, help="AdamW peak learning rate (default: 3e-4)")
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--loss_type", default="bce")        # 'bce' | 'focal' | 'asl'
     ap.add_argument("--focal_gamma", type=float, default=2.0)
     ap.add_argument("--focal_alpha", type=float, default=0.5)
-    ap.add_argument("--arm", default="a14_clean")
-    ap.add_argument("--backbone", default="a14_no_mixer")
-    ap.add_argument("--full", action="store_true", help="use FULL uncleaned SGCC (no keep_idx filter)")
-    ap.add_argument("--manifest", default=str(OUT / "clean_stratified.csv"))
+    ap.add_argument("--arm", default="a34_generic")
+    ap.add_argument("--backbone", default="a34_generic")
+    ap.add_argument("--full", action="store_true", default=True,
+                    help="use full 42,372-consumer SGCC cohort (default: True)")
+    ap.add_argument("--filtered", action="store_true",
+                    help="use keep_idx.npy filtered cohort instead of full SGCC")
+    ap.add_argument("--cell_prefix", default="a34_cell",
+                    help="prefix for per-cell CSVs written to RESULTS_DIR (empty to disable)")
+    ap.add_argument("--manifest", default=str(OUT / "a34_manifest.csv"))
     args = ap.parse_args()
 
-    print(f"[device] {args.device}", flush=True)
+    print(f"[device] {args.device} | backbone={args.backbone} | lr={args.lr}", flush=True)
     X, y = load_and_preprocess()
-    keep = np.arange(len(y)) if args.full else np.load(KEEP)
+    use_full = args.full and not args.filtered
+    keep = np.arange(len(y)) if use_full else np.load(KEEP)
     Xc, yc = X[keep], y[keep]
     # raw-kWh gap/magnitude on the kept cohort
     dfr = pd.read_csv(SGCC_CSV)
@@ -137,10 +144,17 @@ def main():
     with open(mp, "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=cols); w.writeheader()
         for i, (s, f, kf) in enumerate(cells, 1):
-            r = run_cell(Xc, yc, g, m, s, f, kf=kf, epochs=args.epochs, device=args.device,
-                         loss_type=args.loss_type, focal_gamma=args.focal_gamma,
-                         focal_alpha=args.focal_alpha, arm=args.arm, backbone=args.backbone)
+            r = run_cell(Xc, yc, g, m, s, f, kf=kf, epochs=args.epochs, lr=args.lr,
+                         device=args.device, loss_type=args.loss_type,
+                         focal_gamma=args.focal_gamma, focal_alpha=args.focal_alpha,
+                         arm=args.arm, backbone=args.backbone)
             w.writerow(r); fh.flush()
+            if args.cell_prefix:
+                cell_fp = OUT / f"{args.cell_prefix}_{s}_{f}.csv"
+                with open(cell_fp, "w", newline="") as cfh:
+                    cw = csv.DictWriter(cfh, fieldnames=cols)
+                    cw.writeheader()
+                    cw.writerow(r)
             import gc; gc.collect(); torch.cuda.empty_cache()   # free GPU cache between cells
             print(f"[{i}/{len(cells)}] s={s} f={f} kf={kf} | PR={r['pr_auc']:.4f} ROC={r['roc_auc']:.4f} "
                   f"F1={r['f1']:.4f} | HD_PR={r['pr_Heavy_Dropper']:.3f} HR_PR={r['pr_Heavy_Riser']:.3f} "

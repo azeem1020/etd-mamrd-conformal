@@ -65,8 +65,11 @@ def cc_recall_threshold(s_cal, y_cal, alpha):
     pos = s_cal[y_cal == 1]; n = len(pos)
     if n < max(10, int(np.ceil(1.0 / alpha))):
         return None
-    q = min(np.ceil((n + 1) * (1 - alpha)) / n, 1.0)
-    tau = np.quantile(1 - pos, q, method="higher")
+    k = int(np.ceil((n + 1) * (1.0 - alpha)))
+    if k > n:
+        tau = 1.0
+    else:
+        tau = float(np.sort(1.0 - pos)[k - 1])
     return 1.0 - tau
 
 def bca_ci(x, B=2000, alpha=0.05, seed=0):

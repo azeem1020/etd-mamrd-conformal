@@ -49,8 +49,9 @@ def ece_brier(p, y, n_bins=15):
 def cc_recall_threshold(s_cal, y_cal, alpha):
     pos = s_cal[y_cal == 1]; n = len(pos)
     if n < max(10, int(np.ceil(1.0 / alpha))): return None
-    q = min(np.ceil((n + 1) * (1 - alpha)) / n, 1.0)
-    return 1.0 - np.quantile(1 - pos, q, method="higher")
+    k = int(np.ceil((n + 1) * (1.0 - alpha)))
+    tau = 1.0 if k > n else float(np.sort(1.0 - pos)[k - 1])
+    return 1.0 - tau
 
 
 def recall_at_fpr(y, s, cap):

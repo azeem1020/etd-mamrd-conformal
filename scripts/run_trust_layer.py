@@ -41,6 +41,8 @@ from phased.phenotype import gap_magnitude, fit_router, assign, PHENOTYPES
 sys.path.insert(0, str(THIS.parent))          # code/ -> import sct_etd package
 from sct_etd.calibration.conformal_aps import APSCalibrator
 from sct_etd.calibration.temperature import TemperatureCalibrator
+from zkmix_lab.calibration import calibrate_cell, _stable_logit
+from sklearn.linear_model import LogisticRegression
 from repro_config import RESULTS_DIR, DATA_DIR, SGCC_PATH, ECL_PATH
 
 csv.field_size_limit(10**7)
@@ -97,15 +99,20 @@ def cc_recall_threshold(s_cal, y_cal, alpha):
     Calibrates on theft instances only so that, on exchangeable future thefts,
     P(flagged) >= 1 - alpha (distribution-free recall/catch-rate guarantee;
     Sadinle et al. 2019 class-conditional sets). Nonconformity for a true theft
-    is (1 - s); tau = finite-sample quantile; flag iff s >= 1 - tau.
+    is (1 - s); tau = k-th smallest nonconformity score where
+    k = ceil((n + 1)(1 - alpha)); if k > n, tau = 1.0 (threshold 0.0, flagging
+    all instances). Flag iff s >= 1 - tau.
     Returns threshold on s, or None if too few calibration thefts.
     """
     pos = s_cal[y_cal == 1]
     n = len(pos)
     if n < max(10, int(np.ceil(1.0 / alpha))):
         return None
-    q = min(np.ceil((n + 1) * (1 - alpha)) / n, 1.0)
-    tau = np.quantile(1 - pos, q, method="higher")
+    k = int(np.ceil((n + 1) * (1.0 - alpha)))
+    if k > n:
+        tau = 1.0
+    else:
+        tau = float(np.sort(1.0 - pos)[k - 1])
     return 1.0 - tau
 
 
@@ -205,13 +212,20 @@ for arm, (pat, seeds, folds) in ARMS.items():
                 rng = np.random.default_rng(((_ARM_ORDER[arm] * 97 + s * 31 + f) * 23 + rep) & 0xFFFFFFFF)
                 ci, ti = stratified_half(ysv, rng)
                 # ---- T1 calibration on this split ----
-                T = TemperatureCalibrator().fit(logit[ci], ysv[ci])
-                p_cal = T.transform(logit[ti])[:, 1]
+                cal_out = calibrate_cell(sc[ci], ysv[ci], sc[ti], p_train=0.5, p_deploy=float(ysv[ci].mean()))
+                lr_aff = LogisticRegression(C=1e4).fit(_stable_logit(sc[ci]).reshape(-1, 1), ysv[ci])
+                p_aff = lr_aff.predict_proba(_stable_logit(sc[ti]).reshape(-1, 1))[:, 1]
                 e_raw, b_raw = ece_brier(sc[ti], ysv[ti])
-                e_cal, b_cal = ece_brier(p_cal, ysv[ti])
-                acc_cal["ece_raw"].append(e_raw); acc_cal["ece_cal"].append(e_cal)
-                acc_cal["brier_raw"].append(b_raw); acc_cal["brier_cal"].append(b_cal)
-                acc_cal["T"].append(T.T_)
+                e_cal, b_cal = ece_brier(cal_out.test_scores_calibrated, ysv[ti])
+                e_aff, b_aff = ece_brier(p_aff, ysv[ti])
+                acc_cal["ece_raw"].append(e_raw)
+                acc_cal["ece_cal"].append(e_cal)
+                acc_cal["ece_affine"].append(e_aff)
+                acc_cal["brier_raw"].append(b_raw)
+                acc_cal["brier_cal"].append(b_cal)
+                acc_cal["brier_affine"].append(b_aff)
+                acc_cal["T"].append(cal_out.T)
+                acc_cal["prior_shift"].append(cal_out.prior_shift)
                 # ---- T2/T3 conformal at each alpha ----
                 ph_ci, ph_ti = ph[ci], ph[ti]
                 y_ci, y_ti = ysv[ci], ysv[ti]
@@ -267,14 +281,14 @@ lines = ["# RESULTS_TRUST — SGCC trustworthy layer (post-hoc, NREP=%d)" % NREP
          "Cells: a34 n=15 (seeds0-4xfolds0-2); baselines n=9 (seeds0-2xfolds0-2).", ""]
 
 # T1 calibration table
-lines += ["## T1 Calibration (preliminary; Paper 1 owns calibration-as-checklist)",
-          "| arm | T | ECE raw | ECE temp | Brier raw | Brier temp |",
-          "|---|---|---|---|---|---|"]
+lines += ["## T1 Calibration (prior-shift + temperature scaling & 2-param affine recalibration)",
+          "| arm | T | ECE raw | ECE prior+T | ECE affine | Brier raw | Brier prior+T | Brier affine |",
+          "|---|---|---|---|---|---|---|---|"]
 for arm in ARMS:
     d = agg(caldf, arm)
-    lines.append("| %s | %.2f | %.3f | %.3f | %.3f | %.3f |" % (
-        arm, d["T"].mean(), d.ece_raw.mean(), d.ece_cal.mean(),
-        d.brier_raw.mean(), d.brier_cal.mean()))
+    lines.append("| %s | %.2f | %.3f | %.3f | %.3f | %.3f | %.3f | %.3f |" % (
+        arm, d["T"].mean(), d.ece_raw.mean(), d.ece_cal.mean(), d.ece_affine.mean(),
+        d.brier_raw.mean(), d.brier_cal.mean(), d.brier_affine.mean()))
 
 # T2 marginal coverage degeneracy (MOTIVATING NEGATIVE RESULT)
 lines += ["", "## T2 Marginal APS is degenerate under ETD imbalance (motivating result)",

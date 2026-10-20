@@ -19,12 +19,13 @@ Official code repository and experiment replication suite for:
 Electricity theft detection (ETD) models frequently report over-optimistic performance due to temporal data leakage and evaluation on artificially balanced test sets. This repository implements:
 
 1. **Leakage-Free Native-Prevalence Evaluation Protocol**: Standardized evaluation on the State Grid Corporation of China (SGCC, 42,372 consumers) and ElectricityLoadDiagrams (ECL) benchmarks under true operational class imbalance (~8.5% theft) without retrospective or temporal leakage.
-2. **Missingness-Aware Multi-Representation Detector (MAMRD)**: A compact 0.97M-parameter deep learning architecture that fuses four physical consumption representations:
-   - Consumption level & behavioral baseline
-   - Periodicity & intra-/inter-week regularity
-   - Step discontinuities & zero-sum differencing
-   - Informative missing-data patterns via context-conditioned fill tokens
-3. **Certified Conformal Audit Layer**: A post-hoc, distribution-free, class-conditional conformal prediction framework guaranteeing an 80% expected theft recovery rate across heterogeneous consumption-level groups under within-group exchangeability, while reducing required inspection capacity by 35.3% relative to single-threshold policies.
+2. **Missingness-Aware Multi-Representation Detector (MAMRD)**: A compact 0.97M-parameter deep learning architecture (`a34_generic`) that fuses five complementary consumption and missingness representations under single-task binary cross-entropy:
+   - Value 2D CNN + $3 \times 3$ discrete 2D Laplacian + BiMamba2 selective state-space backbone ($\mathbb{R}^{192}$)
+   - 2D missingness-mask CNN + $3 \times 3$ discrete 2D Laplacian ($\mathbb{R}^{64}$)
+   - Multi-scale dilated 1D convolution with Squeeze-and-Excitation gating ($\mathbb{R}^{128}$)
+   - Fixed multi-scale lagged differencing ($s \in \{1, 7, 30\}$) + shared Conv1D + BiGRU ($\mathbb{R}^{64}$)
+   - Inter- and intra-period 2D convolution ($\mathbb{R}^{64}$) alongside context-conditioned missing-value fill tokens (`CC-NaME`, $\mathbb{R}^{64}$)
+3. **Group-Conditional (Mondrian) Conformal Audit Layer**: A post-hoc, distribution-free, class-conditional conformal prediction framework using the exact order statistic $k_\phi = \lceil(n_\phi + 1)(1 - \alpha)\rceil$ to target a common $1 - \alpha = 80\%$ marginal theft recall lower bound within each consumption-level group ($\phi \in \{\text{Heavy, Light, Flat}\}$) under within-group exchangeability, reducing required inspection capacity by 25.3% (`95% BCa CI: [19.5%, 30.7%]`) relative to single-threshold conformal policies.
 
 ---
 
@@ -134,53 +135,53 @@ export MAMRD_RESULTS=../results/phase_n
 To preserve scientific reproducibility and prevent unauthorized pre-publication redistribution of article figures, benchmark outputs and figures are not pre-packaged and must be generated directly from the public datasets.
 
 ### A. Training & Benchmark Evaluation (Table 2, Table 3, Table 4)
-Train MAMRD (`a34_generic`) and rival baselines under the locked native-prevalence protocol:
+Train MAMRD (`a34_generic`) and rival baselines on the full 42,372-consumer SGCC cohort (`--full` is enabled by default, writing both `a34_manifest.csv` and per-cell `a34_cell_{seed}_{fold}.csv` files):
 ```bash
 cd scripts
 
-# Train MAMRD across customer-disjoint folds and seeds
-PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --lr 1e-3
+# Train MAMRD across customer-disjoint folds (0..2) and initialization seeds (0..2) at lr=3e-4
+PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --lr 3e-4 --seeds 0 1 2 --folds 0 1 2
 
-# Generate Table 2 & Table B performance ledgers
+# Generate Table 2 & Table B performance ledgers (9-cell matched & 15-cell extended)
 PYTHONPATH=.. python compute_table_b.py
+
+# Generate Round-2 partition manifests, consumer-level bootstrap CIs, and ablation ledgers
+PYTHONPATH=.. python compute_r2_revisions.py
 
 # Generate Table 4 ablations & contrasts
 PYTHONPATH=.. python compute_table_c.py
 PYTHONPATH=.. python table_c_contrasts.py
 
-# Evaluate external ECL generalization board
+# Evaluate external ECL window-level generalization board
 PYTHONPATH=.. python run_ecl_ours.py
 PYTHONPATH=.. python make_ecl_board.py
 ```
 
-### B. High-Contrast Performance Curves (Figure 2)
-Generate vector PDF and high-resolution PNG of Precision-Recall and ROC curves across all baselines:
+### B. Manuscript & Supplementary Figures (Figures 1–5 & Figures S1–S6)
+Generate all main-text vector PDFs (`fig1_mamrd_architecture.pdf`, `fig3_ablation_bars.pdf`, `fig4_calibration_reliability.pdf`, `fig5_conformal_tradeoffs.pdf`), high-contrast PR/ROC curves (`fig2_performance_curves.pdf`), and supplementary figures (`fig4_ceiling.pdf`, `fig6_trust_guarantee.pdf`):
 ```bash
 cd scripts
+PYTHONPATH=.. python make_manuscript_figures.py
 PYTHONPATH=.. python generate_high_contrast_fig2.py
-```
-Output files:
-- `results/phase_n/figures/fig2_performance_curves.pdf`
-- `results/phase_n/figures/fig2_performance_curves.png`
-
-### C. Conformal Audits & Empirical Baseline Comparator
-Run the 281-resplit empirical comparator evaluating heuristic group-quantile scoring vs. distribution-free conformal prediction:
-```bash
-cd scripts
-PYTHONPATH=.. python run_empirical_comparator.py
-```
-
-Generate the certified safety guarantee visualization (Figure 6):
-```bash
-cd scripts
+PYTHONPATH=.. python make_figures.py
 PYTHONPATH=.. python make_trust_figure.py
 ```
 
-### D. Full Training Pipeline (Requires GPU & Datasets)
-To retrain MAMRD (`a34_generic`) and all rival baselines across 3 customer-disjoint folds and 3 initialization seeds:
+### C. Conformal Audits, Decision Value & Empirical Baseline Comparator
+Run the post-hoc group-conditional conformal audit evaluation (`k = ceil((n + 1)(1 - alpha))`), inspection-burden reduction analysis, and 281-resplit empirical group-quantile comparator:
 ```bash
 cd scripts
-PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --lr 1e-3
+PYTHONPATH=.. python run_trust_layer.py
+PYTHONPATH=.. python run_decision_value.py
+PYTHONPATH=.. python run_empirical_comparator.py
+PYTHONPATH=.. python run_ecl_trust_analysis.py
+```
+
+### D. Full Training Pipeline (Requires GPU & Datasets)
+To retrain MAMRD (`a34_generic`) across 3 customer-disjoint folds and 3 (or 5) initialization seeds on the full SGCC cohort:
+```bash
+cd scripts
+PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --lr 3e-4 --seeds 0 1 2 --folds 0 1 2
 ```
 
 ---

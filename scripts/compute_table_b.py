@@ -113,7 +113,7 @@ def main():
         popfrac[s] = float((sub.n_strat / sub.n_test).mean())
     popfrac["Aggregate"] = 1.0
 
-    # per-detector per-stratum mean + BCa CI (each detector over ITS cells)
+    # per-detector per-stratum mean + BCa CI (each detector over ITS cells, plus MAMRD_9 over seeds 0-2)
     agg_rows = []
     means = {}  # (detector,stratum)->mean
     for disp in [d[1] for d in DETECTORS]:
@@ -124,6 +124,14 @@ def main():
             means[(disp, s)] = m
             agg_rows.append(dict(detector=disp, stratum=s, n_cells=int(np.sum(~np.isnan(vals))),
                                  mean=m, ci_lo=lo, ci_hi=hi, flag=fl))
+    # Also compute matched 9-cell (seeds 0..2 x folds 0..2) summary for MAMRD
+    for s in ROW_ORDER:
+        vals9 = df[(df.detector == "MAMRD") & (df.seed.isin([0, 1, 2])) & (df.stratum == s)].pr.values
+        lo9, hi9, fl9 = bca_ci(vals9)
+        m9 = float(np.nanmean(vals9))
+        means[("MAMRD_9", s)] = m9
+        agg_rows.append(dict(detector="MAMRD_9", stratum=s, n_cells=int(np.sum(~np.isnan(vals9))),
+                             mean=m9, ci_lo=lo9, ci_hi=hi9, flag=fl9))
 
     # paired MAMRD - best baseline, on the 9 COMMON cells (seed 0-2 x fold 0-2)
     baselines = [d[1] for d in DETECTORS if d[1] != "MAMRD"]
