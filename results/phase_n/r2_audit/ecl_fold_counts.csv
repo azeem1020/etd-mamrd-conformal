@@ -1,0 +1,4 @@
+fold,train_win,train_pos,es_win,es_pos,cal_win,cal_pos,te_win,te_pos,te_Heavy_win,te_Heavy_pos,te_Light_win,te_Light_pos,unique_tr_clients,unique_te_clients,shared_tr_te_clients,pct_te_clients_in_tr
+0,20000,1989,1649,168,1649,168,1702,175,821,84,881,91,370,360,360,100.0
+1,20000,1998,1649,165,1649,165,1702,172,851,90,851,82,370,354,354,100.0
+2,20000,2000,1650,165,1650,165,1700,170,849,79,851,91,370,363,363,100.0

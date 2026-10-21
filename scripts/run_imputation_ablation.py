@@ -25,7 +25,7 @@ from __future__ import annotations
 import sys, os, csv, json, time, argparse
 from pathlib import Path
 THIS = Path(__file__).resolve().parent
-for p in (str(THIS), str(THIS.parent / "zkmix_lab")):
+for p in (str(THIS), str(THIS.parent)):
     if p not in sys.path:
         sys.path.insert(0, p)
 

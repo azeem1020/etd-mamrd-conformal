@@ -1,0 +1,7 @@
+arm,label,pr,roc,f1,map100
+grud,GRU-D,0.5289,0.8667,0.591,0.6684
+hybridattn,Self-attention,0.8083,0.8987,0.8215,0.9634
+wdcnn,Wide-and-deep CNN,0.7775,0.898,0.8329,0.8981
+msdm,MSDM,0.8374,0.8965,0.8626,0.9966
+horln,HORLN,0.8266,0.8928,0.8603,0.9844
+a34_generic,MAMRD,0.8451,0.9026,0.8627,0.9972

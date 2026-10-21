@@ -25,7 +25,7 @@ import sys, csv, json
 from pathlib import Path
 from collections import defaultdict
 THIS = Path(__file__).resolve().parent
-for p in (str(THIS), str(THIS.parent / "zkmix_lab")):
+for p in (str(THIS), str(THIS.parent)):
     if p not in sys.path:
         sys.path.insert(0, p)
 import numpy as np, pandas as pd

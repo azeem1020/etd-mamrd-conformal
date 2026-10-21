@@ -25,3 +25,14 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR    = Path(os.environ.get("MAMRD_DATA",    _ROOT / "data"))
 SGCC_PATH   = Path(os.environ.get("MAMRD_SGCC",    DATA_DIR / "SGCC.csv"))
 ECL_PATH    = Path(os.environ.get("MAMRD_ECL",     DATA_DIR / "LD2011_2014.txt"))
+
+# Optional author development workstation fallbacks when raw data is not placed in data/
+if not SGCC_PATH.exists():
+    _dev_sgcc = Path("/home/azeem/papers/All_Work/SGCC.csv")
+    if _dev_sgcc.exists():
+        SGCC_PATH = _dev_sgcc
+
+if not ECL_PATH.exists():
+    _dev_ecl = Path("/home/azeem/papers/Data/ECL/LD2011_2014.txt")
+    if _dev_ecl.exists():
+        ECL_PATH = _dev_ecl

@@ -1,0 +1,8 @@
+DONE
+paired cells=9
+stage                      PR-AUC   +Δ vs prev          incrementCI
+S0 core                    0.5264       (base)
+S1 +ccname                 0.5426      +0.0162 [-0.0051,+0.0265]
+S2 +mask                   0.5511      +0.0086 [-0.0092,+0.0252]
+S3 +diff(a33)              0.5652      +0.0141 [+0.0037,+0.0283]*
+S4 +periodicity(a34)       0.5680      +0.0028 [-0.0080,+0.0133]

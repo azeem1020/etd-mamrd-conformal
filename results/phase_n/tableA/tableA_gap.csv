@@ -1,0 +1,7 @@
+atype,aname,best,gap,lo,hi
+0,Multiplicative scaling,Self-Attn,0.012433862433862432,-0.020348725287320662,0.028173545544488778
+1,Per-step random scaling,WDCNN,-0.003703703703703703,-0.02586279459518148,0.0
+2,Intermittent zeroing,WDCNN,0.0,0.0,0.0
+3,Mean-scaled replacement,WDCNN,0.0,0.0,0.0
+4,Flatten to mean,WDCNN,0.0,0.0,0.0
+5,Time reversal,HORLN,-0.003703703703703703,-0.02124756335282653,0.013840155945419121

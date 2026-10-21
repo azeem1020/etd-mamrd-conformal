@@ -1,0 +1,4 @@
+fold,train_tot,train_pos,es_tot,es_pos,cal_tot,cal_pos,te_tot,te_pos,te_Heavy_tot,te_Heavy_pos,te_Light_tot,te_Light_pos,te_Flat_tot,te_Flat_pos,conf_cal_tot_mean,conf_cal_pos_mean,conf_cal_Heavy_pos_mean,conf_cal_Light_pos_mean,conf_cal_Flat_pos_mean,conf_cal_Flat_pos_min,conf_cal_Flat_pos_max,conf_eval_tot_mean,conf_eval_pos_mean,conf_eval_Heavy_pos_mean,conf_eval_Light_pos_mean,conf_eval_Flat_pos_mean
+0,33897,2873,2795,244,2795,244,2885,254,1226,162,1186,76,473,16,1442.0,127.0,80.9,38.55,7.55,5,12,1443.0,127.0,81.1,37.45,8.45
+1,33897,2943,2795,221,2795,221,2885,230,1196,130,1193,88,496,12,1442.0,115.0,66.45,42.5,6.05,3,8,1443.0,115.0,63.55,45.5,5.95
+2,33898,2886,2795,240,2795,240,2884,249,1203,149,1205,83,476,17,1441.0,124.0,74.5,40.8,8.7,5,12,1443.0,125.0,74.5,42.2,8.3

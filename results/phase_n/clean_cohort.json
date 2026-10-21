@@ -1,0 +1,26 @@
+{
+  "pre_registered_rule": "drop iff nansum(|x|) < 1e-6 (no consumption signal)",
+  "NO_SIGNAL_EPS": 1e-06,
+  "N_total": 42372,
+  "N_kept": 40258,
+  "N_dropped": 2114,
+  "dropped_all_nan": 5,
+  "dropped_all_zero_observed": 2109,
+  "dropped_theft": 36,
+  "dropped_honest": 2078,
+  "dropped_phenotype_breakdown": {
+    "Heavy_Dropper": 0,
+    "Light_Dropper": 0,
+    "Heavy_Riser": 0,
+    "Light_Riser": 0,
+    "Flat": 2114
+  },
+  "theft_prevalence_before": 0.08531577456811101,
+  "theft_prevalence_after": 0.08890158477818073,
+  "conflicting_label_exact_dup_FLAGGED_not_dropped": {
+    "n_clusters": 5,
+    "n_customers": 497,
+    "theft": 18,
+    "honest": 479
+  }
+}

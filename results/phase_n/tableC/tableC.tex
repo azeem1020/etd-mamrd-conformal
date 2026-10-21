@@ -1,0 +1,17 @@
+% Table C - prevalence-controlled per-stratum detectability (MAMRD), SGCC.
+% target prevalence = MAX per-stratum (feasible via negative subsampling); see note.
+\begin{table}[t]\centering\small
+\caption{Prevalence control of \name{}'s per-stratum detectability on SGCC (mean over $15$ cells, BCa 95\% CI). Normalised $=(\mathrm{AP}-\pi)/(1-\pi)$; matched $=$ negatives subsampled to a common prevalence ($100$ reps).}
+\label{tab:prevcontrol}
+\begin{tabular}{@{}l r ccc@{}}
+\toprule
+Stratum & Theft\,\% & Raw PR-AUC & Normalised & Matched PR-AUC \\
+\midrule
+Heavy dropper & 11.2 & 0.630~\ci{0.612}{0.653} & 0.584~\ci{0.564}{0.608} & 0.653~\ci{0.631}{0.673} \\
+Heavy riser & 12.7 & 0.664~\ci{0.626}{0.696} & 0.616~\ci{0.575}{0.652} & 0.664~\ci{0.626}{0.696} \\
+Light dropper & 6.7 & 0.460~\ci{0.404}{0.517} & 0.420~\ci{0.358}{0.484} & 0.575~\ci{0.520}{0.641} \\
+Light riser & 7.0 & 0.492~\ci{0.462}{0.522} & 0.454~\ci{0.424}{0.485} & 0.617~\ci{0.606}{0.629} \\
+Flat & 3.1 & 0.402~\ci{0.322}{0.493} & 0.382~\ci{0.299}{0.477} & 0.647~\ci{0.584}{0.715} \\
+\bottomrule
+\end{tabular}
+\end{table}
