@@ -1,0 +1,39 @@
+# ==============================================================================
+# MAMRD ECL Benchmark Configuration: Industrial Generalization & FDI Invariance
+# ==============================================================================
+experiment:
+  name: mamrd_ecl_benchmark
+  benchmark: ECL
+  data_path: data/LD2011_2014.txt
+  output_dir: results/phase_n/ecl
+  seed_discipline: [0, 1, 2]
+  fold_discipline: [0, 1, 2]
+
+dataset:
+  resample_interval: "30min"
+  window_length_steps: 336 # 7 days x 48 half-hours
+  synthetic_attack_prevalence: 0.10
+  attack_families:
+    - fdi1 # constant multiplicative scaling (cancels under per-window scaling)
+    - fdi2 # per-step random scaling
+    - fdi3 # intermittent zeroing
+    - fdi4 # mean-scaled replacement
+    - fdi5 # flatten to mean
+    - fdi6 # time reversal
+
+model:
+  architecture: a34_generic
+  parameters: 970817
+
+preprocessing:
+  clipping: "local 3-sigma"
+  normalization: "per-window min-max [0, 1]"
+  epsilon: 1.0e-6
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  batch_size: 128
+  epochs: 30
+

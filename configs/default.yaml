@@ -1,0 +1,56 @@
+# ==============================================================================
+# MAMRD Default Configuration: SGCC Native-Prevalence Benchmark
+# ==============================================================================
+experiment:
+  name: mamrd_sgcc_benchmark
+  benchmark: SGCC
+  data_path: data/SGCC.csv
+  output_dir: results/phase_n
+  seed_discipline: [0, 1, 2]
+  fold_discipline: [0, 1, 2]
+  extended_seeds: [3, 4]
+
+model:
+  architecture: a34_generic
+  description: "Missingness-Aware Multi-Representation Detector (MAMRD)"
+  parameters: 970817
+  branches:
+    - value_laplacian_bimamba2
+    - mask_laplacian_cnn
+    - multiscale_dilated_1d_conv
+    - fixed_lagged_differencing
+    - inter_intra_periodicity_2d_conv
+  frontend: cc_name
+  input_shape: [7, 7] # 7-week x 7-day cyclical grid
+
+training:
+  optimizer: AdamW
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  betas: [0.9, 0.999]
+  batch_size: 128
+  eval_batch_size: 256
+  epochs: 30
+  loss: binary_cross_entropy
+  gradient_clip_norm: 1.0
+  mixed_precision: true
+  checkpoint_selection:
+    metric: validation_average_precision
+    cohort: D_es
+    frequency_epochs: 3
+
+evaluation:
+  cohorts:
+    training_fraction: 0.80
+    heldout_fraction: 0.20
+    heldout_split:
+      early_stopping: 0.33
+      threshold_calibration: 0.33
+      test: 0.34
+  conformal_audit:
+    method: class_conditional_mondrian
+    target_recall: 0.80
+    order_statistic: "ceil((n + 1) * (1 - alpha))"
+    groups: [heavy, light, flat]
+    min_stratum_size: 10
+

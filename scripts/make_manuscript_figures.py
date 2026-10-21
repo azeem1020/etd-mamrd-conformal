@@ -131,25 +131,25 @@ def make_fig1_architecture():
 
     # Stage 2: CC-NaME Front-End
     box(20.5, 29.5, 19.5, 12.0,
-        "Context-Conditioned\nMissingness (CC-NaME)\n$\\mathbf{c}_i = [\\bar{m}_i, \\sigma_m, \\mu_x, \\sigma_x]^\\top \\in \\mathbb{R}^4$\n$\\to \\mathbf{f}_i \\in \\mathbb{R}^{64}$ & $\\tilde{\\mathbf{X}}_i$",
+        "Context-Conditioned\nMissingness (CC-NaME)\n$\\mathbf{c}_i \\in \\mathbb{R}^{3D}$ (mean, std, $f_{\\text{miss}}$)\n$\\to \\delta\\tau_i \\in \\mathbb{R}$ & $\\tilde{\\mathbf{X}}_i \\in \\mathbb{R}^{W \\times D}$",
         PAL["lred"], ec=PAL["red"], fs=5.8)
 
     # Five Parallel Representation Branches
     bx, bw, bh = 42.5, 36.5, 7.3
     ys = [52.0, 42.3, 32.6, 22.9, 13.2]
     branches = [
-        ("1. Value 2D CNN + BiMamba2 SSM\n2D Conv + $3{\\times}3$ Laplacian $\\to 2{\\times}$BiMamba2 ($d{=}64$)\nMean/Max/Std Pool $\\to \\mathbf{z}_1 \\in \\mathbb{R}^{192}$", PAL["lblue"]),
-        ("2. Multi-Scale Dilated 1D Conv\nParallel Conv1D ($k{\\in}\\{3,7,15\\}, \\delta{\\in}\\{1,2,4\\}$) + DW $k{=}21$\nSE Gate + Mean/Max Pool $\\to \\mathbf{z}_3 \\in \\mathbb{R}^{128}$", PAL["lgreen"]),
-        ("3. Fixed Multi-Scale Differencing\nFixed lags $\\Delta^{(s)}\\tilde{x}_{i,t}$ ($s{\\in}\\{1,7,30\\}$) + Conv1D\nBiGRU ($h{=}32$) $\\to \\mathbf{z}_4 \\in \\mathbb{R}^{64}$", PAL["lamber"]),
-        ("4. Inter/Intra-Period 2D Conv\nIntra-week $(1{\\times}5)$ & Inter-week $(3{\\times}1)$ Conv2D\nMean/Max Pool $\\to \\mathbf{z}_5 \\in \\mathbb{R}^{64}$", PAL["lpurple"]),
-        ("5. Mask 2D Laplacian CNN\n2-stage Conv2D + $3{\\times}3$ Laplacian on $\\mathbf{M}_i$\nMean/Max Pool $\\to \\mathbf{z}_2 \\in \\mathbb{R}^{64}$", PAL["lred"]),
+        ("1. Wide Mamba2 SSM\nLinear($D{\\to}32$) $\\to$ BiMamba2 ($d{=}32, d_s{=}128$)\nTemporal Attention $\\to \\mathbf{z}_1 \\in \\mathbb{R}^{90}$", PAL["lblue"]),
+        ("2. Value 2D Laplacian CNN\nMulti-Scale Zheng 9-Stencil ($\\delta{\\in}\\{1,2,4\\}$)\nMaxPool2D $\\to$ Linear $\\to \\mathbf{z}_2 \\in \\mathbb{R}^{60}$", PAL["lgreen"]),
+        ("3. Mask 2D Laplacian CNN\nMulti-Scale Zheng 9-Stencil on $\\mathbf{M}_i$ ($\\delta{\\in}\\{1,2,4\\}$)\nMaxPool2D $\\to$ Linear $\\to \\mathbf{z}_3 \\in \\mathbb{R}^{30}$", PAL["lred"]),
+        ("4. Multi-Scale Differencing 1D CNN\nCausal lags $\\Delta^{(s)}$ ($s{\\in}\\{1,7,30\\}$) + $\\tanh$ sat.\n2-Stage Conv1D + MaxPool $\\to \\mathbf{z}_4 \\in \\mathbb{R}^{32}$", PAL["lamber"]),
+        ("5. Inter/Intra-Period 1D Conv (IIPC)\nDilated Conv1D ($d{\\in}\\{1, 2, C, 2C\\}$, $C{=}D$)\nGlobal MaxPool $\\to$ Linear $\\to \\mathbf{z}_5 \\in \\mathbb{R}^{32}$", PAL["lpurple"]),
     ]
     for (lab, fc), y in zip(branches, ys):
         box(bx, y, bw, bh, lab, fc, fs=5.5)
 
     # Concatenation + Single-Task BCE Classifier Head
     box(82.0, 27.0, 16.0, 13.5,
-        "Concatenation\n$\\mathbf{z}_i \\in \\mathbb{R}^{576}$\n(incl. $\\mathbf{f}_i \\in \\mathbb{R}^{64}$)\n$\\downarrow$\n3-Layer MLP\n($576{\\to}192{\\to}64{\\to}1$)",
+        "Concatenation\n$\\mathbf{z}_i \\in \\mathbb{R}^{244}$\n(Branches 1–5)\n$\\downarrow$\n2-Stage MLP\n($244{\\to}96{\\to}1$)",
         PAL["lgrey"], fs=5.7)
 
     box(100.5, 29.5, 16.5, 8.5,
@@ -167,10 +167,9 @@ def make_fig1_architecture():
 
     # Arrows
     arrow(17.5, 34.0, 20.5, 35.5)
-    for y in ys[:4]:
-        arrow(40.0, 35.5, bx, y + bh / 2, c=PAL["red"])
-    arrow(40.0, 32.0, 82.0, 31.0, ls=":", c=PAL["red"])
-    arrow(17.5, 26.5, bx, ys[4] + bh / 2, c=PAL["dark"])
+    for i in (0, 1, 3, 4):
+        arrow(40.0, 35.5, bx, ys[i] + bh / 2, c=PAL["red"])
+    arrow(17.5, 26.5, bx, ys[2] + bh / 2, c=PAL["dark"])
     for y in ys:
         arrow(bx + bw, y + bh / 2, 82.0, 33.8)
     arrow(98.0, 33.8, 100.5, 33.8)

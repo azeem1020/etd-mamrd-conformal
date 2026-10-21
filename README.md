@@ -94,14 +94,15 @@ etd-mamrd-conformal/
 git clone https://github.com/azeem1020/etd-mamrd-conformal.git
 cd etd-mamrd-conformal
 
-# 2. Create conda environment
-conda create -n mamba_gpu python=3.10 -y
-conda activate mamba_gpu
+# 2. Create conda environment from specification
+conda env create -f environment.yml
+conda activate mamrd
 
-# 3. Install core dependencies
-pip install -r requirements.txt
+# Alternatively, manual setup via pip:
+# conda create -n mamrd python=3.10 -y && conda activate mamrd
+# pip install -r requirements.txt
 
-# 4. (Optional for training MAMRD with selective SSMs) Install hardware-accelerated kernels
+# 3. (Optional for training MAMRD with selective SSMs) Install hardware-accelerated kernels
 pip install mamba-ssm causal-conv1d
 ```
 
@@ -132,15 +133,24 @@ export MAMRD_RESULTS=../results/phase_n
 
 ## 5. Running Experiments & Generating Paper Artifacts
 
-To preserve scientific reproducibility and prevent unauthorized pre-publication redistribution of article figures, benchmark outputs and figures are not pre-packaged and must be generated directly from the public datasets.
+### Unified Master Reproduction (Recommended)
+To run the complete Round-2 reproduction suite end-to-end (verifying partition disjointness, computing Tables 2, 3, 4, 5, 6, and generating Figures 1–5 and S1–S2 from raw prediction records):
+```bash
+# Execute master reproduction workflow
+python scripts/reproduce_all_r2.py --config configs/default.yaml
+```
+
+---
+
+### Step-by-Step Individual Workflows
 
 ### A. Training & Benchmark Evaluation (Table 2, Table 3, Table 4)
 Train MAMRD (`a34_generic`) and rival baselines on the full 42,372-consumer SGCC cohort (`--full` is enabled by default, writing both `a34_manifest.csv` and per-cell `a34_cell_{seed}_{fold}.csv` files):
 ```bash
 cd scripts
 
-# Train MAMRD across customer-disjoint folds (0..2) and initialization seeds (0..2) at lr=3e-4
-PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --lr 3e-4 --seeds 0 1 2 --folds 0 1 2
+# Train MAMRD across customer-disjoint folds (0..2) and initialization seeds (0..2)
+PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
 
 # Generate Table 2 & Table B performance ledgers (9-cell matched & 15-cell extended)
 PYTHONPATH=.. python compute_table_b.py
@@ -181,7 +191,7 @@ PYTHONPATH=.. python run_ecl_trust_analysis.py
 To retrain MAMRD (`a34_generic`) across 3 customer-disjoint folds and 3 (or 5) initialization seeds on the full SGCC cohort:
 ```bash
 cd scripts
-PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --lr 3e-4 --seeds 0 1 2 --folds 0 1 2
+PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
 ```
 
 ---
