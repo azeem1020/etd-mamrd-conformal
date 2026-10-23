@@ -20,12 +20,12 @@ Electricity theft detection (ETD) models frequently report over-optimistic perfo
 
 1. **Leakage-Free Native-Prevalence Evaluation Protocol**: Standardized evaluation on the State Grid Corporation of China (SGCC, 42,372 consumers) and ElectricityLoadDiagrams (ECL) benchmarks under true operational class imbalance (~8.5% theft) without retrospective or temporal leakage.
 2. **Missingness-Aware Multi-Representation Detector (MAMRD)**: A compact 0.97M-parameter deep learning architecture (`a34_generic`) that fuses five complementary consumption and missingness representations under single-task binary cross-entropy:
-   - Value 2D CNN + $3 \times 3$ discrete 2D Laplacian + BiMamba2 selective state-space backbone ($\mathbb{R}^{192}$)
-   - 2D missingness-mask CNN + $3 \times 3$ discrete 2D Laplacian ($\mathbb{R}^{64}$)
-   - Multi-scale dilated 1D convolution with Squeeze-and-Excitation gating ($\mathbb{R}^{128}$)
-   - Fixed multi-scale lagged differencing ($s \in \{1, 7, 30\}$) + shared Conv1D + BiGRU ($\mathbb{R}^{64}$)
-   - Inter- and intra-period 2D convolution ($\mathbb{R}^{64}$) alongside context-conditioned missing-value fill tokens (`CC-NaME`, $\mathbb{R}^{64}$)
-3. **Group-Conditional (Mondrian) Conformal Audit Layer**: A post-hoc, distribution-free, class-conditional conformal prediction framework using the exact order statistic $k_\phi = \lceil(n_\phi + 1)(1 - \alpha)\rceil$ to target a common $1 - \alpha = 80\%$ marginal theft recall lower bound within each consumption-level group ($\phi \in \{\text{Heavy, Light, Flat}\}$) under within-group exchangeability, reducing required inspection capacity by 25.3% (`95% BCa CI: [19.5%, 30.7%]`) relative to single-threshold conformal policies.
+   - Branch 1: Bidirectional Mamba2 selective state-space sequence backbone ($\mathbb{R}^{90}$)
+   - Branch 2: Value 2-D multi-scale discrete Laplacian CNN ($\mathbb{R}^{60}$)
+   - Branch 3: Missingness-mask 2-D multi-scale Laplacian CNN ($\mathbb{R}^{30}$)
+   - Branch 4: Fixed causal multi-scale lagged differencing 1-D CNN ($s \in \{1, 7, 30\}$, $\mathbb{R}^{32}$)
+   - Branch 5: Multi-scale inter- and intra-period dilated 1-D CNN (IIPC, $\mathbb{R}^{32}$) alongside context-conditioned missing-value fill tokens (`CC-NaME`)
+3. **Group-Conditional (Mondrian) Conformal Audit Layer**: A post-hoc, distribution-free, class-conditional conformal prediction framework using the exact order statistic $k_\phi = \lceil(n_\phi + 1)(1 - \alpha)\rceil$ to target a common $1 - \alpha = 80\%$ marginal theft recall lower bound within each consumption-level group ($\phi \in \{\text{Heavy, Light, Flat}\}$) under within-group exchangeability, reducing required inspection capacity by 25.3% (`95% BCa CI: [19.5%, 30.7%]`) relative to a single global minimax threshold satisfying the coverage target across all groups.
 
 ---
 
@@ -144,7 +144,7 @@ python scripts/reproduce_all_r2.py --config configs/default.yaml
 
 ### Step-by-Step Individual Workflows
 
-### A. Training & Benchmark Evaluation (Table 2, Table 3, Table 4)
+### A. Training & Benchmark Evaluation (Table 2, Table 3, Table 4, Table 5)
 Train MAMRD (`a34_generic`) and rival baselines on the full 42,372-consumer SGCC cohort (`--full` is enabled by default, writing both `a34_manifest.csv` and per-cell `a34_cell_{seed}_{fold}.csv` files):
 ```bash
 cd scripts
@@ -152,18 +152,18 @@ cd scripts
 # Train MAMRD across customer-disjoint folds (0..2) and initialization seeds (0..2)
 PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
 
-# Generate Table 2 & Table B performance ledgers (9-cell matched & 15-cell extended)
+# Generate Table 3 (formerly Table 2) & Table B performance ledgers (9-cell matched & 15-cell extended)
 PYTHONPATH=.. python compute_table_b.py
 
 # Generate Round-2 partition manifests, consumer-level bootstrap CIs, and ablation ledgers
 PYTHONPATH=.. python compute_r2_revisions.py
 
-# Generate Table 4 ablations & contrasts
+# Generate Table 5 (formerly Table 4) ablations & contrasts
 PYTHONPATH=.. python compute_table_c.py
 PYTHONPATH=.. python table_c_contrasts.py
 
 # Evaluate external ECL window-level generalization board
-PYTHONPATH=.. python run_ecl_ours.py
+PYTHONPATH=.. python run_ecl_ours.py --backbone a34_generic
 PYTHONPATH=.. python make_ecl_board.py
 ```
 

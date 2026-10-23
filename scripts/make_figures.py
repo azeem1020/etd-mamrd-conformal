@@ -162,7 +162,7 @@ def fig_ceiling(d):
     axL.set_xticks(xs); axL.set_xticklabels([s[0] for s in stages], fontsize=6.5)
     axL.set_ylabel("PR-AUC"); axL.set_title(f"(a) Cumulative build-up (n={len(common)})")
     if np.isfinite(means[0]):
-        axL.text(0.03, 0.97, f"+{means[-1]-means[0]:.3f} total\n(plateau ≈ ceiling)",
+        axL.text(0.03, 0.97, f"+{means[-1]-means[0]:.3f} total\n(plateau ≈ bottleneck)",
                  transform=axL.transAxes, ha="left", va="top", fontsize=6.5, color=TOL["dark"])
     # (b) lever forest plot — locked Δ PR-AUC vs a14/a33 (from CLAIMS_N + build-up)
     levers = [  # (label, delta, lo, hi)
@@ -172,7 +172,7 @@ def fig_ceiling(d):
         ("PhenoMoE (label-free)",   +0.0026, -0.004, 0.010),
         ("Periodicity arm (S4)",    +0.0028, -0.008, 0.013),
         ("Differencing arm (S3)",   +0.0141, +0.004, 0.028),
-        ("Full MAMRD stack vs a14 core", +0.0135, +0.006, 0.021),
+        ("Full MAMRD vs. 21-block core", +0.0135, +0.006, 0.021),
     ]
     yy = np.arange(len(levers))
     for i, (lab, dlt, lo, hi) in enumerate(levers):
@@ -183,7 +183,7 @@ def fig_ceiling(d):
     axR.axvline(0, ls="--", lw=0.8, color="k", alpha=0.7)
     axR.axvspan(-0.01, 0.01, color="k", alpha=0.05)
     axR.set_yticks(yy); axR.set_yticklabels([l[0] for l in levers], fontsize=6.5)
-    axR.set_xlabel("Δ PR-AUC (95% BCa CI)"); axR.set_title("(b) Interventions vs the ceiling")
+    axR.set_xlabel("Δ PR-AUC (95% BCa CI)"); axR.set_title("(b) Interventions vs the bottleneck")
     axR.legend(handles=[Patch(color=TOL["red"], label="significant + material"),
                         Patch(color=TOL["grey"], label="null (CI incl. 0)")],
                loc="upper center", bbox_to_anchor=(0.5, -0.30), ncol=2)

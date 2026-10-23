@@ -107,7 +107,7 @@ def main():
     ap.add_argument("--frac", type=float, default=0.10)
     ap.add_argument("--epochs", type=int, default=30)
     ap.add_argument("--device", default="cuda")
-    ap.add_argument("--backbone", default="a14_no_mixer")
+    ap.add_argument("--backbone", default="a34_generic")
     ap.add_argument("--norm", default="window", choices=["window", "global"])
     ap.add_argument("--manifest", default=str(RESULTS_DIR / "ecl_ours.csv"))
     a = ap.parse_args()
