@@ -134,7 +134,7 @@ export MAMRD_RESULTS=../results/phase_n
 ## 5. Running Experiments & Generating Paper Artifacts
 
 ### Unified Master Reproduction (Recommended)
-To run the complete Round-2 reproduction suite end-to-end (verifying partition disjointness, computing Tables 2, 3, 4, 5, 6, and generating Figures 1–5 and S1–S2 from raw prediction records):
+To run the complete Round-2 reproduction suite end-to-end (verifying partition disjointness, computing Tables 2, 3, 4, 5, 6, and generating empirical Figures 2–5 and S1–S2 from raw prediction records; Figure 1 is the conceptual architecture schematic):
 ```bash
 # Execute master reproduction workflow
 python scripts/reproduce_all_r2.py --config configs/default.yaml

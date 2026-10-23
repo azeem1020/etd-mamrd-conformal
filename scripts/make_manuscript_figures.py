@@ -1,12 +1,15 @@
-"""Generate main-text figures (Fig. 1, Fig. 3, Fig. 4, Fig. 5) for MAMRD manuscript.
+"""Generate empirical data-driven figures (Fig. 3, Fig. 4, Fig. 5) for MAMRD manuscript.
 
-Synchronizes all main-text vector PDFs directly with the released codebase and
+Synchronizes all empirical data-driven vector PDFs directly with the released codebase and
 cached phase_n evaluation records under the corrected exact conformal order
 statistic k = ceil((n + 1)(1 - alpha)):
-  - fig1_mamrd_architecture.pdf (+ fig0_architecture.pdf)
   - fig3_ablation_bars.pdf
   - fig4_calibration_reliability.pdf
   - fig5_conformal_tradeoffs.pdf
+
+Note: Figure 1 (MAMRD Architectural Framework) is the conceptual schematic diagram
+authored and compiled directly from dedicated vector LaTeX/TikZ source
+(submission_package/figures/fig0_architecture_src.tex).
 """
 from __future__ import annotations
 import csv
@@ -22,7 +25,7 @@ import pandas as pd
 import matplotlib as mpl
 mpl.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Patch
+from matplotlib.patches import Patch
 
 THIS = Path(__file__).resolve().parent
 for p in (str(THIS), str(THIS.parent)):
@@ -94,97 +97,6 @@ def bca_ci(x, B=4000, seed=12345):
         bt, 100.0 * norm.cdf(z0 + (z0 + norm.ppf(al)) / (1.0 - a * (z0 + norm.ppf(al))))
     ))
     return q(0.025), q(0.975)
-
-
-# =========================================================================== #
-# Fig. 1: MAMRD Architecture Diagram (aligned with a34_generic implementation)
-# =========================================================================== #
-def make_fig1_architecture():
-    fig, ax = plt.subplots(figsize=(8.4, 4.2))
-    ax.set_xlim(0, 118)
-    ax.set_ylim(0, 64)
-    ax.axis("off")
-
-    def box(x, y, w, h, text, fc, ec=PAL["dark"], fs=5.8, lw=0.8, ls="-", bold=False):
-        ax.add_patch(FancyBboxPatch(
-            (x, y), w, h,
-            boxstyle="round,pad=0.35,rounding_size=1.0",
-            fc=fc, ec=ec, lw=lw, ls=ls, zorder=2
-        ))
-        ax.text(
-            x + w / 2, y + h / 2, text,
-            ha="center", va="center", fontsize=fs,
-            weight="bold" if bold else "normal", color=PAL["dark"], zorder=3
-        )
-
-    def arrow(x1, y1, x2, y2, ls="-", c=PAL["dark"], lw=0.8):
-        ax.add_patch(FancyArrowPatch(
-            (x1, y1), (x2, y2),
-            arrowstyle="-|>", mutation_scale=8,
-            lw=lw, color=c, ls=ls, shrinkA=1, shrinkB=1, zorder=1
-        ))
-
-    # Stage 1: Input Grid + Mask
-    box(1.0, 23.0, 16.5, 16.5,
-        "Consumer Grid\n$\\mathbf{X}_i \\in \\mathbb{R}^{W \\times D}$\n+\nMissing Mask\n$\\mathbf{M}_i \\in \\{0,1\\}^{W \\times D}$\n(SGCC: $148{\\times}7$)",
-        PAL["lgrey"], fs=6.0)
-
-    # Stage 2: CC-NaME Front-End
-    box(20.5, 29.5, 19.5, 12.0,
-        "Context-Conditioned\nMissingness (CC-NaME)\n$\\mathbf{c}_i \\in \\mathbb{R}^{3D}$ (mean, std, $f_{\\text{miss}}$)\n$\\to \\delta\\tau_i \\in \\mathbb{R}$ & $\\tilde{\\mathbf{X}}_i \\in \\mathbb{R}^{W \\times D}$",
-        PAL["lred"], ec=PAL["red"], fs=5.8)
-
-    # Five Parallel Representation Branches
-    bx, bw, bh = 42.5, 36.5, 7.3
-    ys = [52.0, 42.3, 32.6, 22.9, 13.2]
-    branches = [
-        ("1. Wide Mamba2 SSM\nLinear($D{\\to}32$) $\\to$ BiMamba2 ($d{=}32, d_s{=}128$)\nTemporal Attention $\\to \\mathbf{z}_1 \\in \\mathbb{R}^{90}$", PAL["lblue"]),
-        ("2. Value 2D Laplacian CNN\nMulti-Scale Zheng 9-Stencil ($\\delta{\\in}\\{1,2,4\\}$)\nMaxPool2D $\\to$ Linear $\\to \\mathbf{z}_2 \\in \\mathbb{R}^{60}$", PAL["lgreen"]),
-        ("3. Mask 2D Laplacian CNN\nMulti-Scale Zheng 9-Stencil on $\\mathbf{M}_i$ ($\\delta{\\in}\\{1,2,4\\}$)\nMaxPool2D $\\to$ Linear $\\to \\mathbf{z}_3 \\in \\mathbb{R}^{30}$", PAL["lred"]),
-        ("4. Multi-Scale Differencing 1D CNN\nCausal lags $\\Delta^{(s)}$ ($s{\\in}\\{1,7,30\\}$) + $\\tanh$ sat.\n2-Stage Conv1D + MaxPool $\\to \\mathbf{z}_4 \\in \\mathbb{R}^{32}$", PAL["lamber"]),
-        ("5. Inter/Intra-Period 1D Conv (IIPC)\nDilated Conv1D ($d{\\in}\\{1, 2, C, 2C\\}$, $C{=}D$)\nGlobal MaxPool $\\to$ Linear $\\to \\mathbf{z}_5 \\in \\mathbb{R}^{32}$", PAL["lpurple"]),
-    ]
-    for (lab, fc), y in zip(branches, ys):
-        box(bx, y, bw, bh, lab, fc, fs=5.5)
-
-    # Concatenation + Single-Task BCE Classifier Head
-    box(82.0, 27.0, 16.0, 13.5,
-        "Concatenation\n$\\mathbf{z}_i \\in \\mathbb{R}^{244}$\n(Branches 1–5)\n$\\downarrow$\n2-Stage MLP\n($244{\\to}96{\\to}1$)",
-        PAL["lgrey"], fs=5.7)
-
-    box(100.5, 29.5, 16.5, 8.5,
-        "Raw Logit $z_i$\n& Score $s_i = \\sigma(z_i)$\n(Single-Task BCE)",
-        PAL["lblue"], ec=PAL["blue"], fs=5.8, bold=True)
-
-    # Post-hoc Deployment Layer (Affine Recalibration + Mondrian Conformal Audit)
-    box(61.0, 1.8, 56.0, 10.2,
-        "Post-Hoc Trustworthy Deployment Layer (No Retraining)\n"
-        "• Affine Logit Recalibration: $\\tilde{p}_i = \\sigma((z_i + \\Delta)/T)$ (strictly monotonic, rank-preserving)\n"
-        "• Group-Conditional (Mondrian) Conformal Threshold: $\\hat{q}_\\alpha^\\phi = R_{(k_\\phi)}^\\phi$, "
-        "$k_\\phi = \\lceil(n_\\phi{+}1)(1{-}\\alpha)\\rceil$\n"
-        "• Targets common marginal recall lower bound $1{-}\\alpha$ per group $\\phi \\in \\{\\text{Heavy, Light, Flat}\\}$",
-        PAL["lamber"], ec=PAL["purple"], lw=1.0, ls="--", fs=5.2)
-
-    # Arrows
-    arrow(17.5, 34.0, 20.5, 35.5)
-    for i in (0, 1, 3, 4):
-        arrow(40.0, 35.5, bx, ys[i] + bh / 2, c=PAL["red"])
-    arrow(17.5, 26.5, bx, ys[2] + bh / 2, c=PAL["dark"])
-    for y in ys:
-        arrow(bx + bw, y + bh / 2, 82.0, 33.8)
-    arrow(98.0, 33.8, 100.5, 33.8)
-    arrow(108.8, 29.5, 108.8, 12.0, ls="--", c=PAL["purple"], lw=1.0)
-
-    ax.text(59.0, 61.5,
-            "MAMRD (a34_generic): End-to-End Multi-Branch Detector + Post-Hoc Conformal Audit",
-            ha="center", va="center", fontsize=8.2, weight="bold", color=PAL["dark"])
-
-    fig.tight_layout()
-    for name in ("fig1_mamrd_architecture", "fig0_architecture"):
-        fig.savefig(FIG / f"{name}.pdf")
-        fig.savefig(FIG / f"{name}.png")
-    plt.close(fig)
-    print("  wrote fig1_mamrd_architecture.pdf (+ fig0_architecture.pdf)")
 
 
 # =========================================================================== #
@@ -484,9 +396,8 @@ def make_fig5_conformal_tradeoffs():
 
 
 if __name__ == "__main__":
-    print("[make_manuscript_figures] generating main-text figures...")
-    make_fig1_architecture()
+    print("[make_manuscript_figures] generating empirical figures (Figures 3, 4, 5)...")
     make_fig3_ablation()
     make_fig4_calibration()
     make_fig5_conformal_tradeoffs()
-    print(f"[done] all figures saved to {FIG}")
+    print(f"[done] all empirical figures saved to {FIG}")

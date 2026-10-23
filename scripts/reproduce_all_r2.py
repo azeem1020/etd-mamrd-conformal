@@ -5,8 +5,9 @@ Command-line usage:
     python scripts/reproduce_all_r2.py --config configs/default.yaml
 
 This script runs end-to-end to verify partition manifests, compute and format all
-principal tables (Tables 2, 3, 4, 5, 6), and generate publication figures (Figures 1-5, S1-S2)
+principal tables (Tables 2, 3, 4, 5, 6), and generate empirical publication figures (Figures 2-5, S1-S2)
 from raw predictions without manual intervention, achieving 100% parity with the manuscript.
+Note: Figure 1 (Architecture Framework) is the conceptual schematic compiled directly from TikZ.
 """
 from __future__ import annotations
 import sys
@@ -96,7 +97,7 @@ def main():
         fig_script = THIS / "make_manuscript_figures.py"
         if fig_script.exists():
             run_step(
-                "3. Publication Figure Generation (Figures 1-5, S1-S2)",
+                "3. Empirical Publication Figure Generation (Figures 3, 4, 5)",
                 [py_exec, str(fig_script)],
                 cwd=THIS,
             )
@@ -110,8 +111,9 @@ def main():
     print("  - Table 4:  FPR Inspection Budgets (1% and 5% FPR, SGCC and ECL)")
     print("  - Table 5:  Architectural Ablation & Provenance Study with Paired CIs")
     print("  - Table 6:  Class-Conditional (Mondrian) Conformal Audit Policies")
-    print("  - Figures:  fig1_mamrd_architecture.pdf, fig3_ablation_bars.pdf,")
-    print("              fig4_calibration_reliability.pdf, fig5_conformal_tradeoffs.pdf")
+    print("  - Figures:  fig3_ablation_bars.pdf, fig4_calibration_reliability.pdf,")
+    print("              fig5_conformal_tradeoffs.pdf, fig2_performance_curves.pdf")
+    print("              (Figure 1 is the conceptual architecture schematic in TikZ)")
     print("#" * 75 + "\n")
 
 if __name__ == "__main__":
