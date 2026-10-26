@@ -15,13 +15,14 @@ model:
   description: "Missingness-Aware Multi-Representation Detector (MAMRD)"
   parameters: 970817
   branches:
-    - value_laplacian_bimamba2
-    - mask_laplacian_cnn
-    - multiscale_dilated_1d_conv
-    - fixed_lagged_differencing
-    - inter_intra_periodicity_2d_conv
+    - branch_1_bimamba2_sequence
+    - branch_2_value_laplacian_2d_cnn
+    - branch_3_mask_laplacian_2d_cnn
+    - branch_4_fixed_lagged_differencing_1d_cnn
+    - branch_5_dilated_1d_periodicity_cnn
   frontend: cc_name
-  input_shape: [7, 7] # 7-week x 7-day cyclical grid
+  sgcc_input_shape: [147, 7] # 147-week x 7-day cyclical grid (1,029 daily readings)
+  ecl_input_shape: [7, 48]   # 7-day x 48-half-hour grid (336 half-hour readings)
 
 training:
   optimizer: AdamW
@@ -52,5 +53,6 @@ evaluation:
     target_recall: 0.80
     order_statistic: "ceil((n + 1) * (1 - alpha))"
     groups: [heavy, light, flat]
+    min_group_size: 10
     min_stratum_size: 10
 

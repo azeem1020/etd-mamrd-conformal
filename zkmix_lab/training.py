@@ -263,14 +263,17 @@ class WeeklyGridDataset(Dataset):
 @dataclass
 class TrainConfig:
     epochs: int = 30
-    batch_size: int = 256
+    batch_size: int = 128
+    eval_batch_size: int = 256
     pos_fraction: float = 0.5
+    optimizer: str = "AdamW"
     lr: float = 3e-4
-    weight_decay: float = 0.01
+    weight_decay: float = 1e-4
     warmup_frac: float = 0.05
     min_lr_ratio: float = 0.01
     grad_clip_norm: float = 1.0
     patience: int = 8
+    eval_every: int = 3
     device: str = "cuda" if torch.cuda.is_available() else "cpu"
     seed: int = 0
     num_workers: int = 0  # keep deterministic by default
@@ -658,7 +661,7 @@ def train(
     )
     val_loader = DataLoader(
         val_ds,
-        batch_size=max(512, cfg.batch_size),
+        batch_size=getattr(cfg, "eval_batch_size", max(256, cfg.batch_size)),
         shuffle=False,
         num_workers=cfg.num_workers,
         pin_memory=cfg.pin_memory and device.type == "cuda",
@@ -666,11 +669,19 @@ def train(
 
     total_steps = max(1, len(sampler)) // 1 * cfg.epochs
     warmup_steps = max(1, int(cfg.warmup_frac * total_steps))
-    optimiser = Lion(
-        (p for p in model.parameters() if p.requires_grad),
-        lr=cfg.lr,
-        weight_decay=cfg.weight_decay,
-    )
+    if getattr(cfg, "optimizer", "AdamW").lower() == "lion":
+        optimiser = Lion(
+            (p for p in model.parameters() if p.requires_grad),
+            lr=cfg.lr,
+            weight_decay=cfg.weight_decay,
+        )
+    else:
+        optimiser = torch.optim.AdamW(
+            (p for p in model.parameters() if p.requires_grad),
+            lr=cfg.lr,
+            weight_decay=cfg.weight_decay,
+            betas=(0.9, 0.999),
+        )
     scheduler = WarmupCosineSchedule(
         optimiser,
         total_steps=total_steps,
@@ -688,19 +699,24 @@ def train(
             model, train_loader, optimiser, scheduler, device,
             cfg.grad_clip_norm, cfg=cfg,
         )
-        val_pr, _, _ = _eval_pr_auc(model, val_loader, device)
-        result.train_history.append(tr_loss)
-        result.val_history.append({"epoch": ep, "pr_auc": val_pr, "loss": tr_loss})
+        eval_freq = getattr(cfg, "eval_every", 1)
+        is_eval_epoch = ((ep + 1) % eval_freq == 0) or (ep == cfg.epochs - 1)
+        if is_eval_epoch:
+            val_pr, _, _ = _eval_pr_auc(model, val_loader, device)
+            result.train_history.append(tr_loss)
+            result.val_history.append({"epoch": ep, "pr_auc": val_pr, "loss": tr_loss})
 
-        if val_pr > result.best_val_pr_auc:
-            result.best_val_pr_auc = val_pr
-            result.best_epoch = ep
-            best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
-            epochs_without_improve = 0
+            if val_pr > result.best_val_pr_auc:
+                result.best_val_pr_auc = val_pr
+                result.best_epoch = ep
+                best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
+                epochs_without_improve = 0
+            else:
+                epochs_without_improve += 1
+                if epochs_without_improve >= cfg.patience:
+                    break
         else:
-            epochs_without_improve += 1
-            if epochs_without_improve >= cfg.patience:
-                break
+            result.train_history.append(tr_loss)
 
     if best_state is not None:
         model.load_state_dict(best_state)

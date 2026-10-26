@@ -70,7 +70,15 @@ def main():
     print(f"Active Configuration: {cfg_file}")
     print("=" * 75)
 
-    _ = load_yaml_config(cfg_file)
+    cfg_dict = load_yaml_config(cfg_file)
+    if cfg_dict and "training" in cfg_dict:
+        t_cfg = cfg_dict["training"]
+        print(f"  Training Optimizer: {t_cfg.get('optimizer', 'AdamW')} (lr={t_cfg.get('learning_rate', 3e-4)}, weight_decay={t_cfg.get('weight_decay', 1e-4)})")
+        print(f"  Batch Size: {t_cfg.get('batch_size', 128)} (eval: {t_cfg.get('eval_batch_size', 256)}) | Epochs: {t_cfg.get('epochs', 30)}")
+    if cfg_dict and "model" in cfg_dict:
+        m_cfg = cfg_dict["model"]
+        print(f"  Model Architecture: {m_cfg.get('architecture', 'a34_generic')} ({m_cfg.get('parameters', 970817)} params)")
+        print(f"  Grid Shapes: SGCC {m_cfg.get('sgcc_input_shape', [147, 7])} | ECL {m_cfg.get('ecl_input_shape', [7, 48])}")
 
     py_exec = sys.executable
 

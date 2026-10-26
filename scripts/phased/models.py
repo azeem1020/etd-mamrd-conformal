@@ -1713,6 +1713,7 @@ def build_a34_ablate(drop):
 
 ARM_BUILDERS = {
     "a32_generic":             build_a32_generic,  # generic cross-dataset arm
+    "a32_ablate_na":           build_a32_generic,  # alias for A_no-miss ablation arm cited in Table 5
     "a33_generic":             build_a33_generic,  # generic + missingness-adaptive
     "a34_generic":             build_a34_generic,  # generic + periodicity (MSDM IIPC)
     "a34_no_diff":             build_a34_ablate("diff"),    # a34 drop-one ablations
@@ -1743,6 +1744,7 @@ ARM_BUILDERS = {
     "a12_mamba_wide":          build_a12,   # Phase H — requires mamba_gpu env
     "a13_no_cnn_consump":      build_a13,   # Phase I ablation — requires mamba_gpu env
     "a14_no_mixer":            build_a14,   # Phase I ablation — requires mamba_gpu env
+    "a14":                     build_a14,   # alias for A_21-block ablation arm cited in Table 5
     "a15_no_mask":             build_a15,   # Phase I ablation — requires mamba_gpu env
     "a16_no_temporal":         build_a16,   # Phase I ablation — requires mamba_gpu env
     "a9_lean":                 build_a9_lean,   # Phase J: A9 − Mixer (pruned)
