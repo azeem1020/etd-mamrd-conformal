@@ -1,4 +1,4 @@
-"""Training infrastructure — Lion + warmup-cosine + binary-stratified sampler.
+"""Training infrastructure — AdamW (default) / Lion + warmup-cosine + binary-stratified sampler.
 
 The training recipe is held constant across all three backbones so the
 bootstrap comparison attributes outcome to architecture, not to
@@ -7,9 +7,9 @@ optimiser tuning.
 Conventions
 -----------
 * Loss     : ``BCEWithLogitsLoss`` with optional ``pos_weight``.
-* Optimiser: Lion (Chen et al. NeurIPS 2023, "Symbolic Discovery of
-             Optimisation Algorithms").  Sign-momentum update with
-             decoupled weight decay.
+* Optimiser: AdamW (default) with decoupled weight decay (Loshchilov & Hutter 2019),
+             or Lion (Chen et al. NeurIPS 2023, "Symbolic Discovery of
+             Optimisation Algorithms") with sign-momentum update.
 * Schedule : linear warmup over ``warmup_steps`` then cosine decay to
              ``min_lr_ratio * lr`` over the remaining steps.
 * Sampling : binary-stratified — every batch is composed of ``b_pos``
@@ -272,7 +272,7 @@ class TrainConfig:
     warmup_frac: float = 0.05
     min_lr_ratio: float = 0.01
     grad_clip_norm: float = 1.0
-    patience: int = 8
+    patience: int = 10
     eval_every: int = 3
     device: str = "cuda" if torch.cuda.is_available() else "cpu"
     seed: int = 0
@@ -539,7 +539,7 @@ def _plain_loss(logit: torch.Tensor, y: torch.Tensor, cfg: TrainConfig) -> torch
 def _epoch_loss(
     model: nn.Module,
     loader: DataLoader,
-    optimiser: Lion,
+    optimiser: torch.optim.Optimizer,
     scheduler: WarmupCosineSchedule,
     device: torch.device,
     grad_clip_norm: float,

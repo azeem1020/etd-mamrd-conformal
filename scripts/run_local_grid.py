@@ -388,9 +388,9 @@ def run_cell(
         train_ds = WeeklyGridDataset(train_X, train_y)
         early_ds = WeeklyGridDataset(X_aug[es_idx], y[es_idx])
         cfg = TrainConfig(
-            epochs=epochs, patience=8,
-            batch_size=256, pos_fraction=0.5,
-            lr=3e-4, weight_decay=0.01,
+            epochs=epochs, patience=10,
+            batch_size=128, eval_batch_size=256, pos_fraction=0.5,
+            optimizer="AdamW", lr=3e-4, weight_decay=1e-4, eval_every=3,
             warmup_frac=0.05, min_lr_ratio=0.01,
             grad_clip_norm=1.0, device=device,
             **train_overrides,

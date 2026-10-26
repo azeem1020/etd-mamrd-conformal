@@ -88,8 +88,9 @@ def main():
         tr, val = folds[0]; _, es, te = _stratified_three_way_split(val, y, (.33,.33,.34), rng=np.random.default_rng(0))
         seed_everything(s)
         model = build_arm(BACKBONE, weeks=7, days=PPD)
-        cfg = TrainConfig(epochs=30, patience=8, batch_size=256, pos_fraction=0.5, lr=3e-4,
-                          weight_decay=0.01, warmup_frac=0.05, min_lr_ratio=0.01, grad_clip_norm=1.0, device="cuda")
+        cfg = TrainConfig(epochs=30, patience=10, batch_size=128, eval_batch_size=256, pos_fraction=0.5,
+                          optimizer="AdamW", lr=3e-4, weight_decay=1e-4, eval_every=3,
+                          warmup_frac=0.05, min_lr_ratio=0.01, grad_clip_norm=1.0, device="cuda")
         _, best = train(model, WeeklyGridDataset(Xg[tr], y[tr]), WeeklyGridDataset(Xg[es], y[es]), cfg)
         scn = _inference_batch(best, Xg[te], torch.device("cuda"))
         aps2.append(average_precision_score(y[te], scn))

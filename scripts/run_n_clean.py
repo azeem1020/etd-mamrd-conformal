@@ -65,9 +65,9 @@ def run_cell(Xc, yc, g, m, seed, fold, kf=0, epochs=30, lr=3e-4, device="cuda",
     params = fit_router(g[tr], m[tr])                       # leakage-free router
     seed_everything(seed)
     model = build_arm(backbone, weeks=rw, days=D)
-    cfg = TrainConfig(epochs=epochs, patience=8, batch_size=256, pos_fraction=0.5,
-                      lr=lr, weight_decay=0.01, warmup_frac=0.05, min_lr_ratio=0.01,
-                      grad_clip_norm=1.0, device=device,
+    cfg = TrainConfig(epochs=epochs, patience=10, batch_size=128, eval_batch_size=256, pos_fraction=0.5,
+                      optimizer="AdamW", lr=lr, weight_decay=1e-4, warmup_frac=0.05, min_lr_ratio=0.01,
+                      eval_every=3, grad_clip_norm=1.0, device=device,
                       loss_type=loss_type, focal_gamma=focal_gamma, focal_alpha=focal_alpha)
     t0 = time.time()
     res, best = train(model, WeeklyGridDataset(X_reg[tr], yc[tr]),

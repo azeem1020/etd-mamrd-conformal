@@ -144,8 +144,8 @@ def run(seeds, folds, epochs, device, smoke):
                 else:
                     seed_everything(s)
                     model = build_arm(arm, weeks=7, days=PPD)
-                    cfg = TrainConfig(epochs=epochs, patience=8, batch_size=256,
-                                      pos_fraction=0.5, lr=3e-4, weight_decay=0.01,
+                    cfg = TrainConfig(epochs=epochs, patience=10, batch_size=128, eval_batch_size=256,
+                                      pos_fraction=0.5, optimizer="AdamW", lr=3e-4, weight_decay=1e-4, eval_every=3,
                                       warmup_frac=0.05, min_lr_ratio=0.01,
                                       grad_clip_norm=1.0, device=device)
                     _, best = train(model, WeeklyGridDataset(Xg[tr], y[tr]),
