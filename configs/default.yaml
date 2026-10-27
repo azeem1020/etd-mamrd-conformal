@@ -13,13 +13,13 @@ experiment:
 model:
   architecture: a34_generic
   description: "Missingness-Aware Multi-Representation Detector (MAMRD)"
-  parameters: 970817
+  parameters: 975076  # 0.97M total (974,833 trainable; 243 frozen Laplacian stencil weights)
   branches:
-    - branch_1_bimamba2_sequence
-    - branch_2_value_laplacian_2d_cnn
-    - branch_3_mask_laplacian_2d_cnn
-    - branch_4_fixed_lagged_differencing_1d_cnn
-    - branch_5_dilated_1d_periodicity_cnn
+    - branch_1_raw_resnet1d_21_64
+    - branch_2_multiscale_laplacian_2d_cnn_120
+    - branch_3_spectral_fft_mlp_80
+    - branch_4_explicit_differencing_resnet1d_5_64
+    - branch_5_missingness_mask_resnet1d_5_stats_48
   frontend: cc_name
   sgcc_input_shape: [147, 7] # 147-week x 7-day cyclical grid (1,029 daily readings)
   ecl_input_shape: [7, 48]   # 7-day x 48-half-hour grid (336 half-hour readings)

@@ -23,7 +23,7 @@ dataset:
 
 model:
   architecture: a34_generic
-  parameters: 970817
+  parameters: 975076  # 0.97M SGCC reference capacity (ECL 7x48 window instantiated dynamically)
 
 preprocessing:
   clipping: "local 3-sigma"

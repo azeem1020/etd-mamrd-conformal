@@ -48,13 +48,20 @@ etd-mamrd-conformal/
 │   │   ├── baselines.py               #   Rival baselines (GRU-D, WDCNN, Self-Attn, HORLN, MSDM)
 │   │   ├── archetype.py               #   Differencing / inter-/intra-period branches
 │   │   └── phenotype.py               #   Label-free consumption-level stratification
+│   ├── reproduce_all_r2.py            # Master one-command R2 reproduction pipeline
+│   ├── compute_r2_revisions.py        # Partition manifests, bootstrap CIs, and R2 audit ledgers
+│   ├── compute_consumer_bootstrap.py  # Customer-level clustered bootstrap CIs (B=1,000)
+│   ├── verify_partition_manifests.py  # Customer & window disjointness verifier
 │   ├── run_empirical_comparator.py    # Group-quantile baseline vs conformal audit comparator
+│   ├── run_decision_value.py          # Group-conditional vs global threshold workload analysis
+│   ├── make_manuscript_figures.py     # Main-text vector figure generator (Figs. 1, 3, 4, 5)
 │   ├── generate_high_contrast_fig2.py # High-contrast publication PR and ROC curves (Fig. 2)
+│   ├── make_trust_figure.py           # Supplementary conformal figure generator (Fig. S4)
 │   ├── repro_config.py                # Centralized path configuration
 │   ├── run_n_clean.py                 # Main benchmark training & evaluation runner
 │   ├── run_trust_layer.py             # Conformal audit policy evaluation
 │   ├── run_ecl_ours.py                # ECL generalization evaluation
-│   └── make_figures.py                # Manuscript figure generators
+│   └── make_figures.py                # Supplementary figure generators
 │
 ├── zkmix_lab/                         # Core library: data loaders, training loops, metrics
 │   ├── data.py                        #   Customer-disjoint fold partitioning

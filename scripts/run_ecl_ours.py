@@ -75,7 +75,7 @@ def run_cell(X, y, seed, fold, kf=0, epochs=30, device="cuda", backbone="a34_gen
                                                 rng=np.random.default_rng(kf * 7 + fold))
     seed_everything(seed)
     model = build_arm(backbone, weeks=7, days=PPD)
-    cfg = TrainConfig(epochs=epochs, patience=8, batch_size=128, pos_fraction=0.5,
+    cfg = TrainConfig(epochs=epochs, patience=10, eval_every=3, batch_size=128, pos_fraction=0.5,
                       optimizer="AdamW", lr=3e-4, weight_decay=1e-4, warmup_frac=0.05,
                       min_lr_ratio=0.01, grad_clip_norm=1.0, device=device)
     _, best = train(model, WeeklyGridDataset(X[tr], y[tr]), WeeklyGridDataset(X[es], y[es]), cfg)

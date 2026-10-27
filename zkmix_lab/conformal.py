@@ -163,8 +163,11 @@ class APSCalibrator:
         scores = aps_scores(probs, labels)
         n = scores.shape[0]
         k = int(np.ceil((n + 1) * (1.0 - self.alpha)))
-        k = min(max(k, 1), n)
-        self.tau = float(np.partition(scores, k - 1)[k - 1])
+        if k > n:
+            self.tau = 1.0
+        else:
+            k = max(k, 1)
+            self.tau = float(np.partition(scores, k - 1)[k - 1])
         self.n_cal = n
         return self
 
@@ -277,8 +280,11 @@ class MondrianAPSCalibrator:
                 continue
             cls_scores = scores[mask]
             kth = int(np.ceil((n_k + 1) * (1.0 - self.alpha)))
-            kth = min(max(kth, 1), n_k)
-            tau[k] = float(np.partition(cls_scores, kth - 1)[kth - 1])
+            if kth > n_k:
+                tau[k] = 1.0
+            else:
+                kth = max(kth, 1)
+                tau[k] = float(np.partition(cls_scores, kth - 1)[kth - 1])
             n_per[k] = n_k
         self.tau_per_class = tau
         self.n_cal_per_class = n_per

@@ -139,7 +139,7 @@ if SGCC_PATH.exists():
 
     for f in (0, 1, 2):
         tr, val = folds_sgcc[f]
-        cal, es, te = _stratified_three_way_split(val, y_all, (0.33, 0.33, 0.34), rng=np.random.default_rng(f))
+        es, cal, te = _stratified_three_way_split(val, y_all, (0.33, 0.33, 0.34), rng=np.random.default_rng(f))
         # Verify exact disjointness
         assert len(set(tr) & set(cal)) == 0
         assert len(set(tr) & set(es)) == 0
@@ -262,7 +262,7 @@ if ECL_PATH.exists():
 
     for f in (0, 1, 2):
         tr, val = ecl_folds[f]
-        cal, es, te = _stratified_three_way_split(val, y_ecl, (0.33, 0.33, 0.34), rng=np.random.default_rng(f))
+        es, cal, te = _stratified_three_way_split(val, y_ecl, (0.33, 0.33, 0.34), rng=np.random.default_rng(f))
         assert len(set(tr) & set(te)) == 0
         assert len(set(cal) & set(te)) == 0
         assert len(set(es) & set(te)) == 0
@@ -509,7 +509,7 @@ if SGCC_PATH.exists():
     mask_aps, mask_rocs = [], []
     for f in (0, 1, 2):
         tr, val = folds_sgcc[f]
-        cal, es, te = _stratified_three_way_split(val, y_all, (0.33, 0.33, 0.34), rng=np.random.default_rng(f))
+        es, cal, te = _stratified_three_way_split(val, y_all, (0.33, 0.33, 0.34), rng=np.random.default_rng(f))
         clf = LogisticRegression(max_iter=1000, class_weight="balanced")
         clf.fit(X_mask_feat[tr], y_all[tr])
         prob_te = clf.predict_proba(X_mask_feat[te])[:, 1]
