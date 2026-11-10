@@ -177,7 +177,7 @@ cd ..
 # ==============================================================================
 # Stage 1: Cohort Cleaning & Chronological Alignment
 # ==============================================================================
-# 1. Strict chronological ISO-8601 sort & weekly seasonal interpolation (2016-09-18)
+# 1. Strict chronological ISO-8601 sort & single-date Sunday 2016-09-18 interpolation (natural NaNs strictly preserved)
 python scripts/prepare_sgcc_dataset.py
 # 2. Execute pre-registered cohort cleaning (filter uninformative meters nansum(|x|) < 1e-6)
 python scripts/clean_cohort.py
