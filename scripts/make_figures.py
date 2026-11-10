@@ -103,26 +103,32 @@ def _mean(cells, key):
 # ===========================================================================
 def fig_metric_inflation(d):
     """C3: per model, ROC vs MAP@100 vs full PR-AUC — easy metrics saturate."""
-    fig, ax = plt.subplots(figsize=(DOUBLE, 2.7))
+    fig, ax = plt.subplots(figsize=(DOUBLE, 2.85))
     names = [m[1].replace("\n", " ") for m in MODELS]
     roc = [_mean(d[k], "roc") for k, _, _ in MODELS]
     m100 = [_mean(d[k], "map100") for k, _, _ in MODELS]
     pr = [_mean(d[k], "pr") for k, _, _ in MODELS]
-    x = np.arange(len(MODELS)); w = 0.26
-    ax.bar(x - w, roc, w, label="ROC-AUC", color=TOL["grey"], edgecolor="k", linewidth=0.4)
-    ax.bar(x, m100, w, label="MAP@100", color=TOL["cyan"], edgecolor="k", linewidth=0.4)
-    ax.bar(x + w, pr, w, label="full-prevalence PR-AUC", color=TOL["red"], edgecolor="k", linewidth=0.4)
+    x = np.arange(len(MODELS)); w = 0.25
+    ax.bar(x - w, roc, w, label="ROC-AUC", color=TOL["grey"], edgecolor="k", linewidth=0.5)
+    ax.bar(x, m100, w, label="MAP@100", color=TOL["cyan"], edgecolor="k", linewidth=0.5)
+    ax.bar(x + w, pr, w, label="Full-prevalence PR-AUC", color=TOL["red"], edgecolor="k", linewidth=0.5)
     for xi, (r, m, p) in enumerate(zip(roc, m100, pr)):
         if np.isfinite(m) and np.isfinite(p):
-            ax.annotate("", xy=(xi + w, p), xytext=(xi, m),
-                        arrowprops=dict(arrowstyle="->", color=TOL["dark"], lw=0.7, alpha=0.7))
-            ax.text(xi + 0.02, (m + p) / 2, f"−{m-p:.2f}", fontsize=6, color=TOL["dark"])
-    ax.set_xticks(x); ax.set_xticklabels(names, fontsize=6.5)
-    ax.set_ylabel("score"); ax.set_ylim(0, 1.0)
+            drop = m - p
+            # Arched drop arrow from MAP@100 to PR-AUC
+            ax.annotate("", xy=(xi + w, p + 0.015), xytext=(xi, m + 0.015),
+                        arrowprops=dict(arrowstyle="->", color="#2c3e50", lw=0.8,
+                                        connectionstyle="arc3,rad=-0.22"))
+            # Label placed cleanly above apex of the arch in free space
+            ax.text(xi + w / 2, max(m, p) + 0.065, f"−{drop:.2f}", ha="center", va="bottom",
+                    fontsize=6.5, color="#900c3f", weight="bold")
+    ax.set_xticks(x); ax.set_xticklabels(names, fontsize=7.5)
+    ax.set_ylabel("Score", fontsize=8); ax.set_ylim(0, 1.14)
     ax.axhline(0.0853, ls=":", lw=0.8, color="k", alpha=0.6)
-    ax.text(len(MODELS) - 0.5, 0.10, "base rate 8.5%", fontsize=6, ha="right", color="k")
+    ax.text(len(MODELS) - 0.5, 0.105, "base rate 8.5%", fontsize=6.5, ha="right", color="k")
     ax.set_title("")
-    ax.legend(ncol=3, loc="upper center", bbox_to_anchor=(0.5, 1.22))
+    ax.legend(ncol=3, loc="upper center", bbox_to_anchor=(0.5, 1.20), fontsize=7.2,
+              framealpha=0.9, edgecolor="#ccc", handletextpad=0.4, columnspacing=1.0)
     _save(fig, "fig1_metric_inflation")
 
 

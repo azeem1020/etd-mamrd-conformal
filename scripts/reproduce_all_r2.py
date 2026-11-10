@@ -5,7 +5,7 @@ Command-line usage:
     python scripts/reproduce_all_r2.py --config configs/default.yaml
 
 This script runs end-to-end to verify partition manifests, compute and format all
-principal tables (Tables 2, 3, 4, 5, 6), and generate empirical publication figures (Figures 2-5, S1-S2)
+principal tables (Tables 2, 3, 4, 5, 6), and generate empirical publication figures (Figures 2-5)
 from raw predictions without manual intervention, achieving 100% parity with the manuscript.
 Note: Figure 1 (Architecture Framework) is the conceptual schematic compiled directly from TikZ.
 """
@@ -82,6 +82,15 @@ def main():
 
     py_exec = sys.executable
 
+    # 0. Prepare & Verify Chronological Dataset Alignment
+    prep_script = THIS / "prepare_sgcc_dataset.py"
+    if prep_script.exists():
+        run_step(
+            "0. Chronological Dataset Alignment & Date Audit",
+            [py_exec, str(prep_script)],
+            cwd=THIS,
+        )
+
     # 1. Verify Partition Manifests (Customer & Window Disjointness, Table 2)
     verify_script = THIS / "verify_partition_manifests.py"
     if verify_script.exists():
@@ -105,7 +114,7 @@ def main():
         fig_script = THIS / "make_manuscript_figures.py"
         if fig_script.exists():
             run_step(
-                "3. Empirical Publication Figure Generation (Figures 3, 4, 5)",
+                "3. Empirical Publication Figure Generation (Figures 2, 3, 4, 5)",
                 [py_exec, str(fig_script)],
                 cwd=THIS,
             )

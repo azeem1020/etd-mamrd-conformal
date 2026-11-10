@@ -1,8 +1,8 @@
-"""Generate empirical data-driven figures (Fig. 3, Fig. 4, Fig. 5) for MAMRD manuscript.
+"""Generate empirical data-driven figures (Fig. 2, Fig. 3, Fig. 4, Fig. 5) for MAMRD manuscript.
 
 Synchronizes all empirical data-driven vector PDFs directly with the released codebase and
-cached phase_n evaluation records under the corrected exact conformal order
-statistic k = ceil((n + 1)(1 - alpha)):
+evaluation records under the standardized leak-free protocol:
+  - fig2_performance_curves.pdf
   - fig3_ablation_bars.pdf
   - fig4_calibration_reliability.pdf
   - fig5_conformal_tradeoffs.pdf
@@ -19,12 +19,14 @@ import sys
 from pathlib import Path
 from scipy.stats import norm
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import precision_recall_curve, roc_curve, average_precision_score, roc_auc_score
 
 import numpy as np
 import pandas as pd
 import matplotlib as mpl
 mpl.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.patheffects as patheffects
 from matplotlib.patches import Patch
 
 THIS = Path(__file__).resolve().parent
@@ -67,6 +69,7 @@ PAL = {
     "red": "#c0392b",
     "lred": "#fadbd8",
     "green": "#1e8449",
+    "dgreen": "#145a32",
     "lgreen": "#d4efdf",
     "amber": "#b7950b",
     "lamber": "#fcf3cf",
@@ -97,6 +100,90 @@ def bca_ci(x, B=4000, seed=12345):
         bt, 100.0 * norm.cdf(z0 + (z0 + norm.ppf(al)) / (1.0 - a * (z0 + norm.ppf(al))))
     ))
     return q(0.025), q(0.975)
+
+
+# =========================================================================== #
+# Fig. 2: Main Benchmark Precision-Recall & ROC Curves (SGCC)
+# =========================================================================== #
+def make_fig2_performance_curves():
+    """Generates Figure 2: (a) Precision-Recall curves and (b) ROC curves across
+    all re-evaluated baseline detectors and MAMRD directly from raw cell predictions.
+    """
+    models_config = [
+        ("GRU-D",      N / "baselines/grud_{s}_{f}.csv",       {"color": "#2D3436", "lw": 1.3, "ls": (0, (3, 2, 1.5, 2)), "zorder": 1}),
+        ("WDCNN",      N / "baselines/wdcnn_{s}_{f}.csv",      {"color": "#C97A10", "lw": 1.4, "ls": (0, (5, 2, 1.5, 2, 1.5, 2)), "zorder": 2}),
+        ("Self-Attn",  N / "baselines/hybridattn_{s}_{f}.csv", {"color": "#207D53", "lw": 1.5, "ls": (0, (1.5, 2)), "zorder": 3}),
+        ("MSDM",       N / "baselines/msdm_net_{s}_{f}.csv",   {"color": "#6E388C", "lw": 1.4, "ls": (0, (5, 2, 1.5, 2)), "zorder": 4}),
+        ("HORLN",      N / "baselines/horln_{s}_{f}.csv",      {"color": "#D33F23", "lw": 1.4, "ls": (0, (5, 2)), "zorder": 5}),
+        ("MAMRD",      N / "a34_cell_{s}_{f}.csv",             {"color": "#1B5E94", "lw": 2.2, "ls": "-", "zorder": 6}),
+    ]
+
+    fig, (axP, axR) = plt.subplots(1, 2, figsize=(7.16, 2.85), layout="constrained")
+    rgrid = np.linspace(0, 1, 200)
+    fgrid = np.linspace(0, 1, 200)
+
+    for name, pat, style in models_config:
+        prc_list, rocc_list, ap_list, auc_list = [], [], [], []
+        seeds = range(5) if name == "MAMRD" else range(3)
+        folds = range(3)
+        for s in seeds:
+            for f in folds:
+                fp = Path(str(pat).format(s=s, f=f))
+                if not fp.exists():
+                    continue
+                r = next(csv.DictReader(open(fp)))
+                if "val_labels_json" not in r or "val_scores_json" not in r:
+                    continue
+                y = np.array(json.loads(r["val_labels_json"]), int)
+                sc = np.array(json.loads(r["val_scores_json"]), float)
+                if y.sum() == 0 or y.sum() == len(y):
+                    continue
+                p_, r_, _ = precision_recall_curve(y, sc)
+                o = np.argsort(r_)
+                prc_list.append(np.interp(rgrid, r_[o], p_[o]))
+                ap_list.append(average_precision_score(y, sc))
+
+                fpr, tpr, _ = roc_curve(y, sc)
+                rocc_list.append(np.interp(fgrid, fpr, tpr))
+                auc_list.append(roc_auc_score(y, sc))
+
+        if not prc_list:
+            continue
+
+        mean_ap = np.mean(ap_list)
+        mean_auc = np.mean(auc_list)
+        mean_prc = np.mean(prc_list, axis=0)
+        mean_rocc = np.mean(rocc_list, axis=0)
+
+        axP.plot(rgrid, mean_prc, color=style["color"], lw=style["lw"], ls=style["ls"],
+                 label=f"{name} ({mean_ap:.2f})", zorder=style["zorder"])
+        axR.plot(fgrid, mean_rocc, color=style["color"], lw=style["lw"], ls=style["ls"],
+                 label=f"{name} ({mean_auc:.2f})", zorder=style["zorder"])
+
+    # Panel (a) styling
+    axP.axhline(0.0853, ls=":", lw=0.9, color="#636E72", alpha=0.8, label="Base rate (0.085)", zorder=0)
+    axP.set_xlim(-0.02, 1.02)
+    axP.set_ylim(-0.02, 1.02)
+    axP.set_xlabel("Recall")
+    axP.set_ylabel("Precision")
+    axP.set_title("(a) Precision–Recall (AP)")
+    axP.legend(loc="upper right", frameon=True, facecolor="white", edgecolor="#DCE1E7", framealpha=0.95, fontsize=7.2)
+
+    # Panel (b) styling
+    axR.plot([0, 1], [0, 1], ls="--", lw=0.8, color="#636E72", alpha=0.7, label="Chance (0.50)", zorder=0)
+    axR.set_xlim(-0.02, 1.02)
+    axR.set_ylim(-0.02, 1.02)
+    axR.set_xlabel("False Positive Rate")
+    axR.set_ylabel("True Positive Rate")
+    axR.set_title("(b) ROC (AUC)")
+    axR.legend(loc="lower right", frameon=True, facecolor="white", edgecolor="#DCE1E7", framealpha=0.95, fontsize=7.2)
+
+    out_pdf = FIG / "fig2_performance_curves.pdf"
+    out_png = FIG / "fig2_performance_curves.png"
+    fig.savefig(out_pdf)
+    fig.savefig(out_png, dpi=300)
+    plt.close(fig)
+    print("  wrote fig2_performance_curves.pdf")
 
 
 # =========================================================================== #
@@ -150,7 +237,10 @@ def make_fig3_ablation():
         axA.text(xi, hi + 0.004, f"{m:.3f}", ha="center", va="bottom", fontsize=6.4, weight="bold")
     axA.set_xticks(x)
     axA.set_xticklabels([lab for lab, _ in stages], fontsize=6.5)
-    axA.set_ylim(0.46, 0.615)
+    # Dynamic y-limits with padding so newly retrained values are never clipped
+    min_val = min(lo for lo, hi in cis)
+    max_val = max(hi for lo, hi in cis)
+    axA.set_ylim(min(0.45, min_val - 0.02), max(0.62, max_val + 0.025))
     axA.set_ylabel("PR-AUC (Average Precision)")
     axA.set_title("(a) Sequential build-up ($n=9$ cells)")
 
@@ -164,10 +254,22 @@ def make_fig3_ablation():
         ("Step +2D Mask CNN ($S_2 - S_1$)", [s2[k][0] - s1[k][0] for k in common]),
         ("Step +Periodicity ($S_4 - S_3$)", [s4[k][0] - s3[k][0] for k in common]),
     ]
+    # Check if controlled S4 no-missingness arm is present
+    s4_nomiss = load_arm_pr(N / "bu/a34_no_missingness_{s}_{f}.csv")
+    if not s4_nomiss:
+        s4_nomiss = load_arm_pr(N / "a34_no_missingness_cell_{s}_{f}.csv")
+    if s4_nomiss:
+        common_nm = sorted(set(s4) & set(s4_nomiss))
+        if common_nm:
+            contrasts.insert(2, ("Controlled Drop Missingness ($S_{4,\\mathrm{no\\text{-}miss}} - S_4$)",
+                                 [s4_nomiss[k][0] - s4[k][0] for k in common_nm]))
+
     yy = np.arange(len(contrasts))
+    all_diffs = []
     for i, (lab, diffs) in enumerate(contrasts):
         m = float(np.mean(diffs))
         lo, hi = bca_ci(diffs)
+        all_diffs.extend(diffs)
         sig = (lo > 0) or (hi < 0)
         c = PAL["red"] if (sig and m < 0) else (PAL["blue"] if sig else PAL["grey"])
         axB.plot([lo, hi], [i, i], "-", color=c, lw=1.8)
@@ -178,7 +280,9 @@ def make_fig3_ablation():
     axB.axvline(0.0, ls="--", lw=0.8, color=PAL["dark"], alpha=0.8)
     axB.set_yticks(yy)
     axB.set_yticklabels([c[0] for c in contrasts], fontsize=6.2)
-    axB.set_xlim(-0.062, 0.068)
+    min_d, max_d = min(all_diffs), max(all_diffs)
+    pad = 0.02 * (max_d - min_d)
+    axB.set_xlim(min(-0.065, min_d - pad), max(0.070, max_d + pad))
     axB.set_xlabel("Paired $\\Delta$ PR-AUC (95% BCa CI)")
     axB.set_title("(b) Paired build-up & drop-branch contrasts")
 
@@ -204,16 +308,16 @@ def make_fig4_calibration():
         ("MAMRD", N / "a34_cell_{s}_{f}.csv", range(5), range(3)),
     ]
 
-    def ece_equal_mass(p, y, n_bins=15):
+    def ece_binned(p, y, n_bins=10):
         p = np.clip(p, 0.0, 1.0)
         y = y.astype(float)
-        order = np.argsort(p)
-        p, yy = p[order], y[order]
+        edges = np.linspace(0.0, 1.0, n_bins + 1)
         ece = 0.0
         n = len(p)
-        for b in np.array_split(np.arange(n), n_bins):
-            if len(b):
-                ece += (len(b) / n) * abs(p[b].mean() - yy[b].mean())
+        for i in range(n_bins):
+            msk = (p >= edges[i]) & (p < edges[i + 1] if i < n_bins - 1 else p <= edges[i + 1])
+            if msk.sum() > 0:
+                ece += (msk.sum() / n) * abs(p[msk].mean() - y[msk].mean())
         return float(ece)
 
     det_names, ece_raw_means, ece_aff_means = [], [], []
@@ -232,31 +336,15 @@ def make_fig4_calibration():
                 ci, ti = np.arange(0, len(y), 2), np.arange(1, len(y), 2)
                 lr = LogisticRegression(C=1e4).fit(_stable_logit(sc[ci]).reshape(-1, 1), y[ci])
                 p_aff = lr.predict_proba(_stable_logit(sc[ti]).reshape(-1, 1))[:, 1]
-                er_list.append(ece_equal_mass(sc[ti], y[ti]))
-                ea_list.append(ece_equal_mass(p_aff, y[ti]))
+                er_list.append(ece_binned(sc[ti], y[ti], n_bins=10))
+                ea_list.append(ece_binned(p_aff, y[ti], n_bins=10))
                 if name == "MAMRD":
                     mamrd_raw_p.append(sc[ti])
                     mamrd_aff_p.append(p_aff)
                     mamrd_y.append(y[ti])
         det_names.append(name)
-    # Load canonical ECE metrics from calibration_sgcc.csv (generated by run_trust_layer.py)
-    cal_csv = N / "trust/calibration_sgcc.csv"
-    if cal_csv.exists():
-        cdf = pd.read_csv(cal_csv)
-        arm_map = {
-            "GRU-D": "GRU-D",
-            "Self-Attn": "HybridAttn",
-            "DKGT-Net": "DKGT",
-            "WDCNN": "WDCNN",
-            "MSDM": "MSDM",
-            "HORLN": "HORLN",
-            "MAMRD": "a34_NaME",
-        }
-        ece_raw_means = [float(cdf[cdf.arm == arm_map[name]]["ece_raw"].mean()) for name in det_names]
-        ece_aff_means = [float(cdf[cdf.arm == arm_map[name]]["ece_affine"].mean()) for name in det_names]
-    else:
-        ece_raw_means = [float(np.mean(er)) for er in [er_list]]
-        ece_aff_means = [float(np.mean(ea)) for ea in [ea_list]]
+        ece_raw_means.append(float(np.mean(er_list)) if er_list else 0.0)
+        ece_aff_means.append(float(np.mean(ea_list)) if ea_list else 0.0)
 
     raw_all = np.concatenate(mamrd_raw_p)
     aff_all = np.concatenate(mamrd_aff_p)
@@ -344,19 +432,19 @@ def make_fig5_conformal_tradeoffs():
     x = np.arange(len(groups))
     w = 0.35
     axA.bar(x - w / 2, emp_rec, w, color=PAL["lred"], edgecolor=PAL["red"], lw=0.6,
-            label="Empirical group-quantile ($\\hat{q}_{1-\\alpha}^{\\mathrm{emp}}$)")
+            label=r"Empirical ($\hat{q}_{1-\alpha}$)")
     axA.bar(x + w / 2, conf_rec, w, color=PAL["blue"], edgecolor=PAL["dark"], lw=0.6,
-            label="Mondrian conformal ($R_{(k_\\phi)}^\\phi$, $k_\\phi=\\lceil(n_\\phi+1)(1-\\alpha)\\rceil$)")
-    axA.axhline(80.0, ls="--", lw=1.0, color=PAL["dark"], label="Target marginal recall ($1-\\alpha = 80\\%$)")
+            label=r"Mondrian ($R_{(k_\phi)}$)")
+    axA.axhline(80.0, ls="--", lw=1.0, color=PAL["dark"], zorder=1, label="80% Target")
     for xi, (er, cr) in enumerate(zip(emp_rec, conf_rec)):
-        axA.text(xi - w / 2, er + 0.8, f"{er:.1f}%", ha="center", va="bottom", fontsize=6.0, color=PAL["red"])
-        axA.text(xi + w / 2, cr + 0.8, f"{cr:.1f}%", ha="center", va="bottom", fontsize=6.0, color=PAL["blue"], weight="bold")
+        axA.text(xi - w / 2, er + 1.0, f"{er:.1f}%", ha="center", va="bottom", fontsize=6.0, color=PAL["red"])
+        axA.text(xi + w / 2, cr + 1.0, f"{cr:.1f}%", ha="center", va="bottom", fontsize=6.0, color=PAL["blue"], weight="bold")
     axA.set_xticks(x)
     axA.set_xticklabels(groups, fontsize=7.0)
-    axA.set_ylim(60.0, 93.0)
+    axA.set_ylim(58.0, 96.0)
     axA.set_ylabel("Mean realized theft recall (%)")
     axA.set_title("(a) Realized recall vs. 80% target marginal recall")
-    axA.legend(loc="lower right", fontsize=5.9)
+    axA.legend(loc="upper center", ncol=3, fontsize=5.8, columnspacing=0.7, handletextpad=0.3, framealpha=0.9, edgecolor="#ccc")
 
     # Panel (b): Inspected population fraction (%) at alpha=0.20 across detectors (run_decision_value.py)
     order = [
@@ -374,19 +462,27 @@ def make_fig5_conformal_tradeoffs():
     red_pct = [100.0 * float(dv80.loc[a, "reduction"]) for a, _ in order]
 
     xb = np.arange(len(order))
-    axB.bar(xb - w / 2, single_b, w, color=PAL["lgrey"], edgecolor=PAL["dark"], lw=0.6,
-            label="Single-threshold conformal ($\\min_\\phi \\hat{q}_\\alpha^\\phi$)")
-    axB.bar(xb + w / 2, group_b, w, color=PAL["green"], edgecolor=PAL["dark"], lw=0.6,
-            label="Group-conditional Mondrian conformal")
+    wb = 0.36
+    axB.bar(xb - wb / 2, single_b, wb, color=PAL["lgrey"], edgecolor=PAL["dark"], lw=0.6,
+            label=r"Single-threshold ($\min_\phi \hat{q}_\alpha^\phi$)")
+    axB.bar(xb + wb / 2, group_b, wb, color=PAL["green"], edgecolor=PAL["dark"], lw=0.6,
+            label="Group-conditional Mondrian")
     for xi, (sb, gb, rp) in enumerate(zip(single_b, group_b, red_pct)):
-        axB.text(xi + w / 2, gb + 1.2, f"−{rp:.1f}%", ha="center", va="bottom",
-                 fontsize=5.8, color=PAL["green"], weight="bold")
+        top = sb + 1.6
+        # Differential comparison bracket linking single-threshold to Mondrian
+        axB.plot([xi - wb / 2, xi - wb / 2, xi + wb / 2, xi + wb / 2],
+                 [sb + 0.5, top, top, gb + 0.5], color=PAL["dgreen"], lw=0.6)
+        # Delta reduction percentage centered cleanly above the horizontal bracket
+        axB.text(xi, top + 0.5, f"−{rp:.1f}%", ha="center", va="bottom",
+                 fontsize=4.6, color=PAL["dgreen"], weight="bold",
+                 path_effects=[patheffects.withStroke(linewidth=1.5, foreground="white")])
     axB.set_xticks(xb)
     axB.set_xticklabels([lab for _, lab in order], fontsize=6.3, rotation=15)
-    axB.set_ylim(0, 92.0)
+    axB.set_xlim(-0.6, len(order) - 0.4)
+    axB.set_ylim(0, 100.0)
     axB.set_ylabel("Inspected consumer fraction (%)")
-    axB.set_title("(b) Inspection burden reduction at $\\alpha = 0.20$")
-    axB.legend(loc="upper right", fontsize=6.1)
+    axB.set_title(r"(b) Inspection burden reduction at $\alpha = 0.20$")
+    axB.legend(loc="upper center", ncol=2, fontsize=5.8, columnspacing=0.8, handletextpad=0.3, framealpha=0.9, edgecolor="#ccc")
 
     fig.tight_layout()
     fig.savefig(FIG / "fig5_conformal_tradeoffs.pdf")
@@ -396,8 +492,9 @@ def make_fig5_conformal_tradeoffs():
 
 
 if __name__ == "__main__":
-    print("[make_manuscript_figures] generating empirical figures (Figures 3, 4, 5)...")
+    print("[make_manuscript_figures] generating empirical publication figures (Figures 2, 3, 4, 5)...")
+    make_fig2_performance_curves()
     make_fig3_ablation()
     make_fig4_calibration()
     make_fig5_conformal_tradeoffs()
-    print(f"[done] all empirical figures saved to {FIG}")
+    print(f"[done] all empirical publication figures saved to {FIG}")

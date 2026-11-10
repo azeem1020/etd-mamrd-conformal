@@ -1711,11 +1711,26 @@ def build_a34_ablate(drop):
     return _b
 
 
+def build_a34_no_missingness(weeks: int = 147, days: int = 7):
+    """Direct controlled S4 ablation (Reviewer 2, Point 4):
+    Identical to complete S4 (a34_generic) with strictly missingness-related pathways disabled:
+    - use_mask_channel = False (drops binary validity mask Laplacian channel)
+    - use_cc_name = False (drops context-conditional imputation token; falls back to scalar fill)
+    Retains all other S4 components: BiMamba2 wide, multi-scale Laplacian CNN,
+    multi-scale lagged differencing (1, 7, 30 days), and inter/intra-period periodicity branch (IIPC).
+    """
+    return ZKMixV4(ZKMixV4Config(
+        weeks=weeks, days=days,
+        **_a34_cfg(use_mask_channel=False, use_cc_name=False, use_diff_branch=True, use_interperiod_branch=True)
+    ))
+
+
 ARM_BUILDERS = {
     "a32_generic":             build_a32_generic,  # generic cross-dataset arm
     "a32_ablate_na":           build_a32_generic,  # alias for A_no-miss ablation arm cited in Table 5
     "a33_generic":             build_a33_generic,  # generic + missingness-adaptive
     "a34_generic":             build_a34_generic,  # generic + periodicity (MSDM IIPC)
+    "a34_no_missingness":      build_a34_no_missingness, # controlled S4 ablation (Reviewer 2 Comment 4)
     "a34_no_diff":             build_a34_ablate("diff"),    # a34 drop-one ablations
     "a34_no_ip":               build_a34_ablate("ip"),
     "a34_no_mask":             build_a34_ablate("mask"),

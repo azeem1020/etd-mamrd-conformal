@@ -20,7 +20,7 @@ from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent          # the reproducibility/ bundle root
 
-RESULTS_DIR = Path(os.environ.get("MAMRD_RESULTS", _ROOT / "results" / "phase_n"))
+RESULTS_DIR = Path(os.environ.get("MAMRD_RESULTS", _ROOT / "results" / "phase_n_retrained"))
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR    = Path(os.environ.get("MAMRD_DATA",    _ROOT / "data"))
 SGCC_PATH   = Path(os.environ.get("MAMRD_SGCC",    DATA_DIR / "SGCC.csv"))

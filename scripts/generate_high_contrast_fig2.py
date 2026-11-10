@@ -4,10 +4,14 @@ import matplotlib as mpl
 mpl.use("Agg")
 import matplotlib.pyplot as plt
 
+from repro_config import RESULTS_DIR
+
 # Load extracted vector data
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPRO_DIR = SCRIPTS_DIR.parent
-json_path = REPRO_DIR / "results" / "phase_n" / "figures" / "curves_dump.json"
+json_path = RESULTS_DIR / "figures" / "curves_dump.json"
+if not json_path.exists():
+    json_path = REPRO_DIR / "results" / "phase_n" / "figures" / "curves_dump.json"
 if not json_path.exists():
     json_path = REPRO_DIR.parent / "figures" / "curves_dump.json"
 
@@ -89,11 +93,8 @@ axR.legend(loc="lower right", frameon=True, facecolor="white", edgecolor="#DCE1E
 
 # Save to destination paths
 destinations = [
-    REPRO_DIR / "results" / "phase_n" / "figures" / "fig2_performance_curves.pdf",
-    REPRO_DIR / "results" / "phase_n" / "figures" / "fig2_performance_curves.png",
-    REPRO_DIR.parent / "figures" / "fig2_performance_curves.pdf",
-    REPRO_DIR.parent / "figures" / "fig2_performance_curves.png",
-    REPRO_DIR.parent / "submission_package" / "figures" / "fig2_performance_curves.pdf",
+    RESULTS_DIR / "figures" / "fig2_performance_curves.pdf",
+    RESULTS_DIR / "figures" / "fig2_performance_curves.png",
 ]
 
 for dst in destinations:

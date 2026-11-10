@@ -1,0 +1,19 @@
+% Table B - cross-detector per-stratum PR-AUC on SGCC (cache-computed)
+% baselines n=9 (seeds 0-2), MAMRD n=15 (seeds 0-4); gap on 9 common cells.
+\begin{table*}[t]\centering\small
+\caption{Per-stratum PR-AUC by detector on SGCC (mean over cells, BCa 95\% CI). Baselines $n{=}9$, \name{} $n{=}15$; the MAMRD$-$best-baseline gap is paired over the $9$ common cells. Pop.\ \% is the mean test-set share of each stratum.}
+\label{tab:perstratum}
+\begin{tabular}{@{}l r ccccccc c@{}}
+\toprule
+Stratum & Pop.\,\% & WDCNN & HORLN & Self-Attn & GRU-D & MSDM & DKGT-Net & MAMRD & MAMRD$-$best \\
+\midrule
+Heavy dropper & 28.6 & 0.497~\ci{0.463}{0.521} & 0.607~\ci{0.578}{0.647} & 0.613~\ci{0.583}{0.658} & 0.235~\ci{0.220}{0.251} & 0.571~\ci{0.554}{0.598} & 0.425~\ci{0.396}{0.458} & 0.678~\ci{0.645}{0.714} & +0.060~\ci{+0.029}{+0.082} \\
+Heavy riser & 13.1 & 0.417~\ci{0.398}{0.435} & 0.624~\ci{0.571}{0.669} & 0.589~\ci{0.548}{0.632} & 0.328~\ci{0.304}{0.356} & 0.477~\ci{0.414}{0.522} & 0.355~\ci{0.340}{0.370} & 0.674~\ci{0.638}{0.701} & +0.050~\ci{+0.033}{+0.079} \\
+Light dropper & 28.1 & 0.297~\ci{0.275}{0.316} & 0.527~\ci{0.504}{0.550} & 0.491~\ci{0.460}{0.520} & 0.152~\ci{0.133}{0.178} & 0.291~\ci{0.262}{0.324} & 0.278~\ci{0.266}{0.294} & 0.563~\ci{0.540}{0.593} & +0.032~\ci{-0.011}{+0.072} \\
+Light riser & 13.0 & 0.180~\ci{0.153}{0.197} & 0.325~\ci{0.256}{0.394} & 0.309~\ci{0.270}{0.364} & 0.160~\ci{0.128}{0.204} & 0.261~\ci{0.223}{0.292} & 0.146~\ci{0.136}{0.167} & 0.461~\ci{0.431}{0.492} & +0.137~\ci{+0.095}{+0.197} \\
+Flat & 17.2 & 0.165~\ci{0.115}{0.209} & 0.359~\ci{0.292}{0.418} & 0.357~\ci{0.240}{0.437} & 0.095~\ci{0.072}{0.127} & 0.185~\ci{0.152}{0.218} & 0.154~\ci{0.104}{0.220} & 0.309~\ci{0.266}{0.348} & -0.044~\ci{-0.071}{-0.007} \\
+\midrule
+Aggregate & 100.0 & 0.352~\ci{0.334}{0.365} & 0.540~\ci{0.516}{0.569} & 0.522~\ci{0.505}{0.544} & 0.190~\ci{0.183}{0.197} & 0.409~\ci{0.390}{0.437} & 0.296~\ci{0.277}{0.312} & 0.600~\ci{0.584}{0.616} & +0.057~\ci{+0.044}{+0.070} \\
+\bottomrule
+\end{tabular}
+\end{table*}

@@ -30,6 +30,7 @@ import numpy as np, pandas as pd
 from scipy.stats import spearmanr
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.metrics import average_precision_score
+from repro_config import RESULTS_DIR
 from run_local_grid import load_and_preprocess, _stratified_three_way_split, SGCC_CSV
 from zkmix_lab.data import KFoldSpec
 from phased.phenotype import gap_magnitude, fit_router, assign, PHENOTYPES
@@ -104,6 +105,8 @@ verdict = ("model-free ~= deep -> SIGNAL-LIMITED corroborated" if abs(np.mean(ag
            else "model-free > deep -> STOP/FLAG (model-limited)" if np.mean(agg)-AGG_OBS>0.03
            else "model-free < deep -> inconclusive, KEEP HEDGE")
 print("VERDICT:", verdict)
+out_p = RESULTS_DIR / "trust" / "ceiling_estimate.csv"
+out_p.parent.mkdir(parents=True, exist_ok=True)
 pd.DataFrame({"stratum":STR5+["AGGREGATE"],"model_free_ap":mf+[np.mean(agg)],
-             "observed_ap":ob+[AGG_OBS]}).to_csv(THIS.parent.parent/"results/phase_n/trust/ceiling_estimate.csv",index=False)
-print("[done] wrote results/phase_n/trust/ceiling_estimate.csv")
+             "observed_ap":ob+[AGG_OBS]}).to_csv(out_p, index=False)
+print(f"[done] wrote {out_p}")

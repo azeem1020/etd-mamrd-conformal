@@ -133,73 +133,134 @@ Path overrides can be set using environment variables without modifying any code
 ```bash
 export MAMRD_SGCC=/path/to/SGCC.csv
 export MAMRD_ECL=/path/to/LD2011_2014.txt
-export MAMRD_RESULTS=../results/phase_n
+export MAMRD_RESULTS=../results/phase_n_retrained
 ```
 
 ---
 
 ## 5. Running Experiments & Generating Paper Artifacts
 
-### Unified Master Reproduction (Recommended)
-To run the complete Round-2 reproduction suite end-to-end (verifying partition disjointness, computing Tables 2, 3, 4, 5, 6, and generating empirical Figures 2–5 and S1–S2 from raw prediction records; Figure 1 is the conceptual architecture schematic):
+To support transparent peer review and independent replication, the repository implements an explicit two-tier replication architecture:
+- **Tier 1 (Fast Audit & Verification Suite, < 60 seconds on CPU)**: Re-computes all statistical metrics, generates bootstrap confidence intervals ($B=1{,}000$ for customer-clustered CIs, $B=2{,}000$ for paired ablations), verifies customer-disjoint partition manifests, and compiles all empirical publication figures (Figures 2, 3, 4, 5) directly from verified prediction-level records.
+- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on GPU)**: Independently executes all 123 neural network training runs (cohort cleaning, 15 MAMRD cells, 54 ablation cells, 54 baseline cells, ECL runs, conformal calibration, and post-processing) from raw CSV data using GPU acceleration.
+
+---
+
+### Tier 1: Fast Master Reproduction Suite (< 60 Seconds)
+To verify partition manifests, compute Tables 2, 3, 4, 5, 6, and compile all empirical publication figures (Figures 2–5) without requiring model retraining:
 ```bash
-# Execute master reproduction workflow
 python scripts/reproduce_all_r2.py --config configs/default.yaml
+```
+*Note: Figure 1 (MAMRD Architectural Framework) is the conceptual schematic compiled from TikZ (`submission_package/figures/fig0_architecture_src.tex`). Figure 2 (Precision-Recall and ROC curves) is dynamically interpolated and rendered by `make_manuscript_figures.py` as part of this routine.*
+
+---
+
+### Tier 2: Complete End-to-End Retraining from Raw Datasets
+
+#### Master One-Command Retraining Runner (103.8 min on NVIDIA GPU):
+To independently execute the full end-to-end retraining pipeline from scratch into `results/phase_n_retrained/`:
+```bash
+python scripts/run_master_retrain.py
+```
+
+#### Step-by-Step 7-Stage Retraining Pipeline:
+Alternatively, each of the seven stages implemented in `scripts/run_master_retrain.py` can be executed independently from the repository root:
+
+```bash
+# ==============================================================================
+# Stage 0: Data Acquisition (see data/README.md)
+# ==============================================================================
+mkdir -p data && cd data
+# Download raw SGCC.csv and UCI ElectricityLoadDiagrams20112014 (LD2011_2014.txt)
+cd ..
+
+# ==============================================================================
+# Stage 1: Cohort Cleaning & Chronological Alignment
+# ==============================================================================
+# 1. Strict chronological ISO-8601 sort & weekly seasonal interpolation (2016-09-18)
+python scripts/prepare_sgcc_dataset.py
+# 2. Execute pre-registered cohort cleaning (filter uninformative meters nansum(|x|) < 1e-6)
+python scripts/clean_cohort.py
+# 3. Verify 100% customer-disjoint and window-disjoint partition manifests
+python scripts/verify_partition_manifests.py
+
+# ==============================================================================
+# Stage 2: MAMRD Architecture Training (15 Cells)
+# ==============================================================================
+# Train MAMRD (a34_generic) across 3 customer-disjoint folds and 5 seeds (15 cells):
+python scripts/run_n_clean.py --backbone a34_generic --epochs 30 --seeds 0 1 2 3 4 --folds 0 1 2
+
+# ==============================================================================
+# Stage 3: Full Architectural Ablation Suite (9 Cells Each)
+# ==============================================================================
+# S0: Minimal Core (BiMamba2 + 2D Value Laplacian CNN)
+python scripts/run_n_clean.py --backbone a34_bu0_core --cell_prefix bu/a34_bu0_core --epochs 30 --seeds 0 1 2 --folds 0 1 2
+# S1: + Context-conditioned fill token (CC-NaME)
+python scripts/run_n_clean.py --backbone a34_bu1_ccname --cell_prefix bu/a34_bu1_ccname --epochs 30 --seeds 0 1 2 --folds 0 1 2
+# S2: + 2D missingness-mask Laplacian CNN
+python scripts/run_n_clean.py --backbone a34_bu2_mask --cell_prefix bu/a34_bu2_mask --epochs 30 --seeds 0 1 2 --folds 0 1 2
+# S3: + Multi-scale lagged differencing (a33_generic, no-IIPC)
+python scripts/run_n_clean.py --backbone a33_generic --cell_prefix bu/a33_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
+# A32: Generic core + differencing (no CC-NaME, no Mask CNN)
+python scripts/run_n_clean.py --backbone a32_generic --cell_prefix bu/a32_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
+# A34_no_miss: Controlled S4 ablation disabling only missingness-related pathways (Reviewer 2, Comment 4)
+python scripts/run_n_clean.py --backbone a34_no_missingness --cell_prefix bu/a34_no_missingness --epochs 30 --seeds 0 1 2 --folds 0 1 2
+
+# ==============================================================================
+# Stage 4: Rival Deep Learning Baselines (9 Cells Each)
+# ==============================================================================
+for b in wdcnn horln hybridattn grud msdm_net dkgt; do
+    python scripts/run_n_clean.py --arm $b --backbone $b --cell_prefix baselines/$b --epochs 30 --seeds 0 1 2 --folds 0 1 2
+done
+
+# ==============================================================================
+# Stage 5: ECL Industrial Transfer Benchmark
+# ==============================================================================
+python scripts/run_ecl_trust.py
+python scripts/run_ecl_trust_analysis.py
+
+# ==============================================================================
+# Stage 6: Certified Conformal Calibration & Trust Layer
+# ==============================================================================
+python scripts/run_ceiling_estimate.py
+python scripts/run_trust_layer.py
+python scripts/run_decision_value.py
+python scripts/run_empirical_comparator.py
+python scripts/run_finardi_repro.py
+
+# ==============================================================================
+# Stage 7: Post-Processing, Metrics Ledgers & Manuscript Figures
+# ==============================================================================
+# 1. Main benchmark metrics across SGCC & ECL (Table 3)
+python scripts/compute_table_b.py
+# 2. Fixed FPR operating points at 1% and 5% budgets (Table 4)
+python scripts/compute_table_c.py
+# 3. Customer-level clustered bootstrap CIs and ablation provenance ledgers (Tables 2 & 5)
+python scripts/compute_r2_revisions.py
+# 4. Empirical publication figures (Figures 2, 3, 4, 5)
+python scripts/make_manuscript_figures.py
+# 5. Supplementary figures (Figures S1, S2, S3, S4, S6)
+python scripts/make_figures.py
+python scripts/make_trust_figure.py
 ```
 
 ---
 
-### Step-by-Step Individual Workflows
+### Result Traceability Matrix
 
-### A. Training & Benchmark Evaluation (Table 2, Table 3, Table 4, Table 5)
-Train MAMRD (`a34_generic`) and rival baselines on the full 42,372-consumer SGCC cohort (`--full` is enabled by default, writing both `a34_manifest.csv` and per-cell `a34_cell_{seed}_{fold}.csv` files):
-```bash
-cd scripts
+Every result reported in the manuscript is traceable to its corresponding configuration, seed set, execution script, and verified output file in `results/phase_n_retrained/`:
 
-# Train MAMRD across customer-disjoint folds (0..2) and initialization seeds (0..2)
-PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
-
-# Generate Table 3 (formerly Table 2) & Table B performance ledgers (9-cell matched & 15-cell extended)
-PYTHONPATH=.. python compute_table_b.py
-
-# Generate Round-2 partition manifests, consumer-level bootstrap CIs, and ablation ledgers
-PYTHONPATH=.. python compute_r2_revisions.py
-
-# Generate Table 5 (formerly Table 4) ablations & contrasts
-PYTHONPATH=.. python compute_table_c.py
-PYTHONPATH=.. python table_c_contrasts.py
-
-# Evaluate external ECL window-level generalization board
-PYTHONPATH=.. python run_ecl_ours.py --backbone a34_generic
-PYTHONPATH=.. python make_ecl_board.py
-```
-
-### B. Manuscript & Supplementary Figures (Figures 1–5 & Figures S1–S6)
-Generate all main-text vector PDFs (`fig1_mamrd_architecture.pdf`, `fig3_ablation_bars.pdf`, `fig4_calibration_reliability.pdf`, `fig5_conformal_tradeoffs.pdf`), high-contrast PR/ROC curves (`fig2_performance_curves.pdf`), and supplementary figures (`fig4_ceiling.pdf`, `fig6_trust_guarantee.pdf`):
-```bash
-cd scripts
-PYTHONPATH=.. python make_manuscript_figures.py
-PYTHONPATH=.. python generate_high_contrast_fig2.py
-PYTHONPATH=.. python make_figures.py
-PYTHONPATH=.. python make_trust_figure.py
-```
-
-### C. Conformal Audits, Decision Value & Empirical Baseline Comparator
-Run the post-hoc group-conditional conformal audit evaluation (`k = ceil((n + 1)(1 - alpha))`), inspection-burden reduction analysis, and 281-resplit empirical group-quantile comparator:
-```bash
-cd scripts
-PYTHONPATH=.. python run_trust_layer.py
-PYTHONPATH=.. python run_decision_value.py
-PYTHONPATH=.. python run_empirical_comparator.py
-PYTHONPATH=.. python run_ecl_trust_analysis.py
-```
-
-### D. Full Training Pipeline (Requires GPU & Datasets)
-To retrain MAMRD (`a34_generic`) across 3 customer-disjoint folds and 3 (or 5) initialization seeds on the full SGCC cohort:
-```bash
-cd scripts
-PYTHONPATH=.. python run_n_clean.py --backbone a34_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
-```
+| Manuscript Artifact | Description | Configuration / Hyperparameters | Executing Script | Verified Output File (`results/phase_n_retrained/`) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Table 2** | Data Partitioning Ledger | `configs/default.yaml`; 5-fold stratified split (`seed=42`); customer-disjoint IDs | `scripts/compute_r2_revisions.py` | `r2_audit/conformal_eligibility_ledger.csv` |
+| **Table 3** | Protocol-Matched Main Results | AdamW ($\text{lr}=3\times 10^{-4}$, $\text{wd}=10^{-4}$, $\text{bs}=128$, 30 ep); Seeds 0–4 $\times$ Folds 0–2 (15 cells) for MAMRD; Seeds 0–2 $\times$ Folds 0–2 (9 cells) for Baselines | `scripts/compute_table_b.py` | `tableB/tableB_recalculated.csv` |
+| **Table 4** | Fixed FPR Budgets ($1\%, 5\%$) | Prospective threshold transfer from $\mathcal{D}_{\text{cal}}$; evaluated at $\text{FPR} \in \{0.01, 0.05\}$ across 9 test cells | `scripts/compute_table_c.py` | `tableC/tableC_recalculated.csv` |
+| **Table 5** | Architectural Ablation Suite | Seeds 0–2 $\times$ Folds 0–2 ($M=9$ matched cells); $\mathcal{A}_{34,\text{no-miss}}$ (`use_mask=False, use_cc=False`); BCa bootstrap ($B=2{,}000$) | `scripts/compute_r2_revisions.py` | `r2_audit/table_ablation_provenance.csv` |
+| **Table 6** | Mondrian Conformal Policies | Marginal target $1-\alpha = 0.80$; exact order stat $k_\phi = \lceil(n_\phi+1)(1-\alpha)\rceil$; 20 stratified 50/50 resplits | `scripts/run_trust_layer.py` | `trust/audit_policies_sgcc.csv` |
+| **Figure 2** | Test PR and ROC Curves | 100-point uniform grid interpolation over held-out test predictions; mean $\pm 1\,\sigma$ ribbon | `scripts/make_manuscript_figures.py` | `figures/fig2_performance_curves.pdf` |
+| **Figure 3** | Sequential / Subtractive Ablation | Step additions $\mathcal{S}_0 \to \mathcal{S}_4$ & paired drop contrasts ($\Delta\text{AP}$ with 95% BCa intervals) | `scripts/make_manuscript_figures.py` | `figures/fig3_ablation_bars.pdf` |
+| **Figure 4** | Probability Calibration & ECE | Alternating split ($\mathcal{I}_{\text{cal}} / \mathcal{I}_{\text{eval}}$); 10 equal-width bins; $L_2$-logistic fit ($C=10^4$) | `scripts/make_manuscript_figures.py` | `figures/fig4_calibration_reliability.pdf` |
+| **Figure 5** | Conformal Workload Reduction | Group routing ($\tau_f = 0.0138, \mu^+ = 5.86, \mu^- = 7.31$); evaluated across valid cells ($n_\phi \ge 10$) | `scripts/make_manuscript_figures.py` | `figures/fig5_conformal_tradeoffs.pdf` |
 
 ---
 

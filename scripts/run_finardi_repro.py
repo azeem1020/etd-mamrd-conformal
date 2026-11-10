@@ -159,7 +159,7 @@ def main():
     ap.add_argument("--epochs", type=int, default=30)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--fold", type=int, default=0)
-    ap.add_argument("--out", default=str(THIS.parent / "results/phase_n/repro_finardi.json"))
+    ap.add_argument("--out", default=str(RESULTS_DIR / "repro_finardi.json"))
     args = ap.parse_args()
     print(f"[device] cuda avail={torch.cuda.is_available()} temp={gpu_temp()}C", flush=True)
     rows = []
