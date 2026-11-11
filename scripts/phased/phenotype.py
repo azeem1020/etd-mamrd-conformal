@@ -5,14 +5,15 @@ to ALL customers (not just theft) so it can (a) stratify detection performance a
 (b) drive a label-free MoE router.
 
 Rule (Paper 4, Algorithm 1 — consumption-only, LABEL-FREE):
-    g_i = mean(mid-week observed) - mean(weekend observed)     # signed switching gap
+    g_i = mean(observed, block columns 0-4) - mean(observed, block columns 5-6)  # signed gap
     m_i = mean(observed consumption)                            # magnitude
     if |g_i| <= tau:           phenotype = Flat
-    elif g_i > 0:  dir=Dropper (mid-week-heavy);  Heavy if m_i > median{m: droppers} else Light
-    else:          dir=Riser   (weekend-heavy);   Heavy if m_i > median{m: risers}   else Light
+    elif g_i > 0:  dir=Dropper (columns 0-4 heavier); Heavy if m_i > median{m: droppers} else Light
+    else:          dir=Riser   (columns 5-6 heavier); Heavy if m_i > median{m: risers}   else Light
 
-Day-of-week convention matches phased/eng_features.py (index 2=Wed, 5=Sat ->
-0=Mon..4=Fri weekday, 5=Sat,6=Sun weekend). Gaps/magnitudes are computed on RAW
+Column convention: on the chronologically ordered SGCC grid every 7-day block starts on a
+Wednesday (2014-01-01), so columns 0-4 are Wednesday-Sunday and columns 5-6 are
+Monday-Tuesday; the gap is therefore not a weekday/weekend contrast. Gaps/magnitudes are computed on RAW
 kWh (pre-normalisation), NaN-aware, matching Paper-4's kWh semantics.
 
 LEAKAGE FIREWALL: tau and the within-direction medians are FIT ON TRAIN CUSTOMERS
@@ -44,7 +45,7 @@ def gap_magnitude(X_raw: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     mid = np.where(np.isfinite(mid), mid, 0.0)
     wke = np.where(np.isfinite(wke), wke, 0.0)
     mag = np.where(np.isfinite(mag), mag, 0.0)
-    g = (mid - wke).astype(np.float64)     # >0 -> dropper (mid-week-heavy)
+    g = (mid - wke).astype(np.float64)     # >0 -> dropper (columns 0-4 heavier)
     return g, mag.astype(np.float64)
 
 

@@ -7,8 +7,8 @@ shuffled 5-fold KFold (random state 0) on windows, held-out fold split 33/33/34 
 per-window test scores, labels and observed load magnitude for the conformal audit
 (run_ecl_trust_analysis.py). Self-contained, resumable (skips existing cells), GPU heat-gated.
 
-ECL has NO calendar/weekday structure and carries injected FDI -> the SGCC weekday/
-weekend phenotype is NOT meaningful here. Per the locked finding ("detectability =
+ECL has NO calendar/weekday structure and carries injected FDI -> the SGCC column-gap
+(Dropper/Riser) phenotype is NOT meaningful here. Per the locked finding ("detectability =
 MAGNITUDE, not direction") we stratify ECL by MAGNITUDE only (Heavy/Light by the
 TRAIN-fit median of observed mean-consumption -> leakage-safe). Analysis reports
 base-rate-normalized LIFT (same prevalence-confound control as SGCC).

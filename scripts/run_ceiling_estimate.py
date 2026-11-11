@@ -3,7 +3,7 @@
 PRE-REGISTRATION (dated 2026-06-05, before running):
   CLAIM under test: the 0.567 detectability ceiling is SIGNAL-limited, not MODEL-limited.
   ESTIMATOR: HistGradientBoosting on hand-crafted, model-free per-consumer features
-    (mean/std/cov/min/max/quantiles/missing-rate/zero-fraction/weekday-weekend gap/
+    (mean/std/cov/min/max/quantiles/missing-rate/zero-fraction/column 0-4 vs 5-6 gap/
      lag-1,lag-7 autocorr/trend slope) -- NO learned/deep representation -- evaluated
      per stratum under the SAME folds as the detectors.
   PREDICTION: model-free AP (i) rank-tracks observed per-stratum detector AP (Spearman>0)
