@@ -195,7 +195,8 @@ cd ..
 # ==============================================================================
 # Stage 1: Cohort Cleaning & Chronological Alignment
 # ==============================================================================
-# 1. Strict chronological ISO-8601 sort & single-date Sunday 2016-09-18 interpolation (natural NaNs strictly preserved)
+# 1. Strict chronological ISO-8601 sort & single-date Sunday 2016-09-18 interpolation (natural NaNs strictly preserved).
+#    Required: training reads the date columns in file order and stops unless this step has been run.
 python scripts/prepare_sgcc_dataset.py
 # 2. Execute pre-registered cohort cleaning (filter uninformative meters nansum(|x|) < 1e-6)
 python scripts/clean_cohort.py
@@ -205,30 +206,40 @@ python scripts/verify_partition_manifests.py
 # ==============================================================================
 # Stage 2: MAMRD Architecture Training (15 Cells)
 # ==============================================================================
-# Train MAMRD (a34_generic) across 3 customer-disjoint folds and 5 seeds (15 cells):
-python scripts/run_n_clean.py --backbone a34_generic --epochs 30 --seeds 0 1 2 3 4 --folds 0 1 2
+# The commands in Stages 2-4 are exactly those issued by run_master_retrain.py.
+# --cell_prefix and --manifest must be given as shown: run_n_clean.py overwrites the
+# manifest it is pointed at, and Table 5 / Fig. 3 read results/phase_n_retrained/a32_sgcc.csv.
+python scripts/run_n_clean.py --backbone a34_generic --arm a34_generic --epochs 30 --seeds 0 1 2 3 4 --folds 0 1 2 \
+    --cell_prefix a34_cell --manifest results/phase_n_retrained/a34_manifest.csv
 
 # ==============================================================================
 # Stage 3: Full Architectural Ablation Suite (9 Cells Each)
 # ==============================================================================
 # S0: Minimal Core (BiMamba2 + 2D Value Laplacian CNN)
-python scripts/run_n_clean.py --backbone a34_bu0_core --cell_prefix bu/a34_bu0_core --epochs 30 --seeds 0 1 2 --folds 0 1 2
+python scripts/run_n_clean.py --backbone a34_bu0_core --arm a34_bu0_core --epochs 30 --seeds 0 1 2 --folds 0 1 2 \
+    --cell_prefix bu/a34_bu0_core --manifest results/phase_n_retrained/bu/a34_bu0_core_manifest.csv
 # S1: + Context vector and CC-MVI imputation token (code name: ccname / CC-NaME)
-python scripts/run_n_clean.py --backbone a34_bu1_ccname --cell_prefix bu/a34_bu1_ccname --epochs 30 --seeds 0 1 2 --folds 0 1 2
+python scripts/run_n_clean.py --backbone a34_bu1_ccname --arm a34_bu1_ccname --epochs 30 --seeds 0 1 2 --folds 0 1 2 \
+    --cell_prefix bu/a34_bu1_ccname --manifest results/phase_n_retrained/bu/a34_bu1_ccname_manifest.csv
 # S2: + 2D missingness-mask Laplacian CNN
-python scripts/run_n_clean.py --backbone a34_bu2_mask --cell_prefix bu/a34_bu2_mask --epochs 30 --seeds 0 1 2 --folds 0 1 2
-# S3: + Multi-scale lagged differencing (a33_generic, no-IIPC)
-python scripts/run_n_clean.py --backbone a33_generic --cell_prefix bu/a33_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
+python scripts/run_n_clean.py --backbone a34_bu2_mask --arm a34_bu2_mask --epochs 30 --seeds 0 1 2 --folds 0 1 2 \
+    --cell_prefix bu/a34_bu2_mask --manifest results/phase_n_retrained/bu/a34_bu2_mask_manifest.csv
+# S3: + Multi-scale lagged differencing (a33_generic, no IIPC)
+python scripts/run_n_clean.py --backbone a33_generic --arm a33_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2 \
+    --cell_prefix bu/a33_generic --manifest results/phase_n_retrained/a33_sgcc.csv
 # A32: Core + differencing only (no CC-MVI, no Mask CNN, no IIPC)
-python scripts/run_n_clean.py --backbone a32_generic --cell_prefix bu/a32_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
-# A34_no_miss: Controlled S4 ablation disabling only missingness-related pathways (Reviewer 2, Comment 4)
-python scripts/run_n_clean.py --backbone a34_no_missingness --cell_prefix bu/a34_no_missingness --epochs 30 --seeds 0 1 2 --folds 0 1 2
+python scripts/run_n_clean.py --backbone a32_generic --arm a32_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2 \
+    --cell_prefix bu/a32_generic --manifest results/phase_n_retrained/a32_sgcc.csv
+# A34_no_miss: full S4 with only the missingness pathways disabled (Reviewer 2, Comment 4)
+python scripts/run_n_clean.py --backbone a34_no_missingness --arm a34_no_missingness --epochs 30 --seeds 0 1 2 --folds 0 1 2 \
+    --cell_prefix bu/a34_no_missingness --manifest results/phase_n_retrained/bu/a34_no_missingness_manifest.csv
 
 # ==============================================================================
 # Stage 4: Rival Deep Learning Baselines (9 Cells Each)
 # ==============================================================================
 for b in wdcnn horln hybridattn grud msdm_net dkgt; do
-    python scripts/run_n_clean.py --arm $b --backbone $b --cell_prefix baselines/$b --epochs 30 --seeds 0 1 2 --folds 0 1 2
+    python scripts/run_n_clean.py --backbone $b --arm $b --epochs 30 --seeds 0 1 2 --folds 0 1 2 \
+        --cell_prefix baselines/$b --manifest results/phase_n_retrained/baselines/${b}_manifest.csv
 done
 
 # ==============================================================================
@@ -260,7 +271,7 @@ Every result reported in the manuscript is traceable to its corresponding config
 
 | Manuscript Artifact | Description | Configuration / Hyperparameters | Executing Script | Verified Output File (`results/phase_n_retrained/`) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Table 2** | Data Partitioning Ledger | `configs/default.yaml`; shuffled 5-fold `KFold` (`random_state=0`), Folds 0–2; held-out fold split by stratified sampling (33/33/34 %); conformal halves on the Table 6 / Supp. Table S6 resplits | `scripts/compute_r2_revisions.py` | `r2_audit/table2_partition_ledger.csv` (per fold: `r2_audit/sgcc_fold_counts.csv`, `ecl_fold_counts.csv`) |
+| **Table 2** | Data Partitioning Ledger | `configs/default.yaml`; shuffled 5-fold `KFold` (`random_state=0`), Folds 0–2; held-out fold split by stratified sampling (33/33/34 %); conformal halves on the Table 6 / Supp. Table S6 resplits | `scripts/compute_r2_revisions.py` | `r2_audit/table2_partition_ledger.csv` (per fold: `r2_audit/sgcc_fold_counts.csv`, `r2_audit/ecl_fold_counts.csv`) |
 | **Table 3** | Protocol-Matched Main Results | AdamW ($\text{lr}=3\times 10^{-4}$, $\text{wd}=10^{-4}$, $\text{bs}=128$, 30 ep); Seeds 0–4 $\times$ Folds 0–2 (15 cells) for MAMRD; Seeds 0–2 $\times$ Folds 0–2 (9 cells) for baselines; cell BCa ($B=2{,}000$, seed 12345); MAP@100/P@100 averaged over random orderings of tied scores | `scripts/compute_r2_revisions.py` | `r2_audit/table3_main_results.csv`, `r2_audit/table3_tests.csv` (paired tests, Friedman, consumer bootstrap) |
 | **Table 4** | Fixed FPR Budgets ($1\%, 5\%$) | Rows: recall at FPR $\in\{0.01, 0.05\}$ by ROC interpolation (`zkmix_lab.metrics.recall_at_fpr`), inspected % $=\pi\cdot$recall$+(1-\pi)\cdot$FPR; note: threshold from conformal-calibration negatives on the Table 6 resplits | `scripts/compute_r2_revisions.py` | `r2_audit/table4_fpr_budgets.csv`, `r2_audit/table4_prospective.csv` |
 | **Table 5** | Architectural Ablation Suite | Seeds 0–2 $\times$ Folds 0–2 ($M=9$ matched cells; $M=15$ for $\mathcal{S}_4$ only); $\mathcal{A}_{34,\text{no-miss}}$ (`use_mask=False, use_cc=False`); paired BCa ($B=2{,}000$), exact Wilcoxon | `scripts/compute_r2_revisions.py` | `r2_audit/table5_ablation.csv` |
@@ -269,12 +280,13 @@ Every result reported in the manuscript is traceable to its corresponding config
 | **Figure 3** | Sequential / Subtractive Ablation | Step additions $\mathcal{S}_0 \to \mathcal{S}_4$ & paired drop contrasts ($\Delta\text{AP}$ with 95% BCa intervals) | `scripts/make_manuscript_figures.py` | `figures/fig3_ablation_bars.pdf` |
 | **Figure 4** | Probability Calibration & ECE | Alternating split ($\mathcal{I}_{\text{cal}} / \mathcal{I}_{\text{eval}}$) of the test predictions; 10 equal-width bins; $L_2$-logistic fit ($C=10^4$) | `scripts/make_manuscript_figures.py` | `figures/fig4_calibration_reliability.pdf`, `trust/fig4_ece_by_detector.csv` (ECE and Brier score before/after recalibration, fitted $\hat{w}$, $\hat{b}$; also the calibration table of the response letter) |
 | **Figure 5** | Conformal Recall & Workload Reduction | (a) empirical vs conformal group thresholds; (b) conditional vs single threshold; same 300 MAMRD resplits as Table 6 (no eligibility gate) | `scripts/run_empirical_comparator.py`, `scripts/run_decision_value.py` → `scripts/make_manuscript_figures.py` | `trust/empirical_comparator_sgcc.csv`, `trust/decision_value_sgcc.csv`, `figures/fig5_conformal_tradeoffs.pdf` |
-| **Supp. Fig. (fig:trust)** | Per-group lift & Heavy−Flat hit-rate gap | Same resplits/protocol as Table 6, all 5 phenotypes | `scripts/run_trust_layer.py` → `scripts/make_trust_figure.py` | `trust/trust_lift_sgcc.csv`, `trust/trust_sgcc_percell.csv`, `figures/fig6_trust_guarantee.pdf` |
+| **Supp. Fig. S4** | Per-group lift & Heavy−Flat hit-rate gap | Same resplits/protocol as Table 6, all 5 phenotypes | `scripts/run_trust_layer.py` → `scripts/make_trust_figure.py` | `trust/trust_lift_sgcc.csv`, `trust/trust_sgcc_percell.csv`, `figures/fig6_trust_guarantee.pdf` |
 | **Supp. Table S7 (per-attack note)** | ECL Recall at 1 % / 5 % FPR per FDI attack type | 9 cells (3 folds × 3 seeds); FPR threshold from evaluation negatives; BCa ($B=2{,}000$) | `scripts/compute_table_a.py` | `tableA/tableA_agg.csv` |
 | **Supp. Tables S2, S4** | Per-group PR-AUC of MAMRD and all detectors | 15 MAMRD / 9 baseline cells; BCa; paired gap over 9 common cells | `scripts/compute_table_b.py` | `tableB/tableB_agg.csv`, `tableB/tableB_gap.csv` |
 | **Supp. Table S3** | Prevalence-matched per-group contrasts | negatives subsampled to a common prevalence (100 draws); paired BCa over 15 cells; Friedman test | `scripts/compute_table_c.py` → `scripts/table_c_contrasts.py` | `tableC/tableC_contrasts.csv`, `tableC/tableC_friedman.csv` |
 | **Supp. Table S7** | ECL metric suite | 9 cells; $F_1$ at the per-fold maximising threshold (oracle); MAP@100 tie-neutral | `scripts/make_ecl_board.py` | `ecl_board.csv` |
 | **Supp. Figs. S1, S2, S3** | Detectability ceiling; metric inflation; illustrative mechanism | — | `scripts/make_figures.py`, `scripts/make_mechanism_figure.py` | `figures/fig4_ceiling.pdf`, `figures/fig1_metric_inflation.pdf`, `figures/fig_mechanism.pdf` |
+| **Table 1, Supp. Table S1, Figure 1, Supp. Fig. S5** | Layer specification, training hyper-parameters, architecture and workflow schematics | not data-driven: written from the model and training code (`scripts/phased/models.py`, `zkmix_lab/training.py` `TrainConfig`); parameter counts as in Supp. Table S5 | `scripts/make_compute_table.py` (parameter counts) | — (schematics are drawn, not generated) |
 | **Supp. Table S5** | Parameters, inference latency, peak memory | hardware measurement (RTX 3060, batch 256); not part of Tier 1 | `scripts/make_compute_table.py` | console output |
 | **Text (Intro., Methods)** | Mask-only classifier; missing-rate statistics; router cutoffs | 3 folds | `scripts/compute_r2_revisions.py` | `r2_audit/mask_only_baseline.csv`, `r2_audit/router_params.csv` |
 | **Supp. Table S6** | ECL conformal lift gap | Same protocol (`conformal_common.py`) | `scripts/run_ecl_trust_analysis.py` | `ecl_trust/RESULTS_ECL_TRUST.md` |

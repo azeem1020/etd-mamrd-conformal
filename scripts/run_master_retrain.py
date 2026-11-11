@@ -101,6 +101,10 @@ def cells_exist(dir_path: Path, prefix: str, seeds: list[int], folds: list[int])
 
 def stage_cohort(args):
     log("=== STAGE 1: COHORT PREPARATION & CLEANING ===")
+    # Chronological ordering of the raw SGCC columns and the 2016-09-18 fill (idempotent).
+    # Training reads columns in file order, so this must run before any model is trained.
+    if not run_cmd([sys.executable, "prepare_sgcc_dataset.py"], "SGCC chronological preparation"):
+        return False
     keep_fp = OUT / "keep_idx.npy"
     if keep_fp.exists() and not args.force:
         log(f"keep_idx.npy exists at {keep_fp}. Skipping (use --force to rerun).")

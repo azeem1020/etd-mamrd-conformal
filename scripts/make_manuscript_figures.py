@@ -116,6 +116,7 @@ def make_fig2_performance_curves():
         ("Self-Attn",  N / "baselines/hybridattn_{s}_{f}.csv", {"color": "#207D53", "lw": 1.5, "ls": (0, (1.5, 2)), "zorder": 3}),
         ("MSDM",       N / "baselines/msdm_net_{s}_{f}.csv",   {"color": "#6E388C", "lw": 1.4, "ls": (0, (5, 2, 1.5, 2)), "zorder": 4}),
         ("HORLN",      N / "baselines/horln_{s}_{f}.csv",      {"color": "#D33F23", "lw": 1.4, "ls": (0, (5, 2)), "zorder": 5}),
+        ("DKGT-Net",   N / "baselines/dkgt_{s}_{f}.csv",       {"color": "#8C6D31", "lw": 1.3, "ls": (0, (1, 1)), "zorder": 5}),
         ("MAMRD",      N / "a34_cell_{s}_{f}.csv",             {"color": "#1B5E94", "lw": 2.2, "ls": "-", "zorder": 6}),
     ]
 

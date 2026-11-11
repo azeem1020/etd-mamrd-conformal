@@ -35,7 +35,6 @@ if str(THIS) not in sys.path:
 from repro_config import DATA_DIR, SGCC_PATH
 
 DEFAULT_RAW_CANDIDATES = [
-    Path("/home/azeem/papers/All_Work/SGCC.csv"),
     DATA_DIR / "SGCC_raw.csv",
     DATA_DIR / "SGCC.csv",
 ]

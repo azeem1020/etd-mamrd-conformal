@@ -85,6 +85,14 @@ def load_and_preprocess(csv_path: Path = SGCC_CSV) -> tuple[np.ndarray, np.ndarr
     print(f"[data] Loading {csv_path} ...", flush=True)
     t0 = time.time()
     df = pd.read_csv(csv_path)
+    # Fail closed unless the date columns are the prepared chronological series
+    # (1,035 consecutive days incl. 2016-09-18); see scripts/prepare_sgcc_dataset.py.
+    dates = pd.to_datetime(pd.Index(df.columns[2:]), format="%Y-%m-%d", errors="coerce")
+    steps = pd.Series(dates).diff().dropna()
+    if (len(dates) != 1035 or dates.isna().any()
+            or not (steps == pd.Timedelta(days=1)).all()):
+        raise SystemExit(f"[data] {csv_path} is not the chronologically prepared SGCC file "
+                         f"({len(dates)} date columns). Run: python scripts/prepare_sgcc_dataset.py")
     labels = df["FLAG"].values.astype(np.int64)
     arr    = df.drop(columns=["CONS_NO", "FLAG"]).values.astype(np.float64)
     print(f"  loaded {df.shape} in {time.time()-t0:.1f}s  "

@@ -56,8 +56,10 @@ def run_step(step_name: str, cmd: list[str], cwd: Path) -> None:
     log_path = log_dir / f"{Path(cmd[1]).stem}.log"
     sys.stdout.flush()
     with open(log_path, "w", encoding="utf-8") as lf:
+        # Fixed timestamp so matplotlib writes byte-identical PDF figures on every run.
+        env = dict(os.environ, SOURCE_DATE_EPOCH=os.environ.get("SOURCE_DATE_EPOCH", "1767225600"))
         proc = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                text=True, bufsize=1)
+                                text=True, bufsize=1, env=env)
         for line in proc.stdout:
             sys.stdout.write(line); lf.write(line)
         returncode = proc.wait()
