@@ -72,7 +72,7 @@ def _mapk(y, s, K):
 def _load_cells(pat):
     """-> dict[(seed,fold)] = {pr,roc,f1,map100,scores,labels, pr_<ph>, roc_<ph>}"""
     out = {}
-    for f in glob.glob(pat):
+    for f in sorted(glob.glob(pat)):  # sorted: cell order must not depend on filesystem order
         for x in csv.DictReader(open(f)):
             if x.get("pr_auc", "") in ("", "nan"): continue
             rec = {"pr": float(x["pr_auc"]), "roc": float(x["roc_auc"]), "f1": float(x["f1"])}
