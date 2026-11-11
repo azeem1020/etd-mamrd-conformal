@@ -48,10 +48,10 @@ def load_yaml_config(cfg_path: Path) -> dict:
 def run_step(step_name: str, cmd: list[str], cwd: Path) -> None:
     print(f"\n{'='*75}")
     print(f">> RUNNING STEP: {step_name}")
-    print(f"   Command: {' '.join(cmd)}")
+    from repro_config import RESULTS_DIR, scrub_paths
+    print(f"   Command: {scrub_paths(' '.join(cmd))}")
     print(f"{'='*75}")
     # stream the step's output to the console and to results/.../logs/<script>.log
-    from repro_config import RESULTS_DIR
     log_dir = RESULTS_DIR / "logs"; log_dir.mkdir(parents=True, exist_ok=True)
     log_path = log_dir / f"{Path(cmd[1]).stem}.log"
     sys.stdout.flush()
@@ -61,6 +61,7 @@ def run_step(step_name: str, cmd: list[str], cwd: Path) -> None:
         proc = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                 text=True, bufsize=1, env=env)
         for line in proc.stdout:
+            line = scrub_paths(line)
             sys.stdout.write(line); lf.write(line)
         returncode = proc.wait()
     if returncode != 0:
@@ -88,8 +89,9 @@ def main():
     cfg_file = REPO_ROOT / args.config if not Path(args.config).is_absolute() else Path(args.config)
     print("=" * 75)
     print("MAMRD ROUND-2 UNIFIED REPRODUCTION SUITE")
-    print(f"Repository Root: {REPO_ROOT}")
-    print(f"Active Configuration: {cfg_file}")
+    from repro_config import scrub_paths
+    print("Repository Root: .")
+    print(f"Active Configuration: {scrub_paths(str(cfg_file))}")
     print("=" * 75)
 
     cfg_dict = load_yaml_config(cfg_file)

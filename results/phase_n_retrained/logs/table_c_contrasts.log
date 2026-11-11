@@ -36,7 +36,7 @@ VERDICT (no spin):
   Flat exceeds light strata with interval excluding zero?  Flat-Light dropper: True (-0.107 [-0.129,-0.082]); Flat-Light riser: False (-0.040 [-0.105,+0.014]).
   Heavy(pooled)-Light(pooled): True (+0.042 [+0.013,+0.065]).
 
-[done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableC
+[done] artifacts in ./results/phase_n_retrained/tableC
 
 [optional] audit-efficiency LIFT under matching: SKIPPED.
   Reason: lift = P_phi/pi_phi needs an operating point phi. The paper's phi is the

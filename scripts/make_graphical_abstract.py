@@ -55,7 +55,7 @@ a2.set_ylim(0, 0.8); a2.set_ylabel("full-prevalence AP")
 a2.set_title("(2) An empirical ceiling")
 a2.text(2.4, 0.70, "no baseline $>0.50$", fontsize=6, color=TOL["dark"], ha="center")
 
-# Panel 3: a guarantee that cuts audits (Move B, MAMRD @ guaranteed 80% per-group detection rate)
+# Panel 3: group-conditional conformal thresholds reduce audits (MAMRD, 80% per-group recall target)
 a3.bar([0, 1], [0.507, 0.322], color=[TOL["grey"], TOL["green"]], width=0.55,
        edgecolor=TOL["dark"], lw=0.6)
 a3.set_xticks([0, 1]); a3.set_xticklabels(["single\nthreshold", "consumption-\nconditional"], fontsize=6.5)

@@ -1,30 +1,37 @@
-# Results Directory
+# Results
 
-This directory is the output destination for experiment scripts, evaluation ledgers, logs, and generated visualizations.
+`phase_n_retrained/` holds every result reported in the manuscript (Revision 3). All models were retrained on the chronologically ordered SGCC data and on ECL.
 
-To preserve scientific reproducibility and prevent unauthorized pre-publication redistribution of article figures, results are not distributed in this repository and must be generated directly from data.
+`_archive_phase_n_pre_retrain/` keeps the superseded Revision 2 records for audit only; no script reads it.
 
-### Generating Results
+## Reproducing these files
 
-1. **Obtain Data**: Place `SGCC.csv` and `LD2011_2014.txt` in `data/` (see [`data/README.md`](../data/README.md)) or configure environment variables `MAMRD_SGCC` and `MAMRD_ECL`.
-2. **Execute Experiment Pipelines**:
-   ```bash
-   cd scripts
-   
-   # Train and evaluate MAMRD and baselines
-   PYTHONPATH=.. python run_n_clean.py --backbone a34_generic
-   
-   # Conformal safety audits
-   PYTHONPATH=.. python run_trust_layer.py
-   
-   # Empirical baseline comparator (300 MAMRD resplits)
-   PYTHONPATH=.. python run_empirical_comparator.py
-   
-   # Generate manuscript tables and figures
-   PYTHONPATH=.. python compute_table_b.py
-   PYTHONPATH=.. python compute_table_c.py
-   PYTHONPATH=.. python make_figures.py
-   PYTHONPATH=.. python generate_high_contrast_fig2.py
-   ```
-Generated CSVs, tables, logs, and figures will be output directly into subdirectories here.
+See the root [`README.md`](../README.md):
 
+- **Tier 1** (`python scripts/reproduce_all_r2.py --config configs/default.yaml`, about 3.5 minutes on a CPU) regenerates every table and every data-driven figure from the cached predictions in this directory.
+- **Tier 2** (`python scripts/run_master_retrain.py`, about 104 minutes on one GPU) retrains all 177 models and then runs Tier 1.
+
+The traceability matrix in the root README maps each table and figure to its script and output file.
+
+## Layout of `phase_n_retrained/`
+
+| Path | Contents |
+|---|---|
+| `a34_cell_<seed>_<fold>.csv`, `a34_manifest.csv` | MAMRD, 15 seed–fold cells: per-cell metrics and the test-fold labels and scores |
+| `bu/`, `a32_sgcc.csv`, `a33_sgcc.csv` | Ablation variants (Table 5, Figure 3) |
+| `baselines/` | The six deep baselines on SGCC |
+| `ecl_trust/`, `ecl_board.csv` | ECL benchmark (MAMRD and five baselines; DKGT-Net is SGCC-only) and its conformal analysis |
+| `trust/` | Conformal and calibration analyses (Table 6, Figures 4–5, Supplementary Figure S4) |
+| `r2_audit/` | Tables 2–5, partition ledgers and manifests, conformal eligibility ledger |
+| `tableA/`, `tableB/`, `tableC/` | Supplementary tables |
+| `figures/` | Data-driven figures |
+| `clean_cohort.json`, `dropped_ids.csv`, `keep_idx.npy` | Outputs of the cohort audit (`scripts/clean_cohort.py`) |
+| `repro_finardi.json` | Output of `scripts/run_finardi_repro.py` |
+| `logs/` | Console log of each Tier 1 step |
+| `master_retrain.log` | Log of the Tier 2 run of 9 November 2026 |
+
+## Notes on the logs
+
+Absolute local paths in the logs are replaced by `.` (repository root), `python` (interpreter) and `<site-packages>`.
+
+Apart from this, `master_retrain.log` is the unedited log of the 9 November 2026 run. Its trust-layer section begins with a header line, "Pre-reg: PLAN_TRUST_2026-06-02.md", printed by the script version used in that run. That line refers to an internal planning note that is not part of this repository. It was removed from the script in commit `982df7e`; the computation is unchanged.

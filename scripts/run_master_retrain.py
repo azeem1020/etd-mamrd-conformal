@@ -39,7 +39,7 @@ ROOT = THIS.parent
 if "MAMRD_RESULTS" not in os.environ:
     os.environ["MAMRD_RESULTS"] = str(ROOT / "results" / "phase_n_retrained")
 
-from repro_config import RESULTS_DIR, DATA_DIR, SGCC_PATH, ECL_PATH
+from repro_config import RESULTS_DIR, DATA_DIR, SGCC_PATH, ECL_PATH, scrub_paths
 
 OUT = RESULTS_DIR
 OUT.mkdir(parents=True, exist_ok=True)
@@ -51,7 +51,7 @@ LOG_FILE = OUT / "master_retrain.log"
 
 def log(msg: str):
     ts = time.strftime("%Y-%m-%d %H:%M:%S")
-    formatted = f"[{ts}] {msg}"
+    formatted = scrub_paths(f"[{ts}] {msg}")
     print(formatted, flush=True)
     with open(LOG_FILE, "a") as f:
         f.write(formatted + "\n")
@@ -77,6 +77,7 @@ def run_cmd(cmd: list[str], desc: str, env=None) -> bool:
     )
     with open(LOG_FILE, "a") as f:
         for line in proc.stdout:
+            line = scrub_paths(line)
             sys.stdout.write(line)
             sys.stdout.flush()
             f.write(line)

@@ -1,14 +1,14 @@
 [running] Empirical Comparator Benchmark on MAMRD...
 [load] SGCC ...
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
-[done] Saved to /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/empirical_comparator_sgcc.csv
+[done] Saved to ./results/phase_n_retrained/trust/empirical_comparator_sgcc.csv
         arm  n_resplits  conf_flat_trivial_pct  conf_inspected_mean  conf_inspected_lo  conf_inspected_hi  emp_inspected_mean  emp_inspected_lo  emp_inspected_hi  conf_rec_flat_mean  emp_rec_flat_mean  conf_flat_viol_pct  emp_flat_viol_pct  conf_rec_heavy_mean  emp_rec_heavy_mean  conf_rec_light_mean  emp_rec_light_mean  conf_rec_overall_mean  emp_rec_overall_mean  n_flat_eval_resplits
 0  a34_NaME         300                    2.0              0.28644           0.191927           0.401317            0.235426          0.169716          0.318815            0.837658           0.722452           32.333333               56.0             0.812595            0.798848             0.808382            0.781926               0.812833              0.787723                   300

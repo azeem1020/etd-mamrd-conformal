@@ -46,18 +46,18 @@ Ablation switches
 -----------------
 Both Phase D and Phase E components can be independently disabled:
 
-    Phase D arms (PLAN_D_2026-05-27.md):
+    Phase D arms:
     use_cc_name=True,  use_ms_kernel=True  → A3 (Phase D headline)
     use_cc_name=True,  use_ms_kernel=False → A1 (CC-NaME only)
     use_cc_name=False, use_ms_kernel=True  → A2 (multi-scale only)
     use_cc_name=False, use_ms_kernel=False → equivalent to Phase C NaME-NN
 
-    Phase E arms (PLAN_E_2026-05-27.md):
+    Phase E arms:
     A3 + use_mask_channel=True             → A7 (mask channel)
     A3 + use_temporal_branch=True          → A8 (temporal branch)
     A3 + use_mask_channel + use_temporal   → A9 (full Phase E headline candidate)
 
-    Phase I arms (PLAN_I_2026-05-27.md — ablation of A12):
+    Phase I arms:
     A12 + use_cnn_consump=False            → A13 (drop CNN-consump, embed=216)
     A12 + use_mixer=False                  → A14 (drop Mixer, embed=212)
     A12 + use_mask_channel=False           → A15 (drop CNN-mask, embed=246)
@@ -193,13 +193,13 @@ class ZKMixV4Config:
     mamba_expand: int = 2           # inner expansion factor
     mamba_headdim: int = 32         # SSM head dim; num_heads = inner_dim / headdim = 2
 
-    # ----- Phase I: ablation branch flags (PLAN_I_2026-05-27.md) -----
+    # ----- Phase I: ablation branch flags -----
     # Set to False to drop the named branch from the model.  Used for the
     # A12 ablation study to identify which branches contribute incrementally.
     use_cnn_consump: bool = True    # False → omit CNN-consump (Deep-CNN) branch
     use_mixer: bool = True          # False → omit Mixer branch
 
-    # ----- Phase J: Peer-Relative Consumption Encoding (PLAN_J_2026-05-27.md) -----
+    # ----- Phase J: Peer-Relative Consumption Encoding -----
     # When True the model expects input (N, W, D*2): the first D columns are the
     # standard imputed consumption series; the last D columns are the peer-relative
     # residual r[c,t] = x̂[c,t] − mean(x̂[k-nearest normal peers, t]).
@@ -209,7 +209,7 @@ class ZKMixV4Config:
     use_prce: bool = False
     prce_beta: int = 60             # embed dim for PRCE-CNN (= beta by default)
 
-    # ----- Phase K: Attention-Based Peer Comparison (PLAN_K_2026-05-27.md) -----
+    # ----- Phase K: Attention-Based Peer Comparison -----
     # When True the PRCE input (N, W, D*2) is consumed by a learned cross-attention
     # branch (PeerAttentionBranch) instead of the hand-coded Laplacian-CNN. Replaces
     # the prce_cnn_branch when use_prce=True and use_peer_gnn=True. Output dim is
@@ -220,7 +220,7 @@ class ZKMixV4Config:
     peer_gnn_heads: int = 4
     peer_gnn_kernel: int = 7
 
-    # ----- Phase L: Signed-Peer Cross-Attention (PLAN_L) -----
+    # ----- Phase L: Signed-Peer Cross-Attention -----
     # When True the runner stacks (own, signed_residual, peer_std, peer_iqr) into
     # an (N, W, 4*D) tensor.  Input layout is:
     #   x[:, :, 0:D]           = own consumption (NaN allowed; goes through CC-NaME)
@@ -234,7 +234,7 @@ class ZKMixV4Config:
     signed_peer_heads: int = 4
     signed_peer_kernel: int = 7
 
-    # ----- Phase L: Engineered-Features Branch (A24, PLAN_L) -----
+    # ----- Phase L: Engineered-Features Branch (A24) -----
     # When True, a small MLP processes 12 pre-computed engineered features
     # (max_consec_nan, lag1_autocorr, missing_frac, roll_std_max, roll_std_range,
     #  consumption_entropy, wed_sat_gap, dow_profile_var, cv_global, iqr,
@@ -1007,7 +1007,7 @@ class ZKMixV4(nn.Module):
 
 
 # ---------------------------------------------------------------------------
-# Canonical arm factories (matching PLAN_D_2026-05-27.md + PLAN_E_2026-05-27.md)
+# Canonical arm factories
 # ---------------------------------------------------------------------------
 
 def build_a1(weeks: int = 147, days: int = 7) -> ZKMixV4:
@@ -1106,7 +1106,7 @@ class _ZKMixV4NoWide(ZKMixV4):
 def build_a6(weeks: int = 147, days: int = 7) -> ZKMixV4:
     """A6 arm: branch-selective NaME — CC-NaME for wide+mixer; scalar NaME for CNN.
 
-    Scientific premise (Stage 2 of PLAN_D_LOCAL_GRID_2026-05-27.md):
+    Scientific premise:
     The negative synergy in A3 arises because τ_n serves two conflicting roles:
       (a) statistical imputation for wide/mixer  → trained toward customer baseline
       (b) clean Laplacian input for CNN          → must stay in [0,1] valid range
@@ -1124,7 +1124,7 @@ def build_a6(weeks: int = 147, days: int = 7) -> ZKMixV4:
 def build_a7(weeks: int = 147, days: int = 7) -> ZKMixV4:
     """A7 arm: A3 + explicit missing-mask channel.
 
-    Scientific premise (PLAN_E_2026-05-27.md §A7):
+    Scientific premise:
     The binary validity mask M (1=observed, 0=NaN) encodes theft-specific
     temporal patterns (meter tampering fingerprints).  NaME substitution
     DESTROYS this signal by making NaN positions indistinguishable from valid
@@ -1145,7 +1145,7 @@ def build_a7(weeks: int = 147, days: int = 7) -> ZKMixV4:
 def build_a8(weeks: int = 147, days: int = 7) -> ZKMixV4:
     """A8 arm: A3 + global temporal trend branch.
 
-    Scientific premise (PLAN_E_2026-05-27.md §A8):
+    Scientific premise:
     Light Dropper/Riser archetypes (48.3% of theft) exhibit gradual consumption
     drift over 6-24 months.  SNR in any 9-week window ≈ 0.013-0.027; these
     patterns are structurally undetectable by the Laplacian at any dilation.
@@ -1230,7 +1230,7 @@ def build_a10(weeks: int = 147, days: int = 7) -> ZKMixV4:
 def build_a12(weeks: int = 147, days: int = 7) -> ZKMixV4:
     """A12: A9 + BiMamba2 Wide branch (replaces linear Wide).
 
-    Scientific premise (PLAN_H_2026-05-27.md):
+    Scientific premise:
     Phase G (BiLSTM, A11) triggered K1: all folds negative (Δ=−0.0066).
     Diagnosis: uniform LSTM gating distributes all 147 time steps equally
     into the hidden state — step-change signal at Heavy Dropper week T is
@@ -1266,7 +1266,7 @@ def build_a12(weeks: int = 147, days: int = 7) -> ZKMixV4:
 def build_a13(weeks: int = 147, days: int = 7) -> ZKMixV4:
     """A13: A12 without CNN-consump branch.
 
-    Ablation (PLAN_I_2026-05-27.md): tests whether the multi-scale Laplacian
+    Ablation: tests whether the multi-scale Laplacian
     CNN on consumption adds incremental information beyond what MambaWide already
     captures from the same x̂ input.  MambaWide provides global sequential
     structure; CNN-consump provides local multi-scale (d=1,2,4) curvature.
@@ -1339,7 +1339,7 @@ def build_a16(weeks: int = 147, days: int = 7) -> ZKMixV4:
 def build_a9_lean(weeks: int = 147, days: int = 7) -> ZKMixV4:
     """A9-lean: A9 with Mixer branch removed (Phase I confirmed Mixer is prunable).
 
-    Phase I ablation (PLAN_I_2026-05-27.md):
+    Phase I ablation:
     A14 (A12 − Mixer): Δ = −0.0003, CI = [−0.0049, +0.0041] → NULL-prunable.
     Removing Mixer reduces embed_dim 276 → 212 and removes ~210K parameters
     with no expected performance loss.  Used as the baseline for Phase J.
@@ -1361,7 +1361,7 @@ def build_a9_lean(weeks: int = 147, days: int = 7) -> ZKMixV4:
 def build_a17(weeks: int = 147, days: int = 7) -> ZKMixV4:
     """A17: A9-lean + Peer-Relative Consumption Encoding branch (PRCE-CNN).
 
-    Scientific premise (PLAN_J_2026-05-27.md):
+    Scientific premise:
     82.3 % of theft customers are individually undetectable by single-customer
     models.  The peer-relative residual r[c,t] = x̂[c,t] − mean_peer[t] exposes
     the step-change at theft week W_t for Light Droppers (48.3 % of theft),
@@ -1392,7 +1392,7 @@ def build_a17(weeks: int = 147, days: int = 7) -> ZKMixV4:
 
 
 def build_a18(weeks: int = 147, days: int = 7) -> ZKMixV4:
-    """A18: A9-lean trained with Physics-Sim Theft Augmentation (PLAN_K).
+    """A18: A9-lean trained with Physics-Sim Theft Augmentation.
 
     Architecture identical to A9-lean. The differentiator is *training-set
     augmentation*: synthetic theft examples synthesised from real normal
@@ -1404,7 +1404,7 @@ def build_a18(weeks: int = 147, days: int = 7) -> ZKMixV4:
 
 
 def build_a19(weeks: int = 147, days: int = 7) -> ZKMixV4:
-    """A19: A9-lean initialised from Contrastive SSL pre-training (PLAN_K).
+    """A19: A9-lean initialised from Contrastive SSL pre-training.
 
     Architecture identical to A9-lean; the differentiator is *initialisation*.
     Before supervised fine-tuning the runner pre-trains the backbone with an
@@ -1416,7 +1416,7 @@ def build_a19(weeks: int = 147, days: int = 7) -> ZKMixV4:
 
 
 def build_a20(weeks: int = 147, days: int = 7) -> ZKMixV4:
-    """A20: A9-lean + Attention-Based Peer Comparison branch (PLAN_K).
+    """A20: A9-lean + Attention-Based Peer Comparison branch.
 
     Replaces the hand-coded PRCE Laplacian-CNN (A17) with a learned
     cross-attention block (PeerAttentionBranch) jointly processing the
@@ -1460,7 +1460,7 @@ def build_a21(weeks: int = 147, days: int = 7) -> ZKMixV4:
 
 
 # ---------------------------------------------------------------------------
-# Phase L (PLAN_L_2026-05-27.md) — TDS-MTN+ v2 component arms
+# Phase L — TDS-MTN+ v2 component arms
 # ---------------------------------------------------------------------------
 
 def build_a22(weeks: int = 147, days: int = 7) -> ZKMixV4:
@@ -1577,7 +1577,7 @@ def build_a30(weeks: int = 147, days: int = 7) -> ZKMixV4:
     """A30 (Phase L, L1): a14 backbone (BiMamba2 wide, no Mixer) + eng-features branch.
 
     Representation-completeness arm. The a14 backbone (Mamba-2 wide + mask + temporal,
-    Mixer pruned) never computes the temporal-complexity statistics that Paper 4
+    Mixer pruned) never computes the temporal-complexity statistics that the phenotype rule
     identifies as the dominant theft separator (lag-1 autocorrelation KS=0.152,
     Shannon entropy 0.089, CV 0.083). This arm supplies them explicitly via the
     12 hand-crafted features (lag1_autocorr, roll_std_max/range, consumption_entropy,

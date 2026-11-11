@@ -21,7 +21,7 @@ Design rationale (honest):
     and applied causally to every split (see phased/phenotype.py).
 
 Detectability target (N1): lift the Heavy strata (~0.62-0.64 monolith) toward 0.70;
-Light/Flat are structurally near-floor (Paper 4) and the generalist suffices there.
+Light/Flat are structurally near-floor and the generalist suffices there.
 """
 from __future__ import annotations
 import numpy as np

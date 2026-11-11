@@ -76,7 +76,7 @@ AUGMENT_ARMS: frozenset[str] = frozenset({"a18_physsim_aug", "a21_full_mitigatio
 SSL_ARMS: frozenset[str] = frozenset({"a19_ssl_identity", "a21_full_mitigation"})
 
 # ---------------------------------------------------------------------------
-# Phase L — Theft-Direction-Symmetric Multi-Task Network arm sets (PLAN_L)
+# Phase L — Theft-Direction-Symmetric Multi-Task Network arm sets
 # ---------------------------------------------------------------------------
 
 #: Phase L — symmetric augmentation (Heavy/Light Risers + Droppers + Flat).

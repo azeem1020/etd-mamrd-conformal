@@ -1,4 +1,4 @@
-"""Paper 3 — Move A: model-free, representation-AGNOSTIC ceiling estimate.
+"""Model-free, representation-agnostic detectability ceiling estimate.
 
 DESIGN:
   CLAIM under test: the 0.567 detectability ceiling is SIGNAL-limited, not MODEL-limited.

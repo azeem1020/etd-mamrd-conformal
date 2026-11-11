@@ -11,13 +11,13 @@ Weekly grid (147, 7) column index -> Calendar Day-of-Week:
   Col 4: Sunday
   Col 5: Monday
   Col 6: Tuesday
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
-  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.4s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 
@@ -50,7 +50,7 @@ MSDM             (n= 9) | AP=0.409 [0.390,0.437] | ROC=0.813 [0.806,0.825] | F1=
 HORLN            (n= 9) | AP=0.540 [0.516,0.569] | ROC=0.871 [0.864,0.881] | F1=0.504 [0.484,0.525] | P@100=0.752 [0.723,0.797] | P@200=0.559 [0.531,0.587]
 MAMRD (9-cell)   (n= 9) | AP=0.597 [0.576,0.619] | ROC=0.892 [0.884,0.900] | F1=0.557 [0.538,0.577] | P@100=0.808 [0.772,0.832] | P@200=0.619 [0.593,0.646]
 MAMRD (15-cell)  (n=15) | AP=0.600 [0.584,0.616] | ROC=0.892 [0.886,0.898] | F1=0.556 [0.540,0.569] | P@100=0.814 [0.789,0.832] | P@200=0.620 [0.600,0.640]
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table3_main_results.csv
+Exported ./results/phase_n_retrained/r2_audit/table3_main_results.csv
 Paired 9-cell MAMRD - HORLN ap  : mean=+0.0572 BCa=[+0.0444,+0.0696] Wilcoxon p=0.0039
 Paired 9-cell MAMRD - HORLN roc : mean=+0.0203 BCa=[+0.0175,+0.0230] Wilcoxon p=0.0039
 Paired 9-cell MAMRD - HORLN f1  : mean=+0.0529 BCa=[+0.0401,+0.0632] Wilcoxon p=0.0039
@@ -67,7 +67,7 @@ Friedman test (7 detectors, 9 matched seed-fold cells): chi2=53.62, p=8.80e-10
   HORLN            | Seed-ensemble AP=0.560 Cons-Boot95%=[0.524,0.598] | ROC=0.882 [0.868,0.895]
   MAMRD (9-cell)   | Seed-ensemble AP=0.612 Cons-Boot95%=[0.580,0.646] | ROC=0.897 [0.884,0.910]
   Paired Consumer-Bootstrap MAMRD - HORLN AP: +0.0521 95% CI=[+0.0250, +0.0774] (replicates <= 0: 0 of 1000)
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table3_tests.csv
+Exported ./results/phase_n_retrained/r2_audit/table3_tests.csv
 
 =====================================================================
 5. POINT 7: ABLATION PROVENANCE & PAIRED CIs (BUILD-UP & SUBTRACTIVE)
@@ -87,13 +87,13 @@ S4: + Inter/intra-period conv (full MAMRD, 9-cell)      | AP=0.5975[0.5760,0.618
   Full MAMRD (S4) minus Controlled No-Missingness (A34: no CC-NaME, no Mask): dAP=+0.0271 [+0.0170, +0.0390]
   S2 (+Mask CNN) minus S1 (CC-NaME only, no Mask CNN)             : dAP=+0.0152 [+0.0068, +0.0223]
   S1 (+CC-NaME) minus S0 (Core scalar fill only)                  : dAP=+0.0236 [+0.0090, +0.0348]
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table5_ablation.csv
+Exported ./results/phase_n_retrained/r2_audit/table5_ablation.csv
 
 =====================================================================
 6. POINT 8: MISSINGNESS-ONLY BASELINE ON SGCC (3 FOLDS)
 =====================================================================
 Mask-only classifier (30 missingness features, 3 folds): AP = 0.168 (folds: [0.164, 0.168, 0.172]), ROC-AUC = 0.651 (folds: [0.644, 0.65, 0.659])
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/mask_only_baseline.csv
+Exported ./results/phase_n_retrained/r2_audit/mask_only_baseline.csv
 
 =====================================================================
 7. TABLE 4: RECALL & INSPECTED % AT 1 % / 5 % FPR (ROC INTERPOLATION) + WORKFLOW B PROSPECTIVE
@@ -112,7 +112,7 @@ WDCNN            | ECL  @1%FPR: Rec=0.759 Insp=8.59% (Prosp: Rec=0.750 FPR=1.12%
 GRU-D            | ECL  @1%FPR: Rec=0.104 Insp=1.96% (Prosp: Rec=0.128 FPR=1.13% Insp=2.32%) | @5%FPR: Rec=0.638 Insp=10.95% (Prosp: Rec=0.631 FPR=5.03% Insp=10.92%)
 Self-Attn        | ECL  @1%FPR: Rec=0.738 Insp=8.38% (Prosp: Rec=0.739 FPR=1.09% Insp=8.48%) | @5%FPR: Rec=0.807 Insp=12.67% (Prosp: Rec=0.807 FPR=5.10% Insp=12.78%)
 MSDM             | ECL  @1%FPR: Rec=0.795 Insp=8.95% (Prosp: Rec=0.794 FPR=1.12% Insp=9.07%) | @5%FPR: Rec=0.810 Insp=12.70% (Prosp: Rec=0.809 FPR=5.15% Insp=12.83%)
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table4_fpr_budgets.csv and table4_prospective.csv
+Exported ./results/phase_n_retrained/r2_audit/table4_fpr_budgets.csv and table4_prospective.csv
 
 =====================================================================
 8. CONFORMAL FINITE-SAMPLE ELIGIBILITY LEDGER (per resplit)
@@ -146,4 +146,4 @@ dataset       partition            n         pos   pos_pct  share_of_total_pct  
     ECL        conf_cal   850.333333   86.000000 10.113681            3.401333 High/Low consumption  31.347222  54.652778       NaN
     ECL       conf_eval   851.000000   86.333333 10.144928            3.404000 High/Low consumption  31.319444  55.013889       NaN
     ECL           total 25000.000000 2500.000000 10.000000          100.000000                  NaN        NaN        NaN       NaN
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table2_partition_ledger.csv
+Exported ./results/phase_n_retrained/r2_audit/table2_partition_ledger.csv

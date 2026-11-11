@@ -1,7 +1,7 @@
 ======================================================================
 MAMRD PARTITION DISJOINTNESS & TABLE 2 RECONCILIATION AUDIT
 ======================================================================
-Using manifest directory: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/partition_manifests
+Using manifest directory: ./partition_manifests
 
 [1/2] Auditing SGCC Partition Manifest: sgcc_partition_manifest.csv
 ======================================================================

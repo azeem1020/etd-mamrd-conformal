@@ -4,4 +4,4 @@
   wrote fig4_ceiling.pdf / .png
   wrote fig5_pr_roc_curves.pdf / .png
   wrote fig2_two_dataset.pdf / .png
-[figures] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures
+[figures] -> ./results/phase_n_retrained/figures

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Local GPU grid runner for Phase D.
 
-Stages (see PLAN_D_LOCAL_GRID_2026-05-27.md):
+Stages:
   Stage 1: A1, A2, A3  — 5 seeds × 3 folds = 15 cells each
   Stage 2: A6           — 15 cells (run only if Stage 1 shows A3 negative synergy)
 

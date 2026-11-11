@@ -1,7 +1,7 @@
 ===========================================================================
 MAMRD ROUND-2 UNIFIED REPRODUCTION SUITE
-Repository Root: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated
-Active Configuration: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/configs/default.yaml
+Repository Root: .
+Active Configuration: ./configs/default.yaml
 ===========================================================================
   Training Optimizer: AdamW (lr=0.0003, weight_decay=0.0001)
   Batch Size: 128 (eval: 256) | Epochs: 30
@@ -10,13 +10,13 @@ Active Configuration: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_R
 
 ===========================================================================
 >> RUNNING STEP: 0. Chronological Dataset Alignment & Date Audit
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/prepare_sgcc_dataset.py
+   Command: python ./scripts/prepare_sgcc_dataset.py
 ===========================================================================
 ===========================================================================
 SGCC DATASET CHRONOLOGICAL PREPARATION & AUDIT
-Target Destination: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv
+Target Destination: ./data/SGCC.csv
 ===========================================================================
-[OK] Target file /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv is already chronologically ordered,
+[OK] Target file ./data/SGCC.csv is already chronologically ordered,
      fully continuous (1,035 days: 2014-01-01 -> 2016-10-31),
      and 2016-09-18 is present. Skipping re-generation.
 ===========================================================================
@@ -26,12 +26,12 @@ Target Destination: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Rep
 
 ===========================================================================
 >> RUNNING STEP: 1. Partition manifest disjointness audit
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/verify_partition_manifests.py
+   Command: python ./scripts/verify_partition_manifests.py
 ===========================================================================
 ======================================================================
 MAMRD PARTITION DISJOINTNESS & TABLE 2 RECONCILIATION AUDIT
 ======================================================================
-Using manifest directory: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/partition_manifests
+Using manifest directory: ./partition_manifests
 
 [1/2] Auditing SGCC Partition Manifest: sgcc_partition_manifest.csv
 ======================================================================
@@ -86,20 +86,20 @@ ECL Mean Counts Across Folds 0--2 (Reconciling Table 2):
 
 ===========================================================================
 >> RUNNING STEP: 2a. Conformal decision value: all six Table 6 columns + Fig. 5b
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_decision_value.py
+   Command: python ./scripts/run_decision_value.py
 ===========================================================================
 [load] SGCC ...
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
-  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [base rates] high=0.1231, low=0.0678, flat=0.0322
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_decision_value.py:118: RuntimeWarning: Mean of empty slice
+./scripts/run_decision_value.py:118: RuntimeWarning: Mean of empty slice
   daily = np.nanmean(raw, axis=1)
 [group profile]
 group  theft_cases  theft_case_share  theft_kwh_share  theft_median_daily_kwh  all_median_daily_kwh
@@ -128,26 +128,26 @@ group  theft_cases  theft_case_share  theft_kwh_share  theft_median_daily_kwh  a
   DKGT       1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 70.7% single= 91.7% red= 21.9% [19.2,24.8] | hit H/F= 18.0/ 3.3% lift H/F=1.46/1.04 | recall H/L/F=0.913/0.915/0.966
   DKGT       1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 83.7% single=100.0% red= 16.3% [14.6,18.3] | hit H/F= 15.6/ 3.2% lift H/F=1.27/0.98 | recall H/L/F=0.960/0.957/1.000
 
-[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/decision_value_sgcc.csv and decision_value_sgcc_resplits.csv
+[done] wrote ./results/phase_n_retrained/trust/decision_value_sgcc.csv and decision_value_sgcc_resplits.csv
 [PASS] 2a. Conformal decision value: all six Table 6 columns + Fig. 5b completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 2b. Empirical-quantile vs conformal comparator (Fig. 5a)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_empirical_comparator.py
+   Command: python ./scripts/run_empirical_comparator.py
 ===========================================================================
 [running] Empirical Comparator Benchmark on MAMRD...
 [load] SGCC ...
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
-[done] Saved to /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/empirical_comparator_sgcc.csv
+[done] Saved to ./results/phase_n_retrained/trust/empirical_comparator_sgcc.csv
         arm  n_resplits  conf_flat_trivial_pct  conf_inspected_mean  conf_inspected_lo  conf_inspected_hi  emp_inspected_mean  emp_inspected_lo  emp_inspected_hi  conf_rec_flat_mean  emp_rec_flat_mean  conf_flat_viol_pct  emp_flat_viol_pct  conf_rec_heavy_mean  emp_rec_heavy_mean  conf_rec_light_mean  emp_rec_light_mean  conf_rec_overall_mean  emp_rec_overall_mean  n_flat_eval_resplits
 0  a34_NaME         300                    2.0              0.28644           0.191927           0.401317            0.235426          0.169716          0.318815            0.837658           0.722452           32.333333               56.0             0.812595            0.798848             0.808382            0.781926               0.812833              0.787723                   300
 [PASS] 2b. Empirical-quantile vs conformal comparator (Fig. 5a) completed successfully.
@@ -155,16 +155,16 @@ group  theft_cases  theft_case_share  theft_kwh_share  theft_median_daily_kwh  a
 
 ===========================================================================
 >> RUNNING STEP: 2c. SGCC trust layer: per-stratum conformal lift (Supp. Fig. S4)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_trust_layer.py
+   Command: python ./scripts/run_trust_layer.py
 ===========================================================================
 [load] SGCC ...
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
-  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [arm] a34_NaME
@@ -176,7 +176,7 @@ group  theft_cases  theft_case_share  theft_kwh_share  theft_median_daily_kwh  a
 [arm] DKGT
 # RESULTS_TRUST — SGCC trustworthy layer (post-hoc, NREP=20)
 
-Pre-reg: PLAN_TRUST_2026-06-02.md. Conformal: split-APS within each
+Conformal: split-APS within each
 held-out fold (stratified calib/test), 20 repeats averaged per cell.
 Cells: a34 n=15 (seeds0-4xfolds0-2); baselines n=9 (seeds0-2xfolds0-2).
 
@@ -275,13 +275,13 @@ Positive gap = audits are more efficient (relative to base rate) in Heavy than i
 | HybridAttn | 0.226 | 0.298 | 0.502 |
 | DKGT | 0.072 | 0.112 | 0.284 |
 
-[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/RESULTS_TRUST.md (+ percell/calibration/operating/lift CSVs)
+[done] wrote ./results/phase_n_retrained/trust/RESULTS_TRUST.md (+ percell/calibration/operating/lift CSVs)
 [PASS] 2c. SGCC trust layer: per-stratum conformal lift (Supp. Fig. S4) completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 2d. ECL conformal lift gap (Supp. Table S6)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_ecl_trust_analysis.py
+   Command: python ./scripts/run_ecl_trust_analysis.py
 ===========================================================================
 # RESULTS_ECL_TRUST — cross-dataset trustworthy layer (ECL, magnitude strata)
 
@@ -329,6 +329,16 @@ Lift = precision / stratum base-rate. Gap>0 = Heavy more audit-efficient than Li
 | hybridattn | 7.93 | 4.36 | +3.56 [+2.26,+4.41] |
 | msdm | 8.94 | 4.94 | +4.00 [+2.89,+5.01] |
 
+## T3b Realized recall of the class-conditional threshold at the 80% target (mean over cells)
+| arm | recall Heavy | recall Light | marginal APS coverage |
+|---|---|---|---|
+| a34_generic | 0.813 | 0.803 | 0.801 |
+| horln | 0.823 | 0.806 | 0.800 |
+| wdcnn | 0.816 | 0.799 | 0.800 |
+| grud | 0.805 | 0.805 | 0.801 |
+| hybridattn | 0.812 | 0.813 | 0.800 |
+| msdm | 0.807 | 0.811 | 0.953 |
+
 ## T4 recall@FPR (supporting)
 | arm | recall@FPR1% | recall@FPR5% |
 |---|---|---|
@@ -339,13 +349,13 @@ Lift = precision / stratum base-rate. Gap>0 = Heavy more audit-efficient than Li
 | hybridattn | 0.738 | 0.807 |
 | msdm | 0.795 | 0.810 |
 
-[done] /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/ecl_trust/RESULTS_ECL_TRUST.md
+[done] ./results/phase_n_retrained/ecl_trust/RESULTS_ECL_TRUST.md
 [PASS] 2d. ECL conformal lift gap (Supp. Table S6) completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 3a. Per-group PR-AUC across detectors (Supp. Table S4)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/compute_table_b.py
+   Command: python ./scripts/compute_table_b.py
 ===========================================================================
 
 === TABLE B: per-stratum PR-AUC (mean [BCa 95% CI]) ===
@@ -370,22 +380,22 @@ Aggregate      100.0 | 0.352[0.33,0.37] 0.540[0.52,0.57] 0.522[0.51,0.54] 0.190[
 --- NOTE: per-stratum theft%% NOT computed: per-stratum positive counts are
     not cached (n_* are totals); requires the strata reconstruction (Table C path).
 
-[done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableB
+[done] artifacts in ./results/phase_n_retrained/tableB
 [config] BCa B=2000, boot seed=12345; baselines n=9, MAMRD n=15, gap pairs=9
 [PASS] 3a. Per-group PR-AUC across detectors (Supp. Table S4) completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 3b. Prevalence-matched per-group contrasts (Supp. Table S3)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/compute_table_c.py
+   Command: python ./scripts/compute_table_c.py
 ===========================================================================
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 
@@ -412,13 +422,13 @@ Light_Dropper  0.245  0.491      0.453  0.089  0.238     0.224  0.531
 Light_Riser    0.124  0.279      0.261  0.103  0.211     0.088  0.424
 Flat           0.137  0.337      0.336  0.065  0.158     0.126  0.287
 
-[done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableC  (BCa B=2000, match reps=100)
+[done] artifacts in ./results/phase_n_retrained/tableC  (BCa B=2000, match reps=100)
 [PASS] 3b. Prevalence-matched per-group contrasts (Supp. Table S3) completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 3b'. Matched contrasts and Friedman test (Supp. Table S3)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/table_c_contrasts.py
+   Command: python ./scripts/table_c_contrasts.py
 ===========================================================================
 ========================================================================
 MATCHING CONFIG (reused, not re-tuned):
@@ -458,7 +468,7 @@ VERDICT (no spin):
   Flat exceeds light strata with interval excluding zero?  Flat-Light dropper: True (-0.107 [-0.129,-0.082]); Flat-Light riser: False (-0.040 [-0.105,+0.014]).
   Heavy(pooled)-Light(pooled): True (+0.042 [+0.013,+0.065]).
 
-[done] artifacts + CHANGELOG in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableC
+[done] artifacts in ./results/phase_n_retrained/tableC
 
 [optional] audit-efficiency LIFT under matching: SKIPPED.
   Reason: lift = P_phi/pi_phi needs an operating point phi. The paper's phi is the
@@ -471,7 +481,7 @@ VERDICT (no spin):
 
 ===========================================================================
 >> RUNNING STEP: 3c. ECL per-attack recall at 1%/5% FPR (Supp. Table S7 note)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/compute_table_a.py
+   Command: python ./scripts/compute_table_a.py
 ===========================================================================
 [ecl] reconstructing windows + types (~60s)...
 
@@ -501,13 +511,13 @@ Time reversal            |       0.97       0.90       0.97       0.92       0.6
   MSDM      : Multiplicative scaling
   MAMRD     : Multiplicative scaling
 
-[done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableA  (BCa B=2000)
+[done] artifacts in ./results/phase_n_retrained/tableA  (BCa B=2000)
 [PASS] 3c. ECL per-attack recall at 1%/5% FPR (Supp. Table S7 note) completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 3d. ECL metric suite (Supp. Table S7)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_ecl_board.py
+   Command: python ./scripts/make_ecl_board.py
 ===========================================================================
 arm                  PR-AUC  ROC-AUC       F1  MAP@100   (n=9, mean)
 --------------------------------------------------------------
@@ -518,13 +528,13 @@ MSDM                  0.842    0.898    0.861    1.000
 HORLN                 0.812    0.891    0.850    0.972
 MAMRD                 0.843    0.899    0.860    0.998
 
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/ecl_board.csv
+[done] -> ./results/phase_n_retrained/ecl_board.csv
 [PASS] 3d. ECL metric suite (Supp. Table S7) completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 4. Tables 2-5, statistical tests, eligibility ledger (r2_audit/table*.csv)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/compute_r2_revisions.py
+   Command: python ./scripts/compute_r2_revisions.py
 ===========================================================================
 =====================================================================
 1. LOADING SGCC RAW & NORMALIZED DATA + CALENDAR DAY-OF-WEEK CHECK
@@ -539,13 +549,13 @@ Weekly grid (147, 7) column index -> Calendar Day-of-Week:
   Col 4: Sunday
   Col 5: Monday
   Col 6: Tuesday
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.4s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 
@@ -578,7 +588,7 @@ MSDM             (n= 9) | AP=0.409 [0.390,0.437] | ROC=0.813 [0.806,0.825] | F1=
 HORLN            (n= 9) | AP=0.540 [0.516,0.569] | ROC=0.871 [0.864,0.881] | F1=0.504 [0.484,0.525] | P@100=0.752 [0.723,0.797] | P@200=0.559 [0.531,0.587]
 MAMRD (9-cell)   (n= 9) | AP=0.597 [0.576,0.619] | ROC=0.892 [0.884,0.900] | F1=0.557 [0.538,0.577] | P@100=0.808 [0.772,0.832] | P@200=0.619 [0.593,0.646]
 MAMRD (15-cell)  (n=15) | AP=0.600 [0.584,0.616] | ROC=0.892 [0.886,0.898] | F1=0.556 [0.540,0.569] | P@100=0.814 [0.789,0.832] | P@200=0.620 [0.600,0.640]
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table3_main_results.csv
+Exported ./results/phase_n_retrained/r2_audit/table3_main_results.csv
 Paired 9-cell MAMRD - HORLN ap  : mean=+0.0572 BCa=[+0.0444,+0.0696] Wilcoxon p=0.0039
 Paired 9-cell MAMRD - HORLN roc : mean=+0.0203 BCa=[+0.0175,+0.0230] Wilcoxon p=0.0039
 Paired 9-cell MAMRD - HORLN f1  : mean=+0.0529 BCa=[+0.0401,+0.0632] Wilcoxon p=0.0039
@@ -595,7 +605,7 @@ Friedman test (7 detectors, 9 matched seed-fold cells): chi2=53.62, p=8.80e-10
   HORLN            | Seed-ensemble AP=0.560 Cons-Boot95%=[0.524,0.598] | ROC=0.882 [0.868,0.895]
   MAMRD (9-cell)   | Seed-ensemble AP=0.612 Cons-Boot95%=[0.580,0.646] | ROC=0.897 [0.884,0.910]
   Paired Consumer-Bootstrap MAMRD - HORLN AP: +0.0521 95% CI=[+0.0250, +0.0774] (replicates <= 0: 0 of 1000)
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table3_tests.csv
+Exported ./results/phase_n_retrained/r2_audit/table3_tests.csv
 
 =====================================================================
 5. POINT 7: ABLATION PROVENANCE & PAIRED CIs (BUILD-UP & SUBTRACTIVE)
@@ -615,13 +625,13 @@ S4: + Inter/intra-period conv (full MAMRD, 9-cell)      | AP=0.5975[0.5760,0.618
   Full MAMRD (S4) minus Controlled No-Missingness (A34: no CC-NaME, no Mask): dAP=+0.0271 [+0.0170, +0.0390]
   S2 (+Mask CNN) minus S1 (CC-NaME only, no Mask CNN)             : dAP=+0.0152 [+0.0068, +0.0223]
   S1 (+CC-NaME) minus S0 (Core scalar fill only)                  : dAP=+0.0236 [+0.0090, +0.0348]
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table5_ablation.csv
+Exported ./results/phase_n_retrained/r2_audit/table5_ablation.csv
 
 =====================================================================
 6. POINT 8: MISSINGNESS-ONLY BASELINE ON SGCC (3 FOLDS)
 =====================================================================
 Mask-only classifier (30 missingness features, 3 folds): AP = 0.168 (folds: [0.164, 0.168, 0.172]), ROC-AUC = 0.651 (folds: [0.644, 0.65, 0.659])
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/mask_only_baseline.csv
+Exported ./results/phase_n_retrained/r2_audit/mask_only_baseline.csv
 
 =====================================================================
 7. TABLE 4: RECALL & INSPECTED % AT 1 % / 5 % FPR (ROC INTERPOLATION) + WORKFLOW B PROSPECTIVE
@@ -640,7 +650,7 @@ WDCNN            | ECL  @1%FPR: Rec=0.759 Insp=8.59% (Prosp: Rec=0.750 FPR=1.12%
 GRU-D            | ECL  @1%FPR: Rec=0.104 Insp=1.96% (Prosp: Rec=0.128 FPR=1.13% Insp=2.32%) | @5%FPR: Rec=0.638 Insp=10.95% (Prosp: Rec=0.631 FPR=5.03% Insp=10.92%)
 Self-Attn        | ECL  @1%FPR: Rec=0.738 Insp=8.38% (Prosp: Rec=0.739 FPR=1.09% Insp=8.48%) | @5%FPR: Rec=0.807 Insp=12.67% (Prosp: Rec=0.807 FPR=5.10% Insp=12.78%)
 MSDM             | ECL  @1%FPR: Rec=0.795 Insp=8.95% (Prosp: Rec=0.794 FPR=1.12% Insp=9.07%) | @5%FPR: Rec=0.810 Insp=12.70% (Prosp: Rec=0.809 FPR=5.15% Insp=12.83%)
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table4_fpr_budgets.csv and table4_prospective.csv
+Exported ./results/phase_n_retrained/r2_audit/table4_fpr_budgets.csv and table4_prospective.csv
 
 =====================================================================
 8. CONFORMAL FINITE-SAMPLE ELIGIBILITY LEDGER (per resplit)
@@ -674,34 +684,34 @@ dataset       partition            n         pos   pos_pct  share_of_total_pct  
     ECL        conf_cal   850.333333   86.000000 10.113681            3.401333 High/Low consumption  31.347222  54.652778       NaN
     ECL       conf_eval   851.000000   86.333333 10.144928            3.404000 High/Low consumption  31.319444  55.013889       NaN
     ECL           total 25000.000000 2500.000000 10.000000          100.000000                  NaN        NaN        NaN       NaN
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table2_partition_ledger.csv
+Exported ./results/phase_n_retrained/r2_audit/table2_partition_ledger.csv
 [PASS] 4. Tables 2-5, statistical tests, eligibility ledger (r2_audit/table*.csv) completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 5a. Main-text figures (Figures 2, 3, 4, 5)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_manuscript_figures.py
+   Command: python ./scripts/make_manuscript_figures.py
 ===========================================================================
 [make_manuscript_figures] generating empirical publication figures (Figures 2, 3, 4, 5)...
   wrote fig2_performance_curves.pdf
   wrote fig3_ablation_bars.pdf
   wrote fig4_calibration_reliability.pdf
   wrote fig5_conformal_tradeoffs.pdf
-[done] all empirical publication figures saved to /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures
+[done] all empirical publication figures saved to ./results/phase_n_retrained/figures
 [PASS] 5a. Main-text figures (Figures 2, 3, 4, 5) completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 5b. Supplementary conformal figure (Supp. Fig. S4)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_trust_figure.py
+   Command: python ./scripts/make_trust_figure.py
 ===========================================================================
-[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures/fig6_trust_guarantee.pdf (+png)
+[done] wrote ./results/phase_n_retrained/figures/fig6_trust_guarantee.pdf (+png)
 [PASS] 5b. Supplementary conformal figure (Supp. Fig. S4) completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 5c. Supplementary Figs. S1, S2 and exploratory figures
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_figures.py
+   Command: python ./scripts/make_figures.py
 ===========================================================================
 [figures] models with data: ours(15), grud(9), wdcnn(9), hybridattn(9), horln(9), msdm_net(9)
   wrote fig1_metric_inflation.pdf / .png
@@ -709,21 +719,21 @@ Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revisi
   wrote fig4_ceiling.pdf / .png
   wrote fig5_pr_roc_curves.pdf / .png
   wrote fig2_two_dataset.pdf / .png
-[figures] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures
+[figures] -> ./results/phase_n_retrained/figures
 [PASS] 5c. Supplementary Figs. S1, S2 and exploratory figures completed successfully.
 
 
 ===========================================================================
 >> RUNNING STEP: 5d. Supplementary Fig. S3 (illustrative mechanism)
-   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_mechanism_figure.py
+   Command: python ./scripts/make_mechanism_figure.py
 ===========================================================================
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_mechanism_figure.py:49: RuntimeWarning: Mean of empty slice
+./scripts/make_mechanism_figure.py:49: RuntimeWarning: Mean of empty slice
   mean = np.nanmean(V, axis=1); std = np.nanstd(V, axis=1)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
 [load] SGCC ...
 [done] high idx=29127 mean=55 sd=9; flat idx=6049 mean=2.2 sd=0.88
-  wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures/fig_mechanism.pdf
+  wrote ./results/phase_n_retrained/figures/fig_mechanism.pdf
 [PASS] 5d. Supplementary Fig. S3 (illustrative mechanism) completed successfully.
 
 

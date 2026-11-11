@@ -1,4 +1,4 @@
-"""Paper 3 — Move F: mechanism schematic (ILLUSTRATIVE, no data claim).
+"""Mechanism schematic (ILLUSTRATIVE, no data claim).
 
 Shows WHY the detectability ceiling is consumption-conditional: the SAME fractional
 theft (here a 30% reduction, Jokar h1-style) is legible on a high-consumption series

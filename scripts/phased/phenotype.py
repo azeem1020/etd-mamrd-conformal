@@ -1,10 +1,10 @@
-"""Leakage-free behavioral phenotype router (Paper 4 rule) — Phase N (N1).
+"""Leakage-free behavioral phenotype router.
 
 Replicates the Paper-4 (ADA) phenotype-assignment algorithm exactly, but applied
 to ALL customers (not just theft) so it can (a) stratify detection performance and
 (b) drive a label-free MoE router.
 
-Rule (Paper 4, Algorithm 1 — consumption-only, LABEL-FREE):
+Rule (consumption-only, label-free):
     g_i = mean(observed, block columns 0-4) - mean(observed, block columns 5-6)  # signed gap
     m_i = mean(observed consumption)                            # magnitude
     if |g_i| <= tau:           phenotype = Flat

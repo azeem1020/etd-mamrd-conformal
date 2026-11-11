@@ -1,4 +1,4 @@
-"""Publication-quality figures for Paper 3 (Engineering, Elsevier).
+"""Supplementary figures (detectability ceiling, metric inflation).
 
 Senior-researcher figure set carrying the three contributions:
   Fig 1  metric_inflation   — C3: ROC/MAP@100 high, full PR-AUC collapses (per model)

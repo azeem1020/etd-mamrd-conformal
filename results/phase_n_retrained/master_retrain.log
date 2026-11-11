@@ -1,22 +1,22 @@
 [2026-11-09 17:57:46] =================================================================
 [2026-11-09 17:57:46] MASTER RETRAINING PIPELINE START
-[2026-11-09 17:57:46] Target Results Directory: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained
+[2026-11-09 17:57:46] Target Results Directory: ./results/phase_n_retrained
 [2026-11-09 17:57:46] Stages to execute: cohort, mamrd, ablations, baselines, ecl, trust, postproc
 [2026-11-09 17:57:46] Epochs per cell: 30 | Force: False
 [2026-11-09 17:57:46] =================================================================
 [2026-11-09 17:57:46] === STAGE 1: COHORT PREPARATION & CLEANING ===
-[2026-11-09 17:57:46] keep_idx.npy exists at /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/keep_idx.npy. Skipping (use --force to rerun).
+[2026-11-09 17:57:46] keep_idx.npy exists at ./results/phase_n_retrained/keep_idx.npy. Skipping (use --force to rerun).
 [2026-11-09 17:57:46] === STAGE 2: MAMRD a34_generic TRAINING (15 CELLS) ===
 [2026-11-09 17:57:46] --- START: MAMRD a34_generic 15-cell training ---
-[2026-11-09 17:57:46] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone a34_generic --arm a34_generic --epochs 30 --seeds 0 1 2 3 4 --folds 0 1 2 --cell_prefix a34_cell --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/a34_manifest.csv
+[2026-11-09 17:57:46] CMD: python run_n_clean.py --backbone a34_generic --arm a34_generic --epochs 30 --seeds 0 1 2 3 4 --folds 0 1 2 --cell_prefix a34_cell --manifest ./results/phase_n_retrained/a34_manifest.csv
 [device] cuda | backbone=a34_generic | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -35,19 +35,19 @@
 [13/15] s=4 f=0 kf=0 | PR=0.5816 ROC=0.8765 F1=0.5413 | HD_PR=0.656 HR_PR=0.690 wall=25.0s
 [14/15] s=4 f=1 kf=0 | PR=0.5666 ROC=0.8904 F1=0.5069 | HD_PR=0.614 HR_PR=0.611 wall=25.4s
 [15/15] s=4 f=2 kf=0 | PR=0.6455 ROC=0.9076 F1=0.6013 | HD_PR=0.770 HR_PR=0.710 wall=25.4s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/a34_manifest.csv
+[done] -> ./results/phase_n_retrained/a34_manifest.csv
 [2026-11-09 18:05:09] COMPLETED in 442.8s: MAMRD a34_generic 15-cell training
 [2026-11-09 18:05:09] === STAGE 3: FULL ABLATION SUITE TRAINING (9 CELLS EACH) ===
 [2026-11-09 18:05:09] --- START: Ablation S0: a34_bu0_core ---
-[2026-11-09 18:05:09] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone a34_bu0_core --arm a34_bu0_core --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a34_bu0_core --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/bu/a34_bu0_core_manifest.csv
+[2026-11-09 18:05:09] CMD: python run_n_clean.py --backbone a34_bu0_core --arm a34_bu0_core --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a34_bu0_core --manifest ./results/phase_n_retrained/bu/a34_bu0_core_manifest.csv
 [device] cuda | backbone=a34_bu0_core | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -60,18 +60,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.5224 ROC=0.8714 F1=0.5056 | HD_PR=0.592 HR_PR=0.710 wall=12.0s
 [8/9] s=2 f=1 kf=0 | PR=0.5043 ROC=0.8659 F1=0.4872 | HD_PR=0.584 HR_PR=0.511 wall=11.9s
 [9/9] s=2 f=2 kf=0 | PR=0.6274 ROC=0.9001 F1=0.5649 | HD_PR=0.762 HR_PR=0.651 wall=12.2s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/bu/a34_bu0_core_manifest.csv
+[done] -> ./results/phase_n_retrained/bu/a34_bu0_core_manifest.csv
 [2026-11-09 18:07:43] COMPLETED in 153.9s: Ablation S0: a34_bu0_core
 [2026-11-09 18:07:43] --- START: Ablation S1: a34_bu1_ccname ---
-[2026-11-09 18:07:43] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone a34_bu1_ccname --arm a34_bu1_ccname --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a34_bu1_ccname --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/bu/a34_bu1_ccname_manifest.csv
+[2026-11-09 18:07:43] CMD: python run_n_clean.py --backbone a34_bu1_ccname --arm a34_bu1_ccname --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a34_bu1_ccname --manifest ./results/phase_n_retrained/bu/a34_bu1_ccname_manifest.csv
 [device] cuda | backbone=a34_bu1_ccname | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -84,18 +84,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.5656 ROC=0.8853 F1=0.5432 | HD_PR=0.648 HR_PR=0.697 wall=12.7s
 [8/9] s=2 f=1 kf=0 | PR=0.5263 ROC=0.8804 F1=0.5045 | HD_PR=0.537 HR_PR=0.569 wall=12.8s
 [9/9] s=2 f=2 kf=0 | PR=0.6251 ROC=0.9045 F1=0.5691 | HD_PR=0.759 HR_PR=0.700 wall=12.6s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/bu/a34_bu1_ccname_manifest.csv
+[done] -> ./results/phase_n_retrained/bu/a34_bu1_ccname_manifest.csv
 [2026-11-09 18:10:24] COMPLETED in 161.3s: Ablation S1: a34_bu1_ccname
 [2026-11-09 18:10:24] --- START: Ablation S2: a34_bu2_mask ---
-[2026-11-09 18:10:24] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone a34_bu2_mask --arm a34_bu2_mask --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a34_bu2_mask --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/bu/a34_bu2_mask_manifest.csv
+[2026-11-09 18:10:24] CMD: python run_n_clean.py --backbone a34_bu2_mask --arm a34_bu2_mask --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a34_bu2_mask --manifest ./results/phase_n_retrained/bu/a34_bu2_mask_manifest.csv
 [device] cuda | backbone=a34_bu2_mask | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -108,18 +108,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.5899 ROC=0.8864 F1=0.5664 | HD_PR=0.660 HR_PR=0.750 wall=14.8s
 [8/9] s=2 f=1 kf=0 | PR=0.5331 ROC=0.8795 F1=0.4977 | HD_PR=0.559 HR_PR=0.588 wall=15.2s
 [9/9] s=2 f=2 kf=0 | PR=0.6276 ROC=0.9068 F1=0.5672 | HD_PR=0.751 HR_PR=0.712 wall=15.2s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/bu/a34_bu2_mask_manifest.csv
+[done] -> ./results/phase_n_retrained/bu/a34_bu2_mask_manifest.csv
 [2026-11-09 18:13:27] COMPLETED in 183.4s: Ablation S2: a34_bu2_mask
 [2026-11-09 18:13:27] --- START: Ablation S3: a33_generic ---
-[2026-11-09 18:13:27] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone a33_generic --arm a33_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a33_generic --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/a33_sgcc.csv
+[2026-11-09 18:13:27] CMD: python run_n_clean.py --backbone a33_generic --arm a33_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a33_generic --manifest ./results/phase_n_retrained/a33_sgcc.csv
 [device] cuda | backbone=a33_generic | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -132,18 +132,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.5891 ROC=0.8818 F1=0.5654 | HD_PR=0.658 HR_PR=0.726 wall=19.8s
 [8/9] s=2 f=1 kf=0 | PR=0.5597 ROC=0.8931 F1=0.5283 | HD_PR=0.594 HR_PR=0.604 wall=20.3s
 [9/9] s=2 f=2 kf=0 | PR=0.6395 ROC=0.9124 F1=0.6021 | HD_PR=0.763 HR_PR=0.724 wall=20.1s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/a33_sgcc.csv
+[done] -> ./results/phase_n_retrained/a33_sgcc.csv
 [2026-11-09 18:17:16] COMPLETED in 229.0s: Ablation S3: a33_generic
 [2026-11-09 18:17:16] --- START: Ablation A32: a32_generic ---
-[2026-11-09 18:17:16] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone a32_generic --arm a32_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a32_generic --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/a32_sgcc.csv
+[2026-11-09 18:17:16] CMD: python run_n_clean.py --backbone a32_generic --arm a32_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a32_generic --manifest ./results/phase_n_retrained/a32_sgcc.csv
 [device] cuda | backbone=a32_generic | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -156,18 +156,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.5486 ROC=0.8752 F1=0.5333 | HD_PR=0.627 HR_PR=0.712 wall=16.7s
 [8/9] s=2 f=1 kf=0 | PR=0.5121 ROC=0.8753 F1=0.5118 | HD_PR=0.585 HR_PR=0.562 wall=16.9s
 [9/9] s=2 f=2 kf=0 | PR=0.6173 ROC=0.9021 F1=0.5826 | HD_PR=0.776 HR_PR=0.651 wall=17.0s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/a32_sgcc.csv
+[done] -> ./results/phase_n_retrained/a32_sgcc.csv
 [2026-11-09 18:20:36] COMPLETED in 199.1s: Ablation A32: a32_generic
 [2026-11-09 18:20:36] --- START: Ablation A34_no_miss: a34_no_missingness ---
-[2026-11-09 18:20:36] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone a34_no_missingness --arm a34_no_missingness --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a34_no_missingness --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/bu/a34_no_missingness_manifest.csv
+[2026-11-09 18:20:36] CMD: python run_n_clean.py --backbone a34_no_missingness --arm a34_no_missingness --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix bu/a34_no_missingness --manifest ./results/phase_n_retrained/bu/a34_no_missingness_manifest.csv
 [device] cuda | backbone=a34_no_missingness | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.7s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -180,19 +180,19 @@
 [7/9] s=2 f=0 kf=0 | PR=0.5658 ROC=0.8794 F1=0.5259 | HD_PR=0.652 HR_PR=0.724 wall=22.2s
 [8/9] s=2 f=1 kf=0 | PR=0.5457 ROC=0.8824 F1=0.5065 | HD_PR=0.609 HR_PR=0.546 wall=22.7s
 [9/9] s=2 f=2 kf=0 | PR=0.6135 ROC=0.8948 F1=0.5820 | HD_PR=0.777 HR_PR=0.654 wall=22.7s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/bu/a34_no_missingness_manifest.csv
+[done] -> ./results/phase_n_retrained/bu/a34_no_missingness_manifest.csv
 [2026-11-09 18:24:47] COMPLETED in 251.2s: Ablation A34_no_miss: a34_no_missingness
 [2026-11-09 18:24:47] === STAGE 4: RIVAL BASELINES TRAINING (9 CELLS EACH) ===
 [2026-11-09 18:24:47] --- START: Baseline wdcnn ---
-[2026-11-09 18:24:47] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone wdcnn --arm wdcnn --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/wdcnn --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/wdcnn_manifest.csv
+[2026-11-09 18:24:47] CMD: python run_n_clean.py --backbone wdcnn --arm wdcnn --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/wdcnn --manifest ./results/phase_n_retrained/baselines/wdcnn_manifest.csv
 [device] cuda | backbone=wdcnn | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -205,18 +205,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.3156 ROC=0.8038 F1=0.3430 | HD_PR=0.429 HR_PR=0.454 wall=3.5s
 [8/9] s=2 f=1 kf=0 | PR=0.3604 ROC=0.7997 F1=0.3874 | HD_PR=0.514 HR_PR=0.375 wall=3.6s
 [9/9] s=2 f=2 kf=0 | PR=0.3723 ROC=0.8105 F1=0.3986 | HD_PR=0.531 HR_PR=0.388 wall=3.6s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/wdcnn_manifest.csv
+[done] -> ./results/phase_n_retrained/baselines/wdcnn_manifest.csv
 [2026-11-09 18:25:49] COMPLETED in 62.1s: Baseline wdcnn
 [2026-11-09 18:25:49] --- START: Baseline horln ---
-[2026-11-09 18:25:49] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone horln --arm horln --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/horln --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/horln_manifest.csv
+[2026-11-09 18:25:49] CMD: python run_n_clean.py --backbone horln --arm horln --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/horln --manifest ./results/phase_n_retrained/baselines/horln_manifest.csv
 [device] cuda | backbone=horln | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -229,18 +229,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.5328 ROC=0.8660 F1=0.5154 | HD_PR=0.572 HR_PR=0.703 wall=26.5s
 [8/9] s=2 f=1 kf=0 | PR=0.4915 ROC=0.8646 F1=0.4574 | HD_PR=0.561 HR_PR=0.544 wall=27.1s
 [9/9] s=2 f=2 kf=0 | PR=0.5940 ROC=0.8939 F1=0.5122 | HD_PR=0.686 HR_PR=0.609 wall=27.0s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/horln_manifest.csv
+[done] -> ./results/phase_n_retrained/baselines/horln_manifest.csv
 [2026-11-09 18:30:23] COMPLETED in 274.0s: Baseline horln
 [2026-11-09 18:30:23] --- START: Baseline hybridattn ---
-[2026-11-09 18:30:23] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone hybridattn --arm hybridattn --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/hybridattn --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/hybridattn_manifest.csv
+[2026-11-09 18:30:23] CMD: python run_n_clean.py --backbone hybridattn --arm hybridattn --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/hybridattn --manifest ./results/phase_n_retrained/baselines/hybridattn_manifest.csv
 [device] cuda | backbone=hybridattn | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -253,18 +253,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.4876 ROC=0.8529 F1=0.4973 | HD_PR=0.563 HR_PR=0.637 wall=43.3s
 [8/9] s=2 f=1 kf=0 | PR=0.5187 ROC=0.8587 F1=0.5000 | HD_PR=0.592 HR_PR=0.528 wall=43.7s
 [9/9] s=2 f=2 kf=0 | PR=0.5514 ROC=0.8702 F1=0.5344 | HD_PR=0.688 HR_PR=0.517 wall=44.0s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/hybridattn_manifest.csv
+[done] -> ./results/phase_n_retrained/baselines/hybridattn_manifest.csv
 [2026-11-09 18:37:30] COMPLETED in 427.4s: Baseline hybridattn
 [2026-11-09 18:37:30] --- START: Baseline grud ---
-[2026-11-09 18:37:30] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone grud --arm grud --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/grud --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/grud_manifest.csv
+[2026-11-09 18:37:30] CMD: python run_n_clean.py --backbone grud --arm grud --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/grud --manifest ./results/phase_n_retrained/baselines/grud_manifest.csv
 [device] cuda | backbone=grud | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -277,18 +277,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.1932 ROC=0.6872 F1=0.2509 | HD_PR=0.239 HR_PR=0.347 wall=115.0s
 [8/9] s=2 f=1 kf=0 | PR=0.1792 ROC=0.6596 F1=0.2450 | HD_PR=0.200 HR_PR=0.273 wall=115.5s
 [9/9] s=2 f=2 kf=0 | PR=0.1956 ROC=0.6716 F1=0.2538 | HD_PR=0.270 HR_PR=0.313 wall=118.2s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/grud_manifest.csv
+[done] -> ./results/phase_n_retrained/baselines/grud_manifest.csv
 [2026-11-09 18:55:26] COMPLETED in 1076.2s: Baseline grud
 [2026-11-09 18:55:26] --- START: Baseline msdm_net ---
-[2026-11-09 18:55:26] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone msdm_net --arm msdm_net --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/msdm_net --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/msdm_net_manifest.csv
+[2026-11-09 18:55:26] CMD: python run_n_clean.py --backbone msdm_net --arm msdm_net --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/msdm_net --manifest ./results/phase_n_retrained/baselines/msdm_net_manifest.csv
 [device] cuda | backbone=msdm_net | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -301,18 +301,18 @@
 [7/9] s=2 f=0 kf=0 | PR=0.3801 ROC=0.7990 F1=0.3896 | HD_PR=0.562 HR_PR=0.503 wall=44.4s
 [8/9] s=2 f=1 kf=0 | PR=0.3942 ROC=0.8028 F1=0.3877 | HD_PR=0.564 HR_PR=0.399 wall=45.3s
 [9/9] s=2 f=2 kf=0 | PR=0.4779 ROC=0.8407 F1=0.4419 | HD_PR=0.642 HR_PR=0.567 wall=45.3s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/msdm_net_manifest.csv
+[done] -> ./results/phase_n_retrained/baselines/msdm_net_manifest.csv
 [2026-11-09 19:02:49] COMPLETED in 442.9s: Baseline msdm_net
 [2026-11-09 19:02:49] --- START: Baseline dkgt ---
-[2026-11-09 19:02:49] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_n_clean.py --backbone dkgt --arm dkgt --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/dkgt --manifest /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/dkgt_manifest.csv
+[2026-11-09 19:02:49] CMD: python run_n_clean.py --backbone dkgt --arm dkgt --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/dkgt --manifest ./results/phase_n_retrained/baselines/dkgt_manifest.csv
 [device] cuda | backbone=dkgt | lr=0.0003
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [cohort] kept 42372 / 42372  theft%=8.53
@@ -325,11 +325,11 @@
 [7/9] s=2 f=0 kf=0 | PR=0.2589 ROC=0.7505 F1=0.3025 | HD_PR=0.363 HR_PR=0.374 wall=15.6s
 [8/9] s=2 f=1 kf=0 | PR=0.3032 ROC=0.7784 F1=0.3321 | HD_PR=0.423 HR_PR=0.337 wall=15.9s
 [9/9] s=2 f=2 kf=0 | PR=0.3110 ROC=0.7859 F1=0.3567 | HD_PR=0.467 HR_PR=0.340 wall=15.9s
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/baselines/dkgt_manifest.csv
+[done] -> ./results/phase_n_retrained/baselines/dkgt_manifest.csv
 [2026-11-09 19:05:43] COMPLETED in 174.0s: Baseline dkgt
 [2026-11-09 19:05:43] === STAGE 5: ECL TRANSFER BENCHMARK ===
 [2026-11-09 19:05:43] --- START: ECL Trust Benchmark Training ---
-[2026-11-09 19:05:43] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_ecl_trust.py
+[2026-11-09 19:05:43] CMD: python run_ecl_trust.py
 [ecl] (25000, 336) theft%=10.00 mag[min/med/max]=0.071/141.643/85306.696
 [a34_generic s0 f0] AP=0.8800 ROC=0.9226 n=1702 pos=175 T=67C
 [a34_generic s0 f1] AP=0.7953 ROC=0.8688 n=1702 pos=172 T=63C
@@ -389,7 +389,7 @@
 @@@ ECL TRUST DUMP DONE @@@
 [2026-11-09 19:37:20] COMPLETED in 1896.4s: ECL Trust Benchmark Training
 [2026-11-09 19:37:20] --- START: ECL Trust Analysis ---
-[2026-11-09 19:37:20] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_ecl_trust_analysis.py
+[2026-11-09 19:37:20] CMD: python run_ecl_trust_analysis.py
 # RESULTS_ECL_TRUST — cross-dataset trustworthy layer (ECL, magnitude strata)
 
 Strata: Heavy/Light by train-fit magnitude median. Base-rate Heavy 7.5% Light 12.7%.
@@ -446,11 +446,11 @@ Lift = precision / stratum base-rate. Gap>0 = Heavy more audit-efficient than Li
 | hybridattn | 0.746 | 0.807 |
 | msdm | 0.795 | 0.810 |
 
-[done] /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/ecl_trust/RESULTS_ECL_TRUST.md
+[done] ./results/phase_n_retrained/ecl_trust/RESULTS_ECL_TRUST.md
 [2026-11-09 19:37:23] COMPLETED in 3.7s: ECL Trust Analysis
 [2026-11-09 19:37:23] === STAGE 6: CONFORMAL CALIBRATION, CEILINGS & DECISION LAYERS ===
 [2026-11-09 19:37:23] --- START: Ceiling estimation ---
-[2026-11-09 19:37:23] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_ceiling_estimate.py
+[2026-11-09 19:37:23] CMD: python run_ceiling_estimate.py
 [load] SGCC raw ...
   42372 x 1035
   features: 18 per consumer
@@ -467,18 +467,18 @@ AGGREGATE              0.314            0.567  -0.253
 Spearman(model-free, observed) rho=+0.90 p=0.037
 mean |per-stratum diff| = 0.259
 VERDICT: model-free < deep -> inconclusive, KEEP HEDGE
-[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/ceiling_estimate.csv
+[done] wrote ./results/phase_n_retrained/trust/ceiling_estimate.csv
 [2026-11-09 19:37:42] COMPLETED in 18.3s: Ceiling estimation
 [2026-11-09 19:37:42] --- START: Conformal trust layer evaluation ---
-[2026-11-09 19:37:42] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_trust_layer.py
+[2026-11-09 19:37:42] CMD: python run_trust_layer.py
 [load] SGCC ...
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 [arm] a34_NaME
@@ -488,7 +488,7 @@ VERDICT: model-free < deep -> inconclusive, KEEP HEDGE
 [arm] GRU-D
 [arm] HybridAttn
 [arm] DKGT
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_trust_layer.py:374: RuntimeWarning: Mean of empty slice
+./scripts/run_trust_layer.py:374: RuntimeWarning: Mean of empty slice
   gap_heavy_flat=float(np.nanmean(gaps)), gap_lo=lo, gap_hi=hi))
 # RESULTS_TRUST — SGCC trustworthy layer (post-hoc, NREP=20)
 
@@ -567,18 +567,18 @@ lower audit efficiency on Flat thefts, whereas MAMRD achieves a negative gap (-0
 | HybridAttn | 0.228 | 0.299 | 0.503 |
 | DKGT | 0.074 | 0.113 | 0.284 |
 
-[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/RESULTS_TRUST.md (+ percell/calibration/operating/lift CSVs)
+[done] wrote ./results/phase_n_retrained/trust/RESULTS_TRUST.md (+ percell/calibration/operating/lift CSVs)
 [2026-11-09 19:37:54] COMPLETED in 11.9s: Conformal trust layer evaluation
 [2026-11-09 19:37:54] --- START: Decision value economic curves ---
-[2026-11-09 19:37:54] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_decision_value.py
+[2026-11-09 19:37:54] CMD: python run_decision_value.py
 [load] SGCC ...
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
   a34_NaME    guar=0.80 n=15 | audit cond=0.279 single=0.444 | REDUCTION=34.0% [28.8,39.4] | realized recall H/L/F=0.79/0.84/0.84
@@ -596,42 +596,42 @@ lower audit efficiency on Flat thefts, whereas MAMRD achieves a negative gap (-0
   DKGT        guar=0.80 n= 7 | audit cond=0.523 single=0.706 | REDUCTION=25.3% [23.3,27.9] | realized recall H/L/F=0.79/0.81/0.91
   DKGT        guar=0.90 n= 7 | audit cond=0.690 single=0.792 | REDUCTION=12.5% [10.0,16.2] | realized recall H/L/F=0.90/0.91/0.95
 
-[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/decision_value_sgcc.csv
+[done] wrote ./results/phase_n_retrained/trust/decision_value_sgcc.csv
 [2026-11-09 19:38:00] COMPLETED in 6.8s: Decision value economic curves
 [2026-11-09 19:38:00] --- START: Empirical comparator evaluation ---
-[2026-11-09 19:38:00] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_empirical_comparator.py
+[2026-11-09 19:38:00] CMD: python run_empirical_comparator.py
 [running] Empirical Comparator Benchmark on MAMRD...
 [load] SGCC ...
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
-[done] Saved to /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/empirical_comparator_sgcc.csv
+[done] Saved to ./results/phase_n_retrained/trust/empirical_comparator_sgcc.csv
         arm  n_resplits  conf_inspected_mean  conf_inspected_lo  conf_inspected_hi  emp_inspected_mean  emp_inspected_lo  emp_inspected_hi  conf_rec_flat_mean  emp_rec_flat_mean  conf_flat_viol_pct  emp_flat_viol_pct  conf_rec_heavy_mean  emp_rec_heavy_mean  conf_rec_light_mean  emp_rec_light_mean  conf_rec_overall_mean  emp_rec_overall_mean
 0  a34_NaME         285             0.287676           0.198337           0.388496            0.238295          0.172765          0.318572            0.821322           0.710007           35.087719               60.0             0.812995             0.79987             0.813686            0.788236               0.813949              0.790086
 [2026-11-09 19:38:06] COMPLETED in 6.1s: Empirical comparator evaluation
 [2026-11-09 19:38:06] --- START: Finardi et al. replication baseline ---
-[2026-11-09 19:38:06] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python run_finardi_repro.py
+[2026-11-09 19:38:06] CMD: python run_finardi_repro.py
 [device] cuda avail=True temp=51C
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_finardi_repro.py:72: RuntimeWarning: Mean of empty slice
+./scripts/run_finardi_repro.py:72: RuntimeWarning: Mean of empty slice
   ceil = np.nanmean(a, 1, keepdims=True) + 2.0 * np.nanstd(a, 1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_finardi_repro.py:74: RuntimeWarning: All-NaN slice encountered
+./scripts/run_finardi_repro.py:74: RuntimeWarning: All-NaN slice encountered
   lo = np.nanmin(a, 1, keepdims=True); hi = np.nanmax(a, 1, keepdims=True)
 [ours] n_test=2885 prev=0.088 wall=41s | NATIVE AP=0.464 ROC=0.855 F1=0.480 | BALANCED AP=0.858 ROC=0.856 F1=0.793
 [finardi] n_test=2885 prev=0.088 wall=39s | NATIVE AP=0.471 ROC=0.858 F1=0.479 | BALANCED AP=0.858 ROC=0.857 F1=0.791
-[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/repro_finardi.json
+[done] wrote ./results/phase_n_retrained/repro_finardi.json
 @@@ FINARDI REPRO DONE @@@
 [2026-11-09 19:40:15] COMPLETED in 128.4s: Finardi et al. replication baseline
 [2026-11-09 19:40:15] === STAGE 7: POST-PROCESSING, TABLES & FIGURES GENERATION ===
 [2026-11-09 19:40:15] --- START: Revision 2/3 comprehensive audit & metrics ledger ---
-[2026-11-09 19:40:15] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python compute_r2_revisions.py
+[2026-11-09 19:40:15] CMD: python compute_r2_revisions.py
 =====================================================================
 1. LOADING SGCC RAW & NORMALIZED DATA + CALENDAR DAY-OF-WEEK CHECK
 =====================================================================
@@ -645,13 +645,13 @@ Weekly grid (147, 7) column index -> Calendar Day-of-Week:
   Col 4: Sunday
   Col 5: Monday
   Col 6: Tuesday
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.4s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 
@@ -763,7 +763,7 @@ MAMRD            | ECL  @1%FPR: Rec=0.797 Insp=9.02% (Prosp: Rec=0.801 FPR=1.06%
             0.80 Overall               4  122.000000          100.000000      Direct Group Conformal
 [2026-11-09 19:41:05] COMPLETED in 50.6s: Revision 2/3 comprehensive audit & metrics ledger
 [2026-11-09 19:41:05] --- START: Table B ablation calculations ---
-[2026-11-09 19:41:05] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python compute_table_b.py
+[2026-11-09 19:41:05] CMD: python compute_table_b.py
 
 === TABLE B: per-stratum PR-AUC (mean [BCa 95% CI]) ===
 stratum         pop% |            WDCNN            HORLN        Self-Attn            GRU-D             MSDM         DKGT-Net            MAMRD | MAMRD-best
@@ -787,18 +787,18 @@ Aggregate      100.0 | 0.352[0.33,0.37] 0.540[0.52,0.57] 0.522[0.51,0.54] 0.190[
 --- NOTE: per-stratum theft%% NOT computed: per-stratum positive counts are
     not cached (n_* are totals); requires the strata reconstruction (Table C path).
 
-[done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableB
+[done] artifacts in ./results/phase_n_retrained/tableB
 [config] BCa B=2000, boot seed=12345; baselines n=9, MAMRD n=15, gap pairs=9
 [2026-11-09 19:41:06] COMPLETED in 0.8s: Table B ablation calculations
 [2026-11-09 19:41:06] --- START: Table C baseline calculations ---
-[2026-11-09 19:41:06] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python compute_table_c.py
-[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+[2026-11-09 19:41:06] CMD: python compute_table_c.py
+[data] Loading ./data/SGCC.csv ...
   loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+./scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
-/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
   var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
-/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+./scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
   row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
   final shape: (42372, 147, 7)  NaN=25.75%
 
@@ -825,32 +825,32 @@ Light_Dropper  0.245  0.491      0.453  0.089  0.238     0.224  0.531
 Light_Riser    0.124  0.279      0.261  0.103  0.211     0.088  0.424
 Flat           0.137  0.337      0.336  0.065  0.158     0.126  0.287
 
-[done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableC  (BCa B=2000, match reps=100)
+[done] artifacts in ./results/phase_n_retrained/tableC  (BCa B=2000, match reps=100)
 [2026-11-09 19:41:28] COMPLETED in 21.6s: Table C baseline calculations
 [2026-11-09 19:41:28] --- START: Manuscript figures 2, 3, 4, 5, S1, S2 ---
-[2026-11-09 19:41:28] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python make_manuscript_figures.py
+[2026-11-09 19:41:28] CMD: python make_manuscript_figures.py
 [make_manuscript_figures] generating empirical publication figures (Figures 2, 3, 4, 5)...
   wrote fig2_performance_curves.pdf
   wrote fig3_ablation_bars.pdf
   wrote fig4_calibration_reliability.pdf
   wrote fig5_conformal_tradeoffs.pdf
-[done] all empirical publication figures saved to /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures
+[done] all empirical publication figures saved to ./results/phase_n_retrained/figures
 [2026-11-09 19:41:31] COMPLETED in 3.5s: Manuscript figures 2, 3, 4, 5, S1, S2
 [2026-11-09 19:41:31] --- START: Extended figures ---
-[2026-11-09 19:41:31] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python make_figures.py
+[2026-11-09 19:41:31] CMD: python make_figures.py
 [figures] models with data: ours(15), grud(9), wdcnn(9), hybridattn(9), horln(9), msdm_net(9)
   wrote fig1_metric_inflation.pdf / .png
   wrote fig3_phenotype.pdf / .png
   wrote fig4_ceiling.pdf / .png
   wrote fig5_pr_roc_curves.pdf / .png
   wrote fig2_two_dataset.pdf / .png
-[figures] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures
+[figures] -> ./results/phase_n_retrained/figures
 [2026-11-09 19:41:34] COMPLETED in 3.1s: Extended figures
 [2026-11-09 19:41:34] --- START: Conformal trust figure ---
-[2026-11-09 19:41:34] CMD: /home/azeem/miniconda3/envs/mamba_gpu/bin/python make_trust_figure.py
-[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures/fig6_trust_guarantee.pdf (+png)
+[2026-11-09 19:41:34] CMD: python make_trust_figure.py
+[done] wrote ./results/phase_n_retrained/figures/fig6_trust_guarantee.pdf (+png)
 [2026-11-09 19:41:36] COMPLETED in 1.8s: Conformal trust figure
 [2026-11-09 19:41:36] =================================================================
 [2026-11-09 19:41:36] MASTER RETRAINING PIPELINE COMPLETED SUCCESSFULLY in 103.8 minutes!
-[2026-11-09 19:41:36] All retrained artifacts, figures, and tables saved in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained
+[2026-11-09 19:41:36] All retrained artifacts, figures, and tables saved in ./results/phase_n_retrained
 [2026-11-09 19:41:36] =================================================================

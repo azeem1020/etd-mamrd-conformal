@@ -7,4 +7,4 @@ MSDM                  0.842    0.898    0.861    1.000
 HORLN                 0.812    0.891    0.850    0.972
 MAMRD                 0.843    0.899    0.860    0.998
 
-[done] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/ecl_board.csv
+[done] -> ./results/phase_n_retrained/ecl_board.csv

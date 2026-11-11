@@ -3,7 +3,7 @@
 Question: is the ~0.56 PR-AUC wall set by the IMPUTATION
 representation (CC-NaME fills missing with a learned scalar token tau~-1.0,
 an out-of-[0,1]-manifold spike at 25.6% of positions) or is it STRUCTURAL
-(Paper 1 regime confound + Paper 4 ceiling, max|r|=0.102, ~82% undetectable)?
+(a regime confound or a detectability ceiling)?
 
 Controlled design: hold a14 fixed; swap ONLY `model.name_module` (the fill used
 by the wide + CNN value-branches). The mask channel (raw_mask from isnan, l.833)

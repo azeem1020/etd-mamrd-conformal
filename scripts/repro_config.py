@@ -16,6 +16,8 @@ variables above at them, e.g.:
 """
 from __future__ import annotations
 import os
+import re
+import sys
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent          # the reproducibility/ bundle root
@@ -25,4 +27,12 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR    = Path(os.environ.get("MAMRD_DATA",    _ROOT / "data"))
 SGCC_PATH   = Path(os.environ.get("MAMRD_SGCC",    DATA_DIR / "SGCC.csv"))
 ECL_PATH    = Path(os.environ.get("MAMRD_ECL",     DATA_DIR / "LD2011_2014.txt"))
+
+
+def scrub_paths(text: str) -> str:
+    """Remove machine-specific absolute paths from console/log text: the repository root
+    becomes '.', the Python interpreter 'python', and installed packages '<site-packages>'."""
+    text = text.replace(str(_ROOT), ".").replace(sys.executable, "python")
+    text = re.sub(r"[^\s\"']*/site-packages/", "<site-packages>/", text)
+    return text.replace(str(Path.home()), "~")
 

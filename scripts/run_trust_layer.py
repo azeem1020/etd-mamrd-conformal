@@ -1,20 +1,17 @@
-"""Paper 3 — SGCC trustworthy-AI layer (post-hoc, no retraining).
+"""SGCC post-hoc trust layer (no retraining).
 
-Computes, from the LOCKED saved per-cell scores in results/phase_n_retrained/,
+Computes, from the saved per-cell scores in results/phase_n_retrained/,
 the post-hoc trust layer:
 
-  T1  calibration (preliminary; cite Paper 1):  ECE (15 equal-mass bins) + Brier,
-      raw vs temperature-scaled (Guo 2017; B4 §14.2.2).
-  T2  conformal marginal coverage (validity check, NOT a finding): split-conformal
-      APS (Romano-Sesia-Candès 2020; B4 §14.3) -> empirical marginal coverage ~ 1-a.
-  T3  conformal CONDITIONAL coverage (THE FINDING): Mondrian per magnitude phenotype.
-      Per-stratum coverage / mean set size / decisive-flag yield / abstention.
+  T1  calibration diagnostic: ECE (15 equal-mass bins) + Brier, raw vs
+      temperature-scaled (Guo et al. 2017). Not used by any figure or table of the
+      manuscript, whose calibration analysis is make_fig4_calibration().
+  T2  conformal marginal coverage (validity check): split-conformal APS
+      (Romano, Sesia and Candès 2020) -> empirical marginal coverage ~ 1-a.
+  T3  group-conditional (Mondrian) conformal coverage per magnitude phenotype:
+      per-stratum coverage / mean set size / decisive-flag yield / abstention;
       Heavy-vs-Flat gap with paired BCa CI over cells.
-  T4  selective operating point (supporting, not headlined): recall@FPR in {0.5,1,5}%.
-
-PORTFOLIO BOUNDARY (Paper 1 under review at RiE): calibration is preliminary only
-(Paper 1 owns calibration-as-checklist + net-value); the conformal magnitude-
-conditional guarantee is Paper 3's clean, novel trustworthy contribution.
+  T4  selective operating point: recall@FPR in {0.5,1,5}%.
 
 Conformal protocol: within each held-out test fold `te` (one trained model => the
 instances are exchangeable), split te into a conformal-calibration half and a
