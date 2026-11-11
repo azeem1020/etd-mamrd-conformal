@@ -1,0 +1,53 @@
+======================================================================
+MAMRD PARTITION DISJOINTNESS & TABLE 2 RECONCILIATION AUDIT
+======================================================================
+Using manifest directory: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/partition_manifests
+
+[1/2] Auditing SGCC Partition Manifest: sgcc_partition_manifest.csv
+======================================================================
+Total manifest rows read: 127116 (Expected 127,116 across 3 folds)
+
+Fold 0: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Pairwise customer overlap: 0 across all 6 pairs (100% customer-disjoint)
+  Test Positives: 254 (Heavy=156, Light=81, Flat=17)
+
+Fold 1: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Pairwise customer overlap: 0 across all 6 pairs (100% customer-disjoint)
+  Test Positives: 230 (Heavy=133, Light=79, Flat=18)
+
+Fold 2: Total customers = 42372 (Train=33898, ES=2795, Cal=2795, Test=2884)
+  [OK] Pairwise customer overlap: 0 across all 6 pairs (100% customer-disjoint)
+  Test Positives: 249 (Heavy=155, Light=81, Flat=13)
+
+SGCC Mean Counts Across Folds 0--2 (Reconciling Table 2):
+  Training (D_train):     33897.3 total | 2900.7 pos (8.56%)
+  Early-Stopping (D_es):  2795.0 total | 235.0 pos (8.41%)
+  Threshold-Cal (D_cal):  2795.0 total | 235.0 pos (8.41%)
+  Held-Out Test (D_test): 2884.7 total | 244.3 pos (8.47%)
+    -> Test Positives Breakdown: Heavy=148.0, Light=80.3, Flat=16.0
+
+[2/2] Auditing ECL Partition Manifest: ecl_partition_manifest.csv
+======================================================================
+Total manifest rows read: 75000 (Expected 75,000 across 3 folds)
+
+Fold 0: Total windows = 25000 (Train=20000, ES=1649, Cal=1649, Test=1702)
+  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)
+  Client Overlap: 370 train clients, 360 test clients -> 360 shared (100.0% of test clients in train; demonstrating window-level evaluation)
+
+Fold 1: Total windows = 25000 (Train=20000, ES=1649, Cal=1649, Test=1702)
+  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)
+  Client Overlap: 370 train clients, 354 test clients -> 354 shared (100.0% of test clients in train; demonstrating window-level evaluation)
+
+Fold 2: Total windows = 25000 (Train=20000, ES=1650, Cal=1650, Test=1700)
+  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)
+  Client Overlap: 370 train clients, 363 test clients -> 363 shared (100.0% of test clients in train; demonstrating window-level evaluation)
+
+ECL Mean Counts Across Folds 0--2 (Reconciling Table 2):
+  Training (D_train):     20000.0 total | 1995.7 pos (9.98%)
+  Early-Stopping (D_es):  1649.3 total | 166.0 pos (10.06%)
+  Reserved, unused:       1649.3 total | 166.0 pos (10.06%)
+  Held-Out Test (D_test): 1701.3 total | 172.3 pos (10.13%)
+
+======================================================================
+[PASS] ALL PARTITIONS 100% DISJOINT ACROSS ALL FOLDS (EXIT 0)
+======================================================================

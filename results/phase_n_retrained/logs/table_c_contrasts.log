@@ -1,0 +1,46 @@
+========================================================================
+MATCHING CONFIG (reused, not re-tuned):
+  common target prevalence (max per-stratum, mean over cells) = 12.77%
+  subsampling draws K=100, MATCH_SEED=777 ; BCa B=2000, BOOT_SEED=12345
+  cells: n=15 (5 seeds x 3 folds), paired
+  retained N per stratum (P + kept negatives) | positives/cell:
+    Heavy dropper  N= 785  P=100
+    Heavy riser    N= 378  P= 48
+    Light dropper  N= 448  P= 56
+    Light riser    N= 187  P= 24
+    Flat           N= 127  P= 16
+========================================================================
+
+[B] Matched PR-AUC per stratum (mean [BCa 95% CI]) — verify vs tableC_agg.csv:
+  Heavy dropper  0.687 [0.650,0.720]  (|diff vs tableC_agg| = 0.0e+00)  N=785
+  Heavy riser    0.675 [0.638,0.702]  (|diff vs tableC_agg| = 0.0e+00)  N=378
+  Light dropper  0.671 [0.656,0.685]  (|diff vs tableC_agg| = 0.0e+00)  N=448
+  Light riser    0.605 [0.571,0.640]  (|diff vs tableC_agg| = 0.0e+00)  N=187
+  Flat           0.564 [0.532,0.593]  (|diff vs tableC_agg| = 0.0e+00)  N=127
+
+[C] Pairwise contrasts (paired over 15 cells, BCa 95% CI):
+  Heavy riser   - Flat         : +0.110 [+0.056,+0.157]  resolved=True
+  Heavy dropper - Flat         : +0.122 [+0.066,+0.186]  resolved=True
+  Flat          - Light dropper: -0.107 [-0.129,-0.082]  resolved=True
+  Flat          - Light riser  : -0.040 [-0.105,+0.014]  resolved=False
+  Heavy riser   - Light dropper: +0.003 [-0.046,+0.039]  resolved=False
+  Heavy(pooled) - Light(pooled): +0.042 [+0.013,+0.065]  resolved=True
+
+[D] Friedman omnibus across 5 strata over 15 cells: chi2=27.093, df=4, p=1.90e-05
+    rank sums {'Heavy dropper': 61.0, 'Heavy riser': 57.0, 'Light dropper': 51.0, 'Light riser': 29.0, 'Flat': 27.0}
+
+========================================================================
+VERDICT (no spin):
+  Friedman: the 5 matched per-stratum PR-AUCs are DISTINGUISHABLE at p<0.05 (p=0.000).
+  Heavy-Flat resolved? Heavy riser-Flat: True (+0.110 [+0.056,+0.157]); Heavy dropper-Flat: True (+0.122 [+0.066,+0.186]).
+  Flat exceeds light strata with interval excluding zero?  Flat-Light dropper: True (-0.107 [-0.129,-0.082]); Flat-Light riser: False (-0.040 [-0.105,+0.014]).
+  Heavy(pooled)-Light(pooled): True (+0.042 [+0.013,+0.065]).
+
+[done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableC
+
+[optional] audit-efficiency LIFT under matching: SKIPPED.
+  Reason: lift = P_phi/pi_phi needs an operating point phi. The paper's phi is the
+  conformal guaranteed-detection-rate threshold, calibrated on the CALIBRATION split,
+  which is NOT in the cached test cells (only test scores+labels are). Computing it
+  consistently would require the calibration-split scores / conformal machinery, i.e.
+  beyond the cached scores — so per the guardrail it is skipped, not approximated.

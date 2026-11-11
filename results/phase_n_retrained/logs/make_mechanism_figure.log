@@ -1,0 +1,7 @@
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_mechanism_figure.py:49: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(V, axis=1); std = np.nanstd(V, axis=1)
+/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+[load] SGCC ...
+[done] high idx=29127 mean=55 sd=9; flat idx=6049 mean=2.2 sd=0.88
+  wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures/fig_mechanism.pdf

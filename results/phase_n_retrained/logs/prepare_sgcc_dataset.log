@@ -1,0 +1,9 @@
+===========================================================================
+SGCC DATASET CHRONOLOGICAL PREPARATION & AUDIT
+Target Destination: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv
+===========================================================================
+[OK] Target file /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv is already chronologically ordered,
+     fully continuous (1,035 days: 2014-01-01 -> 2016-10-31),
+     and 2016-09-18 is present. Skipping re-generation.
+===========================================================================
+

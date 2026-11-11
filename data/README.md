@@ -8,7 +8,9 @@ top-level `README.md`).
 - Public benchmark released with Zheng et al., *Wide and Deep Convolutional
   Neural Networks for Electricity-Theft Detection to Secure Smart Grids*,
   IEEE Trans. Industrial Informatics 14(4), 2018 (DOI 10.1109/TII.2017.2785963).
-- ~42,372 consumers × 1,034 daily readings (2014-01-01 to 2016-10-31),
+- ~42,372 consumers × 1,034 date columns (2014-01-01 to 2016-10-31; the raw columns are
+  not in date order and 2016-09-18 is missing). `scripts/prepare_sgcc_dataset.py` sorts the
+  columns and fills 2016-09-18 by Sunday-to-Sunday interpolation, giving 1,035 days;
   ~8.5% theft prevalence, ~25% missing entries.
 - Place the consumer × day CSV where the scripts expect `SGCC.csv`.
 
@@ -19,8 +21,8 @@ top-level `README.md`).
   Download: https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014
 - The corpus carries **no native theft**; labels are produced by the six-attack
   FDI family in `msdm/fdi.py` (multiplicative/per-step scaling, intermittent
-  zeroing, mean replacement, flattening, time reversal) injected into 10% of
-  clients, on observed entries only (missingness structure preserved). The locked
+  zeroing, mean replacement, flattening, time reversal) injected into 10% of the
+  7-day windows (2,500 of 25,000), on observed entries only (missingness structure preserved). The locked
   protocol aggregates to 30-min, 7-day windows (336 readings).
 - Place the raw file where the scripts expect `LD2011_2014.txt`.
 

@@ -20,11 +20,12 @@ Electricity theft detection (ETD) models frequently report over-optimistic perfo
 
 1. **Leakage-Free Native-Prevalence Evaluation Protocol**: Standardized evaluation on the State Grid Corporation of China (SGCC, 42,372 consumers) and ElectricityLoadDiagrams (ECL) benchmarks under true operational class imbalance (~8.5% theft) without retrospective or temporal leakage.
 2. **Missingness-Aware Multi-Representation Detector (MAMRD)**: A compact 0.97M-parameter deep learning architecture (`a34_generic`) that fuses five complementary consumption and missingness representations under single-task binary cross-entropy:
+   - Front end: Context-Conditioned Missing-Value Imputation (CC-MVI in the manuscript; `CC-NaME` / `ccname` in the code), which replaces each missing reading with a learned token conditioned on the consumer's context vector
    - Branch 1: Bidirectional Mamba2 selective state-space sequence backbone ($\mathbb{R}^{90}$)
    - Branch 2: Value 2-D multi-scale discrete Laplacian CNN ($\mathbb{R}^{60}$)
    - Branch 3: Missingness-mask 2-D multi-scale Laplacian CNN ($\mathbb{R}^{30}$)
    - Branch 4: Fixed causal multi-scale lagged differencing 1-D CNN ($s \in \{1, 7, 30\}$, $\mathbb{R}^{32}$)
-   - Branch 5: Multi-scale inter- and intra-period dilated 1-D CNN (IIPC, $\mathbb{R}^{32}$) alongside context-conditioned missing-value fill tokens (`CC-NaME`)
+   - Branch 5: Multi-scale inter- and intra-period dilated 1-D CNN (IIPC, $\mathbb{R}^{32}$)
 3. **Group-Conditional (Mondrian) Conformal Audit Layer**: A post-hoc, distribution-free, class-conditional conformal prediction framework using the exact order statistic $k_\phi = \lceil(n_\phi + 1)(1 - \alpha)\rceil$ to target a common $1 - \alpha = 80\%$ marginal theft recall lower bound within each consumption-level group ($\phi \in \{\text{Heavy, Light, Flat}\}$) under within-group exchangeability, reducing the inspected share of consumers from 49.1% to 28.6% (a 35.5% relative workload reduction, 95% BCa interval over seed–fold cells [30.2%, 40.4%]) relative to a single global minimax threshold satisfying the coverage target across all groups. Every calibration/evaluation resplit is used; a group with too few calibration thefts for a finite order statistic is inspected in full and that cost is counted (see Section 6).
 
 ---
@@ -149,7 +150,7 @@ export MAMRD_RESULTS=../results/phase_n_retrained
 
 To support transparent peer review and independent replication, the repository implements an explicit two-tier replication architecture:
 - **Tier 1 (Regeneration from cached predictions, about 3.5 minutes on a 16-core CPU, no GPU)**: Starting from the cached prediction-level records of every trained model, it verifies the customer-disjoint partition manifests, re-runs every analysis script (Tables 2–6, Supplementary Tables S2–S4, S6, S7 and the statistics quoted in the text), and regenerates all data-driven main and supplementary figures. It does not retrain any model. Every number in Tables 2–6 is the single rounding of a value in a released CSV.
-- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after cohort cleaning, then runs the Tier 1 post-processing (`reproduce_all_r2.py`).
+- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after cohort cleaning, then runs the Tier 1 post-processing (`reproduce_all_r2.py`). The console log of the reference run is `results/phase_n_retrained/master_retrain.log`.
 
 ---
 
@@ -168,7 +169,7 @@ python scripts/reproduce_all_r2.py --config configs/default.yaml
 | 5 | `make_manuscript_figures.py`, `make_trust_figure.py`, `make_figures.py`, `make_mechanism_figure.py` | `figures/`, `trust/fig4_ece_by_detector.csv` |
 
 Re-running Tier 1 on the released records reproduces every CSV/Markdown output byte-for-byte; console logs of the reference run are in `results/phase_n_retrained/logs/`. Supplementary Table S5 (inference latency and peak memory) is a hardware measurement made once with `scripts/make_compute_table.py` on an RTX 3060 and is not part of Tier 1; its parameter counts are deterministic.
-*Note: Figure 1 (MAMRD Architectural Framework) is the conceptual schematic compiled from TikZ (`submission_package/figures/fig0_architecture_src.tex`). Figure 2 (Precision-Recall and ROC curves) is dynamically interpolated and rendered by `make_manuscript_figures.py` as part of this routine.*
+*Note: Figure 1 (MAMRD Architectural Framework) is a conceptual schematic drawn in TikZ; it is not generated from data, and its source is not part of this repository. Figure 2 (Precision-Recall and ROC curves) is dynamically interpolated and rendered by `make_manuscript_figures.py` as part of this routine.*
 
 ---
 
@@ -212,13 +213,13 @@ python scripts/run_n_clean.py --backbone a34_generic --epochs 30 --seeds 0 1 2 3
 # ==============================================================================
 # S0: Minimal Core (BiMamba2 + 2D Value Laplacian CNN)
 python scripts/run_n_clean.py --backbone a34_bu0_core --cell_prefix bu/a34_bu0_core --epochs 30 --seeds 0 1 2 --folds 0 1 2
-# S1: + Context-conditioned fill token (CC-NaME)
+# S1: + Context vector and CC-MVI imputation token (code name: ccname / CC-NaME)
 python scripts/run_n_clean.py --backbone a34_bu1_ccname --cell_prefix bu/a34_bu1_ccname --epochs 30 --seeds 0 1 2 --folds 0 1 2
 # S2: + 2D missingness-mask Laplacian CNN
 python scripts/run_n_clean.py --backbone a34_bu2_mask --cell_prefix bu/a34_bu2_mask --epochs 30 --seeds 0 1 2 --folds 0 1 2
 # S3: + Multi-scale lagged differencing (a33_generic, no-IIPC)
 python scripts/run_n_clean.py --backbone a33_generic --cell_prefix bu/a33_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
-# A32: Generic core + differencing (no CC-NaME, no Mask CNN)
+# A32: Core + differencing only (no CC-MVI, no Mask CNN, no IIPC)
 python scripts/run_n_clean.py --backbone a32_generic --cell_prefix bu/a32_generic --epochs 30 --seeds 0 1 2 --folds 0 1 2
 # A34_no_miss: Controlled S4 ablation disabling only missingness-related pathways (Reviewer 2, Comment 4)
 python scripts/run_n_clean.py --backbone a34_no_missingness --cell_prefix bu/a34_no_missingness --epochs 30 --seeds 0 1 2 --folds 0 1 2
