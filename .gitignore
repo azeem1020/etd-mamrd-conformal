@@ -62,8 +62,8 @@ data/*.tar.gz
 !data/README.md
 
 # Intermediate raw scratch runs
-results/phase_n/phase_r/
-results/phase_n/*.log
+results/_archive_phase_n_pre_retrain/phase_r/
+results/_archive_phase_n_pre_retrain/*.log
 
 # Manifests are centrally tracked in partition_manifests/
-results/phase_n/r2_audit/*_partition_manifest.csv
+results/_archive_phase_n_pre_retrain/r2_audit/*_partition_manifest.csv

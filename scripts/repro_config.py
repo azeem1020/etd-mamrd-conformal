@@ -4,7 +4,7 @@ All scripts import their data/result paths from here, so the bundle runs from an
 working directory with no edits. Defaults point at this package's own layout;
 override any of them with environment variables.
 
-    MAMRD_RESULTS   results directory (default: <bundle>/results/phase_n)
+    MAMRD_RESULTS   results directory (default: <bundle>/results/phase_n_retrained)
     MAMRD_DATA      raw-data directory (default: <bundle>/data)
     MAMRD_SGCC      SGCC consumer x day CSV (default: <data>/SGCC.csv)
     MAMRD_ECL       ECL LD2011_2014.txt    (default: <data>/LD2011_2014.txt)

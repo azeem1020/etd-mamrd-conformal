@@ -1,0 +1,6 @@
+[make_manuscript_figures] generating empirical publication figures (Figures 2, 3, 4, 5)...
+  wrote fig2_performance_curves.pdf
+  wrote fig3_ablation_bars.pdf
+  wrote fig4_calibration_reliability.pdf
+  wrote fig5_conformal_tradeoffs.pdf
+[done] all empirical publication figures saved to /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures

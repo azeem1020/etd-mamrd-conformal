@@ -9,11 +9,12 @@ from repro_config import RESULTS_DIR
 # Load extracted vector data
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPRO_DIR = SCRIPTS_DIR.parent
+# LEGACY helper (not used for the manuscript; Figure 2 is produced by
+# make_manuscript_figures.py from the retrained per-cell predictions). Fail closed:
+# never fall back to pre-retrain results.
 json_path = RESULTS_DIR / "figures" / "curves_dump.json"
 if not json_path.exists():
-    json_path = REPRO_DIR / "results" / "phase_n" / "figures" / "curves_dump.json"
-if not json_path.exists():
-    json_path = REPRO_DIR.parent / "figures" / "curves_dump.json"
+    raise FileNotFoundError(f"{json_path} not found; use make_manuscript_figures.py for Figure 2")
 
 with open(json_path) as f:
     data = json.load(f)

@@ -1,5 +1,5 @@
 """ECL trustworthy-layer analysis (cross-dataset confirmation). Post-hoc from the
-per-cell dumps in results/phase_n/ecl_trust/ (produced by run_ecl_trust.py).
+per-cell dumps in RESULTS_DIR/ecl_trust/ (produced by run_ecl_trust.py).
 
 Mirrors the SGCC layer (run_trust_layer.py) but stratifies by MAGNITUDE ONLY
 (Heavy/Light by the leakage-safe TRAIN-fit median), since ECL has no calendar
@@ -13,10 +13,12 @@ from pathlib import Path
 from collections import defaultdict
 THIS = Path(__file__).resolve().parent
 sys.path.insert(0, str(THIS.parent))                      # code/ -> sct_etd
+sys.path.insert(0, str(THIS))
 import numpy as np, pandas as pd
 from sct_etd.calibration.conformal_aps import APSCalibrator
 from sct_etd.calibration.temperature import TemperatureCalibrator
 from repro_config import RESULTS_DIR, DATA_DIR, SGCC_PATH, ECL_PATH
+from conformal_common import resplit_rng, stratified_half, cc_recall_threshold
 csv.field_size_limit(10**7)
 
 IN = (RESULTS_DIR / "ecl_trust")
@@ -30,28 +32,12 @@ LOCKED_AP = {"a34_generic": 0.880, "horln": 0.852, "wdcnn": 0.836,
              "grud": 0.561, "hybridattn": 0.847, "msdm": 0.870}
 
 
-def stratified_half(y, rng):
-    idx = np.arange(len(y)); cal = []
-    for c in (0, 1):
-        ic = idx[y == c]; rng.shuffle(ic); cal.append(ic[: len(ic) // 2])
-    cal = np.concatenate(cal); mask = np.zeros(len(y), bool); mask[cal] = True
-    return np.where(mask)[0], np.where(~mask)[0]
-
-
 def ece_brier(p, y, n_bins=15):
     p = np.clip(p, 0, 1); y = y.astype(float); brier = float(np.mean((p - y) ** 2))
     o = np.argsort(p); p, yy = p[o], y[o]; ece = 0.0; n = len(p)
     for b in np.array_split(np.arange(n), n_bins):
         if len(b): ece += (len(b) / n) * abs(p[b].mean() - yy[b].mean())
     return float(ece), brier
-
-
-def cc_recall_threshold(s_cal, y_cal, alpha):
-    pos = s_cal[y_cal == 1]; n = len(pos)
-    if n < max(10, int(np.ceil(1.0 / alpha))): return None
-    k = int(np.ceil((n + 1) * (1.0 - alpha)))
-    tau = 1.0 if k > n else float(np.sort(1.0 - pos)[k - 1])
-    return 1.0 - tau
 
 
 def recall_at_fpr(y, s, cap):
@@ -103,8 +89,7 @@ def main():
             probs = np.column_stack([1 - sc, sc]); logit = np.column_stack([np.log(1 - sc), np.log(sc)])
             accc = defaultdict(list); acc = defaultdict(lambda: defaultdict(list))
             for rep in range(NREP):
-                rng = np.random.default_rng(((_ARM_ORDER[arm] * 97 + s * 31 + f) * 23 + rep) & 0xFFFFFFFF)
-                ci, ti = stratified_half(y, rng)
+                ci, ti = stratified_half(y, resplit_rng(_ARM_ORDER[arm], s, f, rep))
                 T = TemperatureCalibrator().fit(logit[ci], y[ci])
                 e0, b0 = ece_brier(sc[ti], y[ti]); e1, b1 = ece_brier(T.transform(logit[ti])[:, 1], y[ti])
                 accc["ece_raw"].append(e0); accc["ece_cal"].append(e1); accc["brier_raw"].append(b0)
@@ -116,9 +101,10 @@ def main():
                     cov = np.where(y[ti] == 1, ind[:, 1], ind[:, 0]); abst = ind[:, 0] & ind[:, 1]
                     acc[a]["marg_cov"].append(float(cov.mean())); acc[a]["marg_abst"].append(float(abst.mean()))
                     for gn in ("HEAVY", "LIGHT"):
-                        thr = cc_recall_threshold(sc[ci][gci[gn]], y[ci][gci[gn]], a)
+                        thr, trivial = cc_recall_threshold(sc[ci][gci[gn]], y[ci][gci[gn]], a)
+                        acc[a][f"trivial_{gn}"].append(float(trivial))
                         tm = gti[gn]
-                        if thr is None or tm.sum() == 0: continue
+                        if tm.sum() == 0: continue
                         fl = sc[ti][tm] >= thr; yy = y[ti][tm]
                         acc[a][f"prec_{gn}"].append(float(yy[fl].mean()) if fl.sum() else np.nan)
                         acc[a][f"erec_{gn}"].append(float(fl[yy == 1].mean()) if (yy == 1).sum() else np.nan)

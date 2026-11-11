@@ -8,7 +8,7 @@ seeds 0-4 x folds 0-2). Paired MAMRD-minus-best-baseline gaps are computed on th
 9 COMMON cells only (seeds 0-2 x folds 0-2), keyed by (seed,fold) -> identical
 test partition (verified: matching n_test/pos).
 
-Outputs (results/phase_n/tableB/):
+Outputs (results/phase_n_retrained/tableB/):
   tableB_tidy.csv   - raw per-cell per-stratum PR-AUC
   tableB_agg.csv    - means + BCa 95% CI per detector/stratum, gap vs best baseline
   tableB.tex        - booktabs LaTeX using \\ci{}{}

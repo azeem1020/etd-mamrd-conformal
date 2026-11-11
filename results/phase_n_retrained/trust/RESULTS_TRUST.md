@@ -33,27 +33,26 @@ uninformative. This motivates the class-conditional guarantee in T3.
 Class-conditional (Mondrian) conformal guarantees per-stratum theft recall 1-alpha.
 Reported as LIFT = precision / stratum base-rate (=efficiency over random auditing),
 which controls the per-stratum prevalence confound (Heavy 12.3%, Light 6.8%, Flat 3.2%).
-Finding: under the exact finite-sample order statistic, MAMRD achieves 3.85x lift
-in Flat and 2.97x lift in Heavy across certifiable cells (Table 6), outperforming
-all evaluated baselines across all consumption strata. (a34_NaME)
+All 20 resplits per cell are used (no eligibility gate); a stratum with too few
+calibration thefts for the order statistic gets q_hat=+inf (all members flagged).
+MAMRD (a34_NaME) per-stratum lift by guarantee level:
 | guarantee 1-a | lift Heavy | lift Light | lift Flat |
 |---|---|---|---|
-| 0.80 | 3.19 | 3.40 | 1.97 |
-| 0.90 | 2.03 | 2.40 | 1.36 |
-| 0.95 | 1.57 | 1.72 | nan |
+| 0.80 | 3.19 | 3.40 | 2.44 |
+| 0.90 | 2.03 | 2.40 | 1.33 |
+| 0.95 | 1.57 | 1.72 | 0.98 |
 
 ## T3b Per-arm precision-lift gap, Heavy vs Flat @ 80% guarantee (universality)
-Baseline detectors exhibit positive Heavy-Flat lift gaps (+0.25 to +0.80), reflecting
-lower audit efficiency on Flat thefts, whereas MAMRD achieves a negative gap (-0.61 to -0.88).
+Positive gap = audits are more efficient (relative to base rate) in Heavy than in Flat.
 | arm | lift Heavy | lift Flat | Heavy-Flat lift gap [BCa 95%] |
 |---|---|---|---|
-| a34_NaME | 3.19 | 1.97 | +1.05 [+0.32,+1.93] |
-| HORLN | 2.64 | 2.38 | +0.14 [-1.23,+1.27] |
-| MSDM | 2.06 | 1.38 | +0.59 [+0.14,+1.29] |
-| WDCNN | 1.97 | 1.41 | +0.56 [+0.10,+1.12] |
-| GRU-D | 1.23 | 0.88 | +0.35 [+0.18,+0.57] |
-| HybridAttn | 2.52 | 1.92 | +0.58 [-0.34,+1.43] |
-| DKGT | 1.85 | 0.95 | +0.90 [+0.63,+1.22] |
+| a34_NaME | 3.19 | 2.44 | +0.75 [+0.01,+1.43] |
+| HORLN | 2.64 | 2.66 | -0.02 [-1.05,+0.90] |
+| MSDM | 2.06 | 1.67 | +0.39 [-0.10,+0.89] |
+| WDCNN | 1.97 | 1.87 | +0.10 [-0.32,+0.65] |
+| GRU-D | 1.23 | 1.14 | +0.09 [-0.07,+0.21] |
+| HybridAttn | 2.52 | 2.50 | +0.02 [-0.98,+0.90] |
+| DKGT | 1.85 | 1.33 | +0.52 [+0.33,+0.74] |
 
 ## T3c Per-phenotype detail @ guaranteed 90% catch-rate (a34_NaME)
 | phenotype | base-rate | precision | lift | empirical recall |
@@ -61,8 +60,33 @@ lower audit efficiency on Flat thefts, whereas MAMRD achieves a negative gap (-0
 | Heavy_Dropper | 0.121 | 0.237 | 1.96 | 0.912 |
 | Light_Dropper | 0.069 | 0.160 | 2.30 | 0.910 |
 | Heavy_Riser | 0.128 | 0.246 | 1.93 | 0.923 |
-| Light_Riser | 0.064 | 0.129 | 2.02 | 0.931 |
-| Flat | 0.032 | 0.044 | 1.36 | 0.886 |
+| Light_Riser | 0.064 | 0.127 | 1.98 | 0.933 |
+| Flat | 0.032 | 0.043 | 1.33 | 0.958 |
+
+## T3d Small-sample conformal convention: share of resplits with q_hat=+inf
+| arm | 1-a | HEAVY | LIGHT | Flat |
+|---|---|---|---|---|
+| a34_NaME | 0.80 | 0.000 | 0.000 | 0.020 |
+| a34_NaME | 0.90 | 0.000 | 0.000 | 0.557 |
+| a34_NaME | 0.95 | 0.000 | 0.000 | 1.000 |
+| HORLN | 0.80 | 0.000 | 0.000 | 0.017 |
+| HORLN | 0.90 | 0.000 | 0.000 | 0.617 |
+| HORLN | 0.95 | 0.000 | 0.000 | 1.000 |
+| MSDM | 0.80 | 0.000 | 0.000 | 0.022 |
+| MSDM | 0.90 | 0.000 | 0.000 | 0.550 |
+| MSDM | 0.95 | 0.000 | 0.000 | 1.000 |
+| WDCNN | 0.80 | 0.000 | 0.000 | 0.022 |
+| WDCNN | 0.90 | 0.000 | 0.000 | 0.583 |
+| WDCNN | 0.95 | 0.000 | 0.000 | 1.000 |
+| GRU-D | 0.80 | 0.000 | 0.000 | 0.011 |
+| GRU-D | 0.90 | 0.000 | 0.000 | 0.594 |
+| GRU-D | 0.95 | 0.000 | 0.000 | 1.000 |
+| HybridAttn | 0.80 | 0.000 | 0.000 | 0.017 |
+| HybridAttn | 0.90 | 0.000 | 0.000 | 0.589 |
+| HybridAttn | 0.95 | 0.000 | 0.000 | 1.000 |
+| DKGT | 0.80 | 0.000 | 0.000 | 0.028 |
+| DKGT | 0.90 | 0.000 | 0.000 | 0.589 |
+| DKGT | 0.95 | 0.000 | 0.000 | 1.000 |
 
 ## T4 Selective operating point (supporting; not headlined)
 | arm | recall@FPR0.5% | recall@FPR1% | recall@FPR5% |

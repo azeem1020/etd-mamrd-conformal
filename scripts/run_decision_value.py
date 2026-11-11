@@ -1,29 +1,39 @@
-"""Paper 3 — Move B: decision-value of the CONSUMPTION-CONDITIONAL conformal guarantee.
+"""Decision value of the consumption-conditional (Mondrian) conformal audit — Table 6, Fig. 5b.
 
-NEW, post-hoc, no retraining. Reuses the LOCKED conformal protocol of
-run_trust_layer.py VERBATIM (cc_recall_threshold, stratified_half, recon_fold,
-3-group collapse high/low/flat) so numbers are consistent with sec:trust.
+Post-hoc, no retraining. Reads the saved held-out test-fold scores in RESULTS_DIR
+(results/phase_n_retrained/) and applies the shared protocol in conformal_common.py.
 
-Question (the deployment decision the paper currently lacks): to GUARANTEE a
-per-group theft detection rate of 1-alpha in EVERY consumption group, how many
-consumers must an auditor inspect under
-  (i)  a CLASS-CONDITIONAL conformal threshold (one threshold per group), vs
-  (ii) a SINGLE (marginal) threshold that still honours the same per-group
-       guarantee -> it must be set to the most lenient per-group threshold,
-       thr* = min_g thr_g, which over-flags the easy groups.
-Metric: audit-set size (fraction of consumers flagged) for (i) and (ii), and the
-reduction (ii)->(ii) = 1 - cond/single = wasted inspections avoided by conditioning.
+Question: to guarantee a marginal theft recall of 1-alpha in EVERY consumption group
+(high / low / flat), how many consumers must be inspected under
+  (i)  group-conditional conformal thresholds (one per group), vs
+  (ii) a single threshold that honours the same per-group guarantee, i.e. the most
+       lenient group threshold thr* = min_g thr_g?
+Workload reduction = 1 - |(i)| / |(ii)|.
 
-BOUNDARY (Paper 1 owns selective-prediction + net-value): this is framed strictly
-on the CONFORMAL GUARANTEE's CONDITIONING (coverage validity per group), measured
-as audit-set efficiency. NOT $ net-value, NOT generic audit-a-subset.
+Every cell (seed x fold) contributes all NREP = 20 stratified 50/50 resplits of its
+test fold. There is no eligibility gate: a group with too few calibration thefts for
+the order statistic (n < ceil((1-alpha)/alpha)) receives q_hat = +inf, i.e. every
+member is inspected (see conformal_common.py). How often that happens is reported per
+group ("trivial_*" columns) and its cost is included in the workload.
 
-Run (CPU, ~minutes, env tgpu):  python run_decision_value.py
+All six Table 6 columns come from this script on identical resplits:
+  hit rate (precision) in High / Flat, lift = hit rate / group base rate pi_g,
+  inspected % (conditional / single), workload reduction [cell-clustered BCa 95 %].
+Estimand: mean over the 20 resplits within a cell, then mean over cells (balanced
+design, identical to the pooled mean over all resplits — asserted below). Intervals
+resample cells (seed-fold units); because seeds within a fold share test consumers
+and folds share training data, they are descriptive, not independent-sample CIs.
+
+Outputs (RESULTS_DIR/trust/):
+  decision_value_sgcc.csv          one row per arm x guarantee
+  decision_value_sgcc_resplits.csv one row per arm x guarantee x seed x fold x resplit
+  group_profile_sgcc.csv           theft-case and metered-kWh shares per group
+
+Run (CPU, minutes):  agy-py scripts/run_decision_value.py
 """
 from __future__ import annotations
 import sys, csv, json
 from pathlib import Path
-from collections import defaultdict
 THIS = Path(__file__).resolve().parent
 for p in (str(THIS), str(THIS.parent)):
     if p not in sys.path:
@@ -31,17 +41,19 @@ for p in (str(THIS), str(THIS.parent)):
 import numpy as np, pandas as pd
 from run_local_grid import load_and_preprocess, _stratified_three_way_split, SGCC_CSV
 from zkmix_lab.data import KFoldSpec
-from phased.phenotype import gap_magnitude, fit_router, assign, PHENOTYPES
-from repro_config import RESULTS_DIR, DATA_DIR, SGCC_PATH, ECL_PATH
+from phased.phenotype import gap_magnitude, fit_router, assign
+from repro_config import RESULTS_DIR
+from conformal_common import (NREP, n_min, resplit_rng, stratified_half, cc_recall_threshold,
+                              bca_ci, cell_summary, cell_bca)
 
 csv.field_size_limit(10**7)
 RES = RESULTS_DIR
 OUT = RES / "trust"; OUT.mkdir(parents=True, exist_ok=True)
-NREP = 20
-ALPHAS = [0.20, 0.10]                       # guaranteed detection rate 0.80, 0.90
+ALPHAS = [0.20, 0.10, 0.05]                 # target marginal recall 0.80 (primary), 0.90, 0.95
+GROUPS = ("high", "low", "flat")
 HEAVY = ("Heavy_Riser", "Heavy_Dropper")
 LIGHT = ("Light_Riser", "Light_Dropper")
-ARMS = {
+ARMS = {  # same order as run_trust_layer.py -> identical resplit seeds
     "a34_NaME":   (str(RES / "a34_cell_{s}_{f}.csv"), range(5), range(3)),
     "HORLN":      (str(RES / "baselines/horln_{s}_{f}.csv"), range(3), range(3)),
     "MSDM":       (str(RES / "baselines/msdm_net_{s}_{f}.csv"), range(3), range(3)),
@@ -52,41 +64,7 @@ ARMS = {
 }
 _ARM_ORDER = {a: i for i, a in enumerate(ARMS)}
 
-# ---- helpers copied VERBATIM from run_trust_layer.py (identical conformal protocol) ----
-def stratified_half(y, rng):
-    idx = np.arange(len(y)); cal = []
-    for c in (0, 1):
-        ic = idx[y == c]; rng.shuffle(ic); cal.append(ic[: len(ic) // 2])
-    cal = np.concatenate(cal)
-    mask = np.zeros(len(y), bool); mask[cal] = True
-    return np.where(mask)[0], np.where(~mask)[0]
-
-def cc_recall_threshold(s_cal, y_cal, alpha):
-    pos = s_cal[y_cal == 1]; n = len(pos)
-    if n < max(10, int(np.ceil(1.0 / alpha))):
-        return None
-    k = int(np.ceil((n + 1) * (1.0 - alpha)))
-    if k > n:
-        tau = 1.0
-    else:
-        tau = float(np.sort(1.0 - pos)[k - 1])
-    return 1.0 - tau
-
-def bca_ci(x, B=2000, alpha=0.05, seed=0):
-    x = np.asarray(x, float); x = x[np.isfinite(x)]; n = len(x)
-    if n < 3: return (float("nan"), float("nan"))
-    rng = np.random.default_rng(seed); th = x.mean()
-    boot = np.array([rng.choice(x, n, replace=True).mean() for _ in range(B)])
-    from scipy.stats import norm
-    z0 = norm.ppf(np.clip((boot < th).mean(), 1e-6, 1 - 1e-6))
-    jk = np.array([np.delete(x, i).mean() for i in range(n)])
-    jbar = jk.mean(); num = ((jbar - jk) ** 3).sum(); den = 6.0 * ((jbar - jk) ** 2).sum() ** 1.5
-    a = num / den if den != 0 else 0.0
-    def adj(q):
-        z = norm.ppf(q); return norm.cdf(z0 + (z0 + z) / (1 - a * (z0 + z)))
-    lo, hi = np.quantile(boot, [adj(alpha / 2), adj(1 - alpha / 2)]); return (float(lo), float(hi))
-
-# ---- data + folds (identical to run_trust_layer) ----
+# ---- data + folds (identical to run_trust_layer.py) ----
 _data_cache = {}
 def _get_data():
     if "data" not in _data_cache:
@@ -110,73 +88,136 @@ def recon_fold(fold, kf=0):
     _fold_cache[(fold, kf)] = (te, ph); return te, ph
 
 def three_group(ph):
-    """Collapse 5 phenotypes -> {high, low, flat} exactly as sec:trust does."""
+    """Collapse 5 phenotypes -> {high, low, flat} (high = Heavy_Riser + Heavy_Dropper)."""
     grp = np.empty(len(ph), dtype=object)
     for i, p in enumerate(ph):
         grp[i] = "high" if p in HEAVY else ("low" if p in LIGHT else "flat")
     return grp
 
+def group_base_rates():
+    """Theft prevalence per group on the SGCC test folds 0-2 (consumer-pooled)."""
+    _, y, _, _ = _get_data()
+    pos = {gn: 0 for gn in GROUPS}; tot = {gn: 0 for gn in GROUPS}
+    for f in range(3):
+        te, ph = recon_fold(f); grp = three_group(ph); yt = y[te]
+        for gn in GROUPS:
+            m = grp == gn; pos[gn] += int(yt[m].sum()); tot[gn] += int(m.sum())
+    return {gn: pos[gn] / tot[gn] for gn in GROUPS}
+
+
+def group_profile():
+    """Where thefts and metered consumption sit across the three groups (test folds 0-2).
+
+    Reports, among theft-labelled consumers: share of cases, share of metered kWh
+    (mean daily kWh summed over consumers) and median mean-daily kWh; plus the median
+    for all consumers. SGCC records post-tampering metered consumption, not stolen
+    energy, so these describe exposure, not recovered revenue.
+    """
+    _, y, _, _ = _get_data()
+    raw = pd.read_csv(SGCC_CSV).drop(columns=["CONS_NO", "FLAG"]).values.astype(np.float64)
+    daily = np.nanmean(raw, axis=1)
+    parts = []
+    for f in range(3):
+        te, ph = recon_fold(f)
+        parts.append(pd.DataFrame(dict(group=three_group(ph), y=y[te], kwh=daily[te])))
+    d = pd.concat(parts, ignore_index=True)
+    t = d[d.y == 1]
+    out = pd.DataFrame({
+        "theft_cases": t.groupby("group").size(),
+        "theft_case_share": t.groupby("group").size() / len(t),
+        "theft_kwh_share": t.groupby("group").kwh.sum() / t.kwh.sum(),
+        "theft_median_daily_kwh": t.groupby("group").kwh.median(),
+        "all_median_daily_kwh": d.groupby("group").kwh.median(),
+    }).reindex(list(GROUPS)).reset_index().rename(columns={"index": "group"})
+    return out
+
+
+def evaluate_resplit(st, yt, grp, ci, ti, a):
+    """All per-resplit quantities for one calibration/evaluation resplit."""
+    sc_ci, sc_ti = st[ci], st[ti]; y_ci, y_ti = yt[ci], yt[ti]
+    gp_ci, gp_ti = grp[ci], grp[ti]
+    rec = {}
+    thr = {}
+    for gn in GROUPS:
+        cm = gp_ci == gn
+        thr[gn], trivial = cc_recall_threshold(sc_ci[cm], y_ci[cm], a)
+        rec[f"ncal_{gn}"] = int(y_ci[cm].sum())
+        rec[f"trivial_{gn}"] = bool(trivial)
+    thr_vec = np.array([thr[g] for g in gp_ti])
+    flag_cond = sc_ti >= thr_vec
+    flag_single = sc_ti >= min(thr.values())
+    rec["audit_cond"] = float(flag_cond.mean())
+    rec["audit_single"] = float(flag_single.mean())
+    rec["reduction"] = 1.0 - rec["audit_cond"] / rec["audit_single"]
+    for gn in GROUPS:
+        gm = gp_ti == gn
+        pos = gm & (y_ti == 1)
+        rec[f"neval_{gn}"] = int(pos.sum())
+        rec[f"rec_{gn}"] = float(flag_cond[pos].mean()) if pos.any() else np.nan
+        fl = gm & flag_cond
+        rec[f"prec_{gn}"] = float(y_ti[fl].mean()) if fl.any() else np.nan
+    return rec
+
+
 def main():
     X, y, g, m = _get_data()
-    rows = []
+    PI = group_base_rates()
+    print("[base rates] " + ", ".join(f"{k}={v:.4f}" for k, v in PI.items()), flush=True)
+    prof = group_profile()
+    prof.to_csv(OUT / "group_profile_sgcc.csv", index=False)
+    print("[group profile]\n" + prof.to_string(index=False), flush=True)
+    long_rows, rows = [], []
     for arm, (patt, seeds, folds) in ARMS.items():
         for a in ALPHAS:
-            cond_fracs, single_fracs, reductions = [], [], []
-            rec_high, rec_low, rec_flat = [], [], []   # realized per-group recall under conditional
             for s in seeds:
                 for f in folds:
                     fp = Path(patt.format(s=s, f=f))
-                    if not fp.exists(): continue
+                    if not fp.exists():
+                        raise FileNotFoundError(f"missing cell {fp}")
                     r = pd.read_csv(fp).iloc[0]
                     yt = np.array(json.loads(r["val_labels_json"]))
-                    st = np.array(json.loads(r["val_scores_json"]))
+                    st = np.array(json.loads(r["val_scores_json"]), float)
                     te, ph = recon_fold(int(r["fold"]))
-                    assert np.array_equal(yt, y[te]), f"label mismatch {arm} {s} {f}"
+                    assert int(r["fold"]) == f and np.array_equal(yt, y[te]), f"label mismatch {arm} {s} {f}"
                     grp = three_group(ph)
-                    cc, sc, rd = [], [], []
-                    rh, rl, rfl = [], [], []
                     for rep in range(NREP):
-                        rng = np.random.default_rng((_ARM_ORDER[arm] * 9973 + int(s) * 97 + int(f) * 7 + rep))
-                        ci, ti = stratified_half(yt, rng)
-                        sc_ci, sc_ti = st[ci], st[ti]; y_ci, y_ti = yt[ci], yt[ti]
-                        gp_ci, gp_ti = grp[ci], grp[ti]
-                        thr = {}
-                        for gname in ("high", "low", "flat"):
-                            cm = gp_ci == gname
-                            thr[gname] = cc_recall_threshold(sc_ci[cm], y_ci[cm], a)
-                        if any(thr[gn] is None for gn in thr):  # need all 3 groups certifiable
-                            continue
-                        # conditional: per-group threshold
-                        flag_cond = np.array([sc_ti[i] >= thr[gp_ti[i]] for i in range(len(ti))])
-                        thr_star = min(thr.values())            # single threshold honouring all groups
-                        flag_single = sc_ti >= thr_star
-                        cc.append(flag_cond.mean()); sc.append(flag_single.mean())
-                        rd.append(1.0 - flag_cond.mean() / max(flag_single.mean(), 1e-9))
-                        for gname, store in (("high", rh), ("low", rl), ("flat", rfl)):
-                            gm = (gp_ti == gname) & (y_ti == 1)
-                            if gm.sum() > 0: store.append(flag_cond[gm].mean())
-                    if cc:
-                        cond_fracs.append(np.mean(cc)); single_fracs.append(np.mean(sc)); reductions.append(np.mean(rd))
-                        if rh: rec_high.append(np.mean(rh))
-                        if rl: rec_low.append(np.mean(rl))
-                        if rfl: rec_flat.append(np.mean(rfl))
-            if not reductions:
-                print(f"  {arm:11s} a={a}: no certifiable cells"); continue
-            rlo, rhi = bca_ci(reductions)
-            rows.append(dict(arm=arm, guarantee=round(1 - a, 2), n_cells=len(reductions),
-                             audit_cond=np.mean(cond_fracs), audit_single=np.mean(single_fracs),
-                             reduction=np.mean(reductions), red_lo=rlo, red_hi=rhi,
-                             rec_high=np.mean(rec_high) if rec_high else np.nan,
-                             rec_low=np.mean(rec_low) if rec_low else np.nan,
-                             rec_flat=np.mean(rec_flat) if rec_flat else np.nan))
-            print(f"  {arm:11s} guar={1-a:.2f} n={len(reductions):2d} | audit cond={np.mean(cond_fracs):.3f} "
-                  f"single={np.mean(single_fracs):.3f} | REDUCTION={np.mean(reductions)*100:4.1f}% "
-                  f"[{rlo*100:.1f},{rhi*100:.1f}] | realized recall H/L/F="
-                  f"{np.mean(rec_high) if rec_high else float('nan'):.2f}/"
-                  f"{np.mean(rec_low) if rec_low else float('nan'):.2f}/"
-                  f"{np.mean(rec_flat) if rec_flat else float('nan'):.2f}")
+                        ci, ti = stratified_half(yt, resplit_rng(_ARM_ORDER[arm], s, f, rep))
+                        rec = evaluate_resplit(st, yt, grp, ci, ti, a)
+                        long_rows.append(dict(arm=arm, guarantee=round(1 - a, 2), seed=s, fold=f, rep=rep, **rec))
+            d = pd.DataFrame([lr for lr in long_rows if lr["arm"] == arm and lr["guarantee"] == round(1 - a, 2)])
+            cells = [grp_df for _, grp_df in d.groupby(["seed", "fold"])]
+            def summ(col):
+                grand, pooled, nc, nv = cell_summary([c[col].values for c in cells])
+                if col in ("audit_cond", "audit_single", "reduction"):
+                    assert abs(grand - pooled) < 1e-12, f"unbalanced design for {col}"
+                return grand
+            red_lo, red_hi = cell_bca([c["reduction"].values for c in cells], seed=0)
+            fold_red = d.groupby("fold")["reduction"].mean()
+            out = dict(arm=arm, guarantee=round(1 - a, 2), n_min=n_min(a),
+                       n_cells=len(cells), n_resplits=len(d),
+                       audit_cond=summ("audit_cond"), audit_single=summ("audit_single"),
+                       reduction=summ("reduction"), red_lo=red_lo, red_hi=red_hi,
+                       red_fold_min=float(fold_red.min()), red_fold_max=float(fold_red.max()))
+            for gn in GROUPS:
+                out[f"trivial_{gn}"] = float(d[f"trivial_{gn}"].mean())
+                out[f"ncal_{gn}_mean"] = float(d[f"ncal_{gn}"].mean())
+                out[f"rec_{gn}"] = summ(f"rec_{gn}")
+                out[f"rec_{gn}_below_target"] = float((d[f"rec_{gn}"].dropna() < 1 - a).mean())
+                out[f"prec_{gn}"] = summ(f"prec_{gn}")
+                out[f"pi_{gn}"] = PI[gn]
+                out[f"lift_{gn}"] = out[f"prec_{gn}"] / PI[gn]
+            rows.append(out)
+            print(f"  {arm:10s} 1-a={1-a:.2f} cells={out['n_cells']:2d} resplits={out['n_resplits']:3d} "
+                  f"q=inf H/L/F={out['trivial_high']:.2f}/{out['trivial_low']:.2f}/{out['trivial_flat']:.2f} | "
+                  f"inspect cond={out['audit_cond']*100:5.1f}% single={out['audit_single']*100:5.1f}% "
+                  f"red={out['reduction']*100:5.1f}% [{red_lo*100:.1f},{red_hi*100:.1f}] | "
+                  f"hit H/F={out['prec_high']*100:5.1f}/{out['prec_flat']*100:4.1f}% "
+                  f"lift H/F={out['lift_high']:.2f}/{out['lift_flat']:.2f} | "
+                  f"recall H/L/F={out['rec_high']:.3f}/{out['rec_low']:.3f}/{out['rec_flat']:.3f}", flush=True)
     pd.DataFrame(rows).to_csv(OUT / "decision_value_sgcc.csv", index=False)
-    print(f"\n[done] wrote {OUT/'decision_value_sgcc.csv'}")
+    pd.DataFrame(long_rows).to_csv(OUT / "decision_value_sgcc_resplits.csv", index=False)
+    print(f"\n[done] wrote {OUT/'decision_value_sgcc.csv'} and decision_value_sgcc_resplits.csv")
+
 
 if __name__ == "__main__":
     main()

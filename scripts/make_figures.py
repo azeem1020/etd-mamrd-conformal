@@ -7,8 +7,8 @@ Senior-researcher figure set carrying the three contributions:
   Fig 4  ceiling            — C2: (a) cumulative build-up plateau (b) lever forest plot
   Fig 5  pr_roc_curves      — pooled PR & ROC curves, a34 vs baselines (SGCC)
 
-Reads locked CSVs from results/phase_n/. Outputs vector PDF + PNG preview to
-results/phase_n/figures/. Re-run after SGCC+ECL baseline batches complete.
+Reads locked CSVs from results/phase_n_retrained/. Outputs vector PDF + PNG preview to
+results/phase_n_retrained/figures/. Re-run after SGCC+ECL baseline batches complete.
 
 Style: Tol colourblind-safe palette, embedded fonts (Type-42), IEEE/Elsevier
 two-column sizing (single col 3.5in, double 7.16in), CIs everywhere.

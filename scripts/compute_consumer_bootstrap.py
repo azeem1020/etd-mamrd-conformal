@@ -37,9 +37,7 @@ from repro_config import RESULTS_DIR
 
 RES = RESULTS_DIR
 if not (RES / "baselines").exists():
-    fallback = THIS.parent.parent / "reproducibility" / "results" / "phase_n"
-    if (fallback / "baselines").exists():
-        RES = fallback
+    raise FileNotFoundError(f"{RES}/baselines not found (set MAMRD_RESULTS to the retrained results)")
 B_CONS = 1000
 BOOT_SEED = 2026
 

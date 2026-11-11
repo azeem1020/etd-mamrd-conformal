@@ -49,10 +49,11 @@ fig, (axA, axB) = plt.subplots(1, 2, figsize=(DOUBLE, 2.75))
 # ---- panel (a): MAMRD per-stratum lift vs target marginal recall 1 - alpha ----
 na = df[df.arm == "a34_NaME"].sort_values("guarantee")
 x = na["guarantee"].values
+pv = na.iloc[0]
 for col, name, c, mk in [
-    ("lift_heavy", "Heavy consumption (12.2% base)", TOL["red"], "o"),
-    ("lift_light", "Light consumption (6.9% base)", TOL["blue"], "s"),
-    ("lift_flat", "Flat consumption (3.1% base)", TOL["grey"], "^"),
+    ("lift_heavy", f"Heavy consumption ({100*pv.prev_heavy:.1f}% base)", TOL["red"], "o"),
+    ("lift_light", f"Light consumption ({100*pv.prev_light:.1f}% base)", TOL["blue"], "s"),
+    ("lift_flat", f"Flat consumption ({100*pv.prev_flat:.1f}% base)", TOL["grey"], "^"),
 ]:
     y = na[col].values
     m = ~np.isnan(y)
@@ -74,6 +75,7 @@ ORDER = [
 ]
 pc80 = pc[np.isclose(pc["alpha"], 0.20)]
 ys = np.arange(len(ORDER))
+xmax = 0.0
 for i, (arm, lab) in enumerate(ORDER):
     sub = pc80[pc80["arm"] == arm]
     diff = (sub["prec_HEAVY"] - sub["prec_Flat"]).dropna().values * 100.0
@@ -82,13 +84,14 @@ for i, (arm, lab) in enumerate(ORDER):
     c = TOL["red"] if arm == "a34_NaME" else TOL["dark"]
     axB.errorbar(m, i, xerr=[[m - lo], [hi - m]],
                  fmt="o", color=c, ecolor=c, capsize=2.5, markersize=4.5)
-    axB.text(hi + 0.6, i, f"+{m:.1f}%", va="center", ha="left", fontsize=6.2, color=c)
+    xmax = max(xmax, hi)
+    axB.text(hi + 0.6, i, f"{m:+.1f} pp", va="center", ha="left", fontsize=6.2, color=c)
 axB.axvline(0.0, color=TOL["dark"], lw=0.8, ls=":")
 axB.set_yticks(ys)
 axB.set_yticklabels([lab for _, lab in ORDER])
 axB.set_xlabel("Heavy$-$Flat audit hit-rate gap (percentage points, 95% CI)")
 axB.set_title("(b) Heavy vs. Flat precision gap at $\\alpha=0.20$")
-axB.set_xlim(-2.0, 34.0)
+axB.set_xlim(-2.0, xmax + 7.0)
 
 fig.tight_layout()
 for ext in ("pdf", "png"):

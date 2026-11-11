@@ -1,5 +1,5 @@
 """Build the ECL (synthetic-attack) leaderboard at honest n=9 from LOCKED stored
-predictions in results/phase_n/ecl_trust/<arm>_<seed>_<fold>.csv.
+predictions in results/phase_n_retrained/ecl_trust/<arm>_<seed>_<fold>.csv.
 
 No GPU re-run: every metric is recomputed from the cached per-fold test
 predictions (val_labels_json / val_scores_json), so the numbers are guaranteed

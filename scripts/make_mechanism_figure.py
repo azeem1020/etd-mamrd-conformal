@@ -6,7 +6,7 @@ theft (here a 30% reduction, Jokar h1-style) is legible on a high-consumption se
 low-consumption series (the tampered series sits within the spread of honest flat
 consumers). Two real HONEST SGCC consumers; theft is SIMULATED for illustration only.
 
-Run under conda env tgpu.  Output: results/phase_n/figures/fig_mechanism.{pdf,png}
+Run under conda env tgpu.  Output: results/phase_n_retrained/figures/fig_mechanism.{pdf,png}
 """
 from __future__ import annotations
 import sys

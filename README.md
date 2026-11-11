@@ -53,9 +53,10 @@ etd-mamrd-conformal/
 │   ├── compute_consumer_bootstrap.py  # Customer-level clustered bootstrap CIs (B=1,000)
 │   ├── verify_partition_manifests.py  # Customer & window disjointness verifier
 │   ├── run_empirical_comparator.py    # Group-quantile baseline vs conformal audit comparator
-│   ├── run_decision_value.py          # Group-conditional vs global threshold workload analysis
-│   ├── make_manuscript_figures.py     # Main-text vector figure generator (Figs. 1, 3, 4, 5)
-│   ├── generate_high_contrast_fig2.py # High-contrast publication PR and ROC curves (Fig. 2)
+│   ├── run_decision_value.py          # Table 6 (all six columns) + Fig. 5b: conditional vs single-threshold audit
+│   ├── conformal_common.py            # Shared conformal protocol (resplits, Mondrian threshold, estimators)
+│   ├── make_manuscript_figures.py     # Main-text vector figure generator (Figs. 2, 3, 4, 5)
+│   ├── generate_high_contrast_fig2.py # Legacy helper (not used; Fig. 2 is made by make_manuscript_figures.py)
 │   ├── make_trust_figure.py           # Supplementary conformal figure generator (Fig. S4)
 │   ├── repro_config.py                # Centralized path configuration
 │   ├── run_n_clean.py                 # Main benchmark training & evaluation runner
@@ -256,11 +257,13 @@ Every result reported in the manuscript is traceable to its corresponding config
 | **Table 3** | Protocol-Matched Main Results | AdamW ($\text{lr}=3\times 10^{-4}$, $\text{wd}=10^{-4}$, $\text{bs}=128$, 30 ep); Seeds 0–4 $\times$ Folds 0–2 (15 cells) for MAMRD; Seeds 0–2 $\times$ Folds 0–2 (9 cells) for Baselines | `scripts/compute_table_b.py` | `tableB/tableB_recalculated.csv` |
 | **Table 4** | Fixed FPR Budgets ($1\%, 5\%$) | Prospective threshold transfer from $\mathcal{D}_{\text{cal}}$; evaluated at $\text{FPR} \in \{0.01, 0.05\}$ across 9 test cells | `scripts/compute_table_c.py` | `tableC/tableC_recalculated.csv` |
 | **Table 5** | Architectural Ablation Suite | Seeds 0–2 $\times$ Folds 0–2 ($M=9$ matched cells); $\mathcal{A}_{34,\text{no-miss}}$ (`use_mask=False, use_cc=False`); BCa bootstrap ($B=2{,}000$) | `scripts/compute_r2_revisions.py` | `r2_audit/table_ablation_provenance.csv` |
-| **Table 6** | Mondrian Conformal Policies | Marginal target $1-\alpha = 0.80$; exact order stat $k_\phi = \lceil(n_\phi+1)(1-\alpha)\rceil$; 20 stratified 50/50 resplits | `scripts/run_trust_layer.py` | `trust/audit_policies_sgcc.csv` |
+| **Table 6** | Mondrian Conformal Audit (all six columns) | Target $1-\alpha = 0.80$; exact order stat $k_\phi = \lceil(n_\phi+1)(1-\alpha)\rceil$, $\hat q=+\infty$ (inspect whole group) when $k_\phi > n_\phi$; all 20 stratified 50/50 resplits per cell (300 MAMRD, 180 per baseline); cell-clustered BCa ($B=2{,}000$) | `scripts/run_decision_value.py` | `trust/decision_value_sgcc.csv`, `trust/decision_value_sgcc_resplits.csv` |
 | **Figure 2** | Test PR and ROC Curves | 200-point uniform grid interpolation over held-out test predictions; mean $\pm 1\,\sigma$ ribbon | `scripts/make_manuscript_figures.py` | `figures/fig2_performance_curves.pdf` |
 | **Figure 3** | Sequential / Subtractive Ablation | Step additions $\mathcal{S}_0 \to \mathcal{S}_4$ & paired drop contrasts ($\Delta\text{AP}$ with 95% BCa intervals) | `scripts/make_manuscript_figures.py` | `figures/fig3_ablation_bars.pdf` |
 | **Figure 4** | Probability Calibration & ECE | Alternating split ($\mathcal{I}_{\text{cal}} / \mathcal{I}_{\text{eval}}$); 10 equal-width bins; $L_2$-logistic fit ($C=10^4$) | `scripts/make_manuscript_figures.py` | `figures/fig4_calibration_reliability.pdf` |
-| **Figure 5** | Conformal Workload Reduction | Group routing ($\tau_f = 0.0138, \mu^+ = 5.86, \mu^- = 7.31$); evaluated across all 285 valid calibration/evaluation resplits ($n_\phi \ge 5$, $n_{\min}=4$) | `scripts/make_manuscript_figures.py` | `figures/fig5_conformal_tradeoffs.pdf` |
+| **Figure 5** | Conformal Recall & Workload Reduction | (a) empirical vs conformal group thresholds; (b) conditional vs single threshold; same 300 MAMRD resplits as Table 6 (no eligibility gate) | `scripts/run_empirical_comparator.py`, `scripts/run_decision_value.py` → `scripts/make_manuscript_figures.py` | `trust/empirical_comparator_sgcc.csv`, `trust/decision_value_sgcc.csv`, `figures/fig5_conformal_tradeoffs.pdf` |
+| **Supp. Fig. (fig:trust)** | Per-group lift & Heavy−Flat hit-rate gap | Same resplits/protocol as Table 6, all 5 phenotypes | `scripts/run_trust_layer.py` → `scripts/make_trust_figure.py` | `trust/trust_lift_sgcc.csv`, `trust/trust_sgcc_percell.csv`, `figures/fig6_trust_guarantee.pdf` |
+| **Supp. Table S6** | ECL conformal lift gap | Same protocol (`conformal_common.py`) | `scripts/run_ecl_trust_analysis.py` | `ecl_trust/RESULTS_ECL_TRUST.md` |
 
 ---
 

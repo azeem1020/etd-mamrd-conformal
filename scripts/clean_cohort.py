@@ -15,7 +15,7 @@ NOT removed (would be cheating / unjustified):
   * conflicting-label exact-duplicate clusters -> FLAGGED for transparency (R3),
     kept in cohort; they are an irreducible label-noise floor, not our choice to delete.
 
-Outputs (results/phase_n/):
+Outputs (results/phase_n_retrained/):
   clean_cohort.json        summary + counts + breakdowns
   dropped_ids.csv          CONS_NO, FLAG, reason for every dropped customer
   keep_idx.npy             int64 row indices (into the 42372-row SGCC order) to KEEP

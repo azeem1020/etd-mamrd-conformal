@@ -11,6 +11,8 @@ Usage:
 import sys, os, csv
 from pathlib import Path
 from collections import defaultdict
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from repro_config import RESULTS_DIR
 
 def find_manifest_dir():
     # Try current directory first, then standard repo paths
@@ -18,7 +20,7 @@ def find_manifest_dir():
         Path(__file__).resolve().parent,
         Path(__file__).resolve().parent / "partition_manifests",
         Path(__file__).resolve().parent.parent / "partition_manifests",
-        Path(__file__).resolve().parent.parent / "results" / "phase_n" / "r2_audit",
+        RESULTS_DIR / "r2_audit",
     ]
     for c in candidates:
         if (c / "sgcc_partition_manifest.csv").exists() and (c / "ecl_partition_manifest.csv").exists():
