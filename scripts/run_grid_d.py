@@ -19,11 +19,11 @@ python run_grid_d.py --verdicts_only \
     --phase_c_manifest ../../results/phase_c_grid/manifest.csv \
     --out_dir ../../results/phase_d_grid
 
-Pre-registration integrity
---------------------------
+Run integrity
+-------------
 This script computes the SHA256 of itself at startup and logs it.  The hash
 must match the value recorded in PLAN_D_2026-05-27.md §9 before any cell
-is executed.  If the file has been modified since pre-registration, a warning
+is executed.  If the file has been modified since the plan was recorded, a warning
 is printed and the operator must confirm before proceeding.
 """
 from __future__ import annotations
@@ -65,12 +65,12 @@ def _check_integrity(plan_path: Path) -> None:
     if plan_path.exists():
         content = plan_path.read_text()
         if sha in content:
-            print("[integrity] SHA matches pre-registration record. ✓")
+            print("[integrity] SHA matches the plan record.")
         else:
             print(
                 "[integrity] WARNING: SHA not found in PLAN_D_2026-05-27.md.\n"
                 "  Either the plan has not been updated with the runner SHA,\n"
-                "  or the runner was modified after pre-registration.\n"
+                "  or the runner was modified after the plan was recorded.\n"
                 "  Update §9 of the plan file before proceeding."
             )
     else:

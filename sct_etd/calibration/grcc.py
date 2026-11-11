@@ -1,5 +1,9 @@
 """GRCC — Group-Regime Conditional Conformal prediction sets.
 
+NOT USED by any result in the manuscript: no script imports this module. The
+reported conformal analyses use scripts/conformal_common.py (exact order
+statistic per group; no eligibility gate, no exclusion, no pooled fallback).
+
 Application of Gibbs, Cherian & Candès (2023), "Conformal Prediction
 With Conditional Guarantees" (JRSS-B; arXiv:2305.12616) to electricity-
 theft detection.

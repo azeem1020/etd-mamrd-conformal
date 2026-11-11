@@ -1,6 +1,6 @@
 """Imputation ablation (Phase L, NaN-wall test) — 2026-05-30.
 
-Pre-registered question: is the ~0.56 PR-AUC wall set by the IMPUTATION
+Question: is the ~0.56 PR-AUC wall set by the IMPUTATION
 representation (CC-NaME fills missing with a learned scalar token tau~-1.0,
 an out-of-[0,1]-manifold spike at 25.6% of positions) or is it STRUCTURAL
 (Paper 1 regime confound + Paper 4 ceiling, max|r|=0.102, ~82% undetectable)?
@@ -17,7 +17,7 @@ Variants:
   mean   : missing -> per-customer observed mean (in [0,1])        [in-manifold]
   ffill  : missing -> last observed value (calendar order)         [continuity]
 
-Pre-reg: paired Delta(variant - token) vs a14, material >= +0.01, BCa CI.
+Decision rule: paired Delta(variant - token) vs a14, material >= +0.01, BCa CI.
 If any variant beats token by >=0.01 -> wall is imputation-bound (pursue).
 If all tie/lose -> wall is structural (N1 pivot vindicated).
 """

@@ -1,6 +1,6 @@
 """Paper 3 — Move A: model-free, representation-AGNOSTIC ceiling estimate.
 
-PRE-REGISTRATION (dated 2026-06-05, before running):
+DESIGN:
   CLAIM under test: the 0.567 detectability ceiling is SIGNAL-limited, not MODEL-limited.
   ESTIMATOR: HistGradientBoosting on hand-crafted, model-free per-consumer features
     (mean/std/cov/min/max/quantiles/missing-rate/zero-fraction/column 0-4 vs 5-6 gap/

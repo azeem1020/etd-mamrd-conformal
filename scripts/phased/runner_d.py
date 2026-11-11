@@ -323,7 +323,7 @@ def phase_d_grid(
 ) -> list[CellD]:
     """Return the complete Phase D cell list.
 
-    Defaults match the pre-registration protocol:
+    Defaults match the Phase D protocol:
       arms    : all 5 arms (A1–A5)
       seeds   : [0, 1, 2, 3, 4]
       n_folds : 3

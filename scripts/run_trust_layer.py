@@ -1,7 +1,7 @@
 """Paper 3 — SGCC trustworthy-AI layer (post-hoc, no retraining).
 
-Pre-registered in PLAN_TRUST_2026-06-02.md. Computes, from the LOCKED saved
-per-cell scores in results/phase_n_retrained/, the trustworthy layer added for Energy & AI:
+Computes, from the LOCKED saved per-cell scores in results/phase_n_retrained/,
+the post-hoc trust layer:
 
   T1  calibration (preliminary; cite Paper 1):  ECE (15 equal-mass bins) + Brier,
       raw vs temperature-scaled (Guo 2017; B4 §14.2.2).
@@ -221,7 +221,7 @@ def agg(df, arm, a=None):
     return d
 
 lines = ["# RESULTS_TRUST — SGCC trustworthy layer (post-hoc, NREP=%d)" % NREP,
-         "", "Pre-reg: PLAN_TRUST_2026-06-02.md. Conformal: split-APS within each",
+         "", "Conformal: split-APS within each",
          "held-out fold (stratified calib/test), %d repeats averaged per cell." % NREP,
          "Cells: a34 n=15 (seeds0-4xfolds0-2); baselines n=9 (seeds0-2xfolds0-2).", ""]
 

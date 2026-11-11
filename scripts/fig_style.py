@@ -1,4 +1,4 @@
-"""Shared senior-grade figure style for Paper 3 (Energy & AI).
+"""Shared figure style for the manuscript figures.
 
 ONE palette, ONE rcParams, color = meaning, fixed across every figure.
 Import in every make_*.py:  from fig_style import C, MODEL_COLOR, MODEL_NAME, strata_ramp, apply_style, SINGLE, DOUBLE

@@ -264,7 +264,7 @@ def main() -> None:
 
     # Phase C kf0 reference
     print("--- Reference: Phase C manifest (full, random, kf=0, 15 cells) ---")
-    print("  A0 mean=0.5359  std=0.0427  [pre-registered reference]")
+    print("  A0 mean=0.5359  std=0.0427  [Phase C reference]")
     print(f"  This cell A0={r_a0['pr_auc']:.4f}  "
           f"({'within' if abs(r_a0['pr_auc']-0.5359) < 0.06 else 'outside'} 1-std)")
 

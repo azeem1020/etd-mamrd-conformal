@@ -1,4 +1,4 @@
-"""Graphical abstract for Paper 3 (Energy and AI) — 3-panel story.
+"""Graphical abstract — 3-panel story.
 (1) The leaderboard is inflated: reported ROC/MAP ~0.9 vs honest full AP ~0.57.
 (2) An empirical ceiling: no detector clears full AP ~0.57; no baseline > 0.50.
 (3) A guarantee that cuts audits: class-conditional conformal inspects 35% fewer

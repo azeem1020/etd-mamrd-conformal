@@ -428,7 +428,7 @@ def make_fig5_conformal_tradeoffs():
 
     fig, (axA, axB) = plt.subplots(1, 2, figsize=(7.16, 2.85))
 
-    # Panel (a): Realized group recall on held-out evaluation splits (281 valid resplits, alpha=0.20)
+    # Panel (a): Realized group recall on held-out evaluation splits (all 300 MAMRD resplits, alpha=0.20)
     groups = ["Heavy", "Light", "Flat", "Overall"]
     erow = emp_df.iloc[0]
     emp_rec = [

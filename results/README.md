@@ -17,7 +17,7 @@ To preserve scientific reproducibility and prevent unauthorized pre-publication 
    # Conformal safety audits
    PYTHONPATH=.. python run_trust_layer.py
    
-   # Empirical baseline comparator (281 resplits)
+   # Empirical baseline comparator (300 MAMRD resplits)
    PYTHONPATH=.. python run_empirical_comparator.py
    
    # Generate manuscript tables and figures

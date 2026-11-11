@@ -17,7 +17,7 @@
 [arm] DKGT
 # RESULTS_TRUST — SGCC trustworthy layer (post-hoc, NREP=20)
 
-Pre-reg: PLAN_TRUST_2026-06-02.md. Conformal: split-APS within each
+Conformal: split-APS within each
 held-out fold (stratified calib/test), 20 repeats averaged per cell.
 Cells: a34 n=15 (seeds0-4xfolds0-2); baselines n=9 (seeds0-2xfolds0-2).
 

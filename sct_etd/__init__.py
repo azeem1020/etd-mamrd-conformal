@@ -13,6 +13,5 @@ calibration     Isotonic + temperature + Adaptive Prediction Sets (APS) conforma
 policy          Net-value optimiser + active-learning re-queue.
 eval            Selective metrics (RC-curve, AURC), conformal coverage audit, saliency.
 
-See PAPER1_ENERGY_AI_PLAN.md for the Energy & AI submission carve-out.
 """
 __version__ = "0.0.1"

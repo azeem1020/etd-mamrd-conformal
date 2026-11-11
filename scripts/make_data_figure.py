@@ -1,4 +1,4 @@
-"""Fig (data characterization) for Paper 3 (Energy and AI).
+"""Fig (data characterization).
 
 Single panel, computed directly from the raw SGCC release:
 Distribution of per-consumer missing-rate by label (violin): the gap is

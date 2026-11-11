@@ -1,6 +1,6 @@
-"""clean_cohort.py — Step (a1): pre-registered, scientifically-defensible cohort cleaning.
+"""clean_cohort.py — Step (a1): cohort cleaning.
 
-PRE-REGISTERED RULE (committed 2026-05-30, no post-hoc tuning):
+RULE:
   DROP customer iff  nansum(|x|) < NO_SIGNAL_EPS   (= 1e-6 kWh total).
   This single criterion captures BOTH:
     R1 all-NaN customers (no observed reading at all), and
@@ -52,7 +52,7 @@ def main() -> None:
     n_nonzero = np.nansum(vals > 0, axis=1).astype(int)     # observed nonzero readings
     total = np.nansum(np.abs(vals), axis=1)                 # total consumption
 
-    no_signal = total < NO_SIGNAL_EPS                        # the pre-registered drop rule
+    no_signal = total < NO_SIGNAL_EPS                        # the drop rule
     all_nan = n_obs == 0
     all_zero_observed = (n_obs > 0) & (n_nonzero == 0)
     keep_mask = ~no_signal
