@@ -292,6 +292,8 @@ Every result reported in the manuscript is traceable to its corresponding config
 | **Text (Intro., Methods)** | Mask-only classifier; missing-rate statistics; router cutoffs | 3 folds | `scripts/compute_r2_revisions.py` | `r2_audit/mask_only_baseline.csv`, `r2_audit/router_params.csv` |
 | **Supp. Table S6** | ECL conformal lift gap | Same protocol (`conformal_common.py`) | `scripts/run_ecl_trust_analysis.py` | `ecl_trust/RESULTS_ECL_TRUST.md` |
 
+**Not used by any figure or table.** `scripts/run_trust_layer.py` also writes `trust/calibration_sgcc.csv` and the T1 calibration table of `trust/RESULTS_TRUST.md`. They are a separate calibration diagnostic with a different protocol (20 stratified 50/50 resplits per cell, 15 equal-mass bins, and an additional prior-shift plus temperature-scaling variant). Figure 4 and every calibration value in the paper come from `trust/fig4_ece_by_detector.csv` (alternating split, 10 equal-width bins; see the Figure 4 row).
+
 ---
 
 ## 6. Conformal Audit Protocol (Table 6, Figure 5, Supp. Figure S4, Supp. Table S6)
