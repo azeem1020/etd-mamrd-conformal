@@ -63,8 +63,10 @@ def reconstruct():
     for fold in (0, 1, 2):
         folds = list(KFoldSpec(family="random", n_folds=5, seed=0).iter_folds(y))
         tr, val = folds[fold]
-        _, es, te = _stratified_three_way_split(val, y, (0.33, 0.33, 0.34),
-                                                rng=np.random.default_rng(fold))
+        # Held-out thirds are (early-stop, threshold-cal, test) as in run_n_clean.py;
+        # only the test third is used here.
+        _, _, te = _stratified_three_way_split(val, y, (0.33, 0.33, 0.34),
+                                               rng=np.random.default_rng(fold))
         fold_te[fold] = (te, y[te].astype(int), types[te])
     return fold_te
 

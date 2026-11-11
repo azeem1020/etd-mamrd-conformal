@@ -161,7 +161,7 @@ python scripts/reproduce_all_r2.py --config configs/default.yaml
 | :--- | :--- | :--- |
 | 1 | `verify_partition_manifests.py` | disjointness check of `partition_manifests/` |
 | 2 | `run_decision_value.py`, `run_empirical_comparator.py`, `run_trust_layer.py`, `run_ecl_trust_analysis.py` | `trust/`, `ecl_trust/RESULTS_ECL_TRUST.md` (Table 6, Fig. 5, Fig. 4b CSV, Supp. Fig. S4, Supp. Table S6) |
-| 3 | `compute_table_b.py`, `compute_table_c.py` | `tableB/`, `tableC/` (Tables 3, 4) |
+| 3 | `compute_table_b.py`, `compute_table_c.py`, `compute_table_a.py` | `tableB/`, `tableC/` (Tables 3, 4), `tableA/` (ECL per-attack recall, Supp. Table S7 note) |
 | 4 | `compute_r2_revisions.py` | `r2_audit/` (Tables 2, 5; conformal eligibility ledger) |
 | 5 | `make_manuscript_figures.py`, `make_trust_figure.py`, `make_figures.py` | `figures/` |
 
@@ -277,6 +277,7 @@ Every result reported in the manuscript is traceable to its corresponding config
 | **Figure 4** | Probability Calibration & ECE | Alternating split ($\mathcal{I}_{\text{cal}} / \mathcal{I}_{\text{eval}}$); 10 equal-width bins; $L_2$-logistic fit ($C=10^4$) | `scripts/make_manuscript_figures.py` | `figures/fig4_calibration_reliability.pdf` |
 | **Figure 5** | Conformal Recall & Workload Reduction | (a) empirical vs conformal group thresholds; (b) conditional vs single threshold; same 300 MAMRD resplits as Table 6 (no eligibility gate) | `scripts/run_empirical_comparator.py`, `scripts/run_decision_value.py` → `scripts/make_manuscript_figures.py` | `trust/empirical_comparator_sgcc.csv`, `trust/decision_value_sgcc.csv`, `figures/fig5_conformal_tradeoffs.pdf` |
 | **Supp. Fig. (fig:trust)** | Per-group lift & Heavy−Flat hit-rate gap | Same resplits/protocol as Table 6, all 5 phenotypes | `scripts/run_trust_layer.py` → `scripts/make_trust_figure.py` | `trust/trust_lift_sgcc.csv`, `trust/trust_sgcc_percell.csv`, `figures/fig6_trust_guarantee.pdf` |
+| **Supp. Table S7 (per-attack note)** | ECL Recall at 1 % / 5 % FPR per FDI attack type | 9 cells (3 folds × 3 seeds); FPR threshold from evaluation negatives; BCa ($B=2{,}000$) | `scripts/compute_table_a.py` | `tableA/tableA_agg.csv` |
 | **Supp. Table S6** | ECL conformal lift gap | Same protocol (`conformal_common.py`) | `scripts/run_ecl_trust_analysis.py` | `ecl_trust/RESULTS_ECL_TRUST.md` |
 
 ---
@@ -290,7 +291,7 @@ All conformal analyses import one module, `scripts/conformal_common.py`, so they
 - **Estimates and intervals.** Each quantity is averaged over the 20 resplits of a cell and then over cells. Intervals are BCa bootstrap intervals that resample seed–fold cells; because seeds within a fold share test consumers, they are descriptive.
 - **Audit trail.** `trust/decision_value_sgcc_resplits.csv` holds one row per resplit (calibration counts, whether the infinite-quantile rule applied, inspected shares, recall and precision per group); `trust/group_profile_sgcc.csv` holds the per-group theft and consumption shares quoted in the manuscript.
 
-**Corrections made in Revision 3 (commit history on GitHub).** (i) Earlier code discarded every resplit in which any group had fewer than 10 calibration thefts (66 of 300 MAMRD resplits retained); the manuscript described this as a pooled fallback, which was never implemented. The gate is removed as described above. (ii) The Hit Rate / Lift columns of Table 6 were previously transcribed by hand and the High-consumption column reported only the Heavy-Dropper subgroup; all six columns are now written by `run_decision_value.py`. (iii) `partition_manifests/` previously held a pre-retrain copy with the early-stopping and threshold-calibration thirds swapped; it now matches `r2_audit/` and the training code (`run_n_clean.py`). Test sets were unaffected. Superseded results are kept in `results/_archive_phase_n_pre_retrain/` and are not read by any script.
+**Corrections made in Revision 3 (commit history on GitHub).** (i) Earlier code discarded every resplit in which any group had fewer than 10 calibration thefts (66 of 300 MAMRD resplits retained); the manuscript described this as a pooled fallback, which was never implemented. The gate is removed as described above. (ii) The Hit Rate / Lift columns of Table 6 were previously transcribed by hand and the High-consumption column reported only the Heavy-Dropper subgroup; all six columns are now written by `run_decision_value.py`. (iii) `partition_manifests/` previously held a pre-retrain copy with the early-stopping and threshold-calibration thirds swapped; it now matches `r2_audit/` and the training code (`run_n_clean.py`). Test sets were unaffected. (iv) The ECL per-attack recall in the note of Supplementary Table S7 had not been recomputed after retraining; `compute_table_a.py` now regenerates it as part of Tier 1 (`tableA/`). Superseded results are kept in `results/_archive_phase_n_pre_retrain/` and are not read by any script.
 
 ---
 

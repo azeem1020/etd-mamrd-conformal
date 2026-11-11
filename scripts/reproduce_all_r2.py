@@ -9,7 +9,8 @@ Tier-1 reproduction from the cached prediction-level records (no retraining):
   2. run the conformal audit analyses on the shared protocol (conformal_common.py):
      run_decision_value (Table 6, Fig. 5b), run_empirical_comparator (Fig. 5a),
      run_trust_layer (Fig. 4b calibration CSV, Supp. Fig. S4), run_ecl_trust_analysis (Supp. Table S6);
-  3. recompute Tables 3 and 4 (compute_table_b, compute_table_c);
+  3. recompute Tables 3 and 4 and the ECL per-attack recall (compute_table_b,
+     compute_table_c, compute_table_a);
   4. recompute partition counts, bootstrap/ablation ledgers and the conformal
      eligibility ledger (compute_r2_revisions: Tables 2 and 5);
   5. regenerate all main and supplementary figures.
@@ -119,6 +120,7 @@ def main():
     # 3. Main benchmark (Table 3) and fixed-FPR budgets (Table 4)
     run_step("3a. Protocol-matched benchmark (Table 3)", [py_exec, str(THIS / "compute_table_b.py")], cwd=THIS)
     run_step("3b. Fixed-FPR inspection budgets (Table 4)", [py_exec, str(THIS / "compute_table_c.py")], cwd=THIS)
+    run_step("3c. ECL per-attack recall at 1%/5% FPR (Supp. Table S7 note)", [py_exec, str(THIS / "compute_table_a.py")], cwd=THIS)
 
     # 4. Partition counts, bootstrap and ablation ledgers, conformal eligibility ledger (Tables 2, 5)
     run_step("4. Partition counts, bootstrap/ablation ledgers, eligibility ledger (Tables 2, 5)",
@@ -139,6 +141,7 @@ def main():
     print("  - Table 5:  r2_audit/table_ablation_provenance.csv")
     print("  - Table 6:  trust/decision_value_sgcc.csv (+ _resplits.csv, eligibility ledger)")
     print("  - Supp. Table S6: ecl_trust/RESULTS_ECL_TRUST.md")
+    print("  - Supp. Table S7 per-attack note: tableA/tableA_agg.csv")
     print("  - Figures:  figures/fig2-fig5 (main), fig6_trust_guarantee (Supp. S4), others")
     print("              (Figure 1 is the conceptual architecture schematic in TikZ)")
     print("#" * 75 + "\n")

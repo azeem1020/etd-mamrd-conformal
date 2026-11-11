@@ -1,0 +1,325 @@
+detector,seed,fold,atype,aname,n_pos,recall_fpr5,recall_fpr1
+MAMRD,0,0,0,Multiplicative scaling,28,0.10714285714285714,0.0
+MAMRD,0,0,1,Per-step random scaling,26,1.0,1.0
+MAMRD,0,0,2,Intermittent zeroing,29,1.0,1.0
+MAMRD,0,0,3,Mean-scaled replacement,25,1.0,1.0
+MAMRD,0,0,4,Flatten to mean,31,1.0,1.0
+MAMRD,0,0,5,Time reversal,36,1.0,1.0
+MAMRD,0,1,0,Multiplicative scaling,42,0.047619047619047616,0.0
+MAMRD,0,1,1,Per-step random scaling,30,1.0,0.9333333333333333
+MAMRD,0,1,2,Intermittent zeroing,25,1.0,1.0
+MAMRD,0,1,3,Mean-scaled replacement,26,1.0,1.0
+MAMRD,0,1,4,Flatten to mean,30,1.0,1.0
+MAMRD,0,1,5,Time reversal,19,0.9473684210526315,0.9473684210526315
+MAMRD,0,2,0,Multiplicative scaling,30,0.1,0.03333333333333333
+MAMRD,0,2,1,Per-step random scaling,25,1.0,1.0
+MAMRD,0,2,2,Intermittent zeroing,28,1.0,1.0
+MAMRD,0,2,3,Mean-scaled replacement,27,1.0,1.0
+MAMRD,0,2,4,Flatten to mean,30,1.0,1.0
+MAMRD,0,2,5,Time reversal,30,0.9666666666666667,0.9666666666666667
+MAMRD,1,0,0,Multiplicative scaling,28,0.14285714285714285,0.0
+MAMRD,1,0,1,Per-step random scaling,26,1.0,1.0
+MAMRD,1,0,2,Intermittent zeroing,29,1.0,1.0
+MAMRD,1,0,3,Mean-scaled replacement,25,1.0,1.0
+MAMRD,1,0,4,Flatten to mean,31,1.0,1.0
+MAMRD,1,0,5,Time reversal,36,1.0,1.0
+MAMRD,1,1,0,Multiplicative scaling,42,0.07142857142857142,0.047619047619047616
+MAMRD,1,1,1,Per-step random scaling,30,0.9666666666666667,0.8666666666666667
+MAMRD,1,1,2,Intermittent zeroing,25,1.0,1.0
+MAMRD,1,1,3,Mean-scaled replacement,26,1.0,0.9615384615384616
+MAMRD,1,1,4,Flatten to mean,30,1.0,1.0
+MAMRD,1,1,5,Time reversal,19,1.0,0.9473684210526315
+MAMRD,1,2,0,Multiplicative scaling,30,0.03333333333333333,0.0
+MAMRD,1,2,1,Per-step random scaling,25,1.0,1.0
+MAMRD,1,2,2,Intermittent zeroing,28,1.0,1.0
+MAMRD,1,2,3,Mean-scaled replacement,27,1.0,1.0
+MAMRD,1,2,4,Flatten to mean,30,1.0,1.0
+MAMRD,1,2,5,Time reversal,30,0.9666666666666667,0.9666666666666667
+MAMRD,2,0,0,Multiplicative scaling,28,0.07142857142857142,0.0
+MAMRD,2,0,1,Per-step random scaling,26,1.0,1.0
+MAMRD,2,0,2,Intermittent zeroing,29,1.0,1.0
+MAMRD,2,0,3,Mean-scaled replacement,25,1.0,1.0
+MAMRD,2,0,4,Flatten to mean,31,1.0,1.0
+MAMRD,2,0,5,Time reversal,36,1.0,1.0
+MAMRD,2,1,0,Multiplicative scaling,42,0.047619047619047616,0.023809523809523808
+MAMRD,2,1,1,Per-step random scaling,30,1.0,0.9
+MAMRD,2,1,2,Intermittent zeroing,25,1.0,1.0
+MAMRD,2,1,3,Mean-scaled replacement,26,1.0,1.0
+MAMRD,2,1,4,Flatten to mean,30,1.0,1.0
+MAMRD,2,1,5,Time reversal,19,0.9473684210526315,0.9473684210526315
+MAMRD,2,2,0,Multiplicative scaling,30,0.06666666666666667,0.0
+MAMRD,2,2,1,Per-step random scaling,25,1.0,0.96
+MAMRD,2,2,2,Intermittent zeroing,28,1.0,1.0
+MAMRD,2,2,3,Mean-scaled replacement,27,1.0,1.0
+MAMRD,2,2,4,Flatten to mean,30,1.0,1.0
+MAMRD,2,2,5,Time reversal,30,0.9666666666666667,0.9333333333333333
+WDCNN,0,0,0,Multiplicative scaling,28,0.03571428571428571,0.0
+WDCNN,0,0,1,Per-step random scaling,26,1.0,1.0
+WDCNN,0,0,2,Intermittent zeroing,29,1.0,1.0
+WDCNN,0,0,3,Mean-scaled replacement,25,1.0,1.0
+WDCNN,0,0,4,Flatten to mean,31,1.0,1.0
+WDCNN,0,0,5,Time reversal,36,1.0,0.9722222222222222
+WDCNN,0,1,0,Multiplicative scaling,42,0.07142857142857142,0.047619047619047616
+WDCNN,0,1,1,Per-step random scaling,30,1.0,0.5
+WDCNN,0,1,2,Intermittent zeroing,25,1.0,1.0
+WDCNN,0,1,3,Mean-scaled replacement,26,1.0,0.8846153846153846
+WDCNN,0,1,4,Flatten to mean,30,1.0,1.0
+WDCNN,0,1,5,Time reversal,19,1.0,0.7894736842105263
+WDCNN,0,2,0,Multiplicative scaling,30,0.06666666666666667,0.0
+WDCNN,0,2,1,Per-step random scaling,25,1.0,0.96
+WDCNN,0,2,2,Intermittent zeroing,28,1.0,1.0
+WDCNN,0,2,3,Mean-scaled replacement,27,1.0,1.0
+WDCNN,0,2,4,Flatten to mean,30,1.0,1.0
+WDCNN,0,2,5,Time reversal,30,1.0,0.9333333333333333
+WDCNN,1,0,0,Multiplicative scaling,28,0.03571428571428571,0.03571428571428571
+WDCNN,1,0,1,Per-step random scaling,26,1.0,0.9615384615384616
+WDCNN,1,0,2,Intermittent zeroing,29,1.0,1.0
+WDCNN,1,0,3,Mean-scaled replacement,25,1.0,1.0
+WDCNN,1,0,4,Flatten to mean,31,1.0,1.0
+WDCNN,1,0,5,Time reversal,36,1.0,0.9444444444444444
+WDCNN,1,1,0,Multiplicative scaling,42,0.07142857142857142,0.047619047619047616
+WDCNN,1,1,1,Per-step random scaling,30,0.9666666666666667,0.5
+WDCNN,1,1,2,Intermittent zeroing,25,1.0,1.0
+WDCNN,1,1,3,Mean-scaled replacement,26,1.0,0.9230769230769231
+WDCNN,1,1,4,Flatten to mean,30,1.0,1.0
+WDCNN,1,1,5,Time reversal,19,1.0,0.8421052631578947
+WDCNN,1,2,0,Multiplicative scaling,30,0.1,0.0
+WDCNN,1,2,1,Per-step random scaling,25,1.0,0.96
+WDCNN,1,2,2,Intermittent zeroing,28,1.0,1.0
+WDCNN,1,2,3,Mean-scaled replacement,27,1.0,1.0
+WDCNN,1,2,4,Flatten to mean,30,1.0,1.0
+WDCNN,1,2,5,Time reversal,30,1.0,0.9333333333333333
+WDCNN,2,0,0,Multiplicative scaling,28,0.03571428571428571,0.0
+WDCNN,2,0,1,Per-step random scaling,26,1.0,1.0
+WDCNN,2,0,2,Intermittent zeroing,29,1.0,1.0
+WDCNN,2,0,3,Mean-scaled replacement,25,1.0,1.0
+WDCNN,2,0,4,Flatten to mean,31,1.0,1.0
+WDCNN,2,0,5,Time reversal,36,1.0,0.9444444444444444
+WDCNN,2,1,0,Multiplicative scaling,42,0.07142857142857142,0.047619047619047616
+WDCNN,2,1,1,Per-step random scaling,30,1.0,0.5
+WDCNN,2,1,2,Intermittent zeroing,25,1.0,1.0
+WDCNN,2,1,3,Mean-scaled replacement,26,1.0,0.8461538461538461
+WDCNN,2,1,4,Flatten to mean,30,1.0,1.0
+WDCNN,2,1,5,Time reversal,19,1.0,0.7894736842105263
+WDCNN,2,2,0,Multiplicative scaling,30,0.06666666666666667,0.0
+WDCNN,2,2,1,Per-step random scaling,25,1.0,0.96
+WDCNN,2,2,2,Intermittent zeroing,28,1.0,1.0
+WDCNN,2,2,3,Mean-scaled replacement,27,1.0,1.0
+WDCNN,2,2,4,Flatten to mean,30,1.0,1.0
+WDCNN,2,2,5,Time reversal,30,1.0,0.9333333333333333
+HORLN,0,0,0,Multiplicative scaling,28,0.10714285714285714,0.0
+HORLN,0,0,1,Per-step random scaling,26,1.0,1.0
+HORLN,0,0,2,Intermittent zeroing,29,1.0,1.0
+HORLN,0,0,3,Mean-scaled replacement,25,1.0,1.0
+HORLN,0,0,4,Flatten to mean,31,1.0,1.0
+HORLN,0,0,5,Time reversal,36,1.0,0.9722222222222222
+HORLN,0,1,0,Multiplicative scaling,42,0.023809523809523808,0.023809523809523808
+HORLN,0,1,1,Per-step random scaling,30,0.9,0.6666666666666666
+HORLN,0,1,2,Intermittent zeroing,25,1.0,1.0
+HORLN,0,1,3,Mean-scaled replacement,26,0.9615384615384616,0.8846153846153846
+HORLN,0,1,4,Flatten to mean,30,1.0,1.0
+HORLN,0,1,5,Time reversal,19,1.0,0.9473684210526315
+HORLN,0,2,0,Multiplicative scaling,30,0.1,0.0
+HORLN,0,2,1,Per-step random scaling,25,1.0,0.96
+HORLN,0,2,2,Intermittent zeroing,28,1.0,1.0
+HORLN,0,2,3,Mean-scaled replacement,27,1.0,1.0
+HORLN,0,2,4,Flatten to mean,30,1.0,1.0
+HORLN,0,2,5,Time reversal,30,1.0,0.9666666666666667
+HORLN,1,0,0,Multiplicative scaling,28,0.0,0.0
+HORLN,1,0,1,Per-step random scaling,26,0.9615384615384616,0.9615384615384616
+HORLN,1,0,2,Intermittent zeroing,29,1.0,1.0
+HORLN,1,0,3,Mean-scaled replacement,25,1.0,1.0
+HORLN,1,0,4,Flatten to mean,31,1.0,1.0
+HORLN,1,0,5,Time reversal,36,1.0,1.0
+HORLN,1,1,0,Multiplicative scaling,42,0.023809523809523808,0.023809523809523808
+HORLN,1,1,1,Per-step random scaling,30,1.0,0.8333333333333334
+HORLN,1,1,2,Intermittent zeroing,25,1.0,1.0
+HORLN,1,1,3,Mean-scaled replacement,26,0.9615384615384616,0.9615384615384616
+HORLN,1,1,4,Flatten to mean,30,1.0,1.0
+HORLN,1,1,5,Time reversal,19,0.9473684210526315,0.9473684210526315
+HORLN,1,2,0,Multiplicative scaling,30,0.03333333333333333,0.0
+HORLN,1,2,1,Per-step random scaling,25,0.88,0.88
+HORLN,1,2,2,Intermittent zeroing,28,0.9642857142857143,0.9642857142857143
+HORLN,1,2,3,Mean-scaled replacement,27,0.9259259259259259,0.9259259259259259
+HORLN,1,2,4,Flatten to mean,30,1.0,1.0
+HORLN,1,2,5,Time reversal,30,0.9666666666666667,0.9666666666666667
+HORLN,2,0,0,Multiplicative scaling,28,0.0,0.0
+HORLN,2,0,1,Per-step random scaling,26,1.0,0.9230769230769231
+HORLN,2,0,2,Intermittent zeroing,29,1.0,1.0
+HORLN,2,0,3,Mean-scaled replacement,25,1.0,1.0
+HORLN,2,0,4,Flatten to mean,31,1.0,1.0
+HORLN,2,0,5,Time reversal,36,0.9722222222222222,0.9722222222222222
+HORLN,2,1,0,Multiplicative scaling,42,0.0,0.0
+HORLN,2,1,1,Per-step random scaling,30,0.9333333333333333,0.9
+HORLN,2,1,2,Intermittent zeroing,25,1.0,1.0
+HORLN,2,1,3,Mean-scaled replacement,26,0.9615384615384616,0.9230769230769231
+HORLN,2,1,4,Flatten to mean,30,1.0,1.0
+HORLN,2,1,5,Time reversal,19,0.9473684210526315,0.9473684210526315
+HORLN,2,2,0,Multiplicative scaling,30,0.1,0.03333333333333333
+HORLN,2,2,1,Per-step random scaling,25,0.96,0.96
+HORLN,2,2,2,Intermittent zeroing,28,0.9642857142857143,0.9642857142857143
+HORLN,2,2,3,Mean-scaled replacement,27,0.9629629629629629,0.9629629629629629
+HORLN,2,2,4,Flatten to mean,30,1.0,1.0
+HORLN,2,2,5,Time reversal,30,0.9666666666666667,0.9666666666666667
+Self-Attn,0,0,0,Multiplicative scaling,28,0.07142857142857142,0.0
+Self-Attn,0,0,1,Per-step random scaling,26,1.0,0.9615384615384616
+Self-Attn,0,0,2,Intermittent zeroing,29,1.0,0.9655172413793104
+Self-Attn,0,0,3,Mean-scaled replacement,25,1.0,0.96
+Self-Attn,0,0,4,Flatten to mean,31,1.0,1.0
+Self-Attn,0,0,5,Time reversal,36,1.0,0.9722222222222222
+Self-Attn,0,1,0,Multiplicative scaling,42,0.07142857142857142,0.047619047619047616
+Self-Attn,0,1,1,Per-step random scaling,30,0.9,0.5333333333333333
+Self-Attn,0,1,2,Intermittent zeroing,25,1.0,0.92
+Self-Attn,0,1,3,Mean-scaled replacement,26,1.0,0.8846153846153846
+Self-Attn,0,1,4,Flatten to mean,30,1.0,1.0
+Self-Attn,0,1,5,Time reversal,19,1.0,0.8421052631578947
+Self-Attn,0,2,0,Multiplicative scaling,30,0.0,0.0
+Self-Attn,0,2,1,Per-step random scaling,25,0.92,0.84
+Self-Attn,0,2,2,Intermittent zeroing,28,0.9642857142857143,0.9642857142857143
+Self-Attn,0,2,3,Mean-scaled replacement,27,1.0,0.9629629629629629
+Self-Attn,0,2,4,Flatten to mean,30,1.0,1.0
+Self-Attn,0,2,5,Time reversal,30,0.9666666666666667,0.9333333333333333
+Self-Attn,1,0,0,Multiplicative scaling,28,0.03571428571428571,0.0
+Self-Attn,1,0,1,Per-step random scaling,26,0.9615384615384616,0.8076923076923077
+Self-Attn,1,0,2,Intermittent zeroing,29,1.0,1.0
+Self-Attn,1,0,3,Mean-scaled replacement,25,1.0,1.0
+Self-Attn,1,0,4,Flatten to mean,31,1.0,1.0
+Self-Attn,1,0,5,Time reversal,36,1.0,0.9722222222222222
+Self-Attn,1,1,0,Multiplicative scaling,42,0.09523809523809523,0.047619047619047616
+Self-Attn,1,1,1,Per-step random scaling,30,0.9666666666666667,0.16666666666666666
+Self-Attn,1,1,2,Intermittent zeroing,25,1.0,0.96
+Self-Attn,1,1,3,Mean-scaled replacement,26,1.0,0.6538461538461539
+Self-Attn,1,1,4,Flatten to mean,30,1.0,1.0
+Self-Attn,1,1,5,Time reversal,19,1.0,0.7368421052631579
+Self-Attn,1,2,0,Multiplicative scaling,30,0.03333333333333333,0.0
+Self-Attn,1,2,1,Per-step random scaling,25,1.0,0.88
+Self-Attn,1,2,2,Intermittent zeroing,28,1.0,1.0
+Self-Attn,1,2,3,Mean-scaled replacement,27,1.0,1.0
+Self-Attn,1,2,4,Flatten to mean,30,1.0,1.0
+Self-Attn,1,2,5,Time reversal,30,0.9666666666666667,0.9666666666666667
+Self-Attn,2,0,0,Multiplicative scaling,28,0.07142857142857142,0.0
+Self-Attn,2,0,1,Per-step random scaling,26,1.0,1.0
+Self-Attn,2,0,2,Intermittent zeroing,29,1.0,1.0
+Self-Attn,2,0,3,Mean-scaled replacement,25,1.0,1.0
+Self-Attn,2,0,4,Flatten to mean,31,1.0,1.0
+Self-Attn,2,0,5,Time reversal,36,1.0,1.0
+Self-Attn,2,1,0,Multiplicative scaling,42,0.07142857142857142,0.047619047619047616
+Self-Attn,2,1,1,Per-step random scaling,30,0.8333333333333334,0.7
+Self-Attn,2,1,2,Intermittent zeroing,25,1.0,1.0
+Self-Attn,2,1,3,Mean-scaled replacement,26,1.0,0.9230769230769231
+Self-Attn,2,1,4,Flatten to mean,30,1.0,1.0
+Self-Attn,2,1,5,Time reversal,19,1.0,0.8947368421052632
+Self-Attn,2,2,0,Multiplicative scaling,30,0.03333333333333333,0.0
+Self-Attn,2,2,1,Per-step random scaling,25,1.0,0.96
+Self-Attn,2,2,2,Intermittent zeroing,28,1.0,0.9642857142857143
+Self-Attn,2,2,3,Mean-scaled replacement,27,1.0,1.0
+Self-Attn,2,2,4,Flatten to mean,30,1.0,1.0
+Self-Attn,2,2,5,Time reversal,30,0.9666666666666667,0.9666666666666667
+GRU-D,0,0,0,Multiplicative scaling,28,0.03571428571428571,0.0
+GRU-D,0,0,1,Per-step random scaling,26,0.5384615384615384,0.0
+GRU-D,0,0,2,Intermittent zeroing,29,0.6551724137931034,0.0
+GRU-D,0,0,3,Mean-scaled replacement,25,0.92,0.0
+GRU-D,0,0,4,Flatten to mean,31,1.0,0.0
+GRU-D,0,0,5,Time reversal,36,0.9444444444444444,0.6111111111111112
+GRU-D,0,1,0,Multiplicative scaling,42,0.07142857142857142,0.0
+GRU-D,0,1,1,Per-step random scaling,30,0.2,0.0
+GRU-D,0,1,2,Intermittent zeroing,25,0.48,0.0
+GRU-D,0,1,3,Mean-scaled replacement,26,0.8461538461538461,0.0
+GRU-D,0,1,4,Flatten to mean,30,1.0,0.0
+GRU-D,0,1,5,Time reversal,19,0.8947368421052632,0.5263157894736842
+GRU-D,0,2,0,Multiplicative scaling,30,0.0,0.0
+GRU-D,0,2,1,Per-step random scaling,25,0.48,0.0
+GRU-D,0,2,2,Intermittent zeroing,28,0.7857142857142857,0.0
+GRU-D,0,2,3,Mean-scaled replacement,27,1.0,0.0
+GRU-D,0,2,4,Flatten to mean,30,1.0,0.0
+GRU-D,0,2,5,Time reversal,30,1.0,0.8
+GRU-D,1,0,0,Multiplicative scaling,28,0.03571428571428571,0.0
+GRU-D,1,0,1,Per-step random scaling,26,0.6153846153846154,0.0
+GRU-D,1,0,2,Intermittent zeroing,29,0.6551724137931034,0.0
+GRU-D,1,0,3,Mean-scaled replacement,25,0.96,0.0
+GRU-D,1,0,4,Flatten to mean,31,1.0,0.0
+GRU-D,1,0,5,Time reversal,36,0.9444444444444444,0.6111111111111112
+GRU-D,1,1,0,Multiplicative scaling,42,0.07142857142857142,0.0
+GRU-D,1,1,1,Per-step random scaling,30,0.16666666666666666,0.0
+GRU-D,1,1,2,Intermittent zeroing,25,0.44,0.0
+GRU-D,1,1,3,Mean-scaled replacement,26,0.9615384615384616,0.0
+GRU-D,1,1,4,Flatten to mean,30,1.0,0.0
+GRU-D,1,1,5,Time reversal,19,0.8947368421052632,0.631578947368421
+GRU-D,1,2,0,Multiplicative scaling,30,0.0,0.0
+GRU-D,1,2,1,Per-step random scaling,25,0.48,0.0
+GRU-D,1,2,2,Intermittent zeroing,28,0.7857142857142857,0.0
+GRU-D,1,2,3,Mean-scaled replacement,27,1.0,0.0
+GRU-D,1,2,4,Flatten to mean,30,1.0,0.0
+GRU-D,1,2,5,Time reversal,30,1.0,0.9
+GRU-D,2,0,0,Multiplicative scaling,28,0.03571428571428571,0.0
+GRU-D,2,0,1,Per-step random scaling,26,0.2692307692307692,0.0
+GRU-D,2,0,2,Intermittent zeroing,29,0.5172413793103449,0.0
+GRU-D,2,0,3,Mean-scaled replacement,25,0.8,0.0
+GRU-D,2,0,4,Flatten to mean,31,1.0,0.0
+GRU-D,2,0,5,Time reversal,36,1.0,0.6111111111111112
+GRU-D,2,1,0,Multiplicative scaling,42,0.07142857142857142,0.0
+GRU-D,2,1,1,Per-step random scaling,30,0.26666666666666666,0.0
+GRU-D,2,1,2,Intermittent zeroing,25,0.56,0.0
+GRU-D,2,1,3,Mean-scaled replacement,26,0.7307692307692307,0.0
+GRU-D,2,1,4,Flatten to mean,30,1.0,0.0
+GRU-D,2,1,5,Time reversal,19,0.8947368421052632,0.2631578947368421
+GRU-D,2,2,0,Multiplicative scaling,30,0.0,0.0
+GRU-D,2,2,1,Per-step random scaling,25,0.52,0.0
+GRU-D,2,2,2,Intermittent zeroing,28,0.8214285714285714,0.0
+GRU-D,2,2,3,Mean-scaled replacement,27,1.0,0.0
+GRU-D,2,2,4,Flatten to mean,30,1.0,0.0
+GRU-D,2,2,5,Time reversal,30,1.0,0.7
+MSDM,0,0,0,Multiplicative scaling,28,0.03571428571428571,0.0
+MSDM,0,0,1,Per-step random scaling,26,1.0,1.0
+MSDM,0,0,2,Intermittent zeroing,29,1.0,1.0
+MSDM,0,0,3,Mean-scaled replacement,25,1.0,1.0
+MSDM,0,0,4,Flatten to mean,31,1.0,1.0
+MSDM,0,0,5,Time reversal,36,1.0,0.9444444444444444
+MSDM,0,1,0,Multiplicative scaling,42,0.047619047619047616,0.023809523809523808
+MSDM,0,1,1,Per-step random scaling,30,1.0,1.0
+MSDM,0,1,2,Intermittent zeroing,25,1.0,1.0
+MSDM,0,1,3,Mean-scaled replacement,26,1.0,1.0
+MSDM,0,1,4,Flatten to mean,30,1.0,1.0
+MSDM,0,1,5,Time reversal,19,0.9473684210526315,0.9473684210526315
+MSDM,0,2,0,Multiplicative scaling,30,0.06666666666666667,0.03333333333333333
+MSDM,0,2,1,Per-step random scaling,25,1.0,0.96
+MSDM,0,2,2,Intermittent zeroing,28,1.0,1.0
+MSDM,0,2,3,Mean-scaled replacement,27,1.0,1.0
+MSDM,0,2,4,Flatten to mean,30,1.0,1.0
+MSDM,0,2,5,Time reversal,30,0.9333333333333333,0.9333333333333333
+MSDM,1,0,0,Multiplicative scaling,28,0.03571428571428571,0.0
+MSDM,1,0,1,Per-step random scaling,26,1.0,1.0
+MSDM,1,0,2,Intermittent zeroing,29,1.0,1.0
+MSDM,1,0,3,Mean-scaled replacement,25,1.0,1.0
+MSDM,1,0,4,Flatten to mean,31,1.0,1.0
+MSDM,1,0,5,Time reversal,36,1.0,0.9444444444444444
+MSDM,1,1,0,Multiplicative scaling,42,0.07142857142857142,0.0
+MSDM,1,1,1,Per-step random scaling,30,0.9666666666666667,0.9
+MSDM,1,1,2,Intermittent zeroing,25,1.0,1.0
+MSDM,1,1,3,Mean-scaled replacement,26,1.0,1.0
+MSDM,1,1,4,Flatten to mean,30,1.0,1.0
+MSDM,1,1,5,Time reversal,19,0.8947368421052632,0.8947368421052632
+MSDM,1,2,0,Multiplicative scaling,30,0.06666666666666667,0.03333333333333333
+MSDM,1,2,1,Per-step random scaling,25,0.96,0.96
+MSDM,1,2,2,Intermittent zeroing,28,1.0,1.0
+MSDM,1,2,3,Mean-scaled replacement,27,1.0,1.0
+MSDM,1,2,4,Flatten to mean,30,1.0,1.0
+MSDM,1,2,5,Time reversal,30,0.9666666666666667,0.9666666666666667
+MSDM,2,0,0,Multiplicative scaling,28,0.03571428571428571,0.0
+MSDM,2,0,1,Per-step random scaling,26,1.0,1.0
+MSDM,2,0,2,Intermittent zeroing,29,1.0,1.0
+MSDM,2,0,3,Mean-scaled replacement,25,1.0,1.0
+MSDM,2,0,4,Flatten to mean,31,1.0,1.0
+MSDM,2,0,5,Time reversal,36,0.9722222222222222,0.9166666666666666
+MSDM,2,1,0,Multiplicative scaling,42,0.09523809523809523,0.047619047619047616
+MSDM,2,1,1,Per-step random scaling,30,0.9333333333333333,0.9
+MSDM,2,1,2,Intermittent zeroing,25,1.0,1.0
+MSDM,2,1,3,Mean-scaled replacement,26,1.0,1.0
+MSDM,2,1,4,Flatten to mean,30,1.0,1.0
+MSDM,2,1,5,Time reversal,19,0.9473684210526315,0.9473684210526315
+MSDM,2,2,0,Multiplicative scaling,30,0.06666666666666667,0.03333333333333333
+MSDM,2,2,1,Per-step random scaling,25,1.0,0.96
+MSDM,2,2,2,Intermittent zeroing,28,1.0,1.0
+MSDM,2,2,3,Mean-scaled replacement,27,1.0,1.0
+MSDM,2,2,4,Flatten to mean,30,1.0,1.0
+MSDM,2,2,5,Time reversal,30,0.9666666666666667,0.9666666666666667
