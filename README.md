@@ -25,7 +25,7 @@ Electricity theft detection (ETD) models frequently report over-optimistic perfo
    - Branch 3: Missingness-mask 2-D multi-scale Laplacian CNN ($\mathbb{R}^{30}$)
    - Branch 4: Fixed causal multi-scale lagged differencing 1-D CNN ($s \in \{1, 7, 30\}$, $\mathbb{R}^{32}$)
    - Branch 5: Multi-scale inter- and intra-period dilated 1-D CNN (IIPC, $\mathbb{R}^{32}$) alongside context-conditioned missing-value fill tokens (`CC-NaME`)
-3. **Group-Conditional (Mondrian) Conformal Audit Layer**: A post-hoc, distribution-free, class-conditional conformal prediction framework using the exact order statistic $k_\phi = \lceil(n_\phi + 1)(1 - \alpha)\rceil$ to target a common $1 - \alpha = 80\%$ marginal theft recall lower bound within each consumption-level group ($\phi \in \{\text{Heavy, Light, Flat}\}$) under within-group exchangeability, reducing required inspection capacity by 25.3% (`95% BCa CI: [19.5%, 30.7%]`) relative to a single global minimax threshold satisfying the coverage target across all groups.
+3. **Group-Conditional (Mondrian) Conformal Audit Layer**: A post-hoc, distribution-free, class-conditional conformal prediction framework using the exact order statistic $k_\phi = \lceil(n_\phi + 1)(1 - \alpha)\rceil$ to target a common $1 - \alpha = 80\%$ marginal theft recall lower bound within each consumption-level group ($\phi \in \{\text{Heavy, Light, Flat}\}$) under within-group exchangeability, reducing required inspection capacity by 34.0% (`95% BCa CI: [28.8%, 39.4%]`) relative to a single global minimax threshold satisfying the coverage target across all groups.
 
 ---
 
@@ -252,15 +252,15 @@ Every result reported in the manuscript is traceable to its corresponding config
 
 | Manuscript Artifact | Description | Configuration / Hyperparameters | Executing Script | Verified Output File (`results/phase_n_retrained/`) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Table 2** | Data Partitioning Ledger | `configs/default.yaml`; 5-fold stratified split (`seed=42`); customer-disjoint IDs | `scripts/compute_r2_revisions.py` | `r2_audit/conformal_eligibility_ledger.csv` |
+| **Table 2** | Data Partitioning Ledger | `configs/default.yaml`; 5-fold stratified split (`seed=42`); customer-disjoint IDs | `scripts/compute_r2_revisions.py` | `r2_audit/sgcc_fold_counts.csv`, `r2_audit/ecl_fold_counts.csv` |
 | **Table 3** | Protocol-Matched Main Results | AdamW ($\text{lr}=3\times 10^{-4}$, $\text{wd}=10^{-4}$, $\text{bs}=128$, 30 ep); Seeds 0–4 $\times$ Folds 0–2 (15 cells) for MAMRD; Seeds 0–2 $\times$ Folds 0–2 (9 cells) for Baselines | `scripts/compute_table_b.py` | `tableB/tableB_recalculated.csv` |
 | **Table 4** | Fixed FPR Budgets ($1\%, 5\%$) | Prospective threshold transfer from $\mathcal{D}_{\text{cal}}$; evaluated at $\text{FPR} \in \{0.01, 0.05\}$ across 9 test cells | `scripts/compute_table_c.py` | `tableC/tableC_recalculated.csv` |
 | **Table 5** | Architectural Ablation Suite | Seeds 0–2 $\times$ Folds 0–2 ($M=9$ matched cells); $\mathcal{A}_{34,\text{no-miss}}$ (`use_mask=False, use_cc=False`); BCa bootstrap ($B=2{,}000$) | `scripts/compute_r2_revisions.py` | `r2_audit/table_ablation_provenance.csv` |
 | **Table 6** | Mondrian Conformal Policies | Marginal target $1-\alpha = 0.80$; exact order stat $k_\phi = \lceil(n_\phi+1)(1-\alpha)\rceil$; 20 stratified 50/50 resplits | `scripts/run_trust_layer.py` | `trust/audit_policies_sgcc.csv` |
-| **Figure 2** | Test PR and ROC Curves | 100-point uniform grid interpolation over held-out test predictions; mean $\pm 1\,\sigma$ ribbon | `scripts/make_manuscript_figures.py` | `figures/fig2_performance_curves.pdf` |
+| **Figure 2** | Test PR and ROC Curves | 200-point uniform grid interpolation over held-out test predictions; mean $\pm 1\,\sigma$ ribbon | `scripts/make_manuscript_figures.py` | `figures/fig2_performance_curves.pdf` |
 | **Figure 3** | Sequential / Subtractive Ablation | Step additions $\mathcal{S}_0 \to \mathcal{S}_4$ & paired drop contrasts ($\Delta\text{AP}$ with 95% BCa intervals) | `scripts/make_manuscript_figures.py` | `figures/fig3_ablation_bars.pdf` |
 | **Figure 4** | Probability Calibration & ECE | Alternating split ($\mathcal{I}_{\text{cal}} / \mathcal{I}_{\text{eval}}$); 10 equal-width bins; $L_2$-logistic fit ($C=10^4$) | `scripts/make_manuscript_figures.py` | `figures/fig4_calibration_reliability.pdf` |
-| **Figure 5** | Conformal Workload Reduction | Group routing ($\tau_f = 0.0138, \mu^+ = 5.86, \mu^- = 7.31$); evaluated across valid cells ($n_\phi \ge 10$) | `scripts/make_manuscript_figures.py` | `figures/fig5_conformal_tradeoffs.pdf` |
+| **Figure 5** | Conformal Workload Reduction | Group routing ($\tau_f = 0.0138, \mu^+ = 5.86, \mu^- = 7.31$); evaluated across all 285 valid calibration/evaluation resplits ($n_\phi \ge 5$, $n_{\min}=4$) | `scripts/make_manuscript_figures.py` | `figures/fig5_conformal_tradeoffs.pdf` |
 
 ---
 
