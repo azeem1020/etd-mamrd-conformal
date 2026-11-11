@@ -52,6 +52,12 @@ from zkmix_lab.data import KFoldSpec
 from run_local_grid import load_and_preprocess, _stratified_three_way_split
 from phased.phenotype import gap_magnitude, fit_router, assign
 from msdm.fdi import ATTACKS
+from conformal_common import NREP, resplit_rng, n_min as conformal_n_min
+
+# Conformal resplits: exactly those of run_decision_value.py (Table 6) -- arm index and
+# seed set per detector, same RNG (conformal_common.resplit_rng). Only labels are needed.
+CONF_ARMS = [(0, range(5))] + [(i, range(3)) for i in range(1, 7)]
+CONF_RESPLITS = []   # one dict per (arm, seed, fold, rep): calibration positives per group
 
 RES = RESULTS_DIR
 OUT_R2 = RES / "r2_audit"
@@ -165,23 +171,28 @@ if SGCC_PATH.exists():
                     "phenotype_5": ph_all[idx],
                 })
 
-        # Conformal 50/50 resplits on te (matching run_trust_layer.py / run_empirical_comparator.py)
+        # Conformal 50/50 resplits on te: the 1,380 resplits used for Table 6 / Fig. 5
+        # (7 detectors x seed-fold cells x 20), regenerated from labels via conformal_common.
         ci_counts = defaultdict(list)
         ti_counts = defaultdict(list)
         yt = y_all[te]
         gt = grp_all[te]
-        for rep in range(20):
-            rng = np.random.default_rng(3817 + 0 * 97 + f * 7 + rep)
-            ci, ti = stratified_half(yt, rng)
-            ci_counts["total"].append(len(ci))
-            ci_counts["pos"].append(int(yt[ci].sum()))
-            ti_counts["total"].append(len(ti))
-            ti_counts["pos"].append(int(yt[ti].sum()))
-            for gname in ("Heavy", "Light", "Flat"):
-                ci_counts[f"{gname}_tot"].append(int((gt[ci] == gname).sum()))
-                ci_counts[f"{gname}_pos"].append(int(((gt[ci] == gname) & (yt[ci] == 1)).sum()))
-                ti_counts[f"{gname}_tot"].append(int((gt[ti] == gname).sum()))
-                ti_counts[f"{gname}_pos"].append(int(((gt[ti] == gname) & (yt[ti] == 1)).sum()))
+        for arm_idx, seeds in CONF_ARMS:
+            for s in seeds:
+                for rep in range(NREP):
+                    ci, ti = stratified_half(yt, resplit_rng(arm_idx, s, f, rep))
+                    ci_counts["total"].append(len(ci))
+                    ci_counts["pos"].append(int(yt[ci].sum()))
+                    ti_counts["total"].append(len(ti))
+                    ti_counts["pos"].append(int(yt[ti].sum()))
+                    row = dict(arm_index=arm_idx, seed=s, fold=f, rep=rep)
+                    for gname in ("Heavy", "Light", "Flat"):
+                        ci_counts[f"{gname}_tot"].append(int((gt[ci] == gname).sum()))
+                        ci_counts[f"{gname}_pos"].append(int(((gt[ci] == gname) & (yt[ci] == 1)).sum()))
+                        ti_counts[f"{gname}_tot"].append(int((gt[ti] == gname).sum()))
+                        ti_counts[f"{gname}_pos"].append(int(((gt[ti] == gname) & (yt[ti] == 1)).sum()))
+                        row[f"{gname}_pos"] = ci_counts[f"{gname}_pos"][-1]
+                    CONF_RESPLITS.append(row)
 
         st_row = {
             "fold": f,
@@ -683,42 +694,38 @@ for arm, disp in [("grud", "GRU-D"), ("hybridattn", "Self-Attn"), ("wdcnn", "WDC
           f"(Prosp: Rec={np.mean(prosp_rec5):.3f} FPR={np.mean(prosp_fpr5):.2f}% Insp={np.mean(prosp_insp5):.2f}%)")
 
 print("\n=====================================================================")
-print("8. CONFORMAL FINITE-SAMPLE ELIGIBILITY LEDGER & FALLBACK ANALYSIS")
+print("8. CONFORMAL FINITE-SAMPLE ELIGIBILITY LEDGER (per resplit)")
 print("=====================================================================")
-# Reviewer 2 Point 6: Target recall level is justified under exchangeability;
-# finite-sample validity requires n_cal >= ceil((1-alpha)/alpha).
-# Report proportion of evaluation cells/groups satisfying this requirement and fallback policy.
+# Reviewer 2 Comment 6: share of calibration/evaluation resplits in which each group has
+# n_cal >= ceil((1-alpha)/alpha), i.e. a finite order statistic k = ceil((n+1)(1-alpha)) <= n.
+# Computed on the 1,380 resplits used for Table 6. No resplit is excluded: when n_cal is
+# below n_min, the whole group is inspected (q_hat = 0; conformal_common.cc_recall_threshold).
+df_conf = pd.DataFrame(CONF_RESPLITS)
+if df_conf.empty:   # raw SGCC absent: use the released per-resplit records of Table 6
+    _rs = pd.read_csv(RES / "trust" / "decision_value_sgcc_resplits.csv")
+    _rs = _rs[np.isclose(_rs["guarantee"], 0.80)]
+    df_conf = pd.DataFrame({"Heavy_pos": _rs["ncal_high"].values, "Light_pos": _rs["ncal_low"].values,
+                            "Flat_pos": _rs["ncal_flat"].values})
 eligibility_rows = []
-for alpha in (0.05, 0.10, 0.20):
-    n_min = int(np.ceil((1.0 - alpha) / alpha))
-    for gname in ("Heavy", "Light", "Flat", "Overall"):
-        # Aggregate positive counts across the 3 folds
-        if "df_fstats" in locals() and df_fstats is not None and not df_fstats.empty:
-            if gname == "Overall":
-                pos_vals = df_fstats["conf_cal_pos_mean"].values
-            else:
-                pos_vals = df_fstats[f"conf_cal_{gname}_pos_mean"].values
-        else:
-            pos_vals = np.array([50, 50, 50]) if gname != "Flat" else np.array([12, 14, 11])
-        
-        pct_eligible = float((pos_vals >= n_min).mean()) * 100.0
-        k_exact = np.ceil((pos_vals + 1) * (1.0 - alpha)).astype(int)
-        rank_cov = np.clip(k_exact / (pos_vals + 1), 0.0, 1.0)
+for alpha in (0.20, 0.10, 0.05):
+    nmin = conformal_n_min(alpha)
+    for gname in ("Heavy", "Light", "Flat"):
+        v = df_conf[f"{gname}_pos"]
+        share = float((v >= nmin).mean()) * 100.0
         eligibility_rows.append({
-            "target_coverage": 1.0 - alpha,
+            "target_coverage": round(1.0 - alpha, 2),
             "alpha": alpha,
-            "n_min_required": n_min,
+            "n_min_required": nmin,
             "group": gname,
-            "n_pos_mean": float(pos_vals.mean()),
-            "n_pos_min": float(pos_vals.min()),
-            "pct_eligible_cells": pct_eligible,
-            "mean_finite_rank_k": float(k_exact.mean()),
-            "theoretical_coverage": float(rank_cov.mean()),
-            "fallback_policy": "Direct Group Conformal" if pct_eligible == 100.0 else "Pooled Macro-Group Fallback"
+            "n_resplits": int(len(v)),
+            "n_pos_mean": float(v.mean()),
+            "n_pos_min": int(v.min()),
+            "n_pos_max": int(v.max()),
+            "pct_resplits_finite_threshold": share,
+            "rule_when_below_n_min": "-" if share == 100.0 else "whole group inspected (q_hat = 0)",
         })
-
 df_elig = pd.DataFrame(eligibility_rows)
 df_elig.to_csv(OUT_R2 / "conformal_eligibility_ledger.csv", index=False)
-print(df_elig[["target_coverage", "group", "n_min_required", "n_pos_mean", "pct_eligible_cells", "fallback_policy"]].to_string(index=False))
+print(df_elig.to_string(index=False))
 
 

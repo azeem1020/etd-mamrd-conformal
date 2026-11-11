@@ -5,7 +5,7 @@ experiment:
   name: mamrd_ecl_benchmark
   benchmark: ECL
   data_path: data/LD2011_2014.txt
-  output_dir: results/phase_n/ecl
+  output_dir: results/phase_n_retrained/ecl_trust
   seed_discipline: [0, 1, 2]
   fold_discipline: [0, 1, 2]
 

@@ -25,7 +25,7 @@ Electricity theft detection (ETD) models frequently report over-optimistic perfo
    - Branch 3: Missingness-mask 2-D multi-scale Laplacian CNN ($\mathbb{R}^{30}$)
    - Branch 4: Fixed causal multi-scale lagged differencing 1-D CNN ($s \in \{1, 7, 30\}$, $\mathbb{R}^{32}$)
    - Branch 5: Multi-scale inter- and intra-period dilated 1-D CNN (IIPC, $\mathbb{R}^{32}$) alongside context-conditioned missing-value fill tokens (`CC-NaME`)
-3. **Group-Conditional (Mondrian) Conformal Audit Layer**: A post-hoc, distribution-free, class-conditional conformal prediction framework using the exact order statistic $k_\phi = \lceil(n_\phi + 1)(1 - \alpha)\rceil$ to target a common $1 - \alpha = 80\%$ marginal theft recall lower bound within each consumption-level group ($\phi \in \{\text{Heavy, Light, Flat}\}$) under within-group exchangeability, reducing required inspection capacity by 34.0% (`95% BCa CI: [28.8%, 39.4%]`) relative to a single global minimax threshold satisfying the coverage target across all groups.
+3. **Group-Conditional (Mondrian) Conformal Audit Layer**: A post-hoc, distribution-free, class-conditional conformal prediction framework using the exact order statistic $k_\phi = \lceil(n_\phi + 1)(1 - \alpha)\rceil$ to target a common $1 - \alpha = 80\%$ marginal theft recall lower bound within each consumption-level group ($\phi \in \{\text{Heavy, Light, Flat}\}$) under within-group exchangeability, reducing the inspected share of consumers from 49.1% to 28.6% (a 35.5% relative workload reduction, 95% BCa interval over seed–fold cells [30.2%, 40.4%]) relative to a single global minimax threshold satisfying the coverage target across all groups. Every calibration/evaluation resplit is used; a group with too few calibration thefts for a finite order statistic is inspected in full and that cost is counted (see Section 6).
 
 ---
 
@@ -76,11 +76,16 @@ etd-mamrd-conformal/
 │   ├── conformal_aps.py               #   Class-conditional Adaptive Prediction Sets
 │   └── temperature.py                 #   Affine logit recalibration & temperature scaling
 │
-├── results/phase_n/                   # Precomputed evaluation records and CSVs
-│   ├── tableA/                        #   Precomputed Table A records
-│   ├── tableB/                        #   Precomputed Table B records
-│   ├── tableC/                        #   Precomputed Table C records
-│   └── trust/                         #   Precomputed conformal audit & comparator CSVs
+├── results/phase_n_retrained/          # All reported results (retrained on chronologically ordered SGCC)
+│   ├── a34_cell_*.csv, baselines/, bu/  #   Cached prediction-level records per seed-fold cell
+│   ├── tableB/, tableC/                 #   Tables 3 and 4
+│   ├── r2_audit/                        #   Tables 2 and 5, partition manifests, eligibility ledger
+│   ├── trust/                           #   Table 6, Fig. 5, Supp. Fig. S4 (conformal audit) CSVs
+│   ├── ecl_trust/                       #   ECL cached predictions and Supp. Table S6
+│   ├── figures/                         #   Regenerated main and supplementary figures
+│   └── logs/                            #   Console logs of the runs that produced the outputs
+├── results/_archive_phase_n_pre_retrain/ # Superseded pre-retrain results, kept for audit only
+├── partition_manifests/               # Customer/window split manifests + standalone verifier
 │
 └── data/                              # Data documentation (raw datasets not shipped)
     └── README.md                      # Instructions to obtain public SGCC & ECL corpora
@@ -142,16 +147,25 @@ export MAMRD_RESULTS=../results/phase_n_retrained
 ## 5. Running Experiments & Generating Paper Artifacts
 
 To support transparent peer review and independent replication, the repository implements an explicit two-tier replication architecture:
-- **Tier 1 (Fast Audit & Verification Suite, < 60 seconds on CPU)**: Re-computes all statistical metrics, generates bootstrap confidence intervals ($B=1{,}000$ for customer-clustered CIs, $B=2{,}000$ for paired ablations), verifies customer-disjoint partition manifests, and compiles all empirical publication figures (Figures 2, 3, 4, 5) directly from verified prediction-level records.
+- **Tier 1 (Regeneration from cached predictions, about 2 minutes on a 16-core CPU, no GPU)**: Starting from the cached prediction-level records of every trained model, it verifies the customer-disjoint partition manifests, re-runs every analysis script (conformal audit, Tables 2–6, Supp. Table S6, bootstrap and ablation ledgers), and regenerates all data-driven main and supplementary figures. It does not retrain any model.
 - **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on GPU)**: Independently executes all 123 neural network training runs (cohort cleaning, 15 MAMRD cells, 54 ablation cells, 54 baseline cells, ECL runs, conformal calibration, and post-processing) from raw CSV data using GPU acceleration.
 
 ---
 
-### Tier 1: Fast Master Reproduction Suite (< 60 Seconds)
-To verify partition manifests, compute Tables 2, 3, 4, 5, 6, and compile all empirical publication figures (Figures 2–5) without requiring model retraining:
+### Tier 1: Master Reproduction Suite from Cached Predictions (about 2 minutes)
+To regenerate every table (Tables 2–6, Supp. Table S6) and every data-driven figure (Figures 2–5, supplementary figures) from the cached predictions without retraining; the script runs the steps below in order and stops at the first failure:
 ```bash
 python scripts/reproduce_all_r2.py --config configs/default.yaml
 ```
+| Step | Script(s) | Outputs (`results/phase_n_retrained/`) |
+| :--- | :--- | :--- |
+| 1 | `verify_partition_manifests.py` | disjointness check of `partition_manifests/` |
+| 2 | `run_decision_value.py`, `run_empirical_comparator.py`, `run_trust_layer.py`, `run_ecl_trust_analysis.py` | `trust/`, `ecl_trust/RESULTS_ECL_TRUST.md` (Table 6, Fig. 5, Fig. 4b CSV, Supp. Fig. S4, Supp. Table S6) |
+| 3 | `compute_table_b.py`, `compute_table_c.py` | `tableB/`, `tableC/` (Tables 3, 4) |
+| 4 | `compute_r2_revisions.py` | `r2_audit/` (Tables 2, 5; conformal eligibility ledger) |
+| 5 | `make_manuscript_figures.py`, `make_trust_figure.py`, `make_figures.py` | `figures/` |
+
+Re-running Tier 1 on the released records reproduces every CSV/Markdown output byte-for-byte; console logs of the reference run are in `results/phase_n_retrained/logs/`.
 *Note: Figure 1 (MAMRD Architectural Framework) is the conceptual schematic compiled from TikZ (`submission_package/figures/fig0_architecture_src.tex`). Figure 2 (Precision-Recall and ROC curves) is dynamically interpolated and rendered by `make_manuscript_figures.py` as part of this routine.*
 
 ---
@@ -254,8 +268,8 @@ Every result reported in the manuscript is traceable to its corresponding config
 | Manuscript Artifact | Description | Configuration / Hyperparameters | Executing Script | Verified Output File (`results/phase_n_retrained/`) |
 | :--- | :--- | :--- | :--- | :--- |
 | **Table 2** | Data Partitioning Ledger | `configs/default.yaml`; 5-fold stratified split (`seed=42`); customer-disjoint IDs | `scripts/compute_r2_revisions.py` | `r2_audit/sgcc_fold_counts.csv`, `r2_audit/ecl_fold_counts.csv` |
-| **Table 3** | Protocol-Matched Main Results | AdamW ($\text{lr}=3\times 10^{-4}$, $\text{wd}=10^{-4}$, $\text{bs}=128$, 30 ep); Seeds 0–4 $\times$ Folds 0–2 (15 cells) for MAMRD; Seeds 0–2 $\times$ Folds 0–2 (9 cells) for Baselines | `scripts/compute_table_b.py` | `tableB/tableB_recalculated.csv` |
-| **Table 4** | Fixed FPR Budgets ($1\%, 5\%$) | Prospective threshold transfer from $\mathcal{D}_{\text{cal}}$; evaluated at $\text{FPR} \in \{0.01, 0.05\}$ across 9 test cells | `scripts/compute_table_c.py` | `tableC/tableC_recalculated.csv` |
+| **Table 3** | Protocol-Matched Main Results | AdamW ($\text{lr}=3\times 10^{-4}$, $\text{wd}=10^{-4}$, $\text{bs}=128$, 30 ep); Seeds 0–4 $\times$ Folds 0–2 (15 cells) for MAMRD; Seeds 0–2 $\times$ Folds 0–2 (9 cells) for Baselines | `scripts/compute_table_b.py` | `tableB/tableB_agg.csv` |
+| **Table 4** | Fixed FPR Budgets ($1\%, 5\%$) | Prospective threshold transfer from $\mathcal{D}_{\text{cal}}$; evaluated at $\text{FPR} \in \{0.01, 0.05\}$ across 9 test cells | `scripts/compute_table_c.py` | `tableC/tableC_agg.csv` |
 | **Table 5** | Architectural Ablation Suite | Seeds 0–2 $\times$ Folds 0–2 ($M=9$ matched cells); $\mathcal{A}_{34,\text{no-miss}}$ (`use_mask=False, use_cc=False`); BCa bootstrap ($B=2{,}000$) | `scripts/compute_r2_revisions.py` | `r2_audit/table_ablation_provenance.csv` |
 | **Table 6** | Mondrian Conformal Audit (all six columns) | Target $1-\alpha = 0.80$; exact order stat $k_\phi = \lceil(n_\phi+1)(1-\alpha)\rceil$, $\hat q=+\infty$ (inspect whole group) when $k_\phi > n_\phi$; all 20 stratified 50/50 resplits per cell (300 MAMRD, 180 per baseline); cell-clustered BCa ($B=2{,}000$) | `scripts/run_decision_value.py` | `trust/decision_value_sgcc.csv`, `trust/decision_value_sgcc_resplits.csv` |
 | **Figure 2** | Test PR and ROC Curves | 200-point uniform grid interpolation over held-out test predictions; mean $\pm 1\,\sigma$ ribbon | `scripts/make_manuscript_figures.py` | `figures/fig2_performance_curves.pdf` |
@@ -267,7 +281,20 @@ Every result reported in the manuscript is traceable to its corresponding config
 
 ---
 
-## 6. Citation
+## 6. Conformal Audit Protocol (Table 6, Figure 5, Supp. Figure S4, Supp. Table S6)
+
+All conformal analyses import one module, `scripts/conformal_common.py`, so they use identical calibration/evaluation resplits and the same threshold rule.
+
+- **Resplits.** Each seed–fold test cohort is split 20 times into stratified 50/50 calibration/evaluation halves (`resplit_rng`): 300 resplits for MAMRD (15 cells) and 180 per baseline (9 cells). Every resplit is used; none is excluded.
+- **Threshold.** For a group with $n_\phi$ calibration thefts, the threshold is the order statistic $k_\phi = \lceil(n_\phi+1)(1-\alpha)\rceil$. If $k_\phi > n_\phi$ (i.e. $n_\phi < \lceil(1-\alpha)/\alpha\rceil$), the conformal quantile is infinite and every consumer of that group is inspected; the cost is included in the reported workload. At the 80 % target this happens only for the Flat group, in 2.0 % of resplits (`r2_audit/conformal_eligibility_ledger.csv`).
+- **Estimates and intervals.** Each quantity is averaged over the 20 resplits of a cell and then over cells. Intervals are BCa bootstrap intervals that resample seed–fold cells; because seeds within a fold share test consumers, they are descriptive.
+- **Audit trail.** `trust/decision_value_sgcc_resplits.csv` holds one row per resplit (calibration counts, whether the infinite-quantile rule applied, inspected shares, recall and precision per group); `trust/group_profile_sgcc.csv` holds the per-group theft and consumption shares quoted in the manuscript.
+
+**Corrections made in Revision 3 (commit history on GitHub).** (i) Earlier code discarded every resplit in which any group had fewer than 10 calibration thefts (66 of 300 MAMRD resplits retained); the manuscript described this as a pooled fallback, which was never implemented. The gate is removed as described above. (ii) The Hit Rate / Lift columns of Table 6 were previously transcribed by hand and the High-consumption column reported only the Heavy-Dropper subgroup; all six columns are now written by `run_decision_value.py`. (iii) `partition_manifests/` previously held a pre-retrain copy with the early-stopping and threshold-calibration thirds swapped; it now matches `r2_audit/` and the training code (`run_n_clean.py`). Test sets were unaffected. Superseded results are kept in `results/_archive_phase_n_pre_retrain/` and are not read by any script.
+
+---
+
+## 7. Citation
 
 If you use this codebase, benchmark protocols, or models in your research, please cite our manuscript:
 
@@ -284,6 +311,6 @@ If you use this codebase, benchmark protocols, or models in your research, pleas
 
 ---
 
-## 7. License
+## 8. License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

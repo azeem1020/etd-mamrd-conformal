@@ -1,0 +1,604 @@
+===========================================================================
+MAMRD ROUND-2 UNIFIED REPRODUCTION SUITE
+Repository Root: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated
+Active Configuration: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/configs/default.yaml
+===========================================================================
+  Training Optimizer: AdamW (lr=0.0003, weight_decay=0.0001)
+  Batch Size: 128 (eval: 256) | Epochs: 30
+  Model Architecture: a34_generic (975076 params)
+  Grid Shapes: SGCC [147, 7] | ECL [7, 48]
+
+===========================================================================
+>> RUNNING STEP: 0. Chronological Dataset Alignment & Date Audit
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/prepare_sgcc_dataset.py
+===========================================================================
+===========================================================================
+SGCC DATASET CHRONOLOGICAL PREPARATION & AUDIT
+Target Destination: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv
+===========================================================================
+[OK] Target file /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv is already chronologically ordered,
+     fully continuous (1,035 days: 2014-01-01 -> 2016-10-31),
+     and 2016-09-18 is present. Skipping re-generation.
+===========================================================================
+
+[PASS] 0. Chronological Dataset Alignment & Date Audit completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 1. Partition Manifest & Disjointness Audit (Table 2)
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/verify_partition_manifests.py
+===========================================================================
+======================================================================
+MAMRD PARTITION DISJOINTNESS & TABLE 2 RECONCILIATION AUDIT
+======================================================================
+Using manifest directory: /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/partition_manifests
+
+[1/2] Auditing SGCC Partition Manifest: sgcc_partition_manifest.csv
+======================================================================
+Total manifest rows read: 127116 (Expected 127,116 across 3 folds)
+
+Fold 0: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Pairwise customer overlap: 0 across all 6 pairs (100% customer-disjoint)
+  Test Positives: 254 (Heavy=156, Light=81, Flat=17)
+
+Fold 1: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Pairwise customer overlap: 0 across all 6 pairs (100% customer-disjoint)
+  Test Positives: 230 (Heavy=133, Light=79, Flat=18)
+
+Fold 2: Total customers = 42372 (Train=33898, ES=2795, Cal=2795, Test=2884)
+  [OK] Pairwise customer overlap: 0 across all 6 pairs (100% customer-disjoint)
+  Test Positives: 249 (Heavy=155, Light=81, Flat=13)
+
+SGCC Mean Counts Across Folds 0--2 (Reconciling Table 2):
+  Training (D_train):     33897.3 total | 2900.7 pos (8.56%)
+  Early-Stopping (D_es):  2795.0 total | 235.0 pos (8.41%)
+  Threshold-Cal (D_cal):  2795.0 total | 235.0 pos (8.41%)
+  Held-Out Test (D_test): 2884.7 total | 244.3 pos (8.47%)
+    -> Test Positives Breakdown: Heavy=148.0, Light=80.3, Flat=16.0
+
+[2/2] Auditing ECL Partition Manifest: ecl_partition_manifest.csv
+======================================================================
+Total manifest rows read: 75000 (Expected 75,000 across 3 folds)
+
+Fold 0: Total windows = 25000 (Train=20000, ES=1649, Cal=1649, Test=1702)
+  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)
+  Client Overlap: 370 train clients, 360 test clients -> 360 shared (100.0% of test clients in train; demonstrating window-level evaluation)
+
+Fold 1: Total windows = 25000 (Train=20000, ES=1649, Cal=1649, Test=1702)
+  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)
+  Client Overlap: 370 train clients, 354 test clients -> 354 shared (100.0% of test clients in train; demonstrating window-level evaluation)
+
+Fold 2: Total windows = 25000 (Train=20000, ES=1650, Cal=1650, Test=1700)
+  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)
+  Client Overlap: 370 train clients, 363 test clients -> 363 shared (100.0% of test clients in train; demonstrating window-level evaluation)
+
+ECL Mean Counts Across Folds 0--2 (Reconciling Table 2):
+  Training (D_train):     20000.0 total | 1995.7 pos (9.98%)
+  Early-Stopping (D_es):  1649.3 total | 166.0 pos (10.06%)
+  Reserved Cal (D_cal):   1649.3 total | 166.0 pos (10.06%)
+  Held-Out Test (D_test): 1701.3 total | 172.3 pos (10.13%)
+
+======================================================================
+[PASS] ALL PARTITIONS 100% DISJOINT ACROSS ALL FOLDS (EXIT 0)
+======================================================================
+[PASS] 1. Partition Manifest & Disjointness Audit (Table 2) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 2a. Conformal decision value: all six Table 6 columns + Fig. 5b
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_decision_value.py
+===========================================================================
+[load] SGCC ...
+[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[base rates] high=0.1231, low=0.0678, flat=0.0322
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_decision_value.py:118: RuntimeWarning: Mean of empty slice
+  daily = np.nanmean(raw, axis=1)
+[group profile]
+group  theft_cases  theft_case_share  theft_kwh_share  theft_median_daily_kwh  all_median_daily_kwh
+ high          444          0.605730         0.962247               14.470934             11.296815
+  low          241          0.328786         0.029540                3.775034              3.476284
+ flat           48          0.065484         0.008214                2.604258              0.084888
+  a34_NaME   1-a=0.80 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 28.6% single= 49.1% red= 35.5% [30.2,40.4] | hit H/F= 39.2/ 7.8% lift H/F=3.19/2.44 | recall H/L/F=0.813/0.808/0.838
+  a34_NaME   1-a=0.90 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/0.56 | inspect cond= 49.1% single= 83.4% red= 37.2% [32.2,41.2] | hit H/F= 25.0/ 4.3% lift H/F=2.03/1.33 | recall H/L/F=0.909/0.907/0.958
+  a34_NaME   1-a=0.95 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 67.4% single=100.0% red= 32.6% [29.4,35.8] | hit H/F= 19.4/ 3.2% lift H/F=1.57/0.98 | recall H/L/F=0.959/0.956/1.000
+  HORLN      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 31.6% single= 45.9% red= 26.3% [18.4,33.9] | hit H/F= 32.5/ 8.5% lift H/F=2.64/2.65 | recall H/L/F=0.807/0.803/0.840
+  HORLN      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.62 | inspect cond= 54.0% single= 85.9% red= 34.1% [29.6,38.4] | hit H/F= 23.1/ 4.7% lift H/F=1.87/1.46 | recall H/L/F=0.910/0.912/0.966
+  HORLN      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 76.5% single=100.0% red= 23.5% [17.0,26.5] | hit H/F= 18.1/ 3.3% lift H/F=1.47/1.01 | recall H/L/F=0.958/0.965/1.000
+  MSDM       1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 43.8% single= 64.8% red= 28.2% [21.6,34.2] | hit H/F= 25.3/ 5.4% lift H/F=2.06/1.67 | recall H/L/F=0.797/0.812/0.876
+  MSDM       1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.55 | inspect cond= 64.2% single= 88.4% red= 25.7% [20.0,31.2] | hit H/F= 18.7/ 4.0% lift H/F=1.52/1.25 | recall H/L/F=0.896/0.909/0.968
+  MSDM       1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 80.5% single=100.0% red= 19.5% [17.6,22.0] | hit H/F= 15.4/ 3.1% lift H/F=1.25/0.95 | recall H/L/F=0.950/0.958/1.000
+  WDCNN      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 45.2% single= 63.2% red= 26.5% [22.1,31.5] | hit H/F= 24.2/ 6.0% lift H/F=1.97/1.87 | recall H/L/F=0.813/0.809/0.865
+  WDCNN      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.58 | inspect cond= 65.6% single= 90.7% red= 26.6% [24.1,29.2] | hit H/F= 19.2/ 3.9% lift H/F=1.56/1.21 | recall H/L/F=0.906/0.910/0.963
+  WDCNN      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 78.8% single=100.0% red= 21.2% [20.3,22.5] | hit H/F= 16.6/ 3.2% lift H/F=1.35/1.01 | recall H/L/F=0.958/0.963/1.000
+  GRU-D      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.01 | inspect cond= 66.7% single= 86.0% red= 21.7% [19.4,24.4] | hit H/F= 15.2/ 3.7% lift H/F=1.23/1.14 | recall H/L/F=0.811/0.807/0.851
+  GRU-D      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 84.0% single= 97.6% red= 13.8% [12.3,15.0] | hit H/F= 13.6/ 3.2% lift H/F=1.10/1.00 | recall H/L/F=0.911/0.910/0.962
+  GRU-D      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 92.7% single=100.0% red=  7.3% [6.4,8.1] | hit H/F= 12.8/ 3.2% lift H/F=1.04/0.99 | recall H/L/F=0.954/0.956/1.000
+  HybridAttn 1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 33.5% single= 48.7% red= 26.2% [18.4,33.5] | hit H/F= 31.0/ 8.0% lift H/F=2.52/2.50 | recall H/L/F=0.801/0.803/0.852
+  HybridAttn 1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 56.0% single= 84.9% red= 31.3% [27.6,35.3] | hit H/F= 22.3/ 4.5% lift H/F=1.81/1.39 | recall H/L/F=0.901/0.910/0.968
+  HybridAttn 1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 73.7% single=100.0% red= 26.3% [23.2,29.2] | hit H/F= 18.5/ 3.2% lift H/F=1.50/0.99 | recall H/L/F=0.954/0.958/1.000
+  DKGT       1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.03 | inspect cond= 51.6% single= 70.6% red= 25.3% [22.8,29.6] | hit H/F= 22.7/ 4.3% lift H/F=1.85/1.33 | recall H/L/F=0.808/0.813/0.872
+  DKGT       1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 70.7% single= 91.7% red= 21.9% [19.2,24.8] | hit H/F= 18.0/ 3.3% lift H/F=1.46/1.04 | recall H/L/F=0.913/0.915/0.966
+  DKGT       1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 83.7% single=100.0% red= 16.3% [14.6,18.3] | hit H/F= 15.6/ 3.2% lift H/F=1.27/0.98 | recall H/L/F=0.960/0.957/1.000
+
+[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/decision_value_sgcc.csv and decision_value_sgcc_resplits.csv
+[PASS] 2a. Conformal decision value: all six Table 6 columns + Fig. 5b completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 2b. Empirical-quantile vs conformal comparator (Fig. 5a)
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_empirical_comparator.py
+===========================================================================
+[running] Empirical Comparator Benchmark on MAMRD...
+[load] SGCC ...
+[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[done] Saved to /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/empirical_comparator_sgcc.csv
+        arm  n_resplits  conf_flat_trivial_pct  conf_inspected_mean  conf_inspected_lo  conf_inspected_hi  emp_inspected_mean  emp_inspected_lo  emp_inspected_hi  conf_rec_flat_mean  emp_rec_flat_mean  conf_flat_viol_pct  emp_flat_viol_pct  conf_rec_heavy_mean  emp_rec_heavy_mean  conf_rec_light_mean  emp_rec_light_mean  conf_rec_overall_mean  emp_rec_overall_mean  n_flat_eval_resplits
+0  a34_NaME         300                    2.0              0.28644           0.191927           0.401317            0.235426          0.169716          0.318815            0.837658           0.722452           32.333333               56.0             0.812595            0.798848             0.808382            0.781926               0.812833              0.787723                   300
+[PASS] 2b. Empirical-quantile vs conformal comparator (Fig. 5a) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 2c. SGCC trust layer: calibration, per-stratum conformal lift (Fig. 4b, Supp. Fig. S4)
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_trust_layer.py
+===========================================================================
+[load] SGCC ...
+[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[arm] a34_NaME
+[arm] HORLN
+[arm] MSDM
+[arm] WDCNN
+[arm] GRU-D
+[arm] HybridAttn
+[arm] DKGT
+# RESULTS_TRUST — SGCC trustworthy layer (post-hoc, NREP=20)
+
+Pre-reg: PLAN_TRUST_2026-06-02.md. Conformal: split-APS within each
+held-out fold (stratified calib/test), 20 repeats averaged per cell.
+Cells: a34 n=15 (seeds0-4xfolds0-2); baselines n=9 (seeds0-2xfolds0-2).
+
+## T1 Calibration (prior-shift + temperature scaling & 2-param affine recalibration)
+| arm | T | ECE raw | ECE prior+T | ECE affine | Brier raw | Brier prior+T | Brier affine |
+|---|---|---|---|---|---|---|---|
+| a34_NaME | 1.43 | 0.117 | 0.019 | 0.018 | 0.089 | 0.050 | 0.050 |
+| HORLN | 2.50 | 0.078 | 0.032 | 0.020 | 0.079 | 0.056 | 0.055 |
+| MSDM | 1.73 | 0.104 | 0.021 | 0.018 | 0.094 | 0.063 | 0.063 |
+| WDCNN | 1.11 | 0.249 | 0.019 | 0.019 | 0.155 | 0.066 | 0.066 |
+| GRU-D | 1.00 | 0.378 | 0.022 | 0.023 | 0.221 | 0.074 | 0.074 |
+| HybridAttn | 1.81 | 0.110 | 0.032 | 0.021 | 0.094 | 0.058 | 0.056 |
+| DKGT | 1.12 | 0.267 | 0.027 | 0.019 | 0.174 | 0.070 | 0.069 |
+
+## T2 Marginal APS is degenerate under ETD imbalance (motivating result)
+Marginal APS hits 1-alpha coverage trivially by abstaining ({both}) for
+almost every consumer (prevalence ~8.5%). Coverage is met; the set is
+uninformative. This motivates the class-conditional guarantee in T3.
+| arm | cov a=0.10 | abstain-rate a=0.10 | cov a=0.20 | abstain a=0.20 |
+|---|---|---|---|---|
+| a34_NaME | 1.000 | 1.000 | 0.802 | 0.000 |
+| HORLN | 0.961 | 0.589 | 0.898 | 0.000 |
+| MSDM | 1.000 | 1.000 | 0.808 | 0.039 |
+| WDCNN | 1.000 | 1.000 | 0.999 | 0.994 |
+| GRU-D | 1.000 | 1.000 | 1.000 | 1.000 |
+| HybridAttn | 0.999 | 0.994 | 0.801 | 0.000 |
+| DKGT | 1.000 | 1.000 | 1.000 | 1.000 |
+
+## T3 Magnitude-conditional audit efficiency under a conformal catch-rate guarantee — THE FINDING
+Class-conditional (Mondrian) conformal guarantees per-stratum theft recall 1-alpha.
+Reported as LIFT = precision / stratum base-rate (=efficiency over random auditing),
+which controls the per-stratum prevalence confound (Heavy 12.3%, Light 6.8%, Flat 3.2%).
+All 20 resplits per cell are used (no eligibility gate); a stratum with too few
+calibration thefts for the order statistic gets q_hat=+inf (all members flagged).
+MAMRD (a34_NaME) per-stratum lift by guarantee level:
+| guarantee 1-a | lift Heavy | lift Light | lift Flat |
+|---|---|---|---|
+| 0.80 | 3.19 | 3.40 | 2.44 |
+| 0.90 | 2.03 | 2.40 | 1.33 |
+| 0.95 | 1.57 | 1.72 | 0.98 |
+
+## T3b Per-arm precision-lift gap, Heavy vs Flat @ 80% guarantee (universality)
+Positive gap = audits are more efficient (relative to base rate) in Heavy than in Flat.
+| arm | lift Heavy | lift Flat | Heavy-Flat lift gap [BCa 95%] |
+|---|---|---|---|
+| a34_NaME | 3.19 | 2.44 | +0.75 [+0.01,+1.43] |
+| HORLN | 2.64 | 2.66 | -0.02 [-1.05,+0.90] |
+| MSDM | 2.06 | 1.67 | +0.39 [-0.10,+0.89] |
+| WDCNN | 1.97 | 1.87 | +0.10 [-0.32,+0.65] |
+| GRU-D | 1.23 | 1.14 | +0.09 [-0.07,+0.21] |
+| HybridAttn | 2.52 | 2.50 | +0.02 [-0.98,+0.90] |
+| DKGT | 1.85 | 1.33 | +0.52 [+0.33,+0.74] |
+
+## T3c Per-phenotype detail @ guaranteed 90% catch-rate (a34_NaME)
+| phenotype | base-rate | precision | lift | empirical recall |
+|---|---|---|---|---|
+| Heavy_Dropper | 0.121 | 0.237 | 1.96 | 0.912 |
+| Light_Dropper | 0.069 | 0.160 | 2.30 | 0.910 |
+| Heavy_Riser | 0.128 | 0.246 | 1.93 | 0.923 |
+| Light_Riser | 0.064 | 0.127 | 1.98 | 0.933 |
+| Flat | 0.032 | 0.043 | 1.33 | 0.958 |
+
+## T3d Small-sample conformal convention: share of resplits with q_hat=+inf
+| arm | 1-a | HEAVY | LIGHT | Flat |
+|---|---|---|---|---|
+| a34_NaME | 0.80 | 0.000 | 0.000 | 0.020 |
+| a34_NaME | 0.90 | 0.000 | 0.000 | 0.557 |
+| a34_NaME | 0.95 | 0.000 | 0.000 | 1.000 |
+| HORLN | 0.80 | 0.000 | 0.000 | 0.017 |
+| HORLN | 0.90 | 0.000 | 0.000 | 0.617 |
+| HORLN | 0.95 | 0.000 | 0.000 | 1.000 |
+| MSDM | 0.80 | 0.000 | 0.000 | 0.022 |
+| MSDM | 0.90 | 0.000 | 0.000 | 0.550 |
+| MSDM | 0.95 | 0.000 | 0.000 | 1.000 |
+| WDCNN | 0.80 | 0.000 | 0.000 | 0.022 |
+| WDCNN | 0.90 | 0.000 | 0.000 | 0.583 |
+| WDCNN | 0.95 | 0.000 | 0.000 | 1.000 |
+| GRU-D | 0.80 | 0.000 | 0.000 | 0.011 |
+| GRU-D | 0.90 | 0.000 | 0.000 | 0.594 |
+| GRU-D | 0.95 | 0.000 | 0.000 | 1.000 |
+| HybridAttn | 0.80 | 0.000 | 0.000 | 0.017 |
+| HybridAttn | 0.90 | 0.000 | 0.000 | 0.589 |
+| HybridAttn | 0.95 | 0.000 | 0.000 | 1.000 |
+| DKGT | 0.80 | 0.000 | 0.000 | 0.028 |
+| DKGT | 0.90 | 0.000 | 0.000 | 0.589 |
+| DKGT | 0.95 | 0.000 | 0.000 | 1.000 |
+
+## T4 Selective operating point (supporting; not headlined)
+| arm | recall@FPR0.5% | recall@FPR1% | recall@FPR5% |
+|---|---|---|---|
+| a34_NaME | 0.302 | 0.370 | 0.589 |
+| HORLN | 0.248 | 0.318 | 0.525 |
+| MSDM | 0.168 | 0.220 | 0.392 |
+| WDCNN | 0.107 | 0.146 | 0.345 |
+| GRU-D | 0.031 | 0.050 | 0.215 |
+| HybridAttn | 0.228 | 0.299 | 0.503 |
+| DKGT | 0.074 | 0.113 | 0.284 |
+
+[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/trust/RESULTS_TRUST.md (+ percell/calibration/operating/lift CSVs)
+[PASS] 2c. SGCC trust layer: calibration, per-stratum conformal lift (Fig. 4b, Supp. Fig. S4) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 2d. ECL conformal lift gap (Supp. Table S6)
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_ecl_trust_analysis.py
+===========================================================================
+# RESULTS_ECL_TRUST — cross-dataset trustworthy layer (ECL, magnitude strata)
+
+Strata: Heavy/Light by train-fit magnitude median. Base-rate Heavy 7.5% Light 12.7%.
+Cells/arm = 9 (3 folds x 3 seeds). NREP=20.
+
+## AP reproduction (sanity vs locked fold-0 numbers)
+| arm | mean AP (3x3) | locked AP |
+|---|---|---|
+| a34_generic | 0.843 | 0.88 |
+| horln | 0.813 | 0.852 |
+| wdcnn | 0.796 | 0.836 |
+| grud | 0.541 | 0.561 |
+| hybridattn | 0.804 | 0.847 |
+| msdm | 0.842 | 0.87 |
+
+## T1 Calibration (preliminary)
+| arm | ECE raw | Brier |
+|---|---|---|
+| a34_generic | 0.121 | 0.046 |
+| horln | 0.094 | 0.048 |
+| wdcnn | 0.136 | 0.052 |
+| grud | 0.195 | 0.109 |
+| hybridattn | 0.135 | 0.060 |
+| msdm | 0.025 | 0.026 |
+
+## T2 Marginal-APS degeneracy (abstain-rate @1-a=0.90)
+| arm | coverage | abstain |
+|---|---|---|
+| a34_generic | 0.900 | 0.000 |
+| horln | 0.917 | 0.000 |
+| wdcnn | 0.907 | 0.000 |
+| grud | 0.993 | 0.939 |
+| hybridattn | 0.901 | 0.000 |
+| msdm | 0.972 | 0.000 |
+
+## T3 Magnitude-conditional audit efficiency (LIFT) @ guaranteed 80% catch-rate — THE FINDING
+Lift = precision / stratum base-rate. Gap>0 = Heavy more audit-efficient than Light.
+| arm | lift Heavy | lift Light | Heavy-Light lift gap [BCa 95%] |
+|---|---|---|---|
+| a34_generic | 8.06 | 5.15 | +2.91 [+1.90,+3.76] |
+| horln | 6.45 | 4.71 | +1.75 [+0.84,+2.61] |
+| wdcnn | 8.21 | 5.06 | +3.15 [+2.42,+3.73] |
+| grud | 5.41 | 3.03 | +2.38 [+1.87,+2.86] |
+| hybridattn | 7.93 | 4.36 | +3.56 [+2.26,+4.41] |
+| msdm | 8.94 | 4.94 | +4.00 [+2.89,+5.01] |
+
+## T4 recall@FPR (supporting)
+| arm | recall@FPR1% | recall@FPR5% |
+|---|---|---|
+| a34_generic | 0.797 | 0.817 |
+| horln | 0.779 | 0.799 |
+| wdcnn | 0.759 | 0.818 |
+| grud | 0.106 | 0.641 |
+| hybridattn | 0.746 | 0.807 |
+| msdm | 0.795 | 0.810 |
+
+[done] /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/ecl_trust/RESULTS_ECL_TRUST.md
+[PASS] 2d. ECL conformal lift gap (Supp. Table S6) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 3a. Protocol-matched benchmark (Table 3)
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/compute_table_b.py
+===========================================================================
+
+=== TABLE B: per-stratum PR-AUC (mean [BCa 95% CI]) ===
+stratum         pop% |            WDCNN            HORLN        Self-Attn            GRU-D             MSDM         DKGT-Net            MAMRD | MAMRD-best
+Heavy dropper   28.6 | 0.497[0.46,0.52] 0.607[0.58,0.65] 0.613[0.58,0.66] 0.235[0.22,0.25] 0.571[0.55,0.60] 0.425[0.40,0.46] 0.678[0.64,0.71] | +0.060[+0.03,+0.08] vs Self-Attn
+Heavy riser     13.1 | 0.417[0.40,0.43] 0.624[0.57,0.67] 0.589[0.55,0.63] 0.328[0.30,0.36] 0.477[0.41,0.52] 0.355[0.34,0.37] 0.674[0.64,0.70] | +0.050[+0.03,+0.08] vs HORLN
+Light dropper   28.1 | 0.297[0.27,0.32] 0.527[0.50,0.55] 0.491[0.46,0.52] 0.152[0.13,0.18] 0.291[0.26,0.32] 0.278[0.27,0.29] 0.563[0.54,0.59] | +0.032[-0.01,+0.07] vs HORLN
+Light riser     13.0 | 0.180[0.15,0.20] 0.325[0.26,0.39] 0.309[0.27,0.36] 0.160[0.13,0.20] 0.261[0.22,0.29] 0.146[0.14,0.17] 0.461[0.43,0.49] | +0.137[+0.10,+0.20] vs HORLN
+Flat            17.2 | 0.165[0.11,0.21] 0.359[0.29,0.42] 0.357[0.24,0.44] 0.095[0.07,0.13] 0.185[0.15,0.22] 0.154[0.10,0.22] 0.309[0.27,0.35] | -0.044[-0.07,-0.01] vs HORLN
+Aggregate      100.0 | 0.352[0.33,0.37] 0.540[0.52,0.57] 0.522[0.51,0.54] 0.190[0.18,0.20] 0.409[0.39,0.44] 0.296[0.28,0.31] 0.600[0.58,0.62] | +0.057[+0.04,+0.07] vs HORLN
+
+--- per-stratum mean test N (min across cells, anomaly check) ---
+  Heavy dropper  mean N=824  min N=812  (pop 28.6%)
+  Light dropper  mean N=811  min N=804  (pop 28.1%)
+  Heavy riser    mean N=379  min N=370  (pop 13.1%)
+  Light riser    mean N=374  min N=366  (pop 13.0%)
+  Flat           mean N=497  min N=489  (pop 17.2%)
+
+--- FLAGS ---
+  (none)
+
+--- NOTE: per-stratum theft%% NOT computed: per-stratum positive counts are
+    not cached (n_* are totals); requires the strata reconstruction (Table C path).
+
+[done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableB
+[config] BCa B=2000, boot seed=12345; baselines n=9, MAMRD n=15, gap pairs=9
+[PASS] 3a. Protocol-matched benchmark (Table 3) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 3b. Fixed-FPR inspection budgets (Table 4)
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/compute_table_c.py
+===========================================================================
+[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+
+=== TABLE C [MAMRD] : prevalence control (mean [BCa 95% CI]) ===
+stratum        theft%                rawPR     norm(AP-pi)/(1-pi)            matchedPR
+Heavy dropper   12.11 0.678[0.64,0.71] 0.635[0.60,0.67] 0.687[0.65,0.72]
+Heavy riser     12.75 0.674[0.64,0.70] 0.628[0.59,0.66] 0.675[0.64,0.70]
+Light dropper    6.95 0.563[0.54,0.59] 0.531[0.51,0.56] 0.671[0.66,0.69]
+Light riser      6.42 0.461[0.43,0.49] 0.424[0.39,0.46] 0.605[0.57,0.64]
+Flat             3.21 0.309[0.27,0.35] 0.287[0.24,0.33] 0.564[0.53,0.59]
+  common target prevalence (max stratum) = 12.77%  retained N/stratum: Heav=785, Heav=378, Ligh=448, Ligh=187, Flat=127
+
+--- ORDERING VERDICT (MAMRD: mean over heavy / light / flat) ---
+  raw PR-AUC      : Heavy=0.676 Light=0.512 Flat=0.309  ->  Heavy > Light > Flat  [HOLDS]
+  normalized      : Heavy=0.631 Light=0.478 Flat=0.287  ->  Heavy > Light > Flat  [HOLDS]
+  matched PR-AUC  : Heavy=0.681 Light=0.638 Flat=0.564  ->  Heavy > Light > Flat  [HOLDS]
+
+--- normalized (AP-pi)/(1-pi) by detector x stratum (mean) ---
+detector       WDCNN  HORLN  Self-Attn  GRU-D   MSDM  DKGT-Net  MAMRD
+stratum                                                              
+Heavy_Dropper  0.428  0.552      0.560  0.130  0.512     0.346  0.635
+Heavy_Riser    0.332  0.570      0.530  0.231  0.401     0.261  0.628
+Light_Dropper  0.245  0.491      0.453  0.089  0.238     0.224  0.531
+Light_Riser    0.124  0.279      0.261  0.103  0.211     0.088  0.424
+Flat           0.137  0.337      0.336  0.065  0.158     0.126  0.287
+
+[done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableC  (BCa B=2000, match reps=100)
+[PASS] 3b. Fixed-FPR inspection budgets (Table 4) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 4. Partition counts, bootstrap/ablation ledgers, eligibility ledger (Tables 2, 5)
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/compute_r2_revisions.py
+===========================================================================
+=====================================================================
+1. LOADING SGCC RAW & NORMALIZED DATA + CALENDAR DAY-OF-WEEK CHECK
+=====================================================================
+SGCC total rows=42372, total date columns=1035
+First date=2014-01-01 (Wednesday), 1029th date=2016-10-25 (Tuesday), Last date=2016-10-31 (Monday)
+Weekly grid (147, 7) column index -> Calendar Day-of-Week:
+  Col 0: Wednesday
+  Col 1: Thursday
+  Col 2: Friday
+  Col 3: Saturday
+  Col 4: Sunday
+  Col 5: Monday
+  Col 6: Tuesday
+[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+  loaded (42372, 1037) in 1.4s  NaN=25.6%  theft=8.5%
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+
+=====================================================================
+2. POINT 3: SGCC PARTITION MANIFESTS & EXACT COHORT/GROUP COUNTS
+=====================================================================
+ fold  train_tot  train_pos  es_tot  es_pos  cal_tot  cal_pos  te_tot  te_pos  te_Heavy_tot  te_Heavy_pos  te_Light_tot  te_Light_pos  te_Flat_tot  te_Flat_pos  conf_cal_tot_mean  conf_cal_pos_mean  conf_cal_Heavy_pos_mean  conf_cal_Light_pos_mean  conf_cal_Flat_pos_mean  conf_cal_Flat_pos_min  conf_cal_Flat_pos_max  conf_eval_tot_mean  conf_eval_pos_mean  conf_eval_Heavy_pos_mean  conf_eval_Light_pos_mean  conf_eval_Flat_pos_mean
+    0      33897       2873    2795     244     2795      244    2885     254          1205           156          1190            81          490           17             1442.0              127.0                77.930435                40.506522                8.563043                      3                     13              1443.0               127.0                 78.069565                 40.493478                 8.436957
+    1      33897       2943    2795     221     2795      221    2885     230          1202           133          1170            79          513           18             1442.0              115.0                66.271739                39.595652                9.132609                      4                     15              1443.0               115.0                 66.728261                 39.404348                 8.867391
+    2      33898       2886    2795     240     2795      240    2884     249          1200           155          1195            81          489           13             1441.0              124.0                76.808696                40.650000                6.541304                      2                     12              1443.0               125.0                 78.191304                 40.350000                 6.458696
+
+=====================================================================
+3. POINT 3 & 4: ECL WINDOW/CLIENT MANIFEST & CLIENT OVERLAP AUDIT
+=====================================================================
+ fold  train_win  train_pos  es_win  es_pos  cal_win  cal_pos  te_win  te_pos  te_Heavy_win  te_Heavy_pos  te_Light_win  te_Light_pos  unique_tr_clients  unique_te_clients  shared_tr_te_clients  pct_te_clients_in_tr
+    0      20000       1989    1649     168     1649      168    1702     175           821            84           881            91                370                360                   360                 100.0
+    1      20000       1998    1649     165     1649      165    1702     172           851            90           851            82                370                354                   354                 100.0
+    2      20000       2000    1650     165     1650      165    1700     170           849            79           851            91                370                363                   363                 100.0
+
+=====================================================================
+4. POINT 5: 9-CELL VS 15-CELL MAMRD & CONSUMER-BOOTSTRAP VS CELL BCa
+=====================================================================
+
+--- Summary across cells (9-cell vs 15-cell) ---
+GRU-D            (n= 9) | AP=0.190 [0.183,0.197] | ROC=0.676 [0.669,0.684] | F1=0.258 [0.248,0.267] | P@100=0.309 [0.283,0.328] | P@200=0.278 [0.270,0.288]
+Self-Attn        (n= 9) | AP=0.522 [0.505,0.544] | ROC=0.863 [0.858,0.869] | F1=0.494 [0.477,0.515] | P@100=0.724 [0.699,0.748] | P@200=0.541 [0.518,0.564]
+DKGT-Net         (n= 9) | AP=0.296 [0.277,0.312] | ROC=0.774 [0.762,0.783] | F1=0.331 [0.316,0.348] | P@100=0.446 [0.434,0.452] | P@200=0.345 [0.328,0.367]
+WDCNN            (n= 9) | AP=0.352 [0.334,0.365] | ROC=0.806 [0.803,0.809] | F1=0.371 [0.361,0.383] | P@100=0.494 [0.464,0.514] | P@200=0.403 [0.391,0.410]
+MSDM             (n= 9) | AP=0.409 [0.390,0.437] | ROC=0.813 [0.806,0.825] | F1=0.399 [0.387,0.422] | P@100=0.604 [0.569,0.638] | P@200=0.444 [0.425,0.466]
+HORLN            (n= 9) | AP=0.540 [0.516,0.569] | ROC=0.871 [0.864,0.881] | F1=0.504 [0.484,0.525] | P@100=0.752 [0.724,0.797] | P@200=0.559 [0.531,0.587]
+MAMRD (9-cell)   (n= 9) | AP=0.597 [0.576,0.619] | ROC=0.892 [0.884,0.900] | F1=0.557 [0.538,0.577] | P@100=0.808 [0.772,0.832] | P@200=0.619 [0.593,0.646]
+MAMRD (15-cell)  (n=15) | AP=0.600 [0.584,0.616] | ROC=0.892 [0.886,0.898] | F1=0.556 [0.540,0.569] | P@100=0.814 [0.789,0.832] | P@200=0.620 [0.600,0.640]
+Paired 9-cell MAMRD - HORLN ap  : mean=+0.0572 BCa=[+0.0444,+0.0696] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN roc : mean=+0.0203 BCa=[+0.0175,+0.0230] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN f1  : mean=+0.0529 BCa=[+0.0401,+0.0632] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN p100: mean=+0.0556 BCa=[+0.0200,+0.0822] Wilcoxon p=0.0156
+Paired 9-cell MAMRD - HORLN p200: mean=+0.0594 BCa=[+0.0528,+0.0667] Wilcoxon p=0.0039
+Friedman test (7 detectors, 9 matched seed-fold cells): chi2=53.62, p=8.80e-10
+
+--- Consumer-level bootstrap (seed-averaged scores per consumer within each fold, B=1000) ---
+  GRU-D            | Seed-ensemble AP=0.193 Cons-Boot95%=[0.173,0.223] | ROC=0.680 [0.660,0.700]
+  Self-Attn        | Seed-ensemble AP=0.539 Cons-Boot95%=[0.504,0.577] | ROC=0.871 [0.857,0.886]
+  DKGT-Net         | Seed-ensemble AP=0.301 Cons-Boot95%=[0.269,0.339] | ROC=0.777 [0.758,0.794]
+  WDCNN            | Seed-ensemble AP=0.359 Cons-Boot95%=[0.324,0.396] | ROC=0.810 [0.794,0.825]
+  MSDM             | Seed-ensemble AP=0.451 Cons-Boot95%=[0.416,0.494] | ROC=0.834 [0.818,0.849]
+  HORLN            | Seed-ensemble AP=0.560 Cons-Boot95%=[0.524,0.598] | ROC=0.882 [0.868,0.895]
+  MAMRD (9-cell)   | Seed-ensemble AP=0.612 Cons-Boot95%=[0.580,0.646] | ROC=0.897 [0.884,0.910]
+  Paired Consumer-Bootstrap MAMRD - HORLN AP: +0.0521 95% CI=[+0.0250, +0.0774]
+
+=====================================================================
+5. POINT 7: ABLATION PROVENANCE & PAIRED CIs (BUILD-UP & SUBTRACTIVE)
+=====================================================================
+S0: Core (BiMamba2 + 2D Laplacian CNN, scalar fill)     | AP=0.5487[0.5219,0.5846] ROC=0.8791 F1=0.5147 P@100=0.7389 | dPrev=(baseline) | dS0=(baseline)
+S1: + Context-conditioned fill token (CC-NaME)          | AP=0.5723[0.5468,0.6034] ROC=0.8867 F1=0.5300 P@100=0.7800 | dPrev=+0.0236 [+0.0090,+0.0348] | dS0=+0.0236 [+0.0090,+0.0348]
+S2: + 2D missing-mask Laplacian CNN                     | AP=0.5875[0.5627,0.6104] ROC=0.8892 F1=0.5394 P@100=0.8144 | dPrev=+0.0152 [+0.0068,+0.0223] | dS0=+0.0388 [+0.0215,+0.0532]
+S3: + Multi-scale lagged differencing (a33 / no-IIPC)   | AP=0.5951[0.5765,0.6167] ROC=0.8916 F1=0.5551 P@100=0.8067 | dPrev=+0.0076 [+0.0008,+0.0144] | dS0=+0.0464 [+0.0237,+0.0596]
+S4: + Inter/intra-period conv (full MAMRD, 9-cell)      | AP=0.5975[0.5760,0.6188] ROC=0.8917 F1=0.5566 P@100=0.8078 | dPrev=+0.0024 [-0.0028,+0.0104] | dS0=+0.0488 [+0.0304,+0.0627]
+
+--- Subtractive / Cross-Arm Paired Contrasts (n=9 matched cells) ---
+  Full MAMRD (S4) minus No-IIPC (S3 = a33_generic)                : dAP=+0.0024 [-0.0028, +0.0104]
+  No-IIPC (S3) minus No-Diff-No-IIPC (S2 = a34_bu2_mask)          : dAP=+0.0076 [+0.0008, +0.0144]
+  Full MAMRD (S4) minus No-Diff-No-IIPC (S2 = a34_bu2_mask)       : dAP=+0.0100 [+0.0056, +0.0199]
+  No-IIPC (S3) minus No-Missingness (A32: no CC-NaME, no Mask)    : dAP=+0.0348 [+0.0229, +0.0470]
+  Full MAMRD (S4) minus No-Missingness (A32: no CC-NaME, no Mask) : dAP=+0.0372 [+0.0218, +0.0501]
+  Full MAMRD (S4) minus Controlled No-Missingness (A34: no CC-NaME, no Mask): dAP=+0.0271 [+0.0170, +0.0390]
+  S2 (+Mask CNN) minus S1 (CC-NaME only, no Mask CNN)             : dAP=+0.0152 [+0.0068, +0.0223]
+  S1 (+CC-NaME) minus S0 (Core scalar fill only)                  : dAP=+0.0236 [+0.0090, +0.0348]
+Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table_ablation_provenance.csv
+
+=====================================================================
+6. POINT 8: MISSINGNESS-ONLY BASELINE ON SGCC (3 FOLDS)
+=====================================================================
+Mask-only classifier (29 missingness features, 3 folds): AP = 0.168 (folds: [0.164, 0.168, 0.172]), ROC-AUC = 0.651 (folds: [0.644, 0.65, 0.659])
+
+=====================================================================
+7. POINT 9: TABLE 3 FPR BUDGETS, INSPECTED % & PROSPECTIVE THRESHOLDS
+=====================================================================
+GRU-D            | SGCC @1%FPR: Rec=0.050 Insp=1.36% (Prosp: Rec=0.054 FPR=1.10% Insp=1.46%) | @5%FPR: Rec=0.215 Insp=6.40% (Prosp: Rec=0.216 FPR=5.05% Insp=6.44%)
+Self-Attn        | SGCC @1%FPR: Rec=0.299 Insp=3.46% (Prosp: Rec=0.301 FPR=1.14% Insp=3.60%) | @5%FPR: Rec=0.503 Insp=8.85% (Prosp: Rec=0.503 FPR=5.27% Insp=9.09%)
+DKGT-Net         | SGCC @1%FPR: Rec=0.113 Insp=1.89% (Prosp: Rec=0.116 FPR=1.10% Insp=1.98%) | @5%FPR: Rec=0.284 Insp=6.99% (Prosp: Rec=0.285 FPR=5.21% Insp=7.19%)
+WDCNN            | SGCC @1%FPR: Rec=0.146 Insp=2.17% (Prosp: Rec=0.145 FPR=1.05% Insp=2.18%) | @5%FPR: Rec=0.345 Insp=7.50% (Prosp: Rec=0.342 FPR=5.15% Insp=7.61%)
+MSDM             | SGCC @1%FPR: Rec=0.220 Insp=2.80% (Prosp: Rec=0.220 FPR=1.04% Insp=2.82%) | @5%FPR: Rec=0.392 Insp=7.91% (Prosp: Rec=0.392 FPR=5.07% Insp=7.97%)
+HORLN            | SGCC @1%FPR: Rec=0.318 Insp=3.63% (Prosp: Rec=0.311 FPR=1.04% Insp=3.60%) | @5%FPR: Rec=0.525 Insp=9.04% (Prosp: Rec=0.521 FPR=5.11% Insp=9.10%)
+MAMRD (9-cell)   | SGCC @1%FPR: Rec=0.366 Insp=4.04% (Prosp: Rec=0.367 FPR=1.07% Insp=4.09%) | @5%FPR: Rec=0.586 Insp=9.56% (Prosp: Rec=0.584 FPR=5.16% Insp=9.68%)
+MAMRD (15-cell)  | SGCC @1%FPR: Rec=0.370 Insp=4.07% (Prosp: Rec=0.370 FPR=1.04% Insp=4.10%) | @5%FPR: Rec=0.589 Insp=9.58% (Prosp: Rec=0.588 FPR=5.14% Insp=9.69%)
+
+--- ECL Operating Points (Recall & Inspected % @ 1% and 5% FPR) ---
+GRU-D            | ECL  @1%FPR: Rec=0.106 Insp=2.02% (Prosp: Rec=0.126 FPR=1.10% Insp=2.26%) | @5%FPR: Rec=0.641 Insp=11.02% (Prosp: Rec=0.637 FPR=5.03% Insp=10.98%)
+Self-Attn        | ECL  @1%FPR: Rec=0.746 Insp=8.50% (Prosp: Rec=0.741 FPR=1.13% Insp=8.54%) | @5%FPR: Rec=0.807 Insp=12.70% (Prosp: Rec=0.812 FPR=5.01% Insp=12.74%)
+WDCNN            | ECL  @1%FPR: Rec=0.759 Insp=8.63% (Prosp: Rec=0.741 FPR=1.12% Insp=8.53%) | @5%FPR: Rec=0.818 Insp=12.81% (Prosp: Rec=0.824 FPR=5.00% Insp=12.85%)
+MSDM             | ECL  @1%FPR: Rec=0.795 Insp=8.99% (Prosp: Rec=0.799 FPR=1.08% Insp=9.07%) | @5%FPR: Rec=0.810 Insp=12.73% (Prosp: Rec=0.815 FPR=5.17% Insp=12.91%)
+HORLN            | ECL  @1%FPR: Rec=0.779 Insp=8.84% (Prosp: Rec=0.784 FPR=1.05% Insp=8.90%) | @5%FPR: Rec=0.799 Insp=12.62% (Prosp: Rec=0.805 FPR=5.04% Insp=12.70%)
+MAMRD            | ECL  @1%FPR: Rec=0.797 Insp=9.02% (Prosp: Rec=0.801 FPR=1.06% Insp=9.08%) | @5%FPR: Rec=0.817 Insp=12.80% (Prosp: Rec=0.823 FPR=5.09% Insp=12.92%)
+
+=====================================================================
+8. CONFORMAL FINITE-SAMPLE ELIGIBILITY LEDGER (per resplit)
+=====================================================================
+ target_coverage  alpha  n_min_required group  n_resplits  n_pos_mean  n_pos_min  n_pos_max  pct_resplits_finite_threshold             rule_when_below_n_min
+            0.80   0.20               4 Heavy        1380   73.670290         55         89                     100.000000                                 -
+            0.80   0.20               4 Light        1380   40.250725         29         54                     100.000000                                 -
+            0.80   0.20               4  Flat        1380    8.078986          2         15                      98.043478 whole group inspected (q_hat = 0)
+            0.90   0.10               9 Heavy        1380   73.670290         55         89                     100.000000                                 -
+            0.90   0.10               9 Light        1380   40.250725         29         54                     100.000000                                 -
+            0.90   0.10               9  Flat        1380    8.078986          2         15                      41.956522 whole group inspected (q_hat = 0)
+            0.95   0.05              19 Heavy        1380   73.670290         55         89                     100.000000                                 -
+            0.95   0.05              19 Light        1380   40.250725         29         54                     100.000000                                 -
+            0.95   0.05              19  Flat        1380    8.078986          2         15                       0.000000 whole group inspected (q_hat = 0)
+[PASS] 4. Partition counts, bootstrap/ablation ledgers, eligibility ledger (Tables 2, 5) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 5a. Main-text figures (Figures 2, 3, 4, 5)
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_manuscript_figures.py
+===========================================================================
+[make_manuscript_figures] generating empirical publication figures (Figures 2, 3, 4, 5)...
+  wrote fig2_performance_curves.pdf
+  wrote fig3_ablation_bars.pdf
+  wrote fig4_calibration_reliability.pdf
+  wrote fig5_conformal_tradeoffs.pdf
+[done] all empirical publication figures saved to /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures
+[PASS] 5a. Main-text figures (Figures 2, 3, 4, 5) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 5b. Supplementary conformal figure (Supp. Fig. S4)
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_trust_figure.py
+===========================================================================
+[done] wrote /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures/fig6_trust_guarantee.pdf (+png)
+[PASS] 5b. Supplementary conformal figure (Supp. Fig. S4) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 5c. Other supplementary figures
+   Command: /home/azeem/miniconda3/envs/mamba_gpu/bin/python /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/make_figures.py
+===========================================================================
+[figures] models with data: ours(15), grud(9), wdcnn(9), hybridattn(9), horln(9), msdm_net(9)
+  wrote fig1_metric_inflation.pdf / .png
+  wrote fig3_phenotype.pdf / .png
+  wrote fig4_ceiling.pdf / .png
+  wrote fig5_pr_roc_curves.pdf / .png
+  wrote fig2_two_dataset.pdf / .png
+[figures] -> /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/figures
+[PASS] 5c. Other supplementary figures completed successfully.
+
+
+###########################################################################
+# ALL TABLES AND FIGURES REGENERATED FROM CACHED PREDICTIONS (TIER 1)
+###########################################################################
+Generated artifacts (results/phase_n_retrained/):
+  - Table 2:  r2_audit/sgcc_fold_counts.csv, r2_audit/ecl_fold_counts.csv
+  - Table 3:  tableB/tableB_agg.csv            - Table 4: tableC/tableC_agg.csv
+  - Table 5:  r2_audit/table_ablation_provenance.csv
+  - Table 6:  trust/decision_value_sgcc.csv (+ _resplits.csv, eligibility ledger)
+  - Supp. Table S6: ecl_trust/RESULTS_ECL_TRUST.md
+  - Figures:  figures/fig2-fig5 (main), fig6_trust_guarantee (Supp. S4), others
+              (Figure 1 is the conceptual architecture schematic in TikZ)
+###########################################################################
+
+
+real	1m55.315s
+user	5m59.930s
+sys	0m7.610s

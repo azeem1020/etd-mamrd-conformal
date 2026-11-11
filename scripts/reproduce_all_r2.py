@@ -4,10 +4,17 @@
 Command-line usage:
     python scripts/reproduce_all_r2.py --config configs/default.yaml
 
-This script runs end-to-end to verify partition manifests, compute and format all
-principal tables (Tables 2, 3, 4, 5, 6), and generate empirical publication figures (Figures 2-5)
-from raw predictions without manual intervention, achieving 100% parity with the manuscript.
-Note: Figure 1 (Architecture Framework) is the conceptual schematic compiled directly from TikZ.
+Tier-1 reproduction from the cached prediction-level records (no retraining):
+  1. verify customer/window disjointness of the partition manifests (Table 2);
+  2. run the conformal audit analyses on the shared protocol (conformal_common.py):
+     run_decision_value (Table 6, Fig. 5b), run_empirical_comparator (Fig. 5a),
+     run_trust_layer (Fig. 4b calibration CSV, Supp. Fig. S4), run_ecl_trust_analysis (Supp. Table S6);
+  3. recompute Tables 3 and 4 (compute_table_b, compute_table_c);
+  4. recompute partition counts, bootstrap/ablation ledgers and the conformal
+     eligibility ledger (compute_r2_revisions: Tables 2 and 5);
+  5. regenerate all main and supplementary figures.
+Independent retraining from raw data is the separate Tier-2 sequence in README.md.
+Figure 1 (architecture) is a TikZ schematic and is not data-generated.
 """
 from __future__ import annotations
 import sys
@@ -100,36 +107,39 @@ def main():
             cwd=THIS,
         )
 
-    # 2. Compute All R2 Metrics, Tables, and Statistical Tests (Tables 2, 3, 4, 5, 6)
-    compute_script = THIS / "compute_r2_revisions.py"
-    if compute_script.exists():
-        run_step(
-            "2. Master Metrics, Tables & Bootstrap CIs Computation",
-            [py_exec, str(compute_script)],
-            cwd=THIS,
-        )
+    # 2. Conformal audit analyses on the shared protocol (Table 6, Fig. 5, Supp. Fig. S4, Supp. Table S6)
+    for step, script in [
+        ("2a. Conformal decision value: all six Table 6 columns + Fig. 5b", "run_decision_value.py"),
+        ("2b. Empirical-quantile vs conformal comparator (Fig. 5a)", "run_empirical_comparator.py"),
+        ("2c. SGCC trust layer: calibration, per-stratum conformal lift (Fig. 4b, Supp. Fig. S4)", "run_trust_layer.py"),
+        ("2d. ECL conformal lift gap (Supp. Table S6)", "run_ecl_trust_analysis.py"),
+    ]:
+        run_step(step, [py_exec, str(THIS / script)], cwd=THIS)
 
-    # 3. Generate Manuscript and Supplementary Figures
+    # 3. Main benchmark (Table 3) and fixed-FPR budgets (Table 4)
+    run_step("3a. Protocol-matched benchmark (Table 3)", [py_exec, str(THIS / "compute_table_b.py")], cwd=THIS)
+    run_step("3b. Fixed-FPR inspection budgets (Table 4)", [py_exec, str(THIS / "compute_table_c.py")], cwd=THIS)
+
+    # 4. Partition counts, bootstrap and ablation ledgers, conformal eligibility ledger (Tables 2, 5)
+    run_step("4. Partition counts, bootstrap/ablation ledgers, eligibility ledger (Tables 2, 5)",
+             [py_exec, str(THIS / "compute_r2_revisions.py")], cwd=THIS)
+
+    # 5. Figures
     if not args.skip_figures:
-        fig_script = THIS / "make_manuscript_figures.py"
-        if fig_script.exists():
-            run_step(
-                "3. Empirical Publication Figure Generation (Figures 2, 3, 4, 5)",
-                [py_exec, str(fig_script)],
-                cwd=THIS,
-            )
+        run_step("5a. Main-text figures (Figures 2, 3, 4, 5)", [py_exec, str(THIS / "make_manuscript_figures.py")], cwd=THIS)
+        run_step("5b. Supplementary conformal figure (Supp. Fig. S4)", [py_exec, str(THIS / "make_trust_figure.py")], cwd=THIS)
+        run_step("5c. Other supplementary figures", [py_exec, str(THIS / "make_figures.py")], cwd=THIS)
 
     print("\n" + "#" * 75)
-    print("# ALL ROUND-2 TABLES AND FIGURES SUCCESSFULLY REPRODUCED")
+    print("# ALL TABLES AND FIGURES REGENERATED FROM CACHED PREDICTIONS (TIER 1)")
     print("#" * 75)
-    print("Generated Artifacts:")
-    print("  - Table 2:  Partition Ledger and Cohort Counts (SGCC and ECL)")
-    print("  - Table 3:  Protocol-Matched Main Benchmark Comparison (9-cell & 15-cell)")
-    print("  - Table 4:  FPR Inspection Budgets (1% and 5% FPR, SGCC and ECL)")
-    print("  - Table 5:  Architectural Ablation & Provenance Study with Paired CIs")
-    print("  - Table 6:  Class-Conditional (Mondrian) Conformal Audit Policies")
-    print("  - Figures:  fig3_ablation_bars.pdf, fig4_calibration_reliability.pdf,")
-    print("              fig5_conformal_tradeoffs.pdf, fig2_performance_curves.pdf")
+    print("Generated artifacts (results/phase_n_retrained/):")
+    print("  - Table 2:  r2_audit/sgcc_fold_counts.csv, r2_audit/ecl_fold_counts.csv")
+    print("  - Table 3:  tableB/tableB_agg.csv            - Table 4: tableC/tableC_agg.csv")
+    print("  - Table 5:  r2_audit/table_ablation_provenance.csv")
+    print("  - Table 6:  trust/decision_value_sgcc.csv (+ _resplits.csv, eligibility ledger)")
+    print("  - Supp. Table S6: ecl_trust/RESULTS_ECL_TRUST.md")
+    print("  - Figures:  figures/fig2-fig5 (main), fig6_trust_guarantee (Supp. S4), others")
     print("              (Figure 1 is the conceptual architecture schematic in TikZ)")
     print("#" * 75 + "\n")
 

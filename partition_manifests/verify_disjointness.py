@@ -18,7 +18,7 @@ def find_manifest_dir():
         Path(__file__).resolve().parent,
         Path(__file__).resolve().parent / "partition_manifests",
         Path(__file__).resolve().parent.parent / "partition_manifests",
-        Path(__file__).resolve().parent.parent / "results" / "phase_n" / "r2_audit",
+        Path(__file__).resolve().parent.parent / "results" / "phase_n_retrained" / "r2_audit",
     ]
     for c in candidates:
         if (c / "sgcc_partition_manifest.csv").exists() and (c / "ecl_partition_manifest.csv").exists():

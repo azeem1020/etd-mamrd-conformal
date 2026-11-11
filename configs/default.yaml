@@ -5,7 +5,7 @@ experiment:
   name: mamrd_sgcc_benchmark
   benchmark: SGCC
   data_path: data/SGCC.csv
-  output_dir: results/phase_n
+  output_dir: results/phase_n_retrained
   seed_discipline: [0, 1, 2]
   fold_discipline: [0, 1, 2]
   extended_seeds: [3, 4]

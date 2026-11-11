@@ -1,0 +1,131 @@
+=====================================================================
+1. LOADING SGCC RAW & NORMALIZED DATA + CALENDAR DAY-OF-WEEK CHECK
+=====================================================================
+SGCC total rows=42372, total date columns=1035
+First date=2014-01-01 (Wednesday), 1029th date=2016-10-25 (Tuesday), Last date=2016-10-31 (Monday)
+Weekly grid (147, 7) column index -> Calendar Day-of-Week:
+  Col 0: Wednesday
+  Col 1: Thursday
+  Col 2: Friday
+  Col 3: Saturday
+  Col 4: Sunday
+  Col 5: Monday
+  Col 6: Tuesday
+[data] Loading /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/data/SGCC.csv ...
+  loaded (42372, 1037) in 1.4s  NaN=25.6%  theft=8.5%
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:95: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+/home/azeem/miniconda3/envs/mamba_gpu/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/scripts/run_local_grid.py:99: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+
+=====================================================================
+2. POINT 3: SGCC PARTITION MANIFESTS & EXACT COHORT/GROUP COUNTS
+=====================================================================
+ fold  train_tot  train_pos  es_tot  es_pos  cal_tot  cal_pos  te_tot  te_pos  te_Heavy_tot  te_Heavy_pos  te_Light_tot  te_Light_pos  te_Flat_tot  te_Flat_pos  conf_cal_tot_mean  conf_cal_pos_mean  conf_cal_Heavy_pos_mean  conf_cal_Light_pos_mean  conf_cal_Flat_pos_mean  conf_cal_Flat_pos_min  conf_cal_Flat_pos_max  conf_eval_tot_mean  conf_eval_pos_mean  conf_eval_Heavy_pos_mean  conf_eval_Light_pos_mean  conf_eval_Flat_pos_mean
+    0      33897       2873    2795     244     2795      244    2885     254          1205           156          1190            81          490           17             1442.0              127.0                77.930435                40.506522                8.563043                      3                     13              1443.0               127.0                 78.069565                 40.493478                 8.436957
+    1      33897       2943    2795     221     2795      221    2885     230          1202           133          1170            79          513           18             1442.0              115.0                66.271739                39.595652                9.132609                      4                     15              1443.0               115.0                 66.728261                 39.404348                 8.867391
+    2      33898       2886    2795     240     2795      240    2884     249          1200           155          1195            81          489           13             1441.0              124.0                76.808696                40.650000                6.541304                      2                     12              1443.0               125.0                 78.191304                 40.350000                 6.458696
+
+=====================================================================
+3. POINT 3 & 4: ECL WINDOW/CLIENT MANIFEST & CLIENT OVERLAP AUDIT
+=====================================================================
+ fold  train_win  train_pos  es_win  es_pos  cal_win  cal_pos  te_win  te_pos  te_Heavy_win  te_Heavy_pos  te_Light_win  te_Light_pos  unique_tr_clients  unique_te_clients  shared_tr_te_clients  pct_te_clients_in_tr
+    0      20000       1989    1649     168     1649      168    1702     175           821            84           881            91                370                360                   360                 100.0
+    1      20000       1998    1649     165     1649      165    1702     172           851            90           851            82                370                354                   354                 100.0
+    2      20000       2000    1650     165     1650      165    1700     170           849            79           851            91                370                363                   363                 100.0
+
+=====================================================================
+4. POINT 5: 9-CELL VS 15-CELL MAMRD & CONSUMER-BOOTSTRAP VS CELL BCa
+=====================================================================
+
+--- Summary across cells (9-cell vs 15-cell) ---
+GRU-D            (n= 9) | AP=0.190 [0.183,0.197] | ROC=0.676 [0.669,0.684] | F1=0.258 [0.248,0.267] | P@100=0.309 [0.283,0.328] | P@200=0.278 [0.270,0.288]
+Self-Attn        (n= 9) | AP=0.522 [0.505,0.544] | ROC=0.863 [0.858,0.869] | F1=0.494 [0.477,0.515] | P@100=0.724 [0.699,0.748] | P@200=0.541 [0.518,0.564]
+DKGT-Net         (n= 9) | AP=0.296 [0.277,0.312] | ROC=0.774 [0.762,0.783] | F1=0.331 [0.316,0.348] | P@100=0.446 [0.434,0.452] | P@200=0.345 [0.328,0.367]
+WDCNN            (n= 9) | AP=0.352 [0.334,0.365] | ROC=0.806 [0.803,0.809] | F1=0.371 [0.361,0.383] | P@100=0.494 [0.464,0.514] | P@200=0.403 [0.391,0.410]
+MSDM             (n= 9) | AP=0.409 [0.390,0.437] | ROC=0.813 [0.806,0.825] | F1=0.399 [0.387,0.422] | P@100=0.604 [0.569,0.638] | P@200=0.444 [0.425,0.466]
+HORLN            (n= 9) | AP=0.540 [0.516,0.569] | ROC=0.871 [0.864,0.881] | F1=0.504 [0.484,0.525] | P@100=0.752 [0.724,0.797] | P@200=0.559 [0.531,0.587]
+MAMRD (9-cell)   (n= 9) | AP=0.597 [0.576,0.619] | ROC=0.892 [0.884,0.900] | F1=0.557 [0.538,0.577] | P@100=0.808 [0.772,0.832] | P@200=0.619 [0.593,0.646]
+MAMRD (15-cell)  (n=15) | AP=0.600 [0.584,0.616] | ROC=0.892 [0.886,0.898] | F1=0.556 [0.540,0.569] | P@100=0.814 [0.789,0.832] | P@200=0.620 [0.600,0.640]
+Paired 9-cell MAMRD - HORLN ap  : mean=+0.0572 BCa=[+0.0444,+0.0696] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN roc : mean=+0.0203 BCa=[+0.0175,+0.0230] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN f1  : mean=+0.0529 BCa=[+0.0401,+0.0632] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN p100: mean=+0.0556 BCa=[+0.0200,+0.0822] Wilcoxon p=0.0156
+Paired 9-cell MAMRD - HORLN p200: mean=+0.0594 BCa=[+0.0528,+0.0667] Wilcoxon p=0.0039
+Friedman test (7 detectors, 9 matched seed-fold cells): chi2=53.62, p=8.80e-10
+
+--- Consumer-level bootstrap (seed-averaged scores per consumer within each fold, B=1000) ---
+  GRU-D            | Seed-ensemble AP=0.193 Cons-Boot95%=[0.173,0.223] | ROC=0.680 [0.660,0.700]
+  Self-Attn        | Seed-ensemble AP=0.539 Cons-Boot95%=[0.504,0.577] | ROC=0.871 [0.857,0.886]
+  DKGT-Net         | Seed-ensemble AP=0.301 Cons-Boot95%=[0.269,0.339] | ROC=0.777 [0.758,0.794]
+  WDCNN            | Seed-ensemble AP=0.359 Cons-Boot95%=[0.324,0.396] | ROC=0.810 [0.794,0.825]
+  MSDM             | Seed-ensemble AP=0.451 Cons-Boot95%=[0.416,0.494] | ROC=0.834 [0.818,0.849]
+  HORLN            | Seed-ensemble AP=0.560 Cons-Boot95%=[0.524,0.598] | ROC=0.882 [0.868,0.895]
+  MAMRD (9-cell)   | Seed-ensemble AP=0.612 Cons-Boot95%=[0.580,0.646] | ROC=0.897 [0.884,0.910]
+  Paired Consumer-Bootstrap MAMRD - HORLN AP: +0.0521 95% CI=[+0.0250, +0.0774]
+
+=====================================================================
+5. POINT 7: ABLATION PROVENANCE & PAIRED CIs (BUILD-UP & SUBTRACTIVE)
+=====================================================================
+S0: Core (BiMamba2 + 2D Laplacian CNN, scalar fill)     | AP=0.5487[0.5219,0.5846] ROC=0.8791 F1=0.5147 P@100=0.7389 | dPrev=(baseline) | dS0=(baseline)
+S1: + Context-conditioned fill token (CC-NaME)          | AP=0.5723[0.5468,0.6034] ROC=0.8867 F1=0.5300 P@100=0.7800 | dPrev=+0.0236 [+0.0090,+0.0348] | dS0=+0.0236 [+0.0090,+0.0348]
+S2: + 2D missing-mask Laplacian CNN                     | AP=0.5875[0.5627,0.6104] ROC=0.8892 F1=0.5394 P@100=0.8144 | dPrev=+0.0152 [+0.0068,+0.0223] | dS0=+0.0388 [+0.0215,+0.0532]
+S3: + Multi-scale lagged differencing (a33 / no-IIPC)   | AP=0.5951[0.5765,0.6167] ROC=0.8916 F1=0.5551 P@100=0.8067 | dPrev=+0.0076 [+0.0008,+0.0144] | dS0=+0.0464 [+0.0237,+0.0596]
+S4: + Inter/intra-period conv (full MAMRD, 9-cell)      | AP=0.5975[0.5760,0.6188] ROC=0.8917 F1=0.5566 P@100=0.8078 | dPrev=+0.0024 [-0.0028,+0.0104] | dS0=+0.0488 [+0.0304,+0.0627]
+
+--- Subtractive / Cross-Arm Paired Contrasts (n=9 matched cells) ---
+  Full MAMRD (S4) minus No-IIPC (S3 = a33_generic)                : dAP=+0.0024 [-0.0028, +0.0104]
+  No-IIPC (S3) minus No-Diff-No-IIPC (S2 = a34_bu2_mask)          : dAP=+0.0076 [+0.0008, +0.0144]
+  Full MAMRD (S4) minus No-Diff-No-IIPC (S2 = a34_bu2_mask)       : dAP=+0.0100 [+0.0056, +0.0199]
+  No-IIPC (S3) minus No-Missingness (A32: no CC-NaME, no Mask)    : dAP=+0.0348 [+0.0229, +0.0470]
+  Full MAMRD (S4) minus No-Missingness (A32: no CC-NaME, no Mask) : dAP=+0.0372 [+0.0218, +0.0501]
+  Full MAMRD (S4) minus Controlled No-Missingness (A34: no CC-NaME, no Mask): dAP=+0.0271 [+0.0170, +0.0390]
+  S2 (+Mask CNN) minus S1 (CC-NaME only, no Mask CNN)             : dAP=+0.0152 [+0.0068, +0.0223]
+  S1 (+CC-NaME) minus S0 (Core scalar fill only)                  : dAP=+0.0236 [+0.0090, +0.0348]
+Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table_ablation_provenance.csv
+
+=====================================================================
+6. POINT 8: MISSINGNESS-ONLY BASELINE ON SGCC (3 FOLDS)
+=====================================================================
+Mask-only classifier (29 missingness features, 3 folds): AP = 0.168 (folds: [0.164, 0.168, 0.172]), ROC-AUC = 0.651 (folds: [0.644, 0.65, 0.659])
+
+=====================================================================
+7. POINT 9: TABLE 3 FPR BUDGETS, INSPECTED % & PROSPECTIVE THRESHOLDS
+=====================================================================
+GRU-D            | SGCC @1%FPR: Rec=0.050 Insp=1.36% (Prosp: Rec=0.054 FPR=1.10% Insp=1.46%) | @5%FPR: Rec=0.215 Insp=6.40% (Prosp: Rec=0.216 FPR=5.05% Insp=6.44%)
+Self-Attn        | SGCC @1%FPR: Rec=0.299 Insp=3.46% (Prosp: Rec=0.301 FPR=1.14% Insp=3.60%) | @5%FPR: Rec=0.503 Insp=8.85% (Prosp: Rec=0.503 FPR=5.27% Insp=9.09%)
+DKGT-Net         | SGCC @1%FPR: Rec=0.113 Insp=1.89% (Prosp: Rec=0.116 FPR=1.10% Insp=1.98%) | @5%FPR: Rec=0.284 Insp=6.99% (Prosp: Rec=0.285 FPR=5.21% Insp=7.19%)
+WDCNN            | SGCC @1%FPR: Rec=0.146 Insp=2.17% (Prosp: Rec=0.145 FPR=1.05% Insp=2.18%) | @5%FPR: Rec=0.345 Insp=7.50% (Prosp: Rec=0.342 FPR=5.15% Insp=7.61%)
+MSDM             | SGCC @1%FPR: Rec=0.220 Insp=2.80% (Prosp: Rec=0.220 FPR=1.04% Insp=2.82%) | @5%FPR: Rec=0.392 Insp=7.91% (Prosp: Rec=0.392 FPR=5.07% Insp=7.97%)
+HORLN            | SGCC @1%FPR: Rec=0.318 Insp=3.63% (Prosp: Rec=0.311 FPR=1.04% Insp=3.60%) | @5%FPR: Rec=0.525 Insp=9.04% (Prosp: Rec=0.521 FPR=5.11% Insp=9.10%)
+MAMRD (9-cell)   | SGCC @1%FPR: Rec=0.366 Insp=4.04% (Prosp: Rec=0.367 FPR=1.07% Insp=4.09%) | @5%FPR: Rec=0.586 Insp=9.56% (Prosp: Rec=0.584 FPR=5.16% Insp=9.68%)
+MAMRD (15-cell)  | SGCC @1%FPR: Rec=0.370 Insp=4.07% (Prosp: Rec=0.370 FPR=1.04% Insp=4.10%) | @5%FPR: Rec=0.589 Insp=9.58% (Prosp: Rec=0.588 FPR=5.14% Insp=9.69%)
+
+--- ECL Operating Points (Recall & Inspected % @ 1% and 5% FPR) ---
+GRU-D            | ECL  @1%FPR: Rec=0.106 Insp=2.02% (Prosp: Rec=0.126 FPR=1.10% Insp=2.26%) | @5%FPR: Rec=0.641 Insp=11.02% (Prosp: Rec=0.637 FPR=5.03% Insp=10.98%)
+Self-Attn        | ECL  @1%FPR: Rec=0.746 Insp=8.50% (Prosp: Rec=0.741 FPR=1.13% Insp=8.54%) | @5%FPR: Rec=0.807 Insp=12.70% (Prosp: Rec=0.812 FPR=5.01% Insp=12.74%)
+WDCNN            | ECL  @1%FPR: Rec=0.759 Insp=8.63% (Prosp: Rec=0.741 FPR=1.12% Insp=8.53%) | @5%FPR: Rec=0.818 Insp=12.81% (Prosp: Rec=0.824 FPR=5.00% Insp=12.85%)
+MSDM             | ECL  @1%FPR: Rec=0.795 Insp=8.99% (Prosp: Rec=0.799 FPR=1.08% Insp=9.07%) | @5%FPR: Rec=0.810 Insp=12.73% (Prosp: Rec=0.815 FPR=5.17% Insp=12.91%)
+HORLN            | ECL  @1%FPR: Rec=0.779 Insp=8.84% (Prosp: Rec=0.784 FPR=1.05% Insp=8.90%) | @5%FPR: Rec=0.799 Insp=12.62% (Prosp: Rec=0.805 FPR=5.04% Insp=12.70%)
+MAMRD            | ECL  @1%FPR: Rec=0.797 Insp=9.02% (Prosp: Rec=0.801 FPR=1.06% Insp=9.08%) | @5%FPR: Rec=0.817 Insp=12.80% (Prosp: Rec=0.823 FPR=5.09% Insp=12.92%)
+
+=====================================================================
+8. CONFORMAL FINITE-SAMPLE ELIGIBILITY LEDGER (per resplit)
+=====================================================================
+ target_coverage  alpha  n_min_required group  n_resplits  n_pos_mean  n_pos_min  n_pos_max  pct_resplits_finite_threshold             rule_when_below_n_min
+            0.80   0.20               4 Heavy        1380   73.670290         55         89                     100.000000                                 -
+            0.80   0.20               4 Light        1380   40.250725         29         54                     100.000000                                 -
+            0.80   0.20               4  Flat        1380    8.078986          2         15                      98.043478 whole group inspected (q_hat = 0)
+            0.90   0.10               9 Heavy        1380   73.670290         55         89                     100.000000                                 -
+            0.90   0.10               9 Light        1380   40.250725         29         54                     100.000000                                 -
+            0.90   0.10               9  Flat        1380    8.078986          2         15                      41.956522 whole group inspected (q_hat = 0)
+            0.95   0.05              19 Heavy        1380   73.670290         55         89                     100.000000                                 -
+            0.95   0.05              19 Light        1380   40.250725         29         54                     100.000000                                 -
+            0.95   0.05              19  Flat        1380    8.078986          2         15                       0.000000 whole group inspected (q_hat = 0)
+
+real	0m53.726s
+user	2m56.573s
+sys	0m2.148s
