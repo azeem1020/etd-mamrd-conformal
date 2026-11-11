@@ -42,17 +42,23 @@ training:
 
 evaluation:
   cohorts:
+    # Outer split: shuffled (unstratified) 5-fold KFold, random_state 0 (zkmix_lab.data.KFoldSpec,
+    # family "random"); Folds 0-2 are evaluated. Each held-out fold (20 %) is split by stratified
+    # sampling into three parts (rng = default_rng(fold)).
+    outer_split: {method: KFold, shuffle: true, random_state: 0, n_folds: 5, evaluated_folds: [0, 1, 2]}
     training_fraction: 0.80
     heldout_fraction: 0.20
-    heldout_split:
+    heldout_split:          # order as returned by _stratified_three_way_split, SGCC (run_n_clean.py)
       early_stopping: 0.33
       threshold_calibration: 0.33
       test: 0.34
-  conformal_audit:
+  conformal_audit:          # Workflow B: 20 stratified 50/50 resplits of the test part per cell
     method: class_conditional_mondrian
     target_recall: 0.80
     order_statistic: "ceil((n + 1) * (1 - alpha))"
     groups: [heavy, light, flat]
-    min_group_size: 10
-    min_stratum_size: 10
+    resplits_per_cell: 20
+    # No eligibility gate: if k > n (n < ceil((1 - alpha) / alpha)), q_hat = +inf and the whole
+    # group is inspected (conformal_common.cc_recall_threshold); the cost enters the workload.
+    below_n_min: inspect_whole_group
 

@@ -91,10 +91,10 @@ Positive gap = audits are more efficient (relative to base rate) in Heavy than i
 ## T4 Selective operating point (supporting; not headlined)
 | arm | recall@FPR0.5% | recall@FPR1% | recall@FPR5% |
 |---|---|---|---|
-| a34_NaME | 0.302 | 0.370 | 0.589 |
-| HORLN | 0.248 | 0.318 | 0.525 |
-| MSDM | 0.168 | 0.220 | 0.392 |
+| a34_NaME | 0.298 | 0.369 | 0.588 |
+| HORLN | 0.247 | 0.315 | 0.524 |
+| MSDM | 0.168 | 0.218 | 0.392 |
 | WDCNN | 0.107 | 0.146 | 0.345 |
-| GRU-D | 0.031 | 0.050 | 0.215 |
-| HybridAttn | 0.228 | 0.299 | 0.503 |
-| DKGT | 0.074 | 0.113 | 0.284 |
+| GRU-D | 0.030 | 0.048 | 0.213 |
+| HybridAttn | 0.226 | 0.298 | 0.502 |
+| DKGT | 0.072 | 0.112 | 0.284 |

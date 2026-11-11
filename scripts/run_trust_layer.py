@@ -44,6 +44,7 @@ from sct_etd.calibration.temperature import TemperatureCalibrator
 from zkmix_lab.calibration import calibrate_cell, _stable_logit
 from sklearn.linear_model import LogisticRegression
 from repro_config import RESULTS_DIR, DATA_DIR, SGCC_PATH, ECL_PATH
+from zkmix_lab.metrics import recall_at_fpr as recall_at_fpr_roc
 from conformal_common import NREP, resplit_rng, stratified_half, cc_recall_threshold, bca_ci
 
 csv.field_size_limit(10**7)
@@ -84,12 +85,10 @@ def ece_brier(p_theft, y, n_bins=15):
 
 
 def recall_at_fpr(y, s, fpr_cap):
-    """Threshold-free recall (TPR) at the largest threshold with FPR <= cap."""
-    neg = s[y == 0]; pos = s[y == 1]
-    if len(neg) == 0 or len(pos) == 0:
+    """Recall at FPR = cap by ROC interpolation (same definition as Table 4)."""
+    if (y == 0).sum() == 0 or (y == 1).sum() == 0:
         return float("nan")
-    thr = np.quantile(neg, 1.0 - fpr_cap)          # FPR ~ cap above thr
-    return float((pos > thr).mean())
+    return recall_at_fpr_roc(y, s, fpr_cap)
 
 
 # --------------------------- data + folds --------------------------------- #

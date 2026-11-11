@@ -23,7 +23,3 @@ Aggregate      100.0 | 0.352[0.33,0.37] 0.540[0.52,0.57] 0.522[0.51,0.54] 0.190[
 
 [done] artifacts in /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/tableB
 [config] BCa B=2000, boot seed=12345; baselines n=9, MAMRD n=15, gap pairs=9
-
-real	0m2.052s
-user	0m5.051s
-sys	0m0.553s

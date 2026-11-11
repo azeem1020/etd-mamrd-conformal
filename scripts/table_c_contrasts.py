@@ -17,8 +17,6 @@ N = NormalDist(); BOOT_SEED = 12345; B = 2000
 STRATA = ["Heavy_Dropper", "Heavy_Riser", "Light_Dropper", "Light_Riser", "Flat"]
 DISP = {"Heavy_Dropper": "Heavy dropper", "Heavy_Riser": "Heavy riser",
         "Light_Dropper": "Light dropper", "Light_Riser": "Light riser", "Flat": "Flat"}
-EXPECT = {"Heavy_Riser": 0.664, "Heavy_Dropper": 0.653, "Flat": 0.647,
-          "Light_Riser": 0.617, "Light_Dropper": 0.575}
 
 
 def bca(x, B=B, alpha=0.05, seed=BOOT_SEED):
@@ -81,19 +79,21 @@ def main():
     print("="*72)
 
     # B. per-stratum mean + BCa, verify reproduction
-    print("\n[B] Matched PR-AUC per stratum (mean [BCa 95% CI]) — verify vs expected:")
+    # consistency check against the released Table C aggregate (compute_table_c.py), not constants
+    agg = pd.read_csv(OUT/"tableC_agg.csv"); agg = agg[agg.detector == "MAMRD"].set_index("stratum")
+    print("\n[B] Matched PR-AUC per stratum (mean [BCa 95% CI]) — verify vs tableC_agg.csv:")
     rows = []
     bad = False
     for s in STRATA:
         v = piv[s].values; mean = float(v.mean()); lo, hi = bca(v)
-        dev = abs(mean - EXPECT[s])
-        if dev > 0.0015:
+        dev = abs(mean - float(agg.loc[s, "matched_mean"]))
+        if dev > 1e-9:
             bad = True
         rows.append(dict(stratum=DISP[s], matched_mean=mean, ci_lo=lo, ci_hi=hi,
                          retained_N=int(nkeep[s]), positives=int(pos[s])))
-        print(f"  {DISP[s]:14s} {mean:.3f} [{lo:.3f},{hi:.3f}]  (expected {EXPECT[s]:.3f}, dev {dev:.4f})  N={nkeep[s]}")
+        print(f"  {DISP[s]:14s} {mean:.3f} [{lo:.3f},{hi:.3f}]  (|diff vs tableC_agg| = {dev:.1e})  N={nkeep[s]}")
     if bad:
-        print("\n!! MEANS DEVIATE > rounding — STOP (config mismatch)."); return
+        raise SystemExit("matched means differ from tableC_agg.csv -- inputs are inconsistent")
     pd.DataFrame(rows).to_csv(OUT/"tableC_matched_ci.csv", index=False)
 
     # C. pairwise contrasts
@@ -118,7 +118,11 @@ def main():
 
     # D. Friedman omnibus
     chi2, p, Rj = friedman(piv.values)
-    print(f"\n[D] Friedman omnibus across 5 strata over 15 cells: chi2={chi2:.3f}, df=4, p={p:.4f}")
+    from scipy.stats import friedmanchisquare
+    chi2_s, p_s = friedmanchisquare(*[piv[s].values for s in STRATA])
+    assert abs(chi2 - chi2_s) < 1e-9, (chi2, chi2_s)        # cross-check with scipy
+    pd.DataFrame([{"chi2": chi2, "df": 4, "p_value": p, "n_cells": len(piv)}]).to_csv(OUT/"tableC_friedman.csv", index=False)
+    print(f"\n[D] Friedman omnibus across 5 strata over 15 cells: chi2={chi2:.3f}, df=4, p={p:.2e}")
     print(f"    rank sums {dict(zip([DISP[s] for s in STRATA], [round(r,1) for r in Rj]))}")
 
     # ---- LaTeX: contrasts table ----
@@ -126,7 +130,7 @@ def main():
          "\\begin{table}[t]\\centering\\small",
          "\\caption{Prevalence-matched per-stratum detectability of \\name{}: pairwise "
          "contrasts (paired over $n{=}15$ cells, BCa 95\\% CI) and Friedman omnibus. "
-         f"Friedman $\\chi^2_{{4}}={chi2:.2f}$, $p={p:.3f}$.}}",
+         f"Friedman $\\chi^2_{{4}}={chi2:.2f}$, $p={p:.2e}$.}}",
          "\\label{tab:matched-contrasts}",
          "\\begin{tabular}{@{}l c c@{}}", "\\toprule",
          "Contrast & $\\Delta$ matched PR-AUC (95\\% BCa CI) & Resolved \\\\", "\\midrule"]
@@ -167,18 +171,7 @@ def main():
           f"Flat-Light riser: {flr['resolved']} ({flr['mean']:+.3f} [{flr['lo']:+.3f},{flr['hi']:+.3f}]).")
     print(f"  Heavy(pooled)-Light(pooled): {pool['resolved']} ({pool['mean']:+.3f} [{pool['lo']:+.3f},{pool['hi']:+.3f}]).")
 
-    # changelog
-    cl = OUT/"CHANGELOG.md"
-    entry = (f"\n## 2026-06-04 — Table C matched-column CIs + dissolution test\n"
-             f"- Added BCa 95% CIs (B={B}, seed {BOOT_SEED}) to the prevalence-matched per-stratum "
-             f"PR-AUC column (MAMRD, SGCC), reusing the exact cached per-cell matched values "
-             f"(K=100, MATCH_SEED=777, target=max per-stratum prevalence ~{target:.1f}%). Means reproduce prior estimates.\n"
-             f"- Added 6 pairwise contrasts (paired over n=15 cells, BCa) + Friedman omnibus "
-             f"(chi2={chi2:.2f}, df=4, p={p:.3f}).\n"
-             f"- Artifacts: tableC_matched_ci.{{csv,tex}}, tableC_contrasts.{{csv,tex}}. No retraining; main.tex untouched.\n")
-    with open(cl, "a") as fh:
-        fh.write(entry)
-    print(f"\n[done] artifacts + CHANGELOG in {OUT}")
+    print(f"\n[done] artifacts in {OUT}")
 
     # ---- OPTIONAL audit-efficiency lift: SKIPPED (note) ----
     print("\n[optional] audit-efficiency LIFT under matching: SKIPPED.")

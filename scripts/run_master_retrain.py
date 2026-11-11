@@ -222,18 +222,9 @@ def stage_trust(args):
 
 def stage_postproc(args):
     log("=== STAGE 7: POST-PROCESSING, TABLES & FIGURES GENERATION ===")
-    scripts = [
-        ("compute_r2_revisions.py", "Revision 2/3 comprehensive audit & metrics ledger"),
-        ("compute_table_b.py", "Table B ablation calculations"),
-        ("compute_table_c.py", "Table C baseline calculations"),
-        ("make_manuscript_figures.py", "Manuscript figures 2, 3, 4, 5, S1, S2"),
-        ("make_figures.py", "Extended figures"),
-        ("make_trust_figure.py", "Conformal trust figure"),
-    ]
-    for script, desc in scripts:
-        if not run_cmd([sys.executable, script], desc):
-            return False
-    return True
+    # Same post-processing as Tier 1: every table and figure from the freshly cached predictions
+    return run_cmd([sys.executable, "reproduce_all_r2.py", "--config", str(THIS.parent / "configs" / "default.yaml")],
+                   "Tier 1 master: all tables and figures (reproduce_all_r2.py)")
 
 
 def main():

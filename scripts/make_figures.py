@@ -31,6 +31,7 @@ for p in (str(THIS), str(THIS.parent)):
     if p not in sys.path:
         sys.path.insert(0, p)
 from repro_config import RESULTS_DIR, DATA_DIR, SGCC_PATH, ECL_PATH
+from zkmix_lab.metrics import topk_tie_neutral
 from fig_style import C, MODEL_COLOR, MODEL_NAME, apply_style, SINGLE, DOUBLE
 
 N = RESULTS_DIR
@@ -64,9 +65,8 @@ def _bca_ci(x, B=8000):
 
 
 def _mapk(y, s, K):
-    o = np.argsort(-s)[:K]; yk = y[o]
-    if yk.sum() == 0: return 0.0
-    return float((np.cumsum(yk) / (np.arange(len(yk)) + 1) * yk).sum() / yk.sum())
+    """MAP@K with tied scores in random order (zkmix_lab.metrics.topk_tie_neutral), as in Table 3."""
+    return topk_tie_neutral(np.asarray(y), np.asarray(s), K)[0]
 
 
 def _load_cells(pat):

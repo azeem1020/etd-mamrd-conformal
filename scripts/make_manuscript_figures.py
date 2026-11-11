@@ -81,7 +81,8 @@ PAL = {
 }
 
 
-def bca_ci(x, B=4000, seed=12345):
+def bca_ci(x, B=2000, seed=12345):
+    """Same estimator, B and seed as compute_r2_revisions.bca_ci, so Fig. 3 intervals equal Table 5."""
     x = np.asarray(x, float)
     x = x[np.isfinite(x)]
     n = len(x)
@@ -247,7 +248,7 @@ def make_fig3_ablation():
     # Panel (b): Paired ablation contrasts (Delta AP + 95% BCa CI)
     contrasts = [
         ("Full Stack vs. S0 Core ($S_4 - S_0$)", [s4[k][0] - s0[k][0] for k in common]),
-        ("Drop Both Missingness ($\\mathcal{A}_{\\mathrm{no\\text{-}miss}} - S_4$)", [a32[k][0] - s4[k][0] for k in common if k in a32]),
+        ("Drop Missingness + Periodicity ($\\mathcal{A}_{32} - S_4$)", [a32[k][0] - s4[k][0] for k in common if k in a32]),
         ("Drop Diff. & Periodicity ($S_2 - S_4$)", [s2[k][0] - s4[k][0] for k in common]),
         ("Step +Fixed Diff. ($S_3 - S_2$)", [s3[k][0] - s2[k][0] for k in common]),
         ("Step +CC-MVI ($S_1 - S_0$)", [s1[k][0] - s0[k][0] for k in common]),
@@ -261,7 +262,7 @@ def make_fig3_ablation():
     if s4_nomiss:
         common_nm = sorted(set(s4) & set(s4_nomiss))
         if common_nm:
-            contrasts.insert(2, ("Controlled Drop Missingness ($S_{4,\\mathrm{no\\text{-}miss}} - S_4$)",
+            contrasts.insert(2, ("Controlled Drop Missingness ($\\mathcal{A}_{34,\\mathrm{no\\text{-}miss}} - S_4$)",
                                  [s4_nomiss[k][0] - s4[k][0] for k in common_nm]))
 
     yy = np.arange(len(contrasts))
@@ -321,10 +322,11 @@ def make_fig4_calibration():
         return float(ece)
 
     det_names, ece_raw_means, ece_aff_means = [], [], []
+    extra_rows = []  # Brier scores and fitted affine parameters (same cells, same split)
     mamrd_raw_p, mamrd_aff_p, mamrd_y = [], [], []
 
     for name, pat, seeds, folds in arms:
-        er_list, ea_list = [], []
+        er_list, ea_list, br_list, ba_list, w_list, b_list = [], [], [], [], [], []
         for s in seeds:
             for f in folds:
                 fp = Path(str(pat).format(s=s, f=f))
@@ -338,6 +340,9 @@ def make_fig4_calibration():
                 p_aff = lr.predict_proba(_stable_logit(sc[ti]).reshape(-1, 1))[:, 1]
                 er_list.append(ece_binned(sc[ti], y[ti], n_bins=10))
                 ea_list.append(ece_binned(p_aff, y[ti], n_bins=10))
+                br_list.append(float(np.mean((sc[ti] - y[ti]) ** 2)))
+                ba_list.append(float(np.mean((p_aff - y[ti]) ** 2)))
+                w_list.append(float(lr.coef_[0, 0])); b_list.append(float(lr.intercept_[0]))
                 if name == "MAMRD":
                     mamrd_raw_p.append(sc[ti])
                     mamrd_aff_p.append(p_aff)
@@ -345,6 +350,10 @@ def make_fig4_calibration():
         det_names.append(name)
         ece_raw_means.append(float(np.mean(er_list)) if er_list else 0.0)
         ece_aff_means.append(float(np.mean(ea_list)) if ea_list else 0.0)
+        extra_rows.append({"brier_raw": float(np.mean(br_list)), "brier_affine": float(np.mean(ba_list)),
+                           "w_mean": float(np.mean(w_list)), "w_sd": float(np.std(w_list, ddof=1)),
+                           "b_mean": float(np.mean(b_list)), "b_sd": float(np.std(b_list, ddof=1)),
+                           "n_cells": len(er_list)})
 
     raw_all = np.concatenate(mamrd_raw_p)
     aff_all = np.concatenate(mamrd_aff_p)
@@ -359,6 +368,11 @@ def make_fig4_calibration():
                 px.append(float(p[msk].mean()))
                 py.append(float(y[msk].mean()))
         return np.array(px), np.array(py)
+
+    # Values quoted in the text and Fig. 4 (mean over cells; MAMRD 15 cells, baselines 9)
+    pd.concat([pd.DataFrame({"detector": det_names, "ece_raw": ece_raw_means, "ece_affine": ece_aff_means}),
+               pd.DataFrame(extra_rows)], axis=1).to_csv(
+        N / "trust" / "fig4_ece_by_detector.csv", index=False)
 
     rx, ry = bin_curve(raw_all, y_all, n_bins=10)
     ax_x, ax_y = bin_curve(aff_all, y_all, n_bins=10)

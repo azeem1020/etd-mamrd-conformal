@@ -64,6 +64,50 @@ def map_at_k(y_true: np.ndarray, y_score: np.ndarray, k: int) -> float:
     return float(precisions[top_labels == 1].mean())
 
 
+def recall_at_fpr(y_true: np.ndarray, y_score: np.ndarray, fpr: float) -> float:
+    """Recall (TPR) at false-positive rate `fpr` by linear interpolation of the empirical ROC.
+
+    i = last ROC vertex with FPR <= fpr; TPR is interpolated between vertex i and i+1 (the
+    vertex value itself when FPR_i == fpr). Tied scores form one ROC vertex, so the result
+    does not depend on row order.
+    """
+    from sklearn.metrics import roc_curve
+    f, t, _ = roc_curve(y_true, y_score, drop_intermediate=False)
+    i = int(np.searchsorted(f, fpr, side="right") - 1)
+    if f[i] == fpr or i == len(f) - 1:
+        return float(t[i])
+    w = (fpr - f[i]) / (f[i + 1] - f[i])
+    return float(t[i] + w * (t[i + 1] - t[i]))
+
+
+def topk_tie_neutral(y_true: np.ndarray, y_score: np.ndarray, k: int,
+                     n_perm: int = 1000, seed: int = 0) -> tuple[float, float]:
+    """(MAP@k, P@k) with tied scores ordered at random, averaged over n_perm orderings.
+
+    map_at_k breaks score ties by row order. When rows are stored in label order (the SGCC
+    file lists all thefts first) that favours positives for detectors with saturated, tied
+    scores. Here ties are resolved by uniformly random orderings (fixed seed), i.e. the
+    expected value under random tie-breaking. Without ties at or above rank k the result
+    equals map_at_k exactly.
+    """
+    y = np.asarray(y_true); s = np.asarray(y_score, dtype=float)
+    order = np.argsort(-s, kind="stable")
+    k_score = s[order[k - 1]]
+    top_tied = len(np.unique(s[order[:k]])) < k
+    boundary_tied = len(s) > k and s[order[k]] == k_score
+    if not (top_tied or boundary_tied):
+        return map_at_k(y, s, k), float(y[order[:k]].mean())
+    rng = np.random.default_rng(seed)
+    maps, precs = np.empty(n_perm), np.empty(n_perm)
+    pos = np.arange(1, k + 1)
+    for i in range(n_perm):
+        o = np.lexsort((rng.random(len(s)), -s))[:k]
+        top = y[o]
+        precs[i] = top.mean()
+        maps[i] = float((np.cumsum(top) / pos)[top == 1].mean()) if top.sum() else 0.0
+    return float(maps.mean()), float(precs.mean())
+
+
 def precision_at_recall(
     y_true: np.ndarray, y_score: np.ndarray, recall_target: float = 0.90
 ) -> tuple[float, float]:
@@ -277,6 +321,8 @@ __all__ = [
     "pr_auc",
     "auroc",
     "map_at_k",
+    "topk_tie_neutral",
+    "recall_at_fpr",
     "precision_at_recall",
     "f1_optimal",
     "accuracy_at_prior",

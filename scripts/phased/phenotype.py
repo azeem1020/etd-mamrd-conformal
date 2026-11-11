@@ -33,8 +33,8 @@ def gap_magnitude(X_raw: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     X_raw : (N, W, 7) raw kWh grid, NaN at missing. Returns (g, m), each (N,).
     """
     n = X_raw.shape[0]
-    wk = X_raw[:, :, 0:5].reshape(n, -1)   # Mon-Fri
-    we = X_raw[:, :, 5:7].reshape(n, -1)   # Sat-Sun
+    wk = X_raw[:, :, 0:5].reshape(n, -1)   # columns 0-4 of each 7-day block (Wed-Sun on the chronological SGCC grid)
+    we = X_raw[:, :, 5:7].reshape(n, -1)   # columns 5-6 (Mon-Tue; 2014-01-01 is a Wednesday)
     allc = X_raw.reshape(n, -1)
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)

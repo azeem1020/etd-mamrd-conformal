@@ -18,6 +18,7 @@ import numpy as np, pandas as pd
 from sct_etd.calibration.conformal_aps import APSCalibrator
 from sct_etd.calibration.temperature import TemperatureCalibrator
 from repro_config import RESULTS_DIR, DATA_DIR, SGCC_PATH, ECL_PATH
+from zkmix_lab.metrics import recall_at_fpr as recall_at_fpr_roc
 from conformal_common import resplit_rng, stratified_half, cc_recall_threshold
 csv.field_size_limit(10**7)
 
@@ -41,9 +42,9 @@ def ece_brier(p, y, n_bins=15):
 
 
 def recall_at_fpr(y, s, cap):
-    neg, pos = s[y == 0], s[y == 1]
-    if not len(neg) or not len(pos): return float("nan")
-    return float((pos > np.quantile(neg, 1 - cap)).mean())
+    """Recall at FPR = cap by ROC interpolation (same definition as Table 4)."""
+    if not (y == 0).any() or not (y == 1).any(): return float("nan")
+    return recall_at_fpr_roc(y, s, cap)
 
 
 def bca_ci(x, B=2000, alpha=0.05, seed=0):
@@ -147,6 +148,13 @@ def main():
             lL = d.set_index(["seed", "fold"])[pl] / PREV["LIGHT"]
             gaps = (lH - lL).values; lo, hi = bca_ci(gaps, seed=1)
             L.append(f"| {arm} | {lH.mean():.2f} | {lL.mean():.2f} | {np.nanmean(gaps):+.2f} [{lo:+.2f},{hi:+.2f}] |")
+    L += ["", "## T3b Realized recall of the class-conditional threshold at the 80% target (mean over cells)",
+          "| arm | recall Heavy | recall Light | marginal APS coverage |", "|---|---|---|---|"]
+    for arm in ARMS:
+        d = df[df.arm == arm]
+        if len(d):
+            L.append(f"| {arm} | {d['a0.2_erec_HEAVY'].mean():.3f} | {d['a0.2_erec_LIGHT'].mean():.3f} | "
+                     f"{d['a0.2_marg_cov'].mean():.3f} |")
     L += ["", "## T4 recall@FPR (supporting)", "| arm | recall@FPR1% | recall@FPR5% |", "|---|---|---|"]
     for arm in ARMS:
         d = df[df.arm == arm]

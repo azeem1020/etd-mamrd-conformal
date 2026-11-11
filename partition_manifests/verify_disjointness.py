@@ -131,7 +131,7 @@ def audit_ecl(manifest_dir):
         sp_dict = windows_by_fold[fold]
         tr_w = sp_dict["train"]
         es_w = sp_dict["early_stop"]
-        cal_w = sp_dict["threshold_cal"]
+        cal_w = sp_dict["reserved_unused"]
         te_w = sp_dict["test"]
         
         tot = len(tr_w) + len(es_w) + len(cal_w) + len(te_w)
@@ -140,11 +140,11 @@ def audit_ecl(manifest_dir):
         
         # Window-level disjointness
         assert len(tr_w & es_w) == 0, f"Fold {fold}: Window overlap between train and early_stop!"
-        assert len(tr_w & cal_w) == 0, f"Fold {fold}: Window overlap between train and threshold_cal!"
+        assert len(tr_w & cal_w) == 0, f"Fold {fold}: Window overlap between train and reserved_unused!"
         assert len(tr_w & te_w) == 0, f"Fold {fold}: Window overlap between train and test!"
-        assert len(es_w & cal_w) == 0, f"Fold {fold}: Window overlap between early_stop and threshold_cal!"
+        assert len(es_w & cal_w) == 0, f"Fold {fold}: Window overlap between early_stop and reserved_unused!"
         assert len(es_w & te_w) == 0, f"Fold {fold}: Window overlap between early_stop and test!"
-        assert len(cal_w & te_w) == 0, f"Fold {fold}: Window overlap between threshold_cal and test!"
+        assert len(cal_w & te_w) == 0, f"Fold {fold}: Window overlap between reserved_unused and test!"
         print(f"  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)")
         
         # Client sharing check (Point 4 demonstration)
@@ -160,15 +160,15 @@ def audit_ecl(manifest_dir):
     mean_tr_pos = sum(pos_by_fold[f]["train"] for f in (0, 1, 2)) / 3.0
     mean_es = sum(len(windows_by_fold[f]["early_stop"]) for f in (0, 1, 2)) / 3.0
     mean_es_pos = sum(pos_by_fold[f]["early_stop"] for f in (0, 1, 2)) / 3.0
-    mean_cal = sum(len(windows_by_fold[f]["threshold_cal"]) for f in (0, 1, 2)) / 3.0
-    mean_cal_pos = sum(pos_by_fold[f]["threshold_cal"] for f in (0, 1, 2)) / 3.0
+    mean_cal = sum(len(windows_by_fold[f]["reserved_unused"]) for f in (0, 1, 2)) / 3.0
+    mean_cal_pos = sum(pos_by_fold[f]["reserved_unused"] for f in (0, 1, 2)) / 3.0
     mean_te = sum(len(windows_by_fold[f]["test"]) for f in (0, 1, 2)) / 3.0
     mean_te_pos = sum(pos_by_fold[f]["test"] for f in (0, 1, 2)) / 3.0
 
     print("\nECL Mean Counts Across Folds 0--2 (Reconciling Table 2):")
     print(f"  Training (D_train):     {mean_tr:.1f} total | {mean_tr_pos:.1f} pos ({100*mean_tr_pos/mean_tr:.2f}%)")
     print(f"  Early-Stopping (D_es):  {mean_es:.1f} total | {mean_es_pos:.1f} pos ({100*mean_es_pos/mean_es:.2f}%)")
-    print(f"  Reserved Cal (D_cal):   {mean_cal:.1f} total | {mean_cal_pos:.1f} pos ({100*mean_cal_pos/mean_cal:.2f}%)")
+    print(f"  Reserved, unused:       {mean_cal:.1f} total | {mean_cal_pos:.1f} pos ({100*mean_cal_pos/mean_cal:.2f}%)")
     print(f"  Held-Out Test (D_test): {mean_te:.1f} total | {mean_te_pos:.1f} pos ({100*mean_te_pos/mean_te:.2f}%)")
 
 def main():

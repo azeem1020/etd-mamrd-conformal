@@ -33,9 +33,9 @@ Weekly grid (147, 7) column index -> Calendar Day-of-Week:
 3. POINT 3 & 4: ECL WINDOW/CLIENT MANIFEST & CLIENT OVERLAP AUDIT
 =====================================================================
  fold  train_win  train_pos  es_win  es_pos  cal_win  cal_pos  te_win  te_pos  te_Heavy_win  te_Heavy_pos  te_Light_win  te_Light_pos  unique_tr_clients  unique_te_clients  shared_tr_te_clients  pct_te_clients_in_tr
-    0      20000       1989    1649     168     1649      168    1702     175           821            84           881            91                370                360                   360                 100.0
-    1      20000       1998    1649     165     1649      165    1702     172           851            90           851            82                370                354                   354                 100.0
-    2      20000       2000    1650     165     1650      165    1700     170           849            79           851            91                370                363                   363                 100.0
+    0      20000       1989    1649     168     1649      168    1702     175           831            71           871           104                370                360                   360                 100.0
+    1      20000       1998    1649     165     1649      165    1702     172           845            62           857           110                370                354                   354                 100.0
+    2      20000       2000    1650     165     1650      165    1700     170           841            55           859           115                370                363                   363                 100.0
 
 =====================================================================
 4. POINT 5: 9-CELL VS 15-CELL MAMRD & CONSUMER-BOOTSTRAP VS CELL BCa
@@ -47,13 +47,14 @@ Self-Attn        (n= 9) | AP=0.522 [0.505,0.544] | ROC=0.863 [0.858,0.869] | F1=
 DKGT-Net         (n= 9) | AP=0.296 [0.277,0.312] | ROC=0.774 [0.762,0.783] | F1=0.331 [0.316,0.348] | P@100=0.446 [0.434,0.452] | P@200=0.345 [0.328,0.367]
 WDCNN            (n= 9) | AP=0.352 [0.334,0.365] | ROC=0.806 [0.803,0.809] | F1=0.371 [0.361,0.383] | P@100=0.494 [0.464,0.514] | P@200=0.403 [0.391,0.410]
 MSDM             (n= 9) | AP=0.409 [0.390,0.437] | ROC=0.813 [0.806,0.825] | F1=0.399 [0.387,0.422] | P@100=0.604 [0.569,0.638] | P@200=0.444 [0.425,0.466]
-HORLN            (n= 9) | AP=0.540 [0.516,0.569] | ROC=0.871 [0.864,0.881] | F1=0.504 [0.484,0.525] | P@100=0.752 [0.724,0.797] | P@200=0.559 [0.531,0.587]
+HORLN            (n= 9) | AP=0.540 [0.516,0.569] | ROC=0.871 [0.864,0.881] | F1=0.504 [0.484,0.525] | P@100=0.752 [0.723,0.797] | P@200=0.559 [0.531,0.587]
 MAMRD (9-cell)   (n= 9) | AP=0.597 [0.576,0.619] | ROC=0.892 [0.884,0.900] | F1=0.557 [0.538,0.577] | P@100=0.808 [0.772,0.832] | P@200=0.619 [0.593,0.646]
 MAMRD (15-cell)  (n=15) | AP=0.600 [0.584,0.616] | ROC=0.892 [0.886,0.898] | F1=0.556 [0.540,0.569] | P@100=0.814 [0.789,0.832] | P@200=0.620 [0.600,0.640]
+Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table3_main_results.csv
 Paired 9-cell MAMRD - HORLN ap  : mean=+0.0572 BCa=[+0.0444,+0.0696] Wilcoxon p=0.0039
 Paired 9-cell MAMRD - HORLN roc : mean=+0.0203 BCa=[+0.0175,+0.0230] Wilcoxon p=0.0039
 Paired 9-cell MAMRD - HORLN f1  : mean=+0.0529 BCa=[+0.0401,+0.0632] Wilcoxon p=0.0039
-Paired 9-cell MAMRD - HORLN p100: mean=+0.0556 BCa=[+0.0200,+0.0822] Wilcoxon p=0.0156
+Paired 9-cell MAMRD - HORLN p100: mean=+0.0556 BCa=[+0.0200,+0.0822] Wilcoxon p=0.0117
 Paired 9-cell MAMRD - HORLN p200: mean=+0.0594 BCa=[+0.0528,+0.0667] Wilcoxon p=0.0039
 Friedman test (7 detectors, 9 matched seed-fold cells): chi2=53.62, p=8.80e-10
 
@@ -65,7 +66,8 @@ Friedman test (7 detectors, 9 matched seed-fold cells): chi2=53.62, p=8.80e-10
   MSDM             | Seed-ensemble AP=0.451 Cons-Boot95%=[0.416,0.494] | ROC=0.834 [0.818,0.849]
   HORLN            | Seed-ensemble AP=0.560 Cons-Boot95%=[0.524,0.598] | ROC=0.882 [0.868,0.895]
   MAMRD (9-cell)   | Seed-ensemble AP=0.612 Cons-Boot95%=[0.580,0.646] | ROC=0.897 [0.884,0.910]
-  Paired Consumer-Bootstrap MAMRD - HORLN AP: +0.0521 95% CI=[+0.0250, +0.0774]
+  Paired Consumer-Bootstrap MAMRD - HORLN AP: +0.0521 95% CI=[+0.0250, +0.0774] (replicates <= 0: 0 of 1000)
+Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table3_tests.csv
 
 =====================================================================
 5. POINT 7: ABLATION PROVENANCE & PAIRED CIs (BUILD-UP & SUBTRACTIVE)
@@ -85,32 +87,32 @@ S4: + Inter/intra-period conv (full MAMRD, 9-cell)      | AP=0.5975[0.5760,0.618
   Full MAMRD (S4) minus Controlled No-Missingness (A34: no CC-NaME, no Mask): dAP=+0.0271 [+0.0170, +0.0390]
   S2 (+Mask CNN) minus S1 (CC-NaME only, no Mask CNN)             : dAP=+0.0152 [+0.0068, +0.0223]
   S1 (+CC-NaME) minus S0 (Core scalar fill only)                  : dAP=+0.0236 [+0.0090, +0.0348]
-Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table_ablation_provenance.csv
+Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table5_ablation.csv
 
 =====================================================================
 6. POINT 8: MISSINGNESS-ONLY BASELINE ON SGCC (3 FOLDS)
 =====================================================================
-Mask-only classifier (29 missingness features, 3 folds): AP = 0.168 (folds: [0.164, 0.168, 0.172]), ROC-AUC = 0.651 (folds: [0.644, 0.65, 0.659])
+Mask-only classifier (30 missingness features, 3 folds): AP = 0.168 (folds: [0.164, 0.168, 0.172]), ROC-AUC = 0.651 (folds: [0.644, 0.65, 0.659])
+Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/mask_only_baseline.csv
 
 =====================================================================
-7. POINT 9: TABLE 3 FPR BUDGETS, INSPECTED % & PROSPECTIVE THRESHOLDS
+7. TABLE 4: RECALL & INSPECTED % AT 1 % / 5 % FPR (ROC INTERPOLATION) + WORKFLOW B PROSPECTIVE
 =====================================================================
-GRU-D            | SGCC @1%FPR: Rec=0.050 Insp=1.36% (Prosp: Rec=0.054 FPR=1.10% Insp=1.46%) | @5%FPR: Rec=0.215 Insp=6.40% (Prosp: Rec=0.216 FPR=5.05% Insp=6.44%)
-Self-Attn        | SGCC @1%FPR: Rec=0.299 Insp=3.46% (Prosp: Rec=0.301 FPR=1.14% Insp=3.60%) | @5%FPR: Rec=0.503 Insp=8.85% (Prosp: Rec=0.503 FPR=5.27% Insp=9.09%)
-DKGT-Net         | SGCC @1%FPR: Rec=0.113 Insp=1.89% (Prosp: Rec=0.116 FPR=1.10% Insp=1.98%) | @5%FPR: Rec=0.284 Insp=6.99% (Prosp: Rec=0.285 FPR=5.21% Insp=7.19%)
-WDCNN            | SGCC @1%FPR: Rec=0.146 Insp=2.17% (Prosp: Rec=0.145 FPR=1.05% Insp=2.18%) | @5%FPR: Rec=0.345 Insp=7.50% (Prosp: Rec=0.342 FPR=5.15% Insp=7.61%)
-MSDM             | SGCC @1%FPR: Rec=0.220 Insp=2.80% (Prosp: Rec=0.220 FPR=1.04% Insp=2.82%) | @5%FPR: Rec=0.392 Insp=7.91% (Prosp: Rec=0.392 FPR=5.07% Insp=7.97%)
-HORLN            | SGCC @1%FPR: Rec=0.318 Insp=3.63% (Prosp: Rec=0.311 FPR=1.04% Insp=3.60%) | @5%FPR: Rec=0.525 Insp=9.04% (Prosp: Rec=0.521 FPR=5.11% Insp=9.10%)
-MAMRD (9-cell)   | SGCC @1%FPR: Rec=0.366 Insp=4.04% (Prosp: Rec=0.367 FPR=1.07% Insp=4.09%) | @5%FPR: Rec=0.586 Insp=9.56% (Prosp: Rec=0.584 FPR=5.16% Insp=9.68%)
-MAMRD (15-cell)  | SGCC @1%FPR: Rec=0.370 Insp=4.07% (Prosp: Rec=0.370 FPR=1.04% Insp=4.10%) | @5%FPR: Rec=0.589 Insp=9.58% (Prosp: Rec=0.588 FPR=5.14% Insp=9.69%)
-
---- ECL Operating Points (Recall & Inspected % @ 1% and 5% FPR) ---
-GRU-D            | ECL  @1%FPR: Rec=0.106 Insp=2.02% (Prosp: Rec=0.126 FPR=1.10% Insp=2.26%) | @5%FPR: Rec=0.641 Insp=11.02% (Prosp: Rec=0.637 FPR=5.03% Insp=10.98%)
-Self-Attn        | ECL  @1%FPR: Rec=0.746 Insp=8.50% (Prosp: Rec=0.741 FPR=1.13% Insp=8.54%) | @5%FPR: Rec=0.807 Insp=12.70% (Prosp: Rec=0.812 FPR=5.01% Insp=12.74%)
-WDCNN            | ECL  @1%FPR: Rec=0.759 Insp=8.63% (Prosp: Rec=0.741 FPR=1.12% Insp=8.53%) | @5%FPR: Rec=0.818 Insp=12.81% (Prosp: Rec=0.824 FPR=5.00% Insp=12.85%)
-MSDM             | ECL  @1%FPR: Rec=0.795 Insp=8.99% (Prosp: Rec=0.799 FPR=1.08% Insp=9.07%) | @5%FPR: Rec=0.810 Insp=12.73% (Prosp: Rec=0.815 FPR=5.17% Insp=12.91%)
-HORLN            | ECL  @1%FPR: Rec=0.779 Insp=8.84% (Prosp: Rec=0.784 FPR=1.05% Insp=8.90%) | @5%FPR: Rec=0.799 Insp=12.62% (Prosp: Rec=0.805 FPR=5.04% Insp=12.70%)
-MAMRD            | ECL  @1%FPR: Rec=0.797 Insp=9.02% (Prosp: Rec=0.801 FPR=1.06% Insp=9.08%) | @5%FPR: Rec=0.817 Insp=12.80% (Prosp: Rec=0.823 FPR=5.09% Insp=12.92%)
+GRU-D            | SGCC @1%FPR: Rec=0.048 Insp=1.32% (Prosp: Rec=0.052 FPR=1.05% Insp=1.40%) | @5%FPR: Rec=0.213 Insp=6.38% (Prosp: Rec=0.216 FPR=5.01% Insp=6.41%)
+Self-Attn        | SGCC @1%FPR: Rec=0.298 Insp=3.43% (Prosp: Rec=0.303 FPR=1.13% Insp=3.59%) | @5%FPR: Rec=0.502 Insp=8.83% (Prosp: Rec=0.506 FPR=5.18% Insp=9.03%)
+DKGT-Net         | SGCC @1%FPR: Rec=0.112 Insp=1.86% (Prosp: Rec=0.117 FPR=1.09% Insp=1.98%) | @5%FPR: Rec=0.284 Insp=6.98% (Prosp: Rec=0.283 FPR=5.01% Insp=6.98%)
+WDCNN            | SGCC @1%FPR: Rec=0.146 Insp=2.15% (Prosp: Rec=0.147 FPR=1.10% Insp=2.25%) | @5%FPR: Rec=0.345 Insp=7.49% (Prosp: Rec=0.345 FPR=5.11% Insp=7.59%)
+MSDM             | SGCC @1%FPR: Rec=0.218 Insp=2.76% (Prosp: Rec=0.221 FPR=1.02% Insp=2.81%) | @5%FPR: Rec=0.392 Insp=7.90% (Prosp: Rec=0.393 FPR=5.03% Insp=7.94%)
+HORLN            | SGCC @1%FPR: Rec=0.315 Insp=3.59% (Prosp: Rec=0.317 FPR=1.06% Insp=3.65%) | @5%FPR: Rec=0.524 Insp=9.03% (Prosp: Rec=0.527 FPR=5.02% Insp=9.07%)
+MAMRD (9-cell)   | SGCC @1%FPR: Rec=0.365 Insp=4.02% (Prosp: Rec=0.375 FPR=1.06% Insp=4.15%) | @5%FPR: Rec=0.585 Insp=9.54% (Prosp: Rec=0.590 FPR=5.05% Insp=9.63%)
+MAMRD (15-cell)  | SGCC @1%FPR: Rec=0.369 Insp=4.04% (Prosp: Rec=0.376 FPR=1.04% Insp=4.14%) | @5%FPR: Rec=0.588 Insp=9.56% (Prosp: Rec=0.591 FPR=4.99% Insp=9.58%)
+MAMRD (9-cell)   | ECL  @1%FPR: Rec=0.797 Insp=8.97% (Prosp: Rec=0.796 FPR=1.21% Insp=9.17%) | @5%FPR: Rec=0.817 Insp=12.77% (Prosp: Rec=0.815 FPR=5.18% Insp=12.93%)
+HORLN            | ECL  @1%FPR: Rec=0.779 Insp=8.79% (Prosp: Rec=0.781 FPR=1.12% Insp=8.93%) | @5%FPR: Rec=0.799 Insp=12.59% (Prosp: Rec=0.800 FPR=5.05% Insp=12.66%)
+WDCNN            | ECL  @1%FPR: Rec=0.759 Insp=8.59% (Prosp: Rec=0.750 FPR=1.12% Insp=8.62%) | @5%FPR: Rec=0.818 Insp=12.78% (Prosp: Rec=0.815 FPR=5.13% Insp=12.88%)
+GRU-D            | ECL  @1%FPR: Rec=0.104 Insp=1.96% (Prosp: Rec=0.128 FPR=1.13% Insp=2.32%) | @5%FPR: Rec=0.638 Insp=10.95% (Prosp: Rec=0.631 FPR=5.03% Insp=10.92%)
+Self-Attn        | ECL  @1%FPR: Rec=0.738 Insp=8.38% (Prosp: Rec=0.739 FPR=1.09% Insp=8.48%) | @5%FPR: Rec=0.807 Insp=12.67% (Prosp: Rec=0.807 FPR=5.10% Insp=12.78%)
+MSDM             | ECL  @1%FPR: Rec=0.795 Insp=8.95% (Prosp: Rec=0.794 FPR=1.12% Insp=9.07%) | @5%FPR: Rec=0.810 Insp=12.70% (Prosp: Rec=0.809 FPR=5.15% Insp=12.83%)
+Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table4_fpr_budgets.csv and table4_prospective.csv
 
 =====================================================================
 8. CONFORMAL FINITE-SAMPLE ELIGIBILITY LEDGER (per resplit)
@@ -126,6 +128,22 @@ MAMRD            | ECL  @1%FPR: Rec=0.797 Insp=9.02% (Prosp: Rec=0.801 FPR=1.06%
             0.95   0.05              19 Light        1380   40.250725         29         54                     100.000000                                 -
             0.95   0.05              19  Flat        1380    8.078986          2         15                       0.000000 whole group inspected (q_hat = 0)
 
-real	0m53.726s
-user	2m56.573s
-sys	0m2.148s
+=====================================================================
+9. TABLE 2: PARTITION LEDGER (means over Folds 0-2)
+=====================================================================
+dataset       partition            n         pos   pos_pct  share_of_total_pct               groups   grp1_pos   grp2_pos  grp3_pos
+   SGCC           train 33897.333333 2900.666667  8.557212           79.999371     Heavy/Light/Flat        NaN        NaN       NaN
+   SGCC      early_stop  2795.000000  235.000000  8.407871            6.596337     Heavy/Light/Flat        NaN        NaN       NaN
+   SGCC   threshold_cal  2795.000000  235.000000  8.407871            6.596337     Heavy/Light/Flat        NaN        NaN       NaN
+   SGCC            test  2884.666667  244.333333  8.470072            6.807955     Heavy/Light/Flat 148.000000  80.333333 16.000000
+   SGCC        conf_cal  1441.666667  122.000000  8.462428            3.402404     Heavy/Light/Flat  73.670290  40.250725  8.078986
+   SGCC       conf_eval  1443.000000  122.333333  8.477708            3.405551     Heavy/Light/Flat  74.329710  40.082609  7.921014
+   SGCC           total 42372.000000 3615.000000  8.531577          100.000000                  NaN        NaN        NaN       NaN
+    ECL           train 20000.000000 1995.666667  9.978333           80.000000 High/Low consumption        NaN        NaN       NaN
+    ECL      early_stop  1649.333333  166.000000 10.064673            6.597333 High/Low consumption        NaN        NaN       NaN
+    ECL reserved_unused  1649.333333  166.000000 10.064673            6.597333 High/Low consumption        NaN        NaN       NaN
+    ECL            test  1701.333333  172.333333 10.129310            6.805333 High/Low consumption  62.666667 109.666667       NaN
+    ECL        conf_cal   850.333333   86.000000 10.113681            3.401333 High/Low consumption  31.347222  54.652778       NaN
+    ECL       conf_eval   851.000000   86.333333 10.144928            3.404000 High/Low consumption  31.319444  55.013889       NaN
+    ECL           total 25000.000000 2500.000000 10.000000          100.000000                  NaN        NaN        NaN       NaN
+Exported /home/azeem/papers/Submitted_Scientific_Reports/Scientif_Reports_Revision_2_submission_package/etd-mamrd-conformal_updated/results/phase_n_retrained/r2_audit/table2_partition_ledger.csv
