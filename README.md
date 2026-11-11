@@ -62,7 +62,8 @@ etd-mamrd-conformal/
 │   ├── repro_config.py                # Centralized path configuration
 │   ├── run_n_clean.py                 # Main benchmark training & evaluation runner
 │   ├── run_trust_layer.py             # Conformal audit policy evaluation
-│   ├── run_ecl_ours.py                # ECL generalization evaluation
+│   ├── run_ecl_trust.py               # ECL benchmark training (all 6 detectors, 3 folds x 3 seeds)
+│   ├── run_ecl_trust_analysis.py      # ECL conformal audit (Supp. Table S6)
 │   └── make_figures.py                # Supplementary figure generators
 │
 ├── zkmix_lab/                         # Core library: data loaders, training loops, metrics

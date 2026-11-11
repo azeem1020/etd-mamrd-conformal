@@ -1,10 +1,11 @@
-"""ECL cross-dataset trustworthy extension (Task #3, PLAN_TRUST_2026-06-02.md).
+"""ECL benchmark: training and per-window test predictions for all six detectors.
 
-Replicates the LOCKED 30-min ECL protocol of run_ecl_hourly.py EXACTLY (so AP
-reproduces), but (a) dumps per-instance test scores+labels+magnitude per cell, and
-(b) runs 3 folds x 3 seeds per arm (the locked table was fold-0 only) so the conformal
-layer has enough cells/positives for per-stratum CIs. Self-contained, resumable
-(skips existing cells), GPU heat-gated.
+Protocol: 30-min resolution, non-overlapping 7-day windows (336 readings), at most
+25,000 windows, six-type FDI attacks injected into 10% of windows (msdm/fdi.py),
+shuffled 5-fold KFold (random state 0) on windows, held-out fold split 33/33/34 into
+(unused, early-stopping, test); 3 folds x 3 seeds per detector. Each cell dumps the
+per-window test scores, labels and observed load magnitude for the conformal audit
+(run_ecl_trust_analysis.py). Self-contained, resumable (skips existing cells), GPU heat-gated.
 
 ECL has NO calendar/weekday structure and carries injected FDI -> the SGCC weekday/
 weekend phenotype is NOT meaningful here. Per the locked finding ("detectability =
@@ -80,12 +81,12 @@ def prep(W):
 
 
 def build_dataset():
-    """EXACT replication of run_ecl_hourly data path (rng order matters)."""
+    """Windows, FDI injection and observed magnitude (rng order matters for reproducibility)."""
     W = load_windows()
     rng = np.random.default_rng(0)
     if len(W) > CAP:
         W = W[rng.choice(len(W), CAP, False)]
-    # FDI with a FRESH default_rng(0) (matches run_ecl_hourly.fdi call)
+    # FDI with a fresh default_rng(0)
     frng = np.random.default_rng(0); y = np.zeros(len(W), int); Wo = W.copy()
     for i in frng.choice(len(W), int(0.10 * len(W)), False):
         Wo[i] = ATTACKS[frng.integers(6)](W[i], frng); y[i] = 1
