@@ -1727,7 +1727,7 @@ def build_a34_no_missingness(weeks: int = 147, days: int = 7):
 
 ARM_BUILDERS = {
     "a32_generic":             build_a32_generic,  # generic cross-dataset arm
-    "a32_ablate_na":           build_a32_generic,  # alias for A_no-miss ablation arm cited in Table 5
+    "a32_ablate_na":           build_a32_generic,  # legacy R2 alias of a32_generic (not used; Table 5 A_no-miss is a34_no_missingness)
     "a33_generic":             build_a33_generic,  # generic + missingness-adaptive
     "a34_generic":             build_a34_generic,  # generic + periodicity (MSDM IIPC)
     "a34_no_missingness":      build_a34_no_missingness, # controlled S4 ablation (Reviewer 2 Comment 4)
