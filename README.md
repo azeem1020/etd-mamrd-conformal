@@ -151,7 +151,7 @@ export MAMRD_RESULTS=../results/phase_n_retrained
 
 To support transparent peer review and independent replication, the repository implements an explicit two-tier replication architecture:
 - **Tier 1 (Regeneration from cached predictions, about 3.5 minutes on a 16-core CPU, no GPU)**: Starting from the cached prediction-level records of every trained model, it verifies the customer-disjoint partition manifests, re-runs every analysis script (Tables 2–6, Supplementary Tables S2–S4, S6, S7 and the statistics quoted in the text), and regenerates all data-driven main and supplementary figures. It does not retrain any model. Every number in Tables 2–6 is the single rounding of a value in a released CSV.
-- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after cohort cleaning, then runs the Tier 1 post-processing (`reproduce_all_r2.py`). The console log of the reference run is `results/phase_n_retrained/master_retrain.log`.
+- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on one NVIDIA GeForce RTX 5070 Ti Laptop GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after cohort cleaning, then runs the Tier 1 post-processing (`reproduce_all_r2.py`). The console log of the reference run is `results/phase_n_retrained/master_retrain.log`.
 
 ---
 
@@ -169,14 +169,14 @@ python scripts/reproduce_all_r2.py --config configs/default.yaml
 | 4 | `compute_r2_revisions.py` | `r2_audit/table2_partition_ledger.csv` … `table5_ablation.csv`, `table3_tests.csv`, `table4_prospective.csv`, `mask_only_baseline.csv`, `router_params.csv`, conformal eligibility ledger |
 | 5 | `make_manuscript_figures.py`, `make_trust_figure.py`, `make_figures.py`, `make_mechanism_figure.py` | `figures/`, `trust/fig4_ece_by_detector.csv` |
 
-Re-running Tier 1 on the released records reproduces every CSV/Markdown output byte-for-byte; console logs of the reference run are in `results/phase_n_retrained/logs/`. Supplementary Table S5 (inference latency and peak memory) is a hardware measurement made once with `scripts/make_compute_table.py` on an RTX 3060 and is not part of Tier 1; its parameter counts are deterministic.
+Re-running Tier 1 on the released records reproduces every CSV/Markdown output byte-for-byte; console logs of the reference run are in `results/phase_n_retrained/logs/`. Supplementary Table S5 (inference latency and peak memory) is a hardware measurement made with `scripts/make_compute_table.py` on the Tier 2 machine (NVIDIA GeForce RTX 5070 Ti Laptop GPU, batch 256; latency is the median of three runs, logged in `results/phase_n_retrained/logs/make_compute_table_run1.log` to `_run3.log`) and is not part of Tier 1; its parameter counts are deterministic.
 *Note: Figure 1 (MAMRD Architectural Framework) is a conceptual schematic drawn in TikZ; it is not generated from data, and its source is not part of this repository. Figure 2 (Precision-Recall and ROC curves) is dynamically interpolated and rendered by `make_manuscript_figures.py` as part of this routine.*
 
 ---
 
 ### Tier 2: Complete End-to-End Retraining from Raw Datasets
 
-#### Master One-Command Retraining Runner (103.8 min on NVIDIA GPU):
+#### Master One-Command Retraining Runner (103.8 min on one NVIDIA GeForce RTX 5070 Ti Laptop GPU):
 To independently execute the full end-to-end retraining pipeline from scratch into `results/phase_n_retrained/`:
 ```bash
 python scripts/run_master_retrain.py
@@ -288,7 +288,7 @@ Every result reported in the manuscript is traceable to its corresponding config
 | **Supp. Table S7** | ECL metric suite | 9 cells; $F_1$ at the per-fold maximising threshold (oracle); MAP@100 tie-neutral | `scripts/make_ecl_board.py` | `ecl_board.csv` |
 | **Supp. Figs. S1, S2, S3** | Detectability ceiling; metric inflation; illustrative mechanism | — | `scripts/make_figures.py`, `scripts/make_mechanism_figure.py` | `figures/fig4_ceiling.pdf`, `figures/fig1_metric_inflation.pdf`, `figures/fig_mechanism.pdf` |
 | **Table 1, Supp. Table S1, Figure 1, Supp. Fig. S5** | Layer specification, training hyper-parameters, architecture and workflow schematics | not data-driven: written from the model and training code (`scripts/phased/models.py`, `zkmix_lab/training.py` `TrainConfig`); parameter counts as in Supp. Table S5 | `scripts/make_compute_table.py` (parameter counts) | — (schematics are drawn, not generated) |
-| **Supp. Table S5** | Parameters, inference latency, peak memory | hardware measurement (RTX 3060, batch 256); not part of Tier 1 | `scripts/make_compute_table.py` | console output |
+| **Supp. Table S5** | Parameters, inference latency, peak memory | hardware measurement on the Tier 2 machine (RTX 5070 Ti Laptop GPU, batch 256, median of three runs); not part of Tier 1 | `scripts/make_compute_table.py` | `logs/make_compute_table_run1.log` to `_run3.log` |
 | **Text (Intro., Methods)** | Mask-only classifier; missing-rate statistics; router cutoffs | 3 folds | `scripts/compute_r2_revisions.py` | `r2_audit/mask_only_baseline.csv`, `r2_audit/router_params.csv` |
 | **Supp. Table S6** | ECL conformal lift gap | Same protocol (`conformal_common.py`) | `scripts/run_ecl_trust_analysis.py` | `ecl_trust/RESULTS_ECL_TRUST.md` |
 

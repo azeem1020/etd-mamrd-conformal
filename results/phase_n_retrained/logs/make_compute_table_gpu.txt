@@ -1,0 +1,2 @@
+NVIDIA GeForce RTX 5070 Ti Laptop GPU, 595.99.02
+torch 2.14.0+cu130 cuda 13.0

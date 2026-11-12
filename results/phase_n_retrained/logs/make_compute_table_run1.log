@@ -1,0 +1,9 @@
+[device] cuda
+detector                params   us/consumer   peak MB
+GRU-D                   16.0K        114.14      37.2
+Self-attention       33814.1K         69.30     953.9
+DKGT-Net             11198.0K         41.94     646.6
+Wide-and-deep CNN      190.8K          3.59      75.0
+MSDM                   214.0K         86.70     588.5
+HORLN                 3493.6K         30.01     661.4
+MAMRD                  974.8K         44.10     521.3

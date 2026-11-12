@@ -9,7 +9,7 @@
 See the root [`README.md`](../README.md):
 
 - **Tier 1** (`python scripts/reproduce_all_r2.py --config configs/default.yaml`, about 3.5 minutes on a CPU) regenerates every table and every data-driven figure from the cached predictions in this directory.
-- **Tier 2** (`python scripts/run_master_retrain.py`, about 104 minutes on one GPU) retrains all 177 models and then runs Tier 1.
+- **Tier 2** (`python scripts/run_master_retrain.py`, about 104 minutes on one NVIDIA GeForce RTX 5070 Ti Laptop GPU) retrains all 177 models and then runs Tier 1.
 
 The traceability matrix in the root README maps each table and figure to its script and output file.
 
@@ -27,7 +27,7 @@ The traceability matrix in the root README maps each table and figure to its scr
 | `figures/` | Data-driven figures |
 | `clean_cohort.json`, `dropped_ids.csv`, `keep_idx.npy` | Outputs of the cohort audit (`scripts/clean_cohort.py`) |
 | `repro_finardi.json` | Output of `scripts/run_finardi_repro.py` |
-| `logs/` | Console log of each Tier 1 step |
+| `logs/` | Console log of each Tier 1 step, and of the three Supplementary Table S5 hardware runs (`make_compute_table_run*.log`, GPU in `make_compute_table_gpu.txt`) |
 | `master_retrain.log` | Log of the Tier 2 run of 9 November 2026 |
 
 ## Notes on the logs
