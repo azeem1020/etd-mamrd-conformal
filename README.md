@@ -49,7 +49,7 @@ etd-mamrd-conformal/
 │   │   ├── baselines.py               #   Baseline detectors (GRU-D, WDCNN, Self-Attn, HORLN, MSDM, DKGT-Net)
 │   │   ├── archetype.py               #   Differencing / inter-/intra-period branches
 │   │   └── phenotype.py               #   Label-free consumption-level stratification
-│   ├── reproduce_all_r2.py            # Master one-command R2 reproduction pipeline
+│   ├── reproduce_all_r2.py            # Tier 1: regenerates all tables and figures from cached predictions (no retraining)
 │   ├── compute_r2_revisions.py        # Partition manifests, bootstrap CIs, and R2 audit ledgers
 │   ├── compute_consumer_bootstrap.py  # Customer-level clustered bootstrap CIs (B=1,000)
 │   ├── verify_partition_manifests.py  # Customer & window disjointness verifier
