@@ -4,7 +4,7 @@ Senior-researcher figure set carrying the three contributions:
   Fig 1  metric_inflation   — C3: ROC/MAP@100 high, full PR-AUC collapses (per model)
   Fig 2  two_dataset_bars   — protocol-matched 5-baseline x 2-dataset PR-AUC (+CI)
   Fig 3  phenotype          — C1: per-phenotype PR-AUC varies 0.36-0.65 while ROC ~flat
-  Fig 4  ceiling            — C2: (a) cumulative build-up plateau (b) lever forest plot
+  Fig 4  ceiling            — Supp. Fig. S1: (a) cumulative build-up (b) per-branch increments (Table 5 ledger)
   Fig 5  pr_roc_curves      — pooled PR & ROC curves, a34 vs baselines (SGCC)
 
 Reads locked CSVs from results/phase_n_retrained/. Outputs vector PDF + PNG preview to
@@ -153,10 +153,13 @@ def fig_phenotype(d):
 
 
 def fig_ceiling(d):
-    """C2: (a) cumulative build-up plateau; (b) lever forest plot."""
+    """Supp. Fig. S1: (a) cumulative build-up; (b) per-branch increments with 95% BCa CI.
+
+    Panel (b) reads r2_audit/table5_ablation.csv, written by compute_r2_revisions.py
+    (the paired increments of Table 5), so the figure carries no hand-entered values."""
     fig, (axL, axR) = plt.subplots(1, 2, figsize=(DOUBLE, 2.8), gridspec_kw={"width_ratios": [1, 1.15]})
     # (a) build-up — paired means on common cells
-    stages = [("S0\ncore", N / "bu/a34_bu0_core_*.csv"), ("S1\n+native", N / "bu/a34_bu1_ccname_*.csv"),
+    stages = [("S0\ncore", N / "bu/a34_bu0_core_*.csv"), ("S1\n+CC-MVI", N / "bu/a34_bu1_ccname_*.csv"),
               ("S2\n+mask", N / "bu/a34_bu2_mask_*.csv"), ("S3\n+diff", N / "bu/a33_generic_*.csv"),
               ("S4\n+period", N / "a34_cell_*.csv")]
     sd = [(_load_cells(str(p))) for _, p in stages]
@@ -170,29 +173,27 @@ def fig_ceiling(d):
     if np.isfinite(means[0]):
         axL.text(0.03, 0.97, f"+{means[-1]-means[0]:.3f} total\n(plateau ≈ bottleneck)",
                  transform=axL.transAxes, ha="left", va="top", fontsize=6.5, color=TOL["dark"])
-    # (b) lever forest plot — locked Δ PR-AUC vs a14/a33 (from CLAIMS_N + build-up)
-    levers = [  # (label, delta, lo, hi)
-        ("Imputation (token vs 0)", -0.0006, -0.006, 0.005),
-        ("Focal loss (γ=2)",        -0.0030, -0.011, 0.004),
-        ("Complexity branch (L1)",  -0.0024, -0.011, 0.004),
-        ("PhenoMoE (label-free)",   +0.0026, -0.004, 0.010),
-        ("Periodicity arm (S4)",    +0.0028, -0.008, 0.013),
-        ("Differencing arm (S3)",   +0.0141, +0.004, 0.028),
-        ("Full MAMRD vs. 21-block core", +0.0135, +0.006, 0.021),
-    ]
-    yy = np.arange(len(levers))
-    for i, (lab, dlt, lo, hi) in enumerate(levers):
+    # (b) per-branch increments from the Table 5 ledger (step = S_k - S_{k-1}; cum = S4 - S0)
+    led = {r["variant"]: r for r in csv.DictReader(open(N / "r2_audit" / "table5_ablation.csv"))
+           if r["panel"] == "A"}
+    levers = [("CC-MVI front-end (S0→S1)", "S1", "step"), ("2-D mask branch (S1→S2)", "S2", "step"),
+              ("Differencing branch (S2→S3)", "S3", "step"), ("Periodicity branch (S3→S4)", "S4", "step"),
+              ("Full MAMRD vs core (S0→S4)", "S4", "cum")]
+    for i, (lab, v, kind) in enumerate(levers):
+        dlt, lo, hi = (float(led[v][f"{kind}_{c}"]) for c in ("delta", "lo", "hi"))
         sig = lo > 0 or hi < 0
         c = TOL["red"] if sig else TOL["grey"]
         axR.plot([lo, hi], [i, i], "-", color=c, lw=1.4)
         axR.plot(dlt, i, "o", color=c, ms=4)
     axR.axvline(0, ls="--", lw=0.8, color="k", alpha=0.7)
     axR.axvspan(-0.01, 0.01, color="k", alpha=0.05)
-    axR.set_yticks(yy); axR.set_yticklabels([l[0] for l in levers], fontsize=6.5)
-    axR.set_xlabel("Δ PR-AUC (95% BCa CI)"); axR.set_title("(b) Interventions vs the bottleneck")
-    axR.legend(handles=[Patch(color=TOL["red"], label="significant + material"),
-                        Patch(color=TOL["grey"], label="null (CI incl. 0)")],
-               loc="upper center", bbox_to_anchor=(0.5, -0.30), ncol=2)
+    axR.set_yticks(np.arange(len(levers))); axR.set_yticklabels([l[0] for l in levers], fontsize=6.5)
+    axR.invert_yaxis()
+    axR.set_xlabel("Δ PR-AUC (95% BCa CI)"); axR.set_title(f"(b) Branch increments (n={led['S4']['n_cells']})")
+    axR.legend(handles=[Patch(color=TOL["red"], label="interval excludes 0"),
+                        Patch(color=TOL["grey"], label="interval includes 0"),
+                        Patch(color="k", alpha=0.05, label="±0.01 materiality band")],
+               loc="upper center", bbox_to_anchor=(0.5, -0.30), ncol=3)
     _save(fig, "fig4_ceiling")
 
 
