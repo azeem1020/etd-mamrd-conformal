@@ -19,7 +19,8 @@ Outputs (results/phase_n_retrained/):
   clean_cohort.json        summary + counts + breakdowns
   dropped_ids.csv          CONS_NO, FLAG, reason for every dropped customer
   keep_idx.npy             int64 row indices (into the 42372-row SGCC order) to KEEP
-  conflicting_flag_ids.csv CONS_NO, FLAG, cluster_exact  (R3 flag, not dropped)
+  conflicting_flag_ids.csv CONS_NO, FLAG, cluster_exact, idx  (R3 flag, not dropped;
+                           computed from the SGCC readings, no external input)
 """
 from __future__ import annotations
 import sys, json
@@ -37,7 +38,6 @@ from repro_config import RESULTS_DIR, DATA_DIR, SGCC_PATH, ECL_PATH
 
 NO_SIGNAL_EPS = 1e-6
 OUT = RESULTS_DIR
-AUDIT = (DATA_DIR / "sgcc_audit_results")  # external audit input (optional; not shipped)
 
 
 def main() -> None:
@@ -70,18 +70,26 @@ def main() -> None:
     dropped.to_csv(OUT / "dropped_ids.csv", index=False)
     np.save(OUT / "keep_idx.npy", keep_idx)
 
-    # R3 conflicting-label exact-duplicate clusters (flag, do NOT drop)
-    conf = {"n_clusters": 0, "n_customers": 0, "theft": 0, "honest": 0}
-    exf = AUDIT / "tables" / "07_duplicate_exact_clusters.csv"
-    if exf.exists():
-        ex = pd.read_csv(exf)
-        mixed = ex.groupby("cluster_exact").FLAG.transform("nunique") > 1
-        exm = ex[mixed]
-        exm.to_csv(OUT / "conflicting_flag_ids.csv", index=False)
-        conf = {"n_clusters": int(exm.cluster_exact.nunique()),
-                "n_customers": int(len(exm)),
-                "theft": int((exm.FLAG == 1).sum()),
-                "honest": int((exm.FLAG == 0).sum())}
+    # R3 conflicting-label exact-duplicate clusters (flag, do NOT drop).
+    # An exact-duplicate cluster is a set of >= 2 customers whose raw daily readings
+    # are identical in every column (a missing reading matches only a missing reading).
+    # A cluster is conflicting when it contains both labels. Cluster ids follow the
+    # first appearance of each cluster in the SGCC row order.
+    row_key = pd.util.hash_pandas_object(pd.DataFrame(vals), index=False).values
+    key_count = pd.Series(row_key).map(pd.Series(row_key).value_counts()).values
+    dup_idx = np.where(key_count > 1)[0]
+    ex = pd.DataFrame({"idx": dup_idx, "CONS_NO": cons[dup_idx],
+                       "FLAG": y[dup_idx], "key": row_key[dup_idx]})
+    first_row = ex.groupby("key").idx.transform("min")
+    ex["cluster_exact"] = first_row.rank(method="dense").astype(np.int64) - 1
+    mixed = ex.groupby("cluster_exact").FLAG.transform("nunique") > 1
+    exm = ex.loc[mixed, ["CONS_NO", "FLAG", "cluster_exact", "idx"]]
+    exm.to_csv(OUT / "conflicting_flag_ids.csv", index=False)
+    conf = {"n_clusters": int(exm.cluster_exact.nunique()),
+            "n_customers": int(len(exm)),
+            "theft": int((exm.FLAG == 1).sum()),
+            "honest": int((exm.FLAG == 0).sum()),
+            "all_no_signal": bool(no_signal[exm.idx.values].all())}
 
     summary = {
         "pre_registered_rule": "drop iff nansum(|x|) < 1e-6 (no consumption signal)",

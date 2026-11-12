@@ -25,7 +25,7 @@ The traceability matrix in the root README maps each table and figure to its scr
 | `r2_audit/` | Tables 2–5, partition ledgers and manifests, conformal eligibility ledger |
 | `tableA/`, `tableB/`, `tableC/` | Supplementary tables |
 | `figures/` | Data-driven figures |
-| `clean_cohort.json`, `dropped_ids.csv`, `keep_idx.npy` | Outputs of the cohort audit (`scripts/clean_cohort.py`) |
+| `clean_cohort.json`, `dropped_ids.csv`, `keep_idx.npy`, `conflicting_flag_ids.csv` | Outputs of the cohort audit (`scripts/clean_cohort.py`); `conflicting_flag_ids.csv` lists the 497 consumers in exact-duplicate clusters with conflicting labels (flagged, kept in the evaluation cohort) |
 | `repro_finardi.json` | Output of `scripts/run_finardi_repro.py` |
 | `logs/` | Console log of each Tier 1 step, and of the three Supplementary Table S5 hardware runs (`make_compute_table_run*.log`, GPU in `make_compute_table_gpu.txt`) |
 | `master_retrain.log` | Log of the Tier 2 run of 9 November 2026 |
