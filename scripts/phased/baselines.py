@@ -1,6 +1,7 @@
-"""Faithful re-implementations of published ETD baselines, wired to the SAME
-harness contract as our arms so they run under the IDENTICAL honest protocol
-(same customer-disjoint split, same per-user min-max preprocessing, same
+"""Re-implementations of six published ETD detectors, following the architectures
+described in the cited papers and adapted to our input format. They use the same
+harness contract as our models, so all detectors run under one common protocol
+(same customer-disjoint split, same per-consumer min-max preprocessing, same
 PR-AUC/ROC/F1/P@k + per-phenotype metrics in run_n_clean.py).
 
 Contract: every module takes x of shape (B, W, D) float32 with NaN cells
@@ -13,25 +14,24 @@ pipeline so the comparison is controlled.
 
 Models:
   * WDCNN     — Zheng et al., IEEE TII 2018 (Wide & Deep CNN + self-defined
-                periodicity kernel). Ported 1:1 from the user's validated Keras
-                deployment (TII_Wide-Deep_..., reproduces AUC 0.794): wide
+                periodicity kernel), with the paper's settings: wide
                 Dense(90) ∥ deep[Conv2D(15,3x3,stride3)->MaxPool3->Dense(60)]
-                -> concat -> Dense(64) -> Dense(1). The torch kernel transform
-                is unit-tested bit-equivalent to the numpy reference.
-  * HORLN     — Zhu et al., IEEE TII 2023. First-order (IIWC dilated inter/intra
-                week conv, dims 32->16, k=3 + HWGConv g=1 -> C1st=200) +
-                second-order SDM (multihead self-dependency -> C2nd=300) +
-                2-FC classifier. Input C=2 (value + observed-mask).
+                -> concat -> Dense(64) -> Dense(1). The kernel preprocessing
+                reproduces the behaviour of the authors' released code
+                (function.py), checked numerically in __main__.
+  * HORLN     — Zhu et al., IEEE TII 2023. IIWC-Blocks (32, 16) + HWGConv
+                (C1st=200) + self-dependency modeling with h=4 heads (C2nd=300)
+                + two-layer classifier. Input C=2 (value + observed-mask).
   * HybridAttn— Finardi et al., arXiv 2020. Two hybrid layers of
                 [multi-head self-attention (Cbar=16) || dilated conv (d=1,2 ->
                 32ch)] unified by 1x1 conv + LayerNorm + PReLU, then dense(1024)
                 -> logit. Input C=2 (value + missing-mask, mask=1 where missing).
   * GRUD      — Che et al., Sci. Rep. 2018. Decay-based GRU for missing data;
-                W=147 weeks as time steps, D=7 day-features (multivariate,
-                per-feature input decay + hidden decay). Leakage-safe per-sample
-                observed mean as the empirical mean fallback.
-  * MSDMNet   — Wang et al., IEEE TSG 2025, wrapping our faithful repro
-                (msdm_reproduction/msdm/model.py) with the paper's SGCC config
+                W=147 weeks as time steps, D=7 day-features (diagonal input
+                decay + full hidden decay). Per-sample observed mean as the
+                empirical mean.
+  * MSDMNet   — Wang et al., IEEE TSG 2025, wrapping our re-implementation
+                (msdm/model.py) with the paper's SGCC config
                 (scales [1,2,7,28,91,182], period 7, in_channels=2).
 """
 from __future__ import annotations
@@ -59,10 +59,11 @@ def _value_and_mask(x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
 # 1. WDCNN  (Zheng et al., IEEE TII 2018)
 # ===========================================================================
 def wdcnn_kernel_transform(grid: torch.Tensor) -> torch.Tensor:
-    """Torch port of the validated numpy `self_define_cnn_kernel_process`
-    (TII_Wide-Deep_.../function.py).  grid: (B, W, D) -> (B, 1, 3W, 3D).
+    """Kernel preprocessing of Zheng et al. (2018), reproducing the behaviour of
+    `self_define_cnn_kernel_process` in the authors' released code (function.py).
+    grid: (B, W, D) -> (B, 1, 3W, 3D).
 
-    The numpy reference does: 3x-overlapping-triplet expand on both axes, then
+    The released function does: 3x-overlapping-triplet expand on both axes, then
     `preprocess_kernel` whose second (column) loop fully overwrites the first,
     so the EFFECTIVE transform is the per-3-column anti-mean
     [2*c0-c1-c2, 2*c1-c0-c2, 2*c2-c0-c1] applied to the column-expanded grid.
@@ -124,86 +125,85 @@ class WDCNN(nn.Module):
 
 # ===========================================================================
 # 2. HORLN  (Zhu et al., IEEE TII 2023)
+# Follows the architecture described in the paper: IIWC-Blocks (Eq. 2-4), HWGConv,
+# self-dependency modeling with h = 4 heads, f = normalization + PReLU after each
+# HWGConv (Eq. 5, 7), two-layer classifier (Eq. 9), normal initialization; no dropout
+# (the paper specifies none). HWGConv uses 4 groups in the first-order module and 1 in
+# self-dependency modeling, which reproduces the 0.941M parameters the paper reports for
+# HORLN (Table V). Details the paper leaves open (group split, per-branch channel split,
+# classifier width 100, initialization scale 0.02) follow the authors' released code
+# (github.com/GillianZhu/HORLN). Input: value + binary mask (0 where missing).
 # ===========================================================================
 class IIWCBlock(nn.Module):
-    """Inter-and-Intra Week Convolution block. Parallel dilated convs (d=1..r):
-    InterWeekConv kernel (3,1) along the week axis, IntraWeekConv kernel (1,3)
-    along the day axis; all outputs concatenated then fused (1x1) + PReLU + BN.
-    """
+    """Inter-and-Intra Week Convolution block (Eq. 2-4): (k,1) inter-week and (1,k)
+    intra-week convolutions with dilation d = 1..r, concatenated, then BatchNorm +
+    PReLU."""
     def __init__(self, cin: int, cout: int, r: int = 3, k: int = 3):
         super().__init__()
-        pad_off = k // 2
+        temp = cout // 2
+        n1 = temp // 3
+        widths = [n1, n1, temp - 2 * n1]
         self.inter = nn.ModuleList([
-            nn.Conv2d(cin, cout, (k, 1), padding=(d * pad_off, 0), dilation=(d, 1))
+            nn.Conv2d(cin, widths[d - 1], (k, 1), padding=((k - 1) * d // 2, 0), dilation=(d, 1))
             for d in range(1, r + 1)])
         self.intra = nn.ModuleList([
-            nn.Conv2d(cin, cout, (1, k), padding=(0, d * pad_off), dilation=(1, d))
+            nn.Conv2d(cin, widths[d - 1], (1, k), padding=(0, (k - 1) * d // 2), dilation=(1, d))
             for d in range(1, r + 1)])
-        self.fuse = nn.Conv2d(2 * r * cout, cout, kernel_size=1)
-        self.bn = nn.BatchNorm2d(cout)
-        self.act = nn.PReLU()
+        self.post = nn.Sequential(nn.BatchNorm2d(cout), nn.PReLU())
 
     def forward(self, x):
         parts = [c(x) for c in self.inter] + [c(x) for c in self.intra]
-        return self.act(self.bn(self.fuse(torch.cat(parts, dim=1))))
+        return self.post(torch.cat(parts, dim=1))
 
 
 class HWGConv(nn.Module):
-    """H x W group convolution: a spatial-sized kernel collapsing (H,W)->(1,1),
-    groups g (paper sets g=1). Output (B, cout)."""
+    """H x W group convolution collapsing (H,W) -> (1,1), followed by
+    f = BatchNorm + PReLU (Eq. 5, 7). Output (B, cout)."""
     def __init__(self, cin: int, cout: int, h: int, w: int, groups: int = 1):
         super().__init__()
         self.conv = nn.Conv2d(cin, cout, kernel_size=(h, w), groups=groups)
-        self.act = nn.PReLU()
+        self.post = nn.Sequential(nn.BatchNorm1d(cout), nn.PReLU())
 
     def forward(self, x):
-        return self.act(self.conv(x).flatten(1))        # (B, cout)
-
-
-class SDM(nn.Module):
-    """Self-Dependency Modeling: multihead day-day correlation (second order).
-    F^uiw (B,Cmid,H,W) -> reshape M (B,h,W,Dh), Dh=H*Cmid/h -> F^sdm=M @ M^T
-    (B,h,W,W) -> HWGConv -> F^2nd (B,C2nd)."""
-    def __init__(self, cmid: int, h_weeks: int, w_days: int, heads: int, c2nd: int):
-        super().__init__()
-        assert (h_weeks * cmid) % heads == 0, "heads must divide H*Cmid"
-        self.heads = heads
-        self.w = w_days
-        self.hwg = HWGConv(heads, c2nd, w_days, w_days, groups=1)
-
-    def forward(self, x):                               # x: (B,Cmid,H,W)
-        B, C, H, W = x.shape
-        Dh = H * C // self.heads
-        m = x.permute(0, 3, 1, 2).reshape(B, W, C * H)  # (B,W,C*H)
-        m = m.reshape(B, W, self.heads, Dh).permute(0, 2, 1, 3)  # (B,heads,W,Dh)
-        sdm = torch.matmul(m, m.transpose(-1, -2))      # (B,heads,W,W)
-        return self.hwg(sdm)                            # (B,c2nd)
+        return self.post(self.conv(x).flatten(1))
 
 
 class HORLN(nn.Module):
-    def __init__(self, weeks: int = 147, days: int = 7,
-                 iiwc_dims=(32, 16), c1st: int = 200, c2nd: int = 300,
-                 heads: int = 8, r: int = 3, fc_hidden: int = 128):
+    def __init__(self, weeks: int = 147, days: int = 7, mid: int = 32,
+                 c1st: int = 200, c2nd: int = 300, heads: int = 4, hidden: int = 100):
         super().__init__()
-        self.weeks, self.days = weeks, days
-        cin = 2                                         # value + observed-mask
-        self.block1 = IIWCBlock(cin, iiwc_dims[0], r=r)
-        self.block2 = IIWCBlock(iiwc_dims[0], iiwc_dims[1], r=r)
-        cmid = iiwc_dims[1]
-        self.hwg_first = HWGConv(cmid, c1st, weeks, days, groups=1)   # F^1st
-        self.sdm = SDM(cmid, weeks, days, heads=heads, c2nd=c2nd)     # F^2nd
-        self.fc1 = nn.Linear(c1st + c2nd, fc_hidden)
-        self.act = nn.PReLU()
-        self.fc2 = nn.Linear(fc_hidden, 1)
+        self.heads = heads
+        self.block1 = IIWCBlock(2, mid)                 # input: value + observed-mask
+        self.block2 = IIWCBlock(mid, mid // 2)
+        cmid = mid // 2
+        assert (weeks * cmid) % heads == 0, "heads must divide H*Cmid"
+        self.first = HWGConv(cmid, c1st, weeks, days, groups=4)   # F^1st (Eq. 5)
+        self.second = HWGConv(heads, c2nd, days, days, groups=1)  # F^2nd (Eq. 7)
+        self.classifier = nn.Sequential(
+            nn.Linear(c1st + c2nd, hidden), nn.BatchNorm1d(hidden), nn.PReLU(),
+            nn.Linear(hidden, 1))
+        self.apply(self._init)
+
+    @staticmethod
+    def _init(m):
+        name = m.__class__.__name__
+        if hasattr(m, "weight") and ("Conv" in name or "Linear" in name):
+            nn.init.normal_(m.weight, 0.0, 0.02)
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0.0)
+        elif "BatchNorm2d" in name:
+            nn.init.normal_(m.weight, 1.0, 0.02)
+            nn.init.constant_(m.bias, 0.0)
 
     def forward(self, x):
         val, mask = _value_and_mask(x)                  # (B,W,D) each
-        h = torch.stack([val, mask], dim=1)             # (B,2,W,D)
-        f_uiw = self.block2(self.block1(h))             # (B,cmid,W,D)
-        f1 = self.hwg_first(f_uiw)                       # (B,c1st)
-        f2 = self.sdm(f_uiw)                             # (B,c2nd)
-        z = self.act(self.fc1(torch.cat([f1, f2], dim=1)))
-        return self.fc2(z).squeeze(-1)
+        f = self.block2(self.block1(torch.stack([val, mask], dim=1)))   # F^iiw (B,Cmid,H,W)
+        B, C, H, W = f.shape
+        # self-dependency modeling (Eq. 6): h heads, D = H*Cmid/h
+        m = f.permute(0, 3, 1, 2).reshape(B, W, self.heads, C * H // self.heads).permute(0, 2, 1, 3)
+        sdm = torch.matmul(m, m.transpose(-1, -2))      # (B,h,W,W)
+        z = torch.cat([self.first(f), self.second(sdm)], dim=1)   # F^hybrid (Eq. 8)
+        return self.classifier(z).squeeze(-1)
 
 
 # ===========================================================================
@@ -275,14 +275,17 @@ class HybridAttn(nn.Module):
 # ===========================================================================
 class GRUD(nn.Module):
     """Decay-based GRU for missing data. Time axis = weeks (W steps), features =
-    days (D). Per-feature input decay gamma_x and full hidden decay gamma_h on
-    interval delta (steps since last observation). Empirical mean is the
-    leakage-safe per-sample observed mean per feature."""
+    days (D). Diagonal input decay gamma_x (one weight per variable, as in the paper
+    and the authors' code, github.com/PeterChe1990/GRU-D) and full hidden decay
+    gamma_h on the interval delta (steps since last observation); masks are fed
+    to the gates. The empirical mean is each consumer's observed mean per feature,
+    so no test statistic is used."""
     def __init__(self, weeks: int = 147, days: int = 7, hidden: int = 64):
         super().__init__()
         self.weeks, self.days, self.hidden = weeks, days, hidden
         D, H = days, hidden
-        self.w_dg_x = nn.Linear(D, D)                   # gamma_x (diagonal-style, per-feature)
+        self.w_dg_x = nn.Parameter(torch.zeros(D))      # gamma_x, diagonal
+        self.b_dg_x = nn.Parameter(torch.zeros(D))
         self.w_dg_h = nn.Linear(D, H)                   # gamma_h (full)
         # GRU gates take [x_hat (D), mask (D)] and decayed hidden (H)
         self.x2h = nn.Linear(2 * D, 3 * H)
@@ -308,7 +311,7 @@ class GRUD(nn.Module):
             m_t = mask[:, t, :]
             d_t = delta[:, t, :]
             x_t = val[:, t, :]
-            g_x = torch.exp(-F.relu(self.w_dg_x(d_t)))   # (B,D)
+            g_x = torch.exp(-F.relu(d_t * self.w_dg_x + self.b_dg_x))   # (B,D)
             g_h = torch.exp(-F.relu(self.w_dg_h(d_t)))   # (B,H)
             x_hat = m_t * x_t + (1 - m_t) * (g_x * x_last + (1 - g_x) * x_mean)
             h_dec = g_h * h
@@ -325,7 +328,7 @@ class GRUD(nn.Module):
 
 
 # ===========================================================================
-# 5. MSDM  (Wang et al., IEEE TSG 2025) — wrap faithful repro on (B,W,D)
+# 5. MSDM  (Wang et al., IEEE TSG 2025) — re-implementation on (B,W,D)
 # ===========================================================================
 class MSDMNet(nn.Module):
     def __init__(self, weeks: int = 147, days: int = 7):
@@ -346,23 +349,16 @@ class MSDMNet(nn.Module):
 
 
 # ===========================================================================
-# 6. DKGT-Net  (Tian et al., IEEE TII 2026) — faithful KAN+GRU dual-branch core
+# 6. DKGT-Net  (Tian et al., IEEE TII 2026) — KAN+GRU dual-branch architecture
 # ---------------------------------------------------------------------------
-# CONTROLLED COMPARISON (state in paper): the published DKGT-Net pairs this
-# KAN+GRU dual-branch detector with (i) WGAN-GP theft augmentation, (ii) a CSSI
-# consistency-driven training loss, and (iii) reports F1/ACC/AUC on an enhanced
-# 73,900-user set whose theft class is ~90% GAN-SYNTHETIC (32,143 generated vs
-# ~3,600 real) at a 45.3% base rate. Evaluating on synthetic theft at an inflated
-# base rate is exactly the measurement artifact this paper studies (C3); we
-# re-implement the ARCHITECTURE under the identical honest protocol (per-user
-# min-max, leakage-free split, real 8.5% prevalence, PR-AUC primary) with the
-# standard training recipe used for every other baseline, holding the augmentation
-# and the CSSI loss off. The reported score is the architecture under a common
-# protocol, NOT a refutation of the full DKGT-Net method (whose CSSI ablation,
-# F1 0.95->0.62, is itself measured on that synthetic/balanced set).
-# Simplifications (documented): KANLinear uses efficient B-spline edges (Liu 2024);
-# the ECA channel-attention + "spreading" layer are realised as a tanh-sigmoid
-# fusion gate. Input grid (B,W,D).
+# The published DKGT-Net combines this KAN+GRU dual-branch detector with WGAN-GP
+# data augmentation and a CSSI consistency-driven training loss. We re-implement
+# the architecture and train it with the common recipe used for every other
+# detector, without the augmentation and the CSSI loss, so the reported score
+# describes the architecture under the common protocol, not the full published
+# training method. Implementation choices where the paper is not specific:
+# efficient B-spline KANLinear edges (Liu et al. 2024) with three layers, and a
+# two-layer classification head. Input grid (B,W,D).
 # ===========================================================================
 def _stencil_3x3(grid: torch.Tensor) -> torch.Tensor:
     """3x overlapping-triplet expansion on BOTH axes (no anti-mean): (B,W,D)->(B,3W,3D).
@@ -429,12 +425,12 @@ class ECA(nn.Module):
 
 
 class DKGTNet(nn.Module):
-    """Faithful KAN+GRU dual-branch core (Tian 2026, IEEE TII). KAN branch: 3-layer
+    """KAN+GRU dual-branch architecture (Tian 2026, IEEE TII). KAN branch: 3-layer
     KAN(x)=(Phi3 o Phi2 o Phi1)(x) on the (weeks x 3, days x 3) stencil -> 128, dropout
     0.5 (Eq.10,20). GRU branch: 2-layer GRU over (weeks, days) -> 128 (Eq.12,17).
     Fusion: F_fusion=FC(concat) (Eq.13); A=sigmoid(tanh(F_fusion)) (Eq.14);
     F_att=ECA(F_gru * A) (Eq.15 + ECA module); head on concat(F_fusion,F_att,F_kan) (Eq.16).
-    WGAN augmentation + CSSI consistency-training are the controlled-OFF inflation variables."""
+    Trained without the WGAN augmentation and the CSSI consistency loss (common protocol)."""
     def __init__(self, weeks: int = 147, days: int = 7, kan_hidden: int = 128,
                  gru_hidden: int = 128, dropout: float = 0.5):
         super().__init__()

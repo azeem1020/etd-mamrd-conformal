@@ -1,0 +1,1173 @@
+[2026-11-12 09:26:41] =================================================================
+[2026-11-12 09:26:41] MASTER RETRAINING PIPELINE START
+[2026-11-12 09:26:41] Target Results Directory: ./results/phase_n_retrained
+[2026-11-12 09:26:41] Stages to execute: baselines, ecl, trust, postproc
+[2026-11-12 09:26:41] Epochs per cell: 30 | Force: False
+[2026-11-12 09:26:41] =================================================================
+[2026-11-12 09:26:41] === STAGE 4: RIVAL BASELINES TRAINING (9 CELLS EACH) ===
+[2026-11-12 09:26:41] All 9 cells for baseline wdcnn already exist in baselines/. Skipping.
+[2026-11-12 09:26:41] --- START: Baseline horln ---
+[2026-11-12 09:26:41] CMD: python run_n_clean.py --backbone horln --arm horln --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/horln --manifest ./results/phase_n_retrained/baselines/horln_manifest.csv
+[device] cuda | backbone=horln | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/9] s=0 f=0 kf=0 | PR=0.5712 ROC=0.8586 F1=0.5239 | HD_PR=0.627 HR_PR=0.766 wall=20.9s
+[2/9] s=0 f=1 kf=0 | PR=0.5176 ROC=0.8590 F1=0.4891 | HD_PR=0.637 HR_PR=0.534 wall=20.0s
+[3/9] s=0 f=2 kf=0 | PR=0.6225 ROC=0.8912 F1=0.5859 | HD_PR=0.715 HR_PR=0.668 wall=20.0s
+[4/9] s=1 f=0 kf=0 | PR=0.5592 ROC=0.8703 F1=0.5303 | HD_PR=0.643 HR_PR=0.701 wall=19.6s
+[5/9] s=1 f=1 kf=0 | PR=0.5295 ROC=0.8564 F1=0.4812 | HD_PR=0.636 HR_PR=0.581 wall=20.0s
+[6/9] s=1 f=2 kf=0 | PR=0.6397 ROC=0.8929 F1=0.5953 | HD_PR=0.714 HR_PR=0.753 wall=20.0s
+[7/9] s=2 f=0 kf=0 | PR=0.5579 ROC=0.8640 F1=0.5199 | HD_PR=0.602 HR_PR=0.738 wall=19.6s
+[8/9] s=2 f=1 kf=0 | PR=0.5365 ROC=0.8766 F1=0.4905 | HD_PR=0.622 HR_PR=0.617 wall=20.0s
+[9/9] s=2 f=2 kf=0 | PR=0.6311 ROC=0.8854 F1=0.5872 | HD_PR=0.723 HR_PR=0.681 wall=20.1s
+[done] -> ./results/phase_n_retrained/baselines/horln_manifest.csv
+[2026-11-12 09:30:12] COMPLETED in 210.3s: Baseline horln
+[2026-11-12 09:30:12] All 9 cells for baseline hybridattn already exist in baselines/. Skipping.
+[2026-11-12 09:30:12] --- START: Baseline grud ---
+[2026-11-12 09:30:12] CMD: python run_n_clean.py --backbone grud --arm grud --epochs 30 --seeds 0 1 2 --folds 0 1 2 --cell_prefix baselines/grud --manifest ./results/phase_n_retrained/baselines/grud_manifest.csv
+[device] cuda | backbone=grud | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/9] s=0 f=0 kf=0 | PR=0.1947 ROC=0.6928 F1=0.2440 | HD_PR=0.231 HR_PR=0.359 wall=107.7s
+[2/9] s=0 f=1 kf=0 | PR=0.1848 ROC=0.6554 F1=0.2471 | HD_PR=0.200 HR_PR=0.284 wall=110.7s
+[3/9] s=0 f=2 kf=0 | PR=0.1929 ROC=0.6764 F1=0.2382 | HD_PR=0.265 HR_PR=0.350 wall=110.0s
+[4/9] s=1 f=0 kf=0 | PR=0.1945 ROC=0.6853 F1=0.2510 | HD_PR=0.224 HR_PR=0.383 wall=107.2s
+[5/9] s=1 f=1 kf=0 | PR=0.1834 ROC=0.6587 F1=0.2887 | HD_PR=0.218 HR_PR=0.295 wall=109.3s
+[6/9] s=1 f=2 kf=0 | PR=0.1782 ROC=0.6779 F1=0.2588 | HD_PR=0.254 HR_PR=0.329 wall=107.3s
+[7/9] s=2 f=0 kf=0 | PR=0.2120 ROC=0.7053 F1=0.2763 | HD_PR=0.267 HR_PR=0.370 wall=105.0s
+[8/9] s=2 f=1 kf=0 | PR=0.1942 ROC=0.6623 F1=0.2900 | HD_PR=0.211 HR_PR=0.286 wall=108.3s
+[9/9] s=2 f=2 kf=0 | PR=0.1952 ROC=0.6829 F1=0.2656 | HD_PR=0.271 HR_PR=0.337 wall=107.1s
+[done] -> ./results/phase_n_retrained/baselines/grud_manifest.csv
+[2026-11-12 09:46:55] COMPLETED in 1002.9s: Baseline grud
+[2026-11-12 09:46:55] All 9 cells for baseline msdm_net already exist in baselines/. Skipping.
+[2026-11-12 09:46:55] All 9 cells for baseline dkgt already exist in baselines/. Skipping.
+[2026-11-12 09:46:55] === STAGE 5: ECL TRANSFER BENCHMARK ===
+[2026-11-12 09:46:55] --- START: ECL Trust Benchmark Training ---
+[2026-11-12 09:46:55] CMD: python run_ecl_trust.py
+[ecl] (25000, 336) theft%=10.00 mag[min/med/max]=0.071/141.643/85306.696
+[skip] a34_generic_0_0.csv
+[skip] a34_generic_0_1.csv
+[skip] a34_generic_0_2.csv
+[skip] a34_generic_1_0.csv
+[skip] a34_generic_1_1.csv
+[skip] a34_generic_1_2.csv
+[skip] a34_generic_2_0.csv
+[skip] a34_generic_2_1.csv
+[skip] a34_generic_2_2.csv
+[horln s0 f0] AP=0.8550 ROC=0.9070 n=1702 pos=175 T=62C
+[horln s0 f1] AP=0.7683 ROC=0.8487 n=1702 pos=172 T=74C
+[heat] post horln s0 f1 cooling 60->55C
+[horln s0 f2] AP=0.8498 ROC=0.9075 n=1700 pos=170 T=67C
+[horln s1 f0] AP=0.8458 ROC=0.9175 n=1702 pos=175 T=63C
+[horln s1 f1] AP=0.7637 ROC=0.8614 n=1702 pos=172 T=67C
+[horln s1 f2] AP=0.8544 ROC=0.9074 n=1700 pos=170 T=66C
+[horln s2 f0] AP=0.8427 ROC=0.9178 n=1702 pos=175 T=66C
+[horln s2 f1] AP=0.7657 ROC=0.8589 n=1702 pos=172 T=65C
+[horln s2 f2] AP=0.8564 ROC=0.9089 n=1700 pos=170 T=65C
+[skip] wdcnn_0_0.csv
+[skip] wdcnn_0_1.csv
+[skip] wdcnn_0_2.csv
+[skip] wdcnn_1_0.csv
+[skip] wdcnn_1_1.csv
+[skip] wdcnn_1_2.csv
+[skip] wdcnn_2_0.csv
+[skip] wdcnn_2_1.csv
+[skip] wdcnn_2_2.csv
+[grud s0 f0] AP=0.5498 ROC=0.8776 n=1702 pos=175 T=53C
+[grud s0 f1] AP=0.4439 ROC=0.8428 n=1702 pos=172 T=51C
+[grud s0 f2] AP=0.5649 ROC=0.8880 n=1700 pos=170 T=51C
+[grud s1 f0] AP=0.5407 ROC=0.8786 n=1702 pos=175 T=51C
+[grud s1 f1] AP=0.4473 ROC=0.8434 n=1702 pos=172 T=51C
+[grud s1 f2] AP=0.5661 ROC=0.8910 n=1700 pos=170 T=50C
+[grud s2 f0] AP=0.5877 ROC=0.8864 n=1702 pos=175 T=50C
+[grud s2 f1] AP=0.4479 ROC=0.8415 n=1702 pos=172 T=50C
+[grud s2 f2] AP=0.5945 ROC=0.8920 n=1700 pos=170 T=50C
+[skip] hybridattn_0_0.csv
+[skip] hybridattn_0_1.csv
+[skip] hybridattn_0_2.csv
+[skip] hybridattn_1_0.csv
+[skip] hybridattn_1_1.csv
+[skip] hybridattn_1_2.csv
+[skip] hybridattn_2_0.csv
+[skip] hybridattn_2_1.csv
+[skip] hybridattn_2_2.csv
+[skip] msdm_0_0.csv
+[skip] msdm_0_1.csv
+[skip] msdm_0_2.csv
+[skip] msdm_1_0.csv
+[skip] msdm_1_1.csv
+[skip] msdm_1_2.csv
+[skip] msdm_2_0.csv
+[skip] msdm_2_1.csv
+[skip] msdm_2_2.csv
+@@@ ECL TRUST DUMP DONE @@@
+[2026-11-12 09:56:46] COMPLETED in 591.4s: ECL Trust Benchmark Training
+[2026-11-12 09:56:46] --- START: ECL Trust Analysis ---
+[2026-11-12 09:56:46] CMD: python run_ecl_trust_analysis.py
+# RESULTS_ECL_TRUST — cross-dataset trustworthy layer (ECL, magnitude strata)
+
+Strata: Heavy/Light by train-fit magnitude median. Base-rate Heavy 7.5% Light 12.7%.
+Cells/arm = 9 (3 folds x 3 seeds). NREP=20.
+
+## AP reproduction (sanity vs locked fold-0 numbers)
+| arm | mean AP (3x3) | locked AP |
+|---|---|---|
+| a34_generic | 0.843 | 0.88 |
+| horln | 0.822 | 0.852 |
+| wdcnn | 0.796 | 0.836 |
+| grud | 0.527 | 0.561 |
+| hybridattn | 0.804 | 0.847 |
+| msdm | 0.842 | 0.87 |
+
+## T1 Calibration (preliminary)
+| arm | ECE raw | Brier |
+|---|---|---|
+| a34_generic | 0.121 | 0.046 |
+| horln | 0.083 | 0.041 |
+| wdcnn | 0.136 | 0.052 |
+| grud | 0.200 | 0.114 |
+| hybridattn | 0.135 | 0.060 |
+| msdm | 0.025 | 0.026 |
+
+## T2 Marginal-APS degeneracy (abstain-rate @1-a=0.90)
+| arm | coverage | abstain |
+|---|---|---|
+| a34_generic | 0.900 | 0.000 |
+| horln | 0.901 | 0.000 |
+| wdcnn | 0.907 | 0.000 |
+| grud | 0.998 | 0.978 |
+| hybridattn | 0.901 | 0.000 |
+| msdm | 0.972 | 0.000 |
+
+## T3 Magnitude-conditional audit efficiency (LIFT) @ guaranteed 80% catch-rate — THE FINDING
+Lift = precision / stratum base-rate. Gap>0 = Heavy more audit-efficient than Light.
+| arm | lift Heavy | lift Light | Heavy-Light lift gap [BCa 95%] |
+|---|---|---|---|
+| a34_generic | 8.06 | 5.15 | +2.91 [+1.90,+3.76] |
+| horln | 7.36 | 4.87 | +2.49 [+1.86,+3.04] |
+| wdcnn | 8.21 | 5.06 | +3.15 [+2.42,+3.73] |
+| grud | 5.40 | 2.90 | +2.50 [+2.05,+2.97] |
+| hybridattn | 7.93 | 4.36 | +3.56 [+2.26,+4.41] |
+| msdm | 8.94 | 4.94 | +4.00 [+2.89,+5.01] |
+
+## T3b Realized recall of the class-conditional threshold at the 80% target (mean over cells)
+| arm | recall Heavy | recall Light | marginal APS coverage |
+|---|---|---|---|
+| a34_generic | 0.813 | 0.803 | 0.801 |
+| horln | 0.828 | 0.806 | 0.802 |
+| wdcnn | 0.816 | 0.799 | 0.800 |
+| grud | 0.807 | 0.811 | 0.802 |
+| hybridattn | 0.812 | 0.813 | 0.800 |
+| msdm | 0.807 | 0.811 | 0.953 |
+
+## T4 recall@FPR (supporting)
+| arm | recall@FPR1% | recall@FPR5% |
+|---|---|---|
+| a34_generic | 0.797 | 0.817 |
+| horln | 0.784 | 0.806 |
+| wdcnn | 0.759 | 0.818 |
+| grud | 0.106 | 0.625 |
+| hybridattn | 0.738 | 0.807 |
+| msdm | 0.795 | 0.810 |
+
+[done] ./results/phase_n_retrained/ecl_trust/RESULTS_ECL_TRUST.md
+[2026-11-12 09:56:50] COMPLETED in 3.8s: ECL Trust Analysis
+[2026-11-12 09:56:50] === STAGE 6: CONFORMAL CALIBRATION, CEILINGS & DECISION LAYERS ===
+[2026-11-12 09:56:50] --- START: Ceiling estimation ---
+[2026-11-12 09:56:50] CMD: python run_ceiling_estimate.py
+[load] SGCC raw ...
+  42372 x 1035
+  features: 18 per consumer
+
+=== MODEL-FREE (HistGBM on hand-crafted features), n=9 cells ===
+stratum        model-free AP observed (MAMRD)    diff
+Heavy_Riser            0.401            0.664  -0.263
+Heavy_Dropper          0.392            0.631  -0.239
+Light_Riser            0.201            0.492  -0.291
+Light_Dropper          0.225            0.460  -0.235
+Flat                   0.135            0.402  -0.267
+AGGREGATE              0.314            0.567  -0.253
+
+Spearman(model-free, observed) rho=+0.90 p=0.037
+mean |per-stratum diff| = 0.259
+VERDICT: model-free < deep -> inconclusive, KEEP HEDGE
+[done] wrote ./results/phase_n_retrained/trust/ceiling_estimate.csv
+[2026-11-12 09:57:08] COMPLETED in 18.7s: Ceiling estimation
+[2026-11-12 09:57:08] --- START: Conformal trust layer evaluation ---
+[2026-11-12 09:57:08] CMD: python run_trust_layer.py
+[load] SGCC ...
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[arm] a34_NaME
+[arm] HORLN
+[arm] MSDM
+[arm] WDCNN
+[arm] GRU-D
+[arm] HybridAttn
+[arm] DKGT
+# RESULTS_TRUST — SGCC trustworthy layer (post-hoc, NREP=20)
+
+Conformal: split-APS within each
+held-out fold (stratified calib/test), 20 repeats averaged per cell.
+Cells: a34 n=15 (seeds0-4xfolds0-2); baselines n=9 (seeds0-2xfolds0-2).
+
+## T1 Calibration (prior-shift + temperature scaling & 2-param affine recalibration)
+| arm | T | ECE raw | ECE prior+T | ECE affine | Brier raw | Brier prior+T | Brier affine |
+|---|---|---|---|---|---|---|---|
+| a34_NaME | 1.43 | 0.117 | 0.019 | 0.018 | 0.089 | 0.050 | 0.050 |
+| HORLN | 1.98 | 0.056 | 0.017 | 0.017 | 0.066 | 0.053 | 0.053 |
+| MSDM | 1.73 | 0.104 | 0.021 | 0.018 | 0.094 | 0.063 | 0.063 |
+| WDCNN | 1.11 | 0.249 | 0.019 | 0.019 | 0.155 | 0.066 | 0.066 |
+| GRU-D | 1.00 | 0.377 | 0.023 | 0.024 | 0.220 | 0.074 | 0.074 |
+| HybridAttn | 1.81 | 0.110 | 0.032 | 0.021 | 0.094 | 0.058 | 0.056 |
+| DKGT | 1.12 | 0.267 | 0.027 | 0.019 | 0.174 | 0.070 | 0.069 |
+
+## T2 Marginal APS is degenerate under ETD imbalance (motivating result)
+Marginal APS hits 1-alpha coverage trivially by abstaining ({both}) for
+almost every consumer (prevalence ~8.5%). Coverage is met; the set is
+uninformative. This motivates the class-conditional guarantee in T3.
+| arm | cov a=0.10 | abstain-rate a=0.10 | cov a=0.20 | abstain a=0.20 |
+|---|---|---|---|---|
+| a34_NaME | 1.000 | 1.000 | 0.802 | 0.000 |
+| HORLN | 0.906 | 0.050 | 0.801 | 0.000 |
+| MSDM | 1.000 | 1.000 | 0.808 | 0.039 |
+| WDCNN | 1.000 | 1.000 | 0.999 | 0.994 |
+| GRU-D | 1.000 | 1.000 | 1.000 | 1.000 |
+| HybridAttn | 0.999 | 0.994 | 0.801 | 0.000 |
+| DKGT | 1.000 | 1.000 | 1.000 | 1.000 |
+
+## T3 Magnitude-conditional audit efficiency under a conformal catch-rate guarantee — THE FINDING
+Class-conditional (Mondrian) conformal guarantees per-stratum theft recall 1-alpha.
+Reported as LIFT = precision / stratum base-rate (=efficiency over random auditing),
+which controls the per-stratum prevalence confound (Heavy 12.3%, Light 6.8%, Flat 3.2%).
+All 20 resplits per cell are used (no eligibility gate); a stratum with too few
+calibration thefts for the order statistic gets q_hat=+inf (all members flagged).
+MAMRD (a34_NaME) per-stratum lift by guarantee level:
+| guarantee 1-a | lift Heavy | lift Light | lift Flat |
+|---|---|---|---|
+| 0.80 | 3.19 | 3.40 | 2.44 |
+| 0.90 | 2.03 | 2.40 | 1.33 |
+| 0.95 | 1.57 | 1.72 | 0.98 |
+
+## T3b Per-arm precision-lift gap, Heavy vs Flat @ 80% guarantee (universality)
+Positive gap = audits are more efficient (relative to base rate) in Heavy than in Flat.
+| arm | lift Heavy | lift Flat | Heavy-Flat lift gap [BCa 95%] |
+|---|---|---|---|
+| a34_NaME | 3.19 | 2.44 | +0.75 [+0.01,+1.43] |
+| HORLN | 2.85 | 2.51 | +0.34 [-0.63,+1.17] |
+| MSDM | 2.06 | 1.67 | +0.39 [-0.10,+0.89] |
+| WDCNN | 1.97 | 1.87 | +0.10 [-0.32,+0.65] |
+| GRU-D | 1.25 | 1.16 | +0.09 [-0.09,+0.23] |
+| HybridAttn | 2.52 | 2.50 | +0.02 [-0.98,+0.90] |
+| DKGT | 1.85 | 1.33 | +0.52 [+0.33,+0.74] |
+
+## T3c Per-phenotype detail @ guaranteed 90% catch-rate (a34_NaME)
+| phenotype | base-rate | precision | lift | empirical recall |
+|---|---|---|---|---|
+| Heavy_Dropper | 0.121 | 0.237 | 1.96 | 0.912 |
+| Light_Dropper | 0.069 | 0.160 | 2.30 | 0.910 |
+| Heavy_Riser | 0.128 | 0.246 | 1.93 | 0.923 |
+| Light_Riser | 0.064 | 0.127 | 1.98 | 0.933 |
+| Flat | 0.032 | 0.043 | 1.33 | 0.958 |
+
+## T3d Small-sample conformal convention: share of resplits with q_hat=+inf
+| arm | 1-a | HEAVY | LIGHT | Flat |
+|---|---|---|---|---|
+| a34_NaME | 0.80 | 0.000 | 0.000 | 0.020 |
+| a34_NaME | 0.90 | 0.000 | 0.000 | 0.557 |
+| a34_NaME | 0.95 | 0.000 | 0.000 | 1.000 |
+| HORLN | 0.80 | 0.000 | 0.000 | 0.017 |
+| HORLN | 0.90 | 0.000 | 0.000 | 0.617 |
+| HORLN | 0.95 | 0.000 | 0.000 | 1.000 |
+| MSDM | 0.80 | 0.000 | 0.000 | 0.022 |
+| MSDM | 0.90 | 0.000 | 0.000 | 0.550 |
+| MSDM | 0.95 | 0.000 | 0.000 | 1.000 |
+| WDCNN | 0.80 | 0.000 | 0.000 | 0.022 |
+| WDCNN | 0.90 | 0.000 | 0.000 | 0.583 |
+| WDCNN | 0.95 | 0.000 | 0.000 | 1.000 |
+| GRU-D | 0.80 | 0.000 | 0.000 | 0.011 |
+| GRU-D | 0.90 | 0.000 | 0.000 | 0.594 |
+| GRU-D | 0.95 | 0.000 | 0.000 | 1.000 |
+| HybridAttn | 0.80 | 0.000 | 0.000 | 0.017 |
+| HybridAttn | 0.90 | 0.000 | 0.000 | 0.589 |
+| HybridAttn | 0.95 | 0.000 | 0.000 | 1.000 |
+| DKGT | 0.80 | 0.000 | 0.000 | 0.028 |
+| DKGT | 0.90 | 0.000 | 0.000 | 0.589 |
+| DKGT | 0.95 | 0.000 | 0.000 | 1.000 |
+
+## T4 Selective operating point (supporting; not headlined)
+| arm | recall@FPR0.5% | recall@FPR1% | recall@FPR5% |
+|---|---|---|---|
+| a34_NaME | 0.298 | 0.369 | 0.588 |
+| HORLN | 0.249 | 0.333 | 0.541 |
+| MSDM | 0.168 | 0.218 | 0.392 |
+| WDCNN | 0.107 | 0.146 | 0.345 |
+| GRU-D | 0.030 | 0.057 | 0.213 |
+| HybridAttn | 0.226 | 0.298 | 0.502 |
+| DKGT | 0.072 | 0.112 | 0.284 |
+
+[done] wrote ./results/phase_n_retrained/trust/RESULTS_TRUST.md (+ percell/calibration/operating/lift CSVs)
+[2026-11-12 09:57:20] COMPLETED in 11.8s: Conformal trust layer evaluation
+[2026-11-12 09:57:20] --- START: Decision value economic curves ---
+[2026-11-12 09:57:20] CMD: python run_decision_value.py
+[load] SGCC ...
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[base rates] high=0.1231, low=0.0678, flat=0.0322
+./scripts/run_decision_value.py:118: RuntimeWarning: Mean of empty slice
+  daily = np.nanmean(raw, axis=1)
+[group profile]
+group  theft_cases  theft_case_share  theft_kwh_share  theft_median_daily_kwh  all_median_daily_kwh
+ high          444          0.605730         0.962247               14.470934             11.296815
+  low          241          0.328786         0.029540                3.775034              3.476284
+ flat           48          0.065484         0.008214                2.604258              0.084888
+  a34_NaME   1-a=0.80 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 28.6% single= 49.1% red= 35.5% [30.2,40.4] | hit H/F= 39.2/ 7.8% lift H/F=3.19/2.44 | recall H/L/F=0.813/0.808/0.838
+  a34_NaME   1-a=0.90 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/0.56 | inspect cond= 49.1% single= 83.4% red= 37.2% [32.2,41.2] | hit H/F= 25.0/ 4.3% lift H/F=2.03/1.33 | recall H/L/F=0.909/0.907/0.958
+  a34_NaME   1-a=0.95 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 67.4% single=100.0% red= 32.6% [29.4,35.8] | hit H/F= 19.4/ 3.2% lift H/F=1.57/0.98 | recall H/L/F=0.959/0.956/1.000
+  HORLN      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 33.2% single= 51.8% red= 30.2% [23.0,37.3] | hit H/F= 35.0/ 8.1% lift H/F=2.85/2.51 | recall H/L/F=0.806/0.816/0.853
+  HORLN      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.62 | inspect cond= 55.1% single= 87.3% red= 34.8% [31.3,38.6] | hit H/F= 23.8/ 4.7% lift H/F=1.93/1.46 | recall H/L/F=0.905/0.915/0.964
+  HORLN      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 74.6% single=100.0% red= 25.4% [21.9,27.4] | hit H/F= 17.9/ 3.3% lift H/F=1.45/1.01 | recall H/L/F=0.955/0.960/1.000
+  MSDM       1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 43.8% single= 64.8% red= 28.2% [21.6,34.2] | hit H/F= 25.3/ 5.4% lift H/F=2.06/1.67 | recall H/L/F=0.797/0.812/0.876
+  MSDM       1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.55 | inspect cond= 64.2% single= 88.4% red= 25.7% [20.0,31.2] | hit H/F= 18.7/ 4.0% lift H/F=1.52/1.25 | recall H/L/F=0.896/0.909/0.968
+  MSDM       1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 80.5% single=100.0% red= 19.5% [17.6,22.0] | hit H/F= 15.4/ 3.1% lift H/F=1.25/0.95 | recall H/L/F=0.950/0.958/1.000
+  WDCNN      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 45.2% single= 63.2% red= 26.5% [22.1,31.5] | hit H/F= 24.2/ 6.0% lift H/F=1.97/1.87 | recall H/L/F=0.813/0.809/0.865
+  WDCNN      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.58 | inspect cond= 65.6% single= 90.7% red= 26.6% [24.1,29.2] | hit H/F= 19.2/ 3.9% lift H/F=1.56/1.21 | recall H/L/F=0.906/0.910/0.963
+  WDCNN      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 78.8% single=100.0% red= 21.2% [20.3,22.5] | hit H/F= 16.6/ 3.2% lift H/F=1.35/1.01 | recall H/L/F=0.958/0.963/1.000
+  GRU-D      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.01 | inspect cond= 67.3% single= 85.6% red= 20.6% [18.3,23.2] | hit H/F= 15.4/ 3.7% lift H/F=1.25/1.16 | recall H/L/F=0.809/0.818/0.846
+  GRU-D      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 83.6% single= 97.4% red= 14.2% [11.8,16.0] | hit H/F= 13.6/ 3.3% lift H/F=1.11/1.01 | recall H/L/F=0.909/0.911/0.961
+  GRU-D      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 92.1% single=100.0% red=  7.9% [6.5,9.5] | hit H/F= 12.9/ 3.2% lift H/F=1.05/0.99 | recall H/L/F=0.955/0.955/1.000
+  HybridAttn 1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 33.5% single= 48.7% red= 26.2% [18.4,33.5] | hit H/F= 31.0/ 8.0% lift H/F=2.52/2.50 | recall H/L/F=0.801/0.803/0.852
+  HybridAttn 1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 56.0% single= 84.9% red= 31.3% [27.6,35.3] | hit H/F= 22.3/ 4.5% lift H/F=1.81/1.39 | recall H/L/F=0.901/0.910/0.968
+  HybridAttn 1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 73.7% single=100.0% red= 26.3% [23.2,29.2] | hit H/F= 18.5/ 3.2% lift H/F=1.50/0.99 | recall H/L/F=0.954/0.958/1.000
+  DKGT       1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.03 | inspect cond= 51.6% single= 70.6% red= 25.3% [22.8,29.6] | hit H/F= 22.7/ 4.3% lift H/F=1.85/1.33 | recall H/L/F=0.808/0.813/0.872
+  DKGT       1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 70.7% single= 91.7% red= 21.9% [19.2,24.8] | hit H/F= 18.0/ 3.3% lift H/F=1.46/1.04 | recall H/L/F=0.913/0.915/0.966
+  DKGT       1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 83.7% single=100.0% red= 16.3% [14.6,18.3] | hit H/F= 15.6/ 3.2% lift H/F=1.27/0.98 | recall H/L/F=0.960/0.957/1.000
+
+[done] wrote ./results/phase_n_retrained/trust/decision_value_sgcc.csv and decision_value_sgcc_resplits.csv
+[2026-11-12 09:57:29] COMPLETED in 9.1s: Decision value economic curves
+[2026-11-12 09:57:29] --- START: Empirical comparator evaluation ---
+[2026-11-12 09:57:29] CMD: python run_empirical_comparator.py
+[running] Empirical Comparator Benchmark on MAMRD...
+[load] SGCC ...
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[done] Saved to ./results/phase_n_retrained/trust/empirical_comparator_sgcc.csv
+        arm  n_resplits  conf_flat_trivial_pct  conf_inspected_mean  conf_inspected_lo  conf_inspected_hi  emp_inspected_mean  emp_inspected_lo  emp_inspected_hi  conf_rec_flat_mean  emp_rec_flat_mean  conf_flat_viol_pct  emp_flat_viol_pct  conf_rec_heavy_mean  emp_rec_heavy_mean  conf_rec_light_mean  emp_rec_light_mean  conf_rec_overall_mean  emp_rec_overall_mean  n_flat_eval_resplits
+0  a34_NaME         300                    2.0              0.28644           0.191927           0.401317            0.235426          0.169716          0.318815            0.837658           0.722452           32.333333               56.0             0.812595            0.798848             0.808382            0.781926               0.812833              0.787723                   300
+[2026-11-12 09:57:35] COMPLETED in 6.0s: Empirical comparator evaluation
+[2026-11-12 09:57:35] --- START: Finardi et al. replication baseline ---
+[2026-11-12 09:57:35] CMD: python run_finardi_repro.py
+[device] cuda avail=True temp=48C
+./scripts/run_finardi_repro.py:72: RuntimeWarning: Mean of empty slice
+  ceil = np.nanmean(a, 1, keepdims=True) + 2.0 * np.nanstd(a, 1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_finardi_repro.py:74: RuntimeWarning: All-NaN slice encountered
+  lo = np.nanmin(a, 1, keepdims=True); hi = np.nanmax(a, 1, keepdims=True)
+[ours] n_test=2885 prev=0.088 wall=38s | NATIVE AP=0.477 ROC=0.860 F1=0.476 | BALANCED AP=0.860 ROC=0.859 F1=0.801
+[finardi] n_test=2885 prev=0.088 wall=37s | NATIVE AP=0.462 ROC=0.854 F1=0.478 | BALANCED AP=0.854 ROC=0.853 F1=0.783
+[done] wrote ./results/phase_n_retrained/repro_finardi.json
+@@@ FINARDI REPRO DONE @@@
+[2026-11-12 09:59:40] COMPLETED in 124.7s: Finardi et al. replication baseline
+[2026-11-12 09:59:40] === STAGE 7: POST-PROCESSING, TABLES & FIGURES GENERATION ===
+[2026-11-12 09:59:40] --- START: Tier 1 master: all tables and figures (reproduce_all_r2.py) ---
+[2026-11-12 09:59:40] CMD: python reproduce_all_r2.py --config ./configs/default.yaml
+===========================================================================
+MAMRD ROUND-2 UNIFIED REPRODUCTION SUITE
+Repository Root: .
+Active Configuration: ./configs/default.yaml
+===========================================================================
+  Training Optimizer: AdamW (lr=0.0003, weight_decay=0.0001)
+  Batch Size: 128 (eval: 256) | Epochs: 30
+  Model Architecture: a34_generic (975076 params)
+  Grid Shapes: SGCC [147, 7] | ECL [7, 48]
+
+===========================================================================
+>> RUNNING STEP: 0. Chronological Dataset Alignment & Date Audit
+   Command: python ./scripts/prepare_sgcc_dataset.py
+===========================================================================
+===========================================================================
+SGCC DATASET CHRONOLOGICAL PREPARATION & AUDIT
+Target Destination: ./data/SGCC.csv
+===========================================================================
+[OK] Target file ./data/SGCC.csv is already chronologically ordered,
+     fully continuous (1,035 days: 2014-01-01 -> 2016-10-31),
+     and 2016-09-18 is present. Skipping re-generation.
+===========================================================================
+
+[PASS] 0. Chronological Dataset Alignment & Date Audit completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 1. Partition manifest disjointness audit
+   Command: python ./scripts/verify_partition_manifests.py
+===========================================================================
+======================================================================
+MAMRD PARTITION DISJOINTNESS & TABLE 2 RECONCILIATION AUDIT
+======================================================================
+Using manifest directory: ./partition_manifests
+
+[1/2] Auditing SGCC Partition Manifest: sgcc_partition_manifest.csv
+======================================================================
+Total manifest rows read: 127116 (Expected 127,116 across 3 folds)
+
+Fold 0: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Pairwise customer overlap: 0 across all 6 pairs (100% customer-disjoint)
+  Test Positives: 254 (Heavy=156, Light=81, Flat=17)
+
+Fold 1: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Pairwise customer overlap: 0 across all 6 pairs (100% customer-disjoint)
+  Test Positives: 230 (Heavy=133, Light=79, Flat=18)
+
+Fold 2: Total customers = 42372 (Train=33898, ES=2795, Cal=2795, Test=2884)
+  [OK] Pairwise customer overlap: 0 across all 6 pairs (100% customer-disjoint)
+  Test Positives: 249 (Heavy=155, Light=81, Flat=13)
+
+SGCC Mean Counts Across Folds 0--2 (Reconciling Table 2):
+  Training (D_train):     33897.3 total | 2900.7 pos (8.56%)
+  Early-Stopping (D_es):  2795.0 total | 235.0 pos (8.41%)
+  Threshold-Cal (D_cal):  2795.0 total | 235.0 pos (8.41%)
+  Held-Out Test (D_test): 2884.7 total | 244.3 pos (8.47%)
+    -> Test Positives Breakdown: Heavy=148.0, Light=80.3, Flat=16.0
+
+[2/2] Auditing ECL Partition Manifest: ecl_partition_manifest.csv
+======================================================================
+Total manifest rows read: 75000 (Expected 75,000 across 3 folds)
+
+Fold 0: Total windows = 25000 (Train=20000, ES=1649, Cal=1649, Test=1702)
+  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)
+  Client Overlap: 370 train clients, 360 test clients -> 360 shared (100.0% of test clients in train; demonstrating window-level evaluation)
+
+Fold 1: Total windows = 25000 (Train=20000, ES=1649, Cal=1649, Test=1702)
+  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)
+  Client Overlap: 370 train clients, 354 test clients -> 354 shared (100.0% of test clients in train; demonstrating window-level evaluation)
+
+Fold 2: Total windows = 25000 (Train=20000, ES=1650, Cal=1650, Test=1700)
+  [OK] Pairwise window overlap: 0 across all 6 pairs (100% window-disjoint)
+  Client Overlap: 370 train clients, 363 test clients -> 363 shared (100.0% of test clients in train; demonstrating window-level evaluation)
+
+ECL Mean Counts Across Folds 0--2 (Reconciling Table 2):
+  Training (D_train):     20000.0 total | 1995.7 pos (9.98%)
+  Early-Stopping (D_es):  1649.3 total | 166.0 pos (10.06%)
+  Reserved, unused:       1649.3 total | 166.0 pos (10.06%)
+  Held-Out Test (D_test): 1701.3 total | 172.3 pos (10.13%)
+
+======================================================================
+[PASS] ALL PARTITIONS 100% DISJOINT ACROSS ALL FOLDS (EXIT 0)
+======================================================================
+[PASS] 1. Partition manifest disjointness audit completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 2a. Conformal decision value: all six Table 6 columns + Fig. 5b
+   Command: python ./scripts/run_decision_value.py
+===========================================================================
+[load] SGCC ...
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[base rates] high=0.1231, low=0.0678, flat=0.0322
+./scripts/run_decision_value.py:118: RuntimeWarning: Mean of empty slice
+  daily = np.nanmean(raw, axis=1)
+[group profile]
+group  theft_cases  theft_case_share  theft_kwh_share  theft_median_daily_kwh  all_median_daily_kwh
+ high          444          0.605730         0.962247               14.470934             11.296815
+  low          241          0.328786         0.029540                3.775034              3.476284
+ flat           48          0.065484         0.008214                2.604258              0.084888
+  a34_NaME   1-a=0.80 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 28.6% single= 49.1% red= 35.5% [30.2,40.4] | hit H/F= 39.2/ 7.8% lift H/F=3.19/2.44 | recall H/L/F=0.813/0.808/0.838
+  a34_NaME   1-a=0.90 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/0.56 | inspect cond= 49.1% single= 83.4% red= 37.2% [32.2,41.2] | hit H/F= 25.0/ 4.3% lift H/F=2.03/1.33 | recall H/L/F=0.909/0.907/0.958
+  a34_NaME   1-a=0.95 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 67.4% single=100.0% red= 32.6% [29.4,35.8] | hit H/F= 19.4/ 3.2% lift H/F=1.57/0.98 | recall H/L/F=0.959/0.956/1.000
+  HORLN      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 33.2% single= 51.8% red= 30.2% [23.0,37.3] | hit H/F= 35.0/ 8.1% lift H/F=2.85/2.51 | recall H/L/F=0.806/0.816/0.853
+  HORLN      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.62 | inspect cond= 55.1% single= 87.3% red= 34.8% [31.3,38.6] | hit H/F= 23.8/ 4.7% lift H/F=1.93/1.46 | recall H/L/F=0.905/0.915/0.964
+  HORLN      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 74.6% single=100.0% red= 25.4% [21.9,27.4] | hit H/F= 17.9/ 3.3% lift H/F=1.45/1.01 | recall H/L/F=0.955/0.960/1.000
+  MSDM       1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 43.8% single= 64.8% red= 28.2% [21.6,34.2] | hit H/F= 25.3/ 5.4% lift H/F=2.06/1.67 | recall H/L/F=0.797/0.812/0.876
+  MSDM       1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.55 | inspect cond= 64.2% single= 88.4% red= 25.7% [20.0,31.2] | hit H/F= 18.7/ 4.0% lift H/F=1.52/1.25 | recall H/L/F=0.896/0.909/0.968
+  MSDM       1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 80.5% single=100.0% red= 19.5% [17.6,22.0] | hit H/F= 15.4/ 3.1% lift H/F=1.25/0.95 | recall H/L/F=0.950/0.958/1.000
+  WDCNN      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 45.2% single= 63.2% red= 26.5% [22.1,31.5] | hit H/F= 24.2/ 6.0% lift H/F=1.97/1.87 | recall H/L/F=0.813/0.809/0.865
+  WDCNN      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.58 | inspect cond= 65.6% single= 90.7% red= 26.6% [24.1,29.2] | hit H/F= 19.2/ 3.9% lift H/F=1.56/1.21 | recall H/L/F=0.906/0.910/0.963
+  WDCNN      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 78.8% single=100.0% red= 21.2% [20.3,22.5] | hit H/F= 16.6/ 3.2% lift H/F=1.35/1.01 | recall H/L/F=0.958/0.963/1.000
+  GRU-D      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.01 | inspect cond= 67.3% single= 85.6% red= 20.6% [18.3,23.2] | hit H/F= 15.4/ 3.7% lift H/F=1.25/1.16 | recall H/L/F=0.809/0.818/0.846
+  GRU-D      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 83.6% single= 97.4% red= 14.2% [11.8,16.0] | hit H/F= 13.6/ 3.3% lift H/F=1.11/1.01 | recall H/L/F=0.909/0.911/0.961
+  GRU-D      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 92.1% single=100.0% red=  7.9% [6.5,9.5] | hit H/F= 12.9/ 3.2% lift H/F=1.05/0.99 | recall H/L/F=0.955/0.955/1.000
+  HybridAttn 1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 33.5% single= 48.7% red= 26.2% [18.4,33.5] | hit H/F= 31.0/ 8.0% lift H/F=2.52/2.50 | recall H/L/F=0.801/0.803/0.852
+  HybridAttn 1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 56.0% single= 84.9% red= 31.3% [27.6,35.3] | hit H/F= 22.3/ 4.5% lift H/F=1.81/1.39 | recall H/L/F=0.901/0.910/0.968
+  HybridAttn 1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 73.7% single=100.0% red= 26.3% [23.2,29.2] | hit H/F= 18.5/ 3.2% lift H/F=1.50/0.99 | recall H/L/F=0.954/0.958/1.000
+  DKGT       1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.03 | inspect cond= 51.6% single= 70.6% red= 25.3% [22.8,29.6] | hit H/F= 22.7/ 4.3% lift H/F=1.85/1.33 | recall H/L/F=0.808/0.813/0.872
+  DKGT       1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 70.7% single= 91.7% red= 21.9% [19.2,24.8] | hit H/F= 18.0/ 3.3% lift H/F=1.46/1.04 | recall H/L/F=0.913/0.915/0.966
+  DKGT       1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 83.7% single=100.0% red= 16.3% [14.6,18.3] | hit H/F= 15.6/ 3.2% lift H/F=1.27/0.98 | recall H/L/F=0.960/0.957/1.000
+
+[done] wrote ./results/phase_n_retrained/trust/decision_value_sgcc.csv and decision_value_sgcc_resplits.csv
+[PASS] 2a. Conformal decision value: all six Table 6 columns + Fig. 5b completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 2b. Empirical-quantile vs conformal comparator (Fig. 5a)
+   Command: python ./scripts/run_empirical_comparator.py
+===========================================================================
+[running] Empirical Comparator Benchmark on MAMRD...
+[load] SGCC ...
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[done] Saved to ./results/phase_n_retrained/trust/empirical_comparator_sgcc.csv
+        arm  n_resplits  conf_flat_trivial_pct  conf_inspected_mean  conf_inspected_lo  conf_inspected_hi  emp_inspected_mean  emp_inspected_lo  emp_inspected_hi  conf_rec_flat_mean  emp_rec_flat_mean  conf_flat_viol_pct  emp_flat_viol_pct  conf_rec_heavy_mean  emp_rec_heavy_mean  conf_rec_light_mean  emp_rec_light_mean  conf_rec_overall_mean  emp_rec_overall_mean  n_flat_eval_resplits
+0  a34_NaME         300                    2.0              0.28644           0.191927           0.401317            0.235426          0.169716          0.318815            0.837658           0.722452           32.333333               56.0             0.812595            0.798848             0.808382            0.781926               0.812833              0.787723                   300
+[PASS] 2b. Empirical-quantile vs conformal comparator (Fig. 5a) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 2c. SGCC trust layer: per-stratum conformal lift (Supp. Fig. S4)
+   Command: python ./scripts/run_trust_layer.py
+===========================================================================
+[load] SGCC ...
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[arm] a34_NaME
+[arm] HORLN
+[arm] MSDM
+[arm] WDCNN
+[arm] GRU-D
+[arm] HybridAttn
+[arm] DKGT
+# RESULTS_TRUST — SGCC trustworthy layer (post-hoc, NREP=20)
+
+Conformal: split-APS within each
+held-out fold (stratified calib/test), 20 repeats averaged per cell.
+Cells: a34 n=15 (seeds0-4xfolds0-2); baselines n=9 (seeds0-2xfolds0-2).
+
+## T1 Calibration (prior-shift + temperature scaling & 2-param affine recalibration)
+| arm | T | ECE raw | ECE prior+T | ECE affine | Brier raw | Brier prior+T | Brier affine |
+|---|---|---|---|---|---|---|---|
+| a34_NaME | 1.43 | 0.117 | 0.019 | 0.018 | 0.089 | 0.050 | 0.050 |
+| HORLN | 1.98 | 0.056 | 0.017 | 0.017 | 0.066 | 0.053 | 0.053 |
+| MSDM | 1.73 | 0.104 | 0.021 | 0.018 | 0.094 | 0.063 | 0.063 |
+| WDCNN | 1.11 | 0.249 | 0.019 | 0.019 | 0.155 | 0.066 | 0.066 |
+| GRU-D | 1.00 | 0.377 | 0.023 | 0.024 | 0.220 | 0.074 | 0.074 |
+| HybridAttn | 1.81 | 0.110 | 0.032 | 0.021 | 0.094 | 0.058 | 0.056 |
+| DKGT | 1.12 | 0.267 | 0.027 | 0.019 | 0.174 | 0.070 | 0.069 |
+
+## T2 Marginal APS is degenerate under ETD imbalance (motivating result)
+Marginal APS hits 1-alpha coverage trivially by abstaining ({both}) for
+almost every consumer (prevalence ~8.5%). Coverage is met; the set is
+uninformative. This motivates the class-conditional guarantee in T3.
+| arm | cov a=0.10 | abstain-rate a=0.10 | cov a=0.20 | abstain a=0.20 |
+|---|---|---|---|---|
+| a34_NaME | 1.000 | 1.000 | 0.802 | 0.000 |
+| HORLN | 0.906 | 0.050 | 0.801 | 0.000 |
+| MSDM | 1.000 | 1.000 | 0.808 | 0.039 |
+| WDCNN | 1.000 | 1.000 | 0.999 | 0.994 |
+| GRU-D | 1.000 | 1.000 | 1.000 | 1.000 |
+| HybridAttn | 0.999 | 0.994 | 0.801 | 0.000 |
+| DKGT | 1.000 | 1.000 | 1.000 | 1.000 |
+
+## T3 Magnitude-conditional audit efficiency under a conformal catch-rate guarantee — THE FINDING
+Class-conditional (Mondrian) conformal guarantees per-stratum theft recall 1-alpha.
+Reported as LIFT = precision / stratum base-rate (=efficiency over random auditing),
+which controls the per-stratum prevalence confound (Heavy 12.3%, Light 6.8%, Flat 3.2%).
+All 20 resplits per cell are used (no eligibility gate); a stratum with too few
+calibration thefts for the order statistic gets q_hat=+inf (all members flagged).
+MAMRD (a34_NaME) per-stratum lift by guarantee level:
+| guarantee 1-a | lift Heavy | lift Light | lift Flat |
+|---|---|---|---|
+| 0.80 | 3.19 | 3.40 | 2.44 |
+| 0.90 | 2.03 | 2.40 | 1.33 |
+| 0.95 | 1.57 | 1.72 | 0.98 |
+
+## T3b Per-arm precision-lift gap, Heavy vs Flat @ 80% guarantee (universality)
+Positive gap = audits are more efficient (relative to base rate) in Heavy than in Flat.
+| arm | lift Heavy | lift Flat | Heavy-Flat lift gap [BCa 95%] |
+|---|---|---|---|
+| a34_NaME | 3.19 | 2.44 | +0.75 [+0.01,+1.43] |
+| HORLN | 2.85 | 2.51 | +0.34 [-0.63,+1.17] |
+| MSDM | 2.06 | 1.67 | +0.39 [-0.10,+0.89] |
+| WDCNN | 1.97 | 1.87 | +0.10 [-0.32,+0.65] |
+| GRU-D | 1.25 | 1.16 | +0.09 [-0.09,+0.23] |
+| HybridAttn | 2.52 | 2.50 | +0.02 [-0.98,+0.90] |
+| DKGT | 1.85 | 1.33 | +0.52 [+0.33,+0.74] |
+
+## T3c Per-phenotype detail @ guaranteed 90% catch-rate (a34_NaME)
+| phenotype | base-rate | precision | lift | empirical recall |
+|---|---|---|---|---|
+| Heavy_Dropper | 0.121 | 0.237 | 1.96 | 0.912 |
+| Light_Dropper | 0.069 | 0.160 | 2.30 | 0.910 |
+| Heavy_Riser | 0.128 | 0.246 | 1.93 | 0.923 |
+| Light_Riser | 0.064 | 0.127 | 1.98 | 0.933 |
+| Flat | 0.032 | 0.043 | 1.33 | 0.958 |
+
+## T3d Small-sample conformal convention: share of resplits with q_hat=+inf
+| arm | 1-a | HEAVY | LIGHT | Flat |
+|---|---|---|---|---|
+| a34_NaME | 0.80 | 0.000 | 0.000 | 0.020 |
+| a34_NaME | 0.90 | 0.000 | 0.000 | 0.557 |
+| a34_NaME | 0.95 | 0.000 | 0.000 | 1.000 |
+| HORLN | 0.80 | 0.000 | 0.000 | 0.017 |
+| HORLN | 0.90 | 0.000 | 0.000 | 0.617 |
+| HORLN | 0.95 | 0.000 | 0.000 | 1.000 |
+| MSDM | 0.80 | 0.000 | 0.000 | 0.022 |
+| MSDM | 0.90 | 0.000 | 0.000 | 0.550 |
+| MSDM | 0.95 | 0.000 | 0.000 | 1.000 |
+| WDCNN | 0.80 | 0.000 | 0.000 | 0.022 |
+| WDCNN | 0.90 | 0.000 | 0.000 | 0.583 |
+| WDCNN | 0.95 | 0.000 | 0.000 | 1.000 |
+| GRU-D | 0.80 | 0.000 | 0.000 | 0.011 |
+| GRU-D | 0.90 | 0.000 | 0.000 | 0.594 |
+| GRU-D | 0.95 | 0.000 | 0.000 | 1.000 |
+| HybridAttn | 0.80 | 0.000 | 0.000 | 0.017 |
+| HybridAttn | 0.90 | 0.000 | 0.000 | 0.589 |
+| HybridAttn | 0.95 | 0.000 | 0.000 | 1.000 |
+| DKGT | 0.80 | 0.000 | 0.000 | 0.028 |
+| DKGT | 0.90 | 0.000 | 0.000 | 0.589 |
+| DKGT | 0.95 | 0.000 | 0.000 | 1.000 |
+
+## T4 Selective operating point (supporting; not headlined)
+| arm | recall@FPR0.5% | recall@FPR1% | recall@FPR5% |
+|---|---|---|---|
+| a34_NaME | 0.298 | 0.369 | 0.588 |
+| HORLN | 0.249 | 0.333 | 0.541 |
+| MSDM | 0.168 | 0.218 | 0.392 |
+| WDCNN | 0.107 | 0.146 | 0.345 |
+| GRU-D | 0.030 | 0.057 | 0.213 |
+| HybridAttn | 0.226 | 0.298 | 0.502 |
+| DKGT | 0.072 | 0.112 | 0.284 |
+
+[done] wrote ./results/phase_n_retrained/trust/RESULTS_TRUST.md (+ percell/calibration/operating/lift CSVs)
+[PASS] 2c. SGCC trust layer: per-stratum conformal lift (Supp. Fig. S4) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 2d. ECL conformal lift gap (Supp. Table S6)
+   Command: python ./scripts/run_ecl_trust_analysis.py
+===========================================================================
+# RESULTS_ECL_TRUST — cross-dataset trustworthy layer (ECL, magnitude strata)
+
+Strata: Heavy/Light by train-fit magnitude median. Base-rate Heavy 7.5% Light 12.7%.
+Cells/arm = 9 (3 folds x 3 seeds). NREP=20.
+
+## AP reproduction (sanity vs locked fold-0 numbers)
+| arm | mean AP (3x3) | locked AP |
+|---|---|---|
+| a34_generic | 0.843 | 0.88 |
+| horln | 0.822 | 0.852 |
+| wdcnn | 0.796 | 0.836 |
+| grud | 0.527 | 0.561 |
+| hybridattn | 0.804 | 0.847 |
+| msdm | 0.842 | 0.87 |
+
+## T1 Calibration (preliminary)
+| arm | ECE raw | Brier |
+|---|---|---|
+| a34_generic | 0.121 | 0.046 |
+| horln | 0.083 | 0.041 |
+| wdcnn | 0.136 | 0.052 |
+| grud | 0.200 | 0.114 |
+| hybridattn | 0.135 | 0.060 |
+| msdm | 0.025 | 0.026 |
+
+## T2 Marginal-APS degeneracy (abstain-rate @1-a=0.90)
+| arm | coverage | abstain |
+|---|---|---|
+| a34_generic | 0.900 | 0.000 |
+| horln | 0.901 | 0.000 |
+| wdcnn | 0.907 | 0.000 |
+| grud | 0.998 | 0.978 |
+| hybridattn | 0.901 | 0.000 |
+| msdm | 0.972 | 0.000 |
+
+## T3 Magnitude-conditional audit efficiency (LIFT) @ guaranteed 80% catch-rate — THE FINDING
+Lift = precision / stratum base-rate. Gap>0 = Heavy more audit-efficient than Light.
+| arm | lift Heavy | lift Light | Heavy-Light lift gap [BCa 95%] |
+|---|---|---|---|
+| a34_generic | 8.06 | 5.15 | +2.91 [+1.90,+3.76] |
+| horln | 7.36 | 4.87 | +2.49 [+1.86,+3.04] |
+| wdcnn | 8.21 | 5.06 | +3.15 [+2.42,+3.73] |
+| grud | 5.40 | 2.90 | +2.50 [+2.05,+2.97] |
+| hybridattn | 7.93 | 4.36 | +3.56 [+2.26,+4.41] |
+| msdm | 8.94 | 4.94 | +4.00 [+2.89,+5.01] |
+
+## T3b Realized recall of the class-conditional threshold at the 80% target (mean over cells)
+| arm | recall Heavy | recall Light | marginal APS coverage |
+|---|---|---|---|
+| a34_generic | 0.813 | 0.803 | 0.801 |
+| horln | 0.828 | 0.806 | 0.802 |
+| wdcnn | 0.816 | 0.799 | 0.800 |
+| grud | 0.807 | 0.811 | 0.802 |
+| hybridattn | 0.812 | 0.813 | 0.800 |
+| msdm | 0.807 | 0.811 | 0.953 |
+
+## T4 recall@FPR (supporting)
+| arm | recall@FPR1% | recall@FPR5% |
+|---|---|---|
+| a34_generic | 0.797 | 0.817 |
+| horln | 0.784 | 0.806 |
+| wdcnn | 0.759 | 0.818 |
+| grud | 0.106 | 0.625 |
+| hybridattn | 0.738 | 0.807 |
+| msdm | 0.795 | 0.810 |
+
+[done] ./results/phase_n_retrained/ecl_trust/RESULTS_ECL_TRUST.md
+[PASS] 2d. ECL conformal lift gap (Supp. Table S6) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 3a. Per-group PR-AUC across detectors (Supp. Table S4)
+   Command: python ./scripts/compute_table_b.py
+===========================================================================
+
+=== TABLE B: per-stratum PR-AUC (mean [BCa 95% CI]) ===
+stratum         pop% |            WDCNN            HORLN        Self-Attn            GRU-D             MSDM         DKGT-Net            MAMRD | MAMRD-best
+Heavy dropper   28.6 | 0.497[0.46,0.52] 0.641[0.61,0.68] 0.613[0.58,0.66] 0.238[0.22,0.25] 0.571[0.55,0.60] 0.425[0.40,0.46] 0.678[0.64,0.71] | +0.032[+0.01,+0.05] vs HORLN
+Heavy riser     13.1 | 0.417[0.40,0.43] 0.669[0.63,0.71] 0.589[0.55,0.63] 0.332[0.31,0.35] 0.477[0.41,0.52] 0.355[0.34,0.37] 0.674[0.64,0.70] | +0.006[-0.01,+0.02] vs HORLN
+Light dropper   28.1 | 0.297[0.27,0.32] 0.515[0.48,0.56] 0.491[0.46,0.52] 0.153[0.14,0.18] 0.291[0.26,0.32] 0.278[0.27,0.29] 0.563[0.54,0.59] | +0.044[-0.02,+0.11] vs HORLN
+Light riser     13.0 | 0.180[0.15,0.20] 0.370[0.30,0.45] 0.309[0.27,0.36] 0.176[0.14,0.22] 0.261[0.22,0.29] 0.146[0.14,0.17] 0.461[0.43,0.49] | +0.092[+0.04,+0.15] vs HORLN
+Flat            17.2 | 0.165[0.11,0.21] 0.326[0.24,0.40] 0.357[0.24,0.44] 0.096[0.07,0.13] 0.185[0.15,0.22] 0.154[0.10,0.22] 0.309[0.27,0.35] | -0.042[-0.10,+0.02] vs Self-Attn
+Aggregate      100.0 | 0.352[0.33,0.37] 0.559[0.53,0.59] 0.522[0.51,0.54] 0.192[0.19,0.20] 0.409[0.39,0.44] 0.296[0.28,0.31] 0.600[0.58,0.62] | +0.038[+0.03,+0.05] vs HORLN
+
+--- per-stratum mean test N (min across cells, anomaly check) ---
+  Heavy dropper  mean N=824  min N=812  (pop 28.6%)
+  Light dropper  mean N=811  min N=804  (pop 28.1%)
+  Heavy riser    mean N=379  min N=370  (pop 13.1%)
+  Light riser    mean N=374  min N=366  (pop 13.0%)
+  Flat           mean N=497  min N=489  (pop 17.2%)
+
+--- FLAGS ---
+  (none)
+
+--- NOTE: per-stratum theft%% NOT computed: per-stratum positive counts are
+    not cached (n_* are totals); requires the strata reconstruction (Table C path).
+
+[done] artifacts in ./results/phase_n_retrained/tableB
+[config] BCa B=2000, boot seed=12345; baselines n=9, MAMRD n=15, gap pairs=9
+[PASS] 3a. Per-group PR-AUC across detectors (Supp. Table S4) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 3b. Prevalence-matched per-group contrasts (Supp. Table S3)
+   Command: python ./scripts/compute_table_c.py
+===========================================================================
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+
+=== TABLE C [MAMRD] : prevalence control (mean [BCa 95% CI]) ===
+stratum        theft%                rawPR     norm(AP-pi)/(1-pi)            matchedPR
+Heavy dropper   12.11 0.678[0.64,0.71] 0.635[0.60,0.67] 0.687[0.65,0.72]
+Heavy riser     12.75 0.674[0.64,0.70] 0.628[0.59,0.66] 0.675[0.64,0.70]
+Light dropper    6.95 0.563[0.54,0.59] 0.531[0.51,0.56] 0.671[0.66,0.69]
+Light riser      6.42 0.461[0.43,0.49] 0.424[0.39,0.46] 0.605[0.57,0.64]
+Flat             3.21 0.309[0.27,0.35] 0.287[0.24,0.33] 0.564[0.53,0.59]
+  common target prevalence (max stratum) = 12.77%  retained N/stratum: Heav=785, Heav=378, Ligh=448, Ligh=187, Flat=127
+
+--- ORDERING VERDICT (MAMRD: mean over heavy / light / flat) ---
+  raw PR-AUC      : Heavy=0.676 Light=0.512 Flat=0.309  ->  Heavy > Light > Flat  [HOLDS]
+  normalized      : Heavy=0.631 Light=0.478 Flat=0.287  ->  Heavy > Light > Flat  [HOLDS]
+  matched PR-AUC  : Heavy=0.681 Light=0.638 Flat=0.564  ->  Heavy > Light > Flat  [HOLDS]
+
+--- normalized (AP-pi)/(1-pi) by detector x stratum (mean) ---
+detector       WDCNN  HORLN  Self-Attn  GRU-D   MSDM  DKGT-Net  MAMRD
+stratum                                                              
+Heavy_Dropper  0.428  0.592      0.560  0.133  0.512     0.346  0.635
+Heavy_Riser    0.332  0.621      0.530  0.235  0.401     0.261  0.628
+Light_Dropper  0.245  0.479      0.453  0.090  0.238     0.224  0.531
+Light_Riser    0.124  0.327      0.261  0.120  0.211     0.088  0.424
+Flat           0.137  0.303      0.336  0.066  0.158     0.126  0.287
+
+[done] artifacts in ./results/phase_n_retrained/tableC  (BCa B=2000, match reps=100)
+[PASS] 3b. Prevalence-matched per-group contrasts (Supp. Table S3) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 3b'. Matched contrasts and Friedman test (Supp. Table S3)
+   Command: python ./scripts/table_c_contrasts.py
+===========================================================================
+========================================================================
+MATCHING CONFIG (reused, not re-tuned):
+  common target prevalence (max per-stratum, mean over cells) = 12.77%
+  subsampling draws K=100, MATCH_SEED=777 ; BCa B=2000, BOOT_SEED=12345
+  cells: n=15 (5 seeds x 3 folds), paired
+  retained N per stratum (P + kept negatives) | positives/cell:
+    Heavy dropper  N= 785  P=100
+    Heavy riser    N= 378  P= 48
+    Light dropper  N= 448  P= 56
+    Light riser    N= 187  P= 24
+    Flat           N= 127  P= 16
+========================================================================
+
+[B] Matched PR-AUC per stratum (mean [BCa 95% CI]) — verify vs tableC_agg.csv:
+  Heavy dropper  0.687 [0.650,0.720]  (|diff vs tableC_agg| = 0.0e+00)  N=785
+  Heavy riser    0.675 [0.638,0.702]  (|diff vs tableC_agg| = 0.0e+00)  N=378
+  Light dropper  0.671 [0.656,0.685]  (|diff vs tableC_agg| = 0.0e+00)  N=448
+  Light riser    0.605 [0.571,0.640]  (|diff vs tableC_agg| = 0.0e+00)  N=187
+  Flat           0.564 [0.532,0.593]  (|diff vs tableC_agg| = 0.0e+00)  N=127
+
+[C] Pairwise contrasts (paired over 15 cells, BCa 95% CI):
+  Heavy riser   - Flat         : +0.110 [+0.056,+0.157]  resolved=True
+  Heavy dropper - Flat         : +0.122 [+0.066,+0.186]  resolved=True
+  Flat          - Light dropper: -0.107 [-0.129,-0.082]  resolved=True
+  Flat          - Light riser  : -0.040 [-0.105,+0.014]  resolved=False
+  Heavy riser   - Light dropper: +0.003 [-0.046,+0.039]  resolved=False
+  Heavy(pooled) - Light(pooled): +0.042 [+0.013,+0.065]  resolved=True
+
+[D] Friedman omnibus across 5 strata over 15 cells: chi2=27.093, df=4, p=1.90e-05
+    rank sums {'Heavy dropper': 61.0, 'Heavy riser': 57.0, 'Light dropper': 51.0, 'Light riser': 29.0, 'Flat': 27.0}
+
+========================================================================
+VERDICT (no spin):
+  Friedman: the 5 matched per-stratum PR-AUCs are DISTINGUISHABLE at p<0.05 (p=0.000).
+  Heavy-Flat resolved? Heavy riser-Flat: True (+0.110 [+0.056,+0.157]); Heavy dropper-Flat: True (+0.122 [+0.066,+0.186]).
+  Flat exceeds light strata with interval excluding zero?  Flat-Light dropper: True (-0.107 [-0.129,-0.082]); Flat-Light riser: False (-0.040 [-0.105,+0.014]).
+  Heavy(pooled)-Light(pooled): True (+0.042 [+0.013,+0.065]).
+
+[done] artifacts in ./results/phase_n_retrained/tableC
+
+[optional] audit-efficiency LIFT under matching: SKIPPED.
+  Reason: lift = P_phi/pi_phi needs an operating point phi. The paper's phi is the
+  conformal guaranteed-detection-rate threshold, calibrated on the CALIBRATION split,
+  which is NOT in the cached test cells (only test scores+labels are). Computing it
+  consistently would require the calibration-split scores / conformal machinery, i.e.
+  beyond the cached scores — so per the guardrail it is skipped, not approximated.
+[PASS] 3b'. Matched contrasts and Friedman test (Supp. Table S3) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 3c. ECL per-attack recall at 1%/5% FPR (Supp. Table S7 note)
+   Command: python ./scripts/compute_table_a.py
+===========================================================================
+[ecl] reconstructing windows + types (~60s)...
+
+=== TABLE A: per-type RECALL @ 5% FPR (mean [BCa 95% CI]) ===
+attack type              npos |           MAMRD           WDCNN           HORLN       Self-Attn           GRU-D            MSDM | MAMRD-best
+Multiplicative scaling    300 | 0.08[0.06,0.10] 0.06[0.05,0.08] 0.04[0.02,0.06] 0.05[0.03,0.07] 0.04[0.03,0.06] 0.06[0.05,0.07] | +0.01[-0.02,+0.05] vs WDCNN
+Per-step random scaling   243 | 1.00[0.97,1.00] 1.00[0.97,1.00] 0.98[0.95,0.99] 0.95[0.91,0.98] 0.33[0.22,0.45] 0.98[0.96,1.00] | +0.00[+0.00,+0.00] vs WDCNN
+Intermittent zeroing      246 | 1.00[1.00,1.00] 1.00[1.00,1.00] 1.00[0.98,1.00] 1.00[0.98,1.00] 0.59[0.53,0.68] 1.00[1.00,1.00] | +0.00[+0.00,+0.00] vs WDCNN
+Mean-scaled replacement   234 | 1.00[1.00,1.00] 1.00[1.00,1.00] 0.99[0.97,1.00] 1.00[1.00,1.00] 0.91[0.86,0.96] 1.00[1.00,1.00] | +0.00[+0.00,+0.00] vs WDCNN
+Flatten to mean           273 | 1.00[1.00,1.00] 1.00[1.00,1.00] 1.00[1.00,1.00] 1.00[1.00,1.00] 1.00[1.00,1.00] 1.00[1.00,1.00] | +0.00[+0.00,+0.00] vs WDCNN
+Time reversal             255 | 0.98[0.96,0.99] 1.00[1.00,1.00] 0.99[0.98,1.00] 0.99[0.97,1.00] 0.95[0.91,0.98] 0.96[0.93,0.98] | -0.02[-0.04,-0.01] vs WDCNN
+
+=== TABLE A: per-type RECALL @ 1% FPR (mean) ===
+attack type              |      MAMRD      WDCNN      HORLN  Self-Attn      GRU-D       MSDM
+Multiplicative scaling   |       0.01       0.02       0.01       0.02       0.00       0.02
+Per-step random scaling  |       0.96       0.82       0.95       0.76       0.00       0.96
+Intermittent zeroing     |       1.00       1.00       0.98       0.97       0.00       1.00
+Mean-scaled replacement  |       1.00       0.96       0.96       0.93       0.00       1.00
+Flatten to mean          |       1.00       1.00       1.00       1.00       0.00       1.00
+Time reversal            |       0.97       0.90       0.95       0.92       0.62       0.94
+
+--- baseline blind spots (recall@5%FPR < 0.50) ---
+  WDCNN     : Multiplicative scaling
+  HORLN     : Multiplicative scaling
+  Self-Attn : Multiplicative scaling
+  GRU-D     : Multiplicative scaling, Per-step random scaling
+  MSDM      : Multiplicative scaling
+  MAMRD     : Multiplicative scaling
+
+[done] artifacts in ./results/phase_n_retrained/tableA  (BCa B=2000)
+[PASS] 3c. ECL per-attack recall at 1%/5% FPR (Supp. Table S7 note) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 3d. ECL metric suite (Supp. Table S7)
+   Command: python ./scripts/make_ecl_board.py
+===========================================================================
+arm                  PR-AUC  ROC-AUC       F1  MAP@100   (n=9, mean)
+--------------------------------------------------------------
+GRU-D                 0.527    0.871    0.623    0.603
+Self-attention        0.804    0.893    0.830    0.959
+Wide-and-deep CNN     0.796    0.899    0.838    0.924
+MSDM                  0.842    0.898    0.861    1.000
+HORLN                 0.822    0.893    0.849    0.981
+MAMRD                 0.843    0.899    0.860    0.998
+
+[done] -> ./results/phase_n_retrained/ecl_board.csv
+[PASS] 3d. ECL metric suite (Supp. Table S7) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 4. Tables 2-5, statistical tests, eligibility ledger (r2_audit/table*.csv)
+   Command: python ./scripts/compute_r2_revisions.py
+===========================================================================
+=====================================================================
+1. LOADING SGCC RAW & NORMALIZED DATA + CALENDAR DAY-OF-WEEK CHECK
+=====================================================================
+SGCC total rows=42372, total date columns=1035
+First date=2014-01-01 (Wednesday), 1029th date=2016-10-25 (Tuesday), Last date=2016-10-31 (Monday)
+Weekly grid (147, 7) column index -> Calendar Day-of-Week:
+  Col 0: Wednesday
+  Col 1: Thursday
+  Col 2: Friday
+  Col 3: Saturday
+  Col 4: Sunday
+  Col 5: Monday
+  Col 6: Tuesday
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.4s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+
+=====================================================================
+2. POINT 3: SGCC PARTITION MANIFESTS & EXACT COHORT/GROUP COUNTS
+=====================================================================
+ fold  train_tot  train_pos  es_tot  es_pos  cal_tot  cal_pos  te_tot  te_pos  te_Heavy_tot  te_Heavy_pos  te_Light_tot  te_Light_pos  te_Flat_tot  te_Flat_pos  conf_cal_tot_mean  conf_cal_pos_mean  conf_cal_Heavy_pos_mean  conf_cal_Light_pos_mean  conf_cal_Flat_pos_mean  conf_cal_Flat_pos_min  conf_cal_Flat_pos_max  conf_eval_tot_mean  conf_eval_pos_mean  conf_eval_Heavy_pos_mean  conf_eval_Light_pos_mean  conf_eval_Flat_pos_mean
+    0      33897       2873    2795     244     2795      244    2885     254          1205           156          1190            81          490           17             1442.0              127.0                77.930435                40.506522                8.563043                      3                     13              1443.0               127.0                 78.069565                 40.493478                 8.436957
+    1      33897       2943    2795     221     2795      221    2885     230          1202           133          1170            79          513           18             1442.0              115.0                66.271739                39.595652                9.132609                      4                     15              1443.0               115.0                 66.728261                 39.404348                 8.867391
+    2      33898       2886    2795     240     2795      240    2884     249          1200           155          1195            81          489           13             1441.0              124.0                76.808696                40.650000                6.541304                      2                     12              1443.0               125.0                 78.191304                 40.350000                 6.458696
+
+=====================================================================
+3. POINT 3 & 4: ECL WINDOW/CLIENT MANIFEST & CLIENT OVERLAP AUDIT
+=====================================================================
+ fold  train_win  train_pos  es_win  es_pos  cal_win  cal_pos  te_win  te_pos  te_Heavy_win  te_Heavy_pos  te_Light_win  te_Light_pos  unique_tr_clients  unique_te_clients  shared_tr_te_clients  pct_te_clients_in_tr
+    0      20000       1989    1649     168     1649      168    1702     175           831            71           871           104                370                360                   360                 100.0
+    1      20000       1998    1649     165     1649      165    1702     172           845            62           857           110                370                354                   354                 100.0
+    2      20000       2000    1650     165     1650      165    1700     170           841            55           859           115                370                363                   363                 100.0
+
+=====================================================================
+4. POINT 5: 9-CELL VS 15-CELL MAMRD & CONSUMER-BOOTSTRAP VS CELL BCa
+=====================================================================
+
+--- Summary across cells (9-cell vs 15-cell) ---
+GRU-D            (n= 9) | AP=0.192 [0.187,0.199] | ROC=0.677 [0.668,0.688] | F1=0.262 [0.251,0.274] | P@100=0.316 [0.293,0.331] | P@200=0.274 [0.263,0.290]
+Self-Attn        (n= 9) | AP=0.522 [0.505,0.544] | ROC=0.863 [0.858,0.869] | F1=0.494 [0.477,0.515] | P@100=0.724 [0.699,0.748] | P@200=0.541 [0.518,0.564]
+DKGT-Net         (n= 9) | AP=0.296 [0.277,0.312] | ROC=0.774 [0.762,0.783] | F1=0.331 [0.316,0.348] | P@100=0.446 [0.434,0.452] | P@200=0.345 [0.328,0.367]
+WDCNN            (n= 9) | AP=0.352 [0.334,0.365] | ROC=0.806 [0.803,0.809] | F1=0.371 [0.361,0.383] | P@100=0.494 [0.464,0.514] | P@200=0.403 [0.391,0.410]
+MSDM             (n= 9) | AP=0.409 [0.390,0.437] | ROC=0.813 [0.806,0.825] | F1=0.399 [0.387,0.422] | P@100=0.604 [0.569,0.638] | P@200=0.444 [0.425,0.466]
+HORLN            (n= 9) | AP=0.559 [0.529,0.592] | ROC=0.871 [0.864,0.880] | F1=0.521 [0.494,0.553] | P@100=0.761 [0.718,0.792] | P@200=0.580 [0.542,0.619]
+MAMRD (9-cell)   (n= 9) | AP=0.597 [0.576,0.619] | ROC=0.892 [0.884,0.900] | F1=0.557 [0.538,0.577] | P@100=0.808 [0.772,0.832] | P@200=0.619 [0.593,0.646]
+MAMRD (15-cell)  (n=15) | AP=0.600 [0.584,0.616] | ROC=0.892 [0.886,0.898] | F1=0.556 [0.540,0.569] | P@100=0.814 [0.789,0.832] | P@200=0.620 [0.600,0.640]
+Exported ./results/phase_n_retrained/r2_audit/table3_main_results.csv
+Paired 9-cell MAMRD - HORLN ap  : mean=+0.0382 BCa=[+0.0261,+0.0529] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN roc : mean=+0.0204 BCa=[+0.0144,+0.0278] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN f1  : mean=+0.0360 BCa=[+0.0157,+0.0502] Wilcoxon p=0.0195
+Paired 9-cell MAMRD - HORLN p100: mean=+0.0467 BCa=[+0.0222,+0.0767] Wilcoxon p=0.0156
+Paired 9-cell MAMRD - HORLN p200: mean=+0.0389 BCa=[+0.0156,+0.0539] Wilcoxon p=0.0117
+Friedman test (7 detectors, 9 matched seed-fold cells): chi2=53.62, p=8.80e-10
+
+--- Consumer-level bootstrap (seed-averaged scores per consumer within each fold, B=1000) ---
+  GRU-D            | Seed-ensemble AP=0.196 Cons-Boot95%=[0.177,0.226] | ROC=0.681 [0.661,0.701]
+  Self-Attn        | Seed-ensemble AP=0.539 Cons-Boot95%=[0.504,0.577] | ROC=0.871 [0.857,0.886]
+  DKGT-Net         | Seed-ensemble AP=0.301 Cons-Boot95%=[0.269,0.339] | ROC=0.777 [0.758,0.794]
+  WDCNN            | Seed-ensemble AP=0.359 Cons-Boot95%=[0.324,0.396] | ROC=0.810 [0.794,0.825]
+  MSDM             | Seed-ensemble AP=0.451 Cons-Boot95%=[0.416,0.494] | ROC=0.834 [0.818,0.849]
+  HORLN            | Seed-ensemble AP=0.596 Cons-Boot95%=[0.563,0.631] | ROC=0.884 [0.871,0.898]
+  MAMRD (9-cell)   | Seed-ensemble AP=0.612 Cons-Boot95%=[0.580,0.646] | ROC=0.897 [0.884,0.910]
+  Paired Consumer-Bootstrap MAMRD - HORLN AP: +0.0161 95% CI=[-0.0102, +0.0414] (replicates <= 0: 122 of 1000)
+Exported ./results/phase_n_retrained/r2_audit/table3_tests.csv
+
+=====================================================================
+5. POINT 7: ABLATION PROVENANCE & PAIRED CIs (BUILD-UP & SUBTRACTIVE)
+=====================================================================
+S0: Core (BiMamba2 + 2D Laplacian CNN, scalar fill)     | AP=0.5487[0.5219,0.5846] ROC=0.8791 F1=0.5147 P@100=0.7389 | dPrev=(baseline) | dS0=(baseline)
+S1: + Context-conditioned fill token (CC-NaME)          | AP=0.5723[0.5468,0.6034] ROC=0.8867 F1=0.5300 P@100=0.7800 | dPrev=+0.0236 [+0.0090,+0.0348] | dS0=+0.0236 [+0.0090,+0.0348]
+S2: + 2D missing-mask Laplacian CNN                     | AP=0.5875[0.5627,0.6104] ROC=0.8892 F1=0.5394 P@100=0.8144 | dPrev=+0.0152 [+0.0068,+0.0223] | dS0=+0.0388 [+0.0215,+0.0532]
+S3: + Multi-scale lagged differencing (a33 / no-IIPC)   | AP=0.5951[0.5765,0.6167] ROC=0.8916 F1=0.5551 P@100=0.8067 | dPrev=+0.0076 [+0.0008,+0.0144] | dS0=+0.0464 [+0.0237,+0.0596]
+S4: + Inter/intra-period conv (full MAMRD, 9-cell)      | AP=0.5975[0.5760,0.6188] ROC=0.8917 F1=0.5566 P@100=0.8078 | dPrev=+0.0024 [-0.0028,+0.0104] | dS0=+0.0488 [+0.0304,+0.0627]
+
+--- Subtractive / Cross-Arm Paired Contrasts (n=9 matched cells) ---
+  Full MAMRD (S4) minus No-IIPC (S3 = a33_generic)                : dAP=+0.0024 [-0.0028, +0.0104]
+  No-IIPC (S3) minus No-Diff-No-IIPC (S2 = a34_bu2_mask)          : dAP=+0.0076 [+0.0008, +0.0144]
+  Full MAMRD (S4) minus No-Diff-No-IIPC (S2 = a34_bu2_mask)       : dAP=+0.0100 [+0.0056, +0.0199]
+  No-IIPC (S3) minus No-Missingness (A32: no CC-NaME, no Mask)    : dAP=+0.0348 [+0.0229, +0.0470]
+  Full MAMRD (S4) minus No-Missingness (A32: no CC-NaME, no Mask) : dAP=+0.0372 [+0.0218, +0.0501]
+  Full MAMRD (S4) minus Controlled No-Missingness (A34: no CC-NaME, no Mask): dAP=+0.0271 [+0.0170, +0.0390]
+  S2 (+Mask CNN) minus S1 (CC-NaME only, no Mask CNN)             : dAP=+0.0152 [+0.0068, +0.0223]
+  S1 (+CC-NaME) minus S0 (Core scalar fill only)                  : dAP=+0.0236 [+0.0090, +0.0348]
+Exported ./results/phase_n_retrained/r2_audit/table5_ablation.csv
+
+=====================================================================
+6. POINT 8: MISSINGNESS-ONLY BASELINE ON SGCC (3 FOLDS)
+=====================================================================
+Mask-only classifier (30 missingness features, 3 folds): AP = 0.168 (folds: [0.164, 0.168, 0.172]), ROC-AUC = 0.651 (folds: [0.644, 0.65, 0.659])
+Exported ./results/phase_n_retrained/r2_audit/mask_only_baseline.csv
+
+=====================================================================
+7. TABLE 4: RECALL & INSPECTED % AT 1 % / 5 % FPR (ROC INTERPOLATION) + WORKFLOW B PROSPECTIVE
+=====================================================================
+GRU-D            | SGCC @1%FPR: Rec=0.057 Insp=1.40% (Prosp: Rec=0.057 FPR=1.03% Insp=1.43%) | @5%FPR: Rec=0.213 Insp=6.38% (Prosp: Rec=0.215 FPR=5.00% Insp=6.40%)
+Self-Attn        | SGCC @1%FPR: Rec=0.298 Insp=3.43% (Prosp: Rec=0.303 FPR=1.13% Insp=3.59%) | @5%FPR: Rec=0.502 Insp=8.83% (Prosp: Rec=0.506 FPR=5.18% Insp=9.03%)
+DKGT-Net         | SGCC @1%FPR: Rec=0.112 Insp=1.86% (Prosp: Rec=0.117 FPR=1.09% Insp=1.98%) | @5%FPR: Rec=0.284 Insp=6.98% (Prosp: Rec=0.283 FPR=5.01% Insp=6.98%)
+WDCNN            | SGCC @1%FPR: Rec=0.146 Insp=2.15% (Prosp: Rec=0.147 FPR=1.10% Insp=2.25%) | @5%FPR: Rec=0.345 Insp=7.49% (Prosp: Rec=0.345 FPR=5.11% Insp=7.59%)
+MSDM             | SGCC @1%FPR: Rec=0.218 Insp=2.76% (Prosp: Rec=0.221 FPR=1.02% Insp=2.81%) | @5%FPR: Rec=0.392 Insp=7.90% (Prosp: Rec=0.393 FPR=5.03% Insp=7.94%)
+HORLN            | SGCC @1%FPR: Rec=0.333 Insp=3.75% (Prosp: Rec=0.331 FPR=1.05% Insp=3.78%) | @5%FPR: Rec=0.541 Insp=9.16% (Prosp: Rec=0.542 FPR=5.04% Insp=9.22%)
+MAMRD (9-cell)   | SGCC @1%FPR: Rec=0.365 Insp=4.02% (Prosp: Rec=0.375 FPR=1.06% Insp=4.15%) | @5%FPR: Rec=0.585 Insp=9.54% (Prosp: Rec=0.590 FPR=5.05% Insp=9.63%)
+MAMRD (15-cell)  | SGCC @1%FPR: Rec=0.369 Insp=4.04% (Prosp: Rec=0.376 FPR=1.04% Insp=4.14%) | @5%FPR: Rec=0.588 Insp=9.56% (Prosp: Rec=0.591 FPR=4.99% Insp=9.58%)
+MAMRD (9-cell)   | ECL  @1%FPR: Rec=0.797 Insp=8.97% (Prosp: Rec=0.796 FPR=1.21% Insp=9.17%) | @5%FPR: Rec=0.817 Insp=12.77% (Prosp: Rec=0.815 FPR=5.18% Insp=12.93%)
+HORLN            | ECL  @1%FPR: Rec=0.784 Insp=8.84% (Prosp: Rec=0.782 FPR=1.05% Insp=8.87%) | @5%FPR: Rec=0.806 Insp=12.66% (Prosp: Rec=0.807 FPR=5.05% Insp=12.73%)
+WDCNN            | ECL  @1%FPR: Rec=0.759 Insp=8.59% (Prosp: Rec=0.750 FPR=1.12% Insp=8.62%) | @5%FPR: Rec=0.818 Insp=12.78% (Prosp: Rec=0.815 FPR=5.13% Insp=12.88%)
+GRU-D            | ECL  @1%FPR: Rec=0.106 Insp=1.97% (Prosp: Rec=0.129 FPR=1.13% Insp=2.32%) | @5%FPR: Rec=0.625 Insp=10.83% (Prosp: Rec=0.617 FPR=5.02% Insp=10.77%)
+Self-Attn        | ECL  @1%FPR: Rec=0.738 Insp=8.38% (Prosp: Rec=0.739 FPR=1.09% Insp=8.48%) | @5%FPR: Rec=0.807 Insp=12.67% (Prosp: Rec=0.807 FPR=5.10% Insp=12.78%)
+MSDM             | ECL  @1%FPR: Rec=0.795 Insp=8.95% (Prosp: Rec=0.794 FPR=1.12% Insp=9.07%) | @5%FPR: Rec=0.810 Insp=12.70% (Prosp: Rec=0.809 FPR=5.15% Insp=12.83%)
+Exported ./results/phase_n_retrained/r2_audit/table4_fpr_budgets.csv and table4_prospective.csv
+
+=====================================================================
+8. CONFORMAL FINITE-SAMPLE ELIGIBILITY LEDGER (per resplit)
+=====================================================================
+ target_coverage  alpha  n_min_required group  n_resplits  n_pos_mean  n_pos_min  n_pos_max  pct_resplits_finite_threshold             rule_when_below_n_min
+            0.80   0.20               4 Heavy        1380   73.670290         55         89                     100.000000                                 -
+            0.80   0.20               4 Light        1380   40.250725         29         54                     100.000000                                 -
+            0.80   0.20               4  Flat        1380    8.078986          2         15                      98.043478 whole group inspected (q_hat = 0)
+            0.90   0.10               9 Heavy        1380   73.670290         55         89                     100.000000                                 -
+            0.90   0.10               9 Light        1380   40.250725         29         54                     100.000000                                 -
+            0.90   0.10               9  Flat        1380    8.078986          2         15                      41.956522 whole group inspected (q_hat = 0)
+            0.95   0.05              19 Heavy        1380   73.670290         55         89                     100.000000                                 -
+            0.95   0.05              19 Light        1380   40.250725         29         54                     100.000000                                 -
+            0.95   0.05              19  Flat        1380    8.078986          2         15                       0.000000 whole group inspected (q_hat = 0)
+
+=====================================================================
+9. TABLE 2: PARTITION LEDGER (means over Folds 0-2)
+=====================================================================
+dataset       partition            n         pos   pos_pct  share_of_total_pct               groups   grp1_pos   grp2_pos  grp3_pos
+   SGCC           train 33897.333333 2900.666667  8.557212           79.999371     Heavy/Light/Flat        NaN        NaN       NaN
+   SGCC      early_stop  2795.000000  235.000000  8.407871            6.596337     Heavy/Light/Flat        NaN        NaN       NaN
+   SGCC   threshold_cal  2795.000000  235.000000  8.407871            6.596337     Heavy/Light/Flat        NaN        NaN       NaN
+   SGCC            test  2884.666667  244.333333  8.470072            6.807955     Heavy/Light/Flat 148.000000  80.333333 16.000000
+   SGCC        conf_cal  1441.666667  122.000000  8.462428            3.402404     Heavy/Light/Flat  73.670290  40.250725  8.078986
+   SGCC       conf_eval  1443.000000  122.333333  8.477708            3.405551     Heavy/Light/Flat  74.329710  40.082609  7.921014
+   SGCC           total 42372.000000 3615.000000  8.531577          100.000000                  NaN        NaN        NaN       NaN
+    ECL           train 20000.000000 1995.666667  9.978333           80.000000 High/Low consumption        NaN        NaN       NaN
+    ECL      early_stop  1649.333333  166.000000 10.064673            6.597333 High/Low consumption        NaN        NaN       NaN
+    ECL reserved_unused  1649.333333  166.000000 10.064673            6.597333 High/Low consumption        NaN        NaN       NaN
+    ECL            test  1701.333333  172.333333 10.129310            6.805333 High/Low consumption  62.666667 109.666667       NaN
+    ECL        conf_cal   850.333333   86.000000 10.113681            3.401333 High/Low consumption  31.347222  54.652778       NaN
+    ECL       conf_eval   851.000000   86.333333 10.144928            3.404000 High/Low consumption  31.319444  55.013889       NaN
+    ECL           total 25000.000000 2500.000000 10.000000          100.000000                  NaN        NaN        NaN       NaN
+Exported ./results/phase_n_retrained/r2_audit/table2_partition_ledger.csv
+[PASS] 4. Tables 2-5, statistical tests, eligibility ledger (r2_audit/table*.csv) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 5a. Main-text figures (Figures 2, 3, 4, 5)
+   Command: python ./scripts/make_manuscript_figures.py
+===========================================================================
+[make_manuscript_figures] generating empirical publication figures (Figures 2, 3, 4, 5)...
+  wrote fig2_performance_curves.pdf
+  wrote fig3_ablation_bars.pdf
+  wrote fig4_calibration_reliability.pdf
+  wrote fig5_conformal_tradeoffs.pdf
+[done] all empirical publication figures saved to ./results/phase_n_retrained/figures
+[PASS] 5a. Main-text figures (Figures 2, 3, 4, 5) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 5b. Supplementary conformal figure (Supp. Fig. S4)
+   Command: python ./scripts/make_trust_figure.py
+===========================================================================
+[done] wrote ./results/phase_n_retrained/figures/fig6_trust_guarantee.pdf (+png)
+[PASS] 5b. Supplementary conformal figure (Supp. Fig. S4) completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 5c. Supplementary Figs. S1, S2 and exploratory figures
+   Command: python ./scripts/make_figures.py
+===========================================================================
+[figures] models with data: ours(15), grud(9), wdcnn(9), hybridattn(9), horln(9), msdm_net(9)
+  wrote fig1_metric_inflation.pdf / .png
+  wrote fig3_phenotype.pdf / .png
+  wrote fig4_ceiling.pdf / .png
+  wrote fig5_pr_roc_curves.pdf / .png
+  wrote fig2_two_dataset.pdf / .png
+[figures] -> ./results/phase_n_retrained/figures
+[PASS] 5c. Supplementary Figs. S1, S2 and exploratory figures completed successfully.
+
+
+===========================================================================
+>> RUNNING STEP: 5d. Supplementary Fig. S3 (illustrative mechanism)
+   Command: python ./scripts/make_mechanism_figure.py
+===========================================================================
+./scripts/make_mechanism_figure.py:49: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(V, axis=1); std = np.nanstd(V, axis=1)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+[load] SGCC ...
+[done] high idx=29127 mean=55 sd=9; flat idx=6049 mean=2.2 sd=0.88
+  wrote ./results/phase_n_retrained/figures/fig_mechanism.pdf
+[PASS] 5d. Supplementary Fig. S3 (illustrative mechanism) completed successfully.
+
+
+###########################################################################
+# ALL TABLES AND FIGURES REGENERATED FROM CACHED PREDICTIONS (TIER 1)
+###########################################################################
+Generated artifacts (results/phase_n_retrained/):
+  - Table 2:  r2_audit/table2_partition_ledger.csv (fold counts: *_fold_counts.csv)
+  - Table 3:  r2_audit/table3_main_results.csv (+ table3_tests.csv)
+  - Table 4:  r2_audit/table4_fpr_budgets.csv (+ table4_prospective.csv, note)
+  - Table 5:  r2_audit/table5_ablation.csv
+  - Table 6:  trust/decision_value_sgcc.csv (+ _resplits.csv, eligibility ledger)
+  - Supp. Table S6: ecl_trust/RESULTS_ECL_TRUST.md
+  - Supp. Tables S3/S4: tableC/tableC_contrasts.csv (+ _friedman.csv), tableB/tableB_agg.csv
+  - Supp. Table S7: ecl_board.csv; per-attack note: tableA/tableA_agg.csv
+  - Text: r2_audit/mask_only_baseline.csv, trust/fig4_ece_by_detector.csv
+  - Figures:  figures/fig2-fig5 (main), fig6_trust_guarantee (Supp. S4), others
+              (Figure 1 is the conceptual architecture schematic in TikZ)
+###########################################################################
+
+[2026-11-12 10:02:59] COMPLETED in 199.1s: Tier 1 master: all tables and figures (reproduce_all_r2.py)
+[2026-11-12 10:02:59] =================================================================
+[2026-11-12 10:02:59] MASTER RETRAINING PIPELINE COMPLETED SUCCESSFULLY in 36.3 minutes!
+[2026-11-12 10:02:59] All retrained artifacts, figures, and tables saved in ./results/phase_n_retrained
+[2026-11-12 10:02:59] =================================================================
+EXIT 0 10:03:00

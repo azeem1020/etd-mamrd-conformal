@@ -913,7 +913,7 @@ def _eq7_nine_stencil_weights() -> torch.Tensor:
 
 
 class ZhengBaseline(nn.Module):
-    """Paper-faithful PyTorch port of the Zheng wide-and-deep CNN (2018).
+    """PyTorch re-implementation of the Zheng wide-and-deep CNN (2018).
 
     Equivalence to the paper's "expand + Eq. 7-9 kernel + stride-3 Conv"
     --------------------------------------------------------------------
@@ -927,9 +927,8 @@ class ZhengBaseline(nn.Module):
     Linearity makes (b) + (c) equivalent to "convolve V with the nine
     fixed (g1+g2) stencils → nine channels → 1×1 learnable conv to γ
     channels".  We pre-compute the nine stencils as a frozen Conv2d and
-    use a learnable 1×1 conv on top.  This is *paper-faithful* — it
-    reproduces what Zheng's pipeline computes, just without the
-    expansion trick.
+    use a learnable 1×1 conv on top.  This computes the same operation
+    as the paper's pipeline, without the expansion step.
 
     Forward
     -------

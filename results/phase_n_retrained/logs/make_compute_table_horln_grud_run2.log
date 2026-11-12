@@ -1,0 +1,4 @@
+[device] cuda
+detector                params   us/consumer   peak MB
+GRU-D                   16.0K        110.77      37.2
+HORLN                  935.8K         12.53     169.2

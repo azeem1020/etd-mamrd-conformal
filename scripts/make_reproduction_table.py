@@ -2,7 +2,7 @@
 
 For each baseline we already store, per CV cell, the per-consumer test labels and
 scores (val_labels_json / val_scores_json in run_n_clean.py). Those scores come
-from one trained model under the SHARED honest protocol. Here we hold the model
+from one trained model under the shared protocol. Here we hold the model
 and its scores fixed and flip ONLY the *evaluation protocol*:
 
   (A) NATIVE   : the full test partition at the corpus prevalence (~8.5%).

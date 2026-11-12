@@ -13,7 +13,7 @@ Stages:
      - S3: a33_generic
      - A32: a32_generic
      - A34_no_miss: a34_no_missingness (controlled S4 ablation)
-  4. Rival Baselines (9 cells each: seeds 0..2, folds 0..2):
+  4. Baseline detectors (9 cells each: seeds 0..2, folds 0..2):
      - wdcnn, horln, hybridattn, grud, msdm_net, dkgt
   5. ECL Transfer Benchmark:
      - run_ecl_trust.py + run_ecl_trust_analysis.py

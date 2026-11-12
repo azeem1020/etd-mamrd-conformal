@@ -46,7 +46,7 @@ etd-mamrd-conformal/
 │   │   ├── models.py                  #   MAMRD (ZKMixV4 / arm 'a34_generic')
 │   │   ├── cc_name.py                 #   Context-conditional native missingness embedding
 │   │   ├── ms_kernel.py               #   Multi-scale dilated/Laplacian kernels
-│   │   ├── baselines.py               #   Rival baselines (GRU-D, WDCNN, Self-Attn, HORLN, MSDM)
+│   │   ├── baselines.py               #   Baseline detectors (GRU-D, WDCNN, Self-Attn, HORLN, MSDM, DKGT-Net)
 │   │   ├── archetype.py               #   Differencing / inter-/intra-period branches
 │   │   └── phenotype.py               #   Label-free consumption-level stratification
 │   ├── reproduce_all_r2.py            # Master one-command R2 reproduction pipeline
@@ -93,6 +93,19 @@ etd-mamrd-conformal/
 └── data/                              # Data documentation (raw datasets not shipped)
     └── README.md                      # Instructions to obtain public SGCC & ECL corpora
 ```
+
+### Baseline detectors
+
+`scripts/phased/baselines.py` contains our PyTorch re-implementations of six published detectors, written from the architectures described in their papers and adapted to the 147 x 7 weekly input grid. All seven models, MAMRD included, are trained and evaluated under one common protocol: customer-disjoint partitions, per-consumer min-max preprocessing, AdamW (learning rate 3e-4, weight decay 1e-4), 30 epochs, class-balanced mini-batches, checkpoint selection by validation average precision, and native-prevalence test sets. This protocol replaces the preprocessing, sampling and training schedules of the original studies, so the reported scores describe these re-implementations under the common protocol; they are not reproductions of the original experiments. Supplementary Table S8 of the paper lists the details.
+
+| Detector | Paper | As described in the paper | Adapted or chosen here |
+|---|---|---|---|
+| WDCNN | Zheng et al., IEEE TII 2018 | Wide path (90 units) and CNN path (15 filters, stride-3 3x3 convolution with zero-padding 1, 3x3 max pooling, 60 units), 64-unit fusion layer | Kernel preprocessing reproduces the behaviour of the authors' released code; missing readings set to 0 (the paper interpolates) |
+| HORLN | Zhu et al., IEEE TII 2023 | Two IIWC blocks (32 and 16 channels, kernel 3, dilations 1-3), H x W group convolutions (200 first-order features with 4 groups, 300 second-order features with 1 group), self-dependency modeling with 4 heads, normalization and PReLU, two-layer classifier, normal initialization; value and mask input (0.94M parameters, as reported in the paper) | 147 weeks (the paper uses 148); no dropout (none is specified in the paper) |
+| Self-Attention | Finardi et al., arXiv 2020 | Two hybrid layers (16 attention heads in parallel with standard and dilated convolutions, 32 channels), 1x1 unifying convolution with layer normalization and PReLU, 1,024-unit dense layer; value and binary-mask input | Quantile normalization replaced by the common preprocessing |
+| GRU-D | Che et al., Sci. Rep. 2018 | Trainable diagonal input decay and hidden-state decay, mask fed to the gates, 64 hidden units | 147 weekly steps of 7 daily variables; empirical mean taken per consumer |
+| MSDM | Wang et al., IEEE TSG 2025 | SGCC configuration: differencing scales of 1, 2, 7, 28, 91 and 182 days with kernel (-1, 1, 0), adaptive quantization, two MSCBlocks with 48 filters, 128-dimensional features, missing-value indicator channel | Unspecified details (1x1 projections, global max pooling) marked `[ASSUMPTION]` in `msdm/model.py`; class weights replaced by the common sampler |
+| DKGT-Net | Tian et al., IEEE TII 2026 | KAN branch on the (weeks x 3, days x 3) expansion and two-layer GRU branch (128 features each), fusion with tanh-sigmoid gating and ECA channel attention | Trained without the WGAN-GP augmentation and the CSSI loss; three KAN layers and a two-layer head; SGCC only |
 
 ---
 
@@ -151,7 +164,7 @@ export MAMRD_RESULTS=../results/phase_n_retrained
 
 To support transparent peer review and independent replication, the repository implements an explicit two-tier replication architecture:
 - **Tier 1 (Regeneration from cached predictions, about 3.5 minutes on a 16-core CPU, no GPU)**: Starting from the cached prediction-level records of every trained model, it verifies the customer-disjoint partition manifests, re-runs every analysis script (Tables 2–6, Supplementary Tables S2–S4, S6, S7 and the statistics quoted in the text), and regenerates all data-driven main and supplementary figures. It does not retrain any model. Every number in Tables 2–6 is the single rounding of a value in a released CSV.
-- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on one NVIDIA GeForce RTX 5070 Ti Laptop GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after cohort cleaning, then runs the Tier 1 post-processing (`reproduce_all_r2.py`). The console log of the reference run is `results/phase_n_retrained/master_retrain.log`.
+- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on one NVIDIA GeForce RTX 5070 Ti Laptop GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after cohort cleaning, then runs the Tier 1 post-processing (`reproduce_all_r2.py`). The console log of the reference run is `results/phase_n_retrained/master_retrain.log`; HORLN and GRU-D were retrained with the Stage 4 and Stage 5 commands in Revision 3, and their logs are `master_retrain_r3.log` and `logs/retrain_horln_sgcc_r3.log` (the HORLN SGCC cells come from the latter). GPU training is not bit-for-bit deterministic, so re-running Tier 2 reproduces the reported values up to small run-to-run differences; Tier 1 is exact.
 
 ---
 
@@ -169,7 +182,7 @@ python scripts/reproduce_all_r2.py --config configs/default.yaml
 | 4 | `compute_r2_revisions.py` | `r2_audit/table2_partition_ledger.csv` … `table5_ablation.csv`, `table3_tests.csv`, `table4_prospective.csv`, `mask_only_baseline.csv`, `router_params.csv`, conformal eligibility ledger |
 | 5 | `make_manuscript_figures.py`, `make_trust_figure.py`, `make_figures.py`, `make_mechanism_figure.py` | `figures/`, `trust/fig4_ece_by_detector.csv` |
 
-Re-running Tier 1 on the released records reproduces every CSV/Markdown output byte-for-byte; console logs of the reference run are in `results/phase_n_retrained/logs/`. Supplementary Table S5 (inference latency and peak memory) is a hardware measurement made with `scripts/make_compute_table.py` on the Tier 2 machine (NVIDIA GeForce RTX 5070 Ti Laptop GPU, batch 256; latency is the median of three runs, logged in `results/phase_n_retrained/logs/make_compute_table_run1.log` to `_run3.log`) and is not part of Tier 1; its parameter counts are deterministic.
+Re-running Tier 1 on the released records reproduces every CSV/Markdown output byte-for-byte; console logs of the reference run are in `results/phase_n_retrained/logs/`. Supplementary Table S5 (inference latency and peak memory) is a hardware measurement made with `scripts/make_compute_table.py` on the Tier 2 machine (NVIDIA GeForce RTX 5070 Ti Laptop GPU, batch 256; latency is the median of three runs, logged in `results/phase_n_retrained/logs/make_compute_table_run1.log` to `_run3.log`, and for the HORLN and GRU-D rows in `make_compute_table_horln_grud_run1.log` to `_run3.log`) and is not part of Tier 1; its parameter counts are deterministic.
 *Note: Figure 1 (MAMRD Architectural Framework) is a conceptual schematic drawn in TikZ; it is not generated from data, and its source is not part of this repository. Figure 2 (Precision-Recall and ROC curves) is dynamically interpolated and rendered by `make_manuscript_figures.py` as part of this routine.*
 
 ---
@@ -236,7 +249,7 @@ python scripts/run_n_clean.py --backbone a34_no_missingness --arm a34_no_missing
     --cell_prefix bu/a34_no_missingness --manifest results/phase_n_retrained/bu/a34_no_missingness_manifest.csv
 
 # ==============================================================================
-# Stage 4: Rival Deep Learning Baselines (9 Cells Each)
+# Stage 4: Baseline Detectors (9 Cells Each)
 # ==============================================================================
 for b in wdcnn horln hybridattn grud msdm_net dkgt; do
     python scripts/run_n_clean.py --backbone $b --arm $b --epochs 30 --seeds 0 1 2 --folds 0 1 2 \
@@ -288,7 +301,7 @@ Every result reported in the manuscript is traceable to its corresponding config
 | **Supp. Table S7** | ECL metric suite | 9 cells; $F_1$ at the per-fold maximising threshold (oracle); MAP@100 tie-neutral | `scripts/make_ecl_board.py` | `ecl_board.csv` |
 | **Supp. Figs. S1, S2, S3** | Detectability ceiling; metric inflation; illustrative mechanism | — | `scripts/make_figures.py`, `scripts/make_mechanism_figure.py` | `figures/fig4_ceiling.pdf`, `figures/fig1_metric_inflation.pdf`, `figures/fig_mechanism.pdf` |
 | **Table 1, Supp. Table S1, Figure 1, Supp. Fig. S5** | Layer specification, training hyper-parameters, architecture and workflow schematics | not data-driven: written from the model and training code (`scripts/phased/models.py`, `zkmix_lab/training.py` `TrainConfig`); parameter counts as in Supp. Table S5 | `scripts/make_compute_table.py` (parameter counts) | — (schematics are drawn, not generated) |
-| **Supp. Table S5** | Parameters, inference latency, peak memory | hardware measurement on the Tier 2 machine (RTX 5070 Ti Laptop GPU, batch 256, median of three runs); not part of Tier 1 | `scripts/make_compute_table.py` | `logs/make_compute_table_run1.log` to `_run3.log` |
+| **Supp. Table S5** | Parameters, inference latency, peak memory | hardware measurement on the Tier 2 machine (RTX 5070 Ti Laptop GPU, batch 256, median of three runs); not part of Tier 1 | `scripts/make_compute_table.py` | `logs/make_compute_table_run1.log` to `_run3.log`; HORLN and GRU-D rows: `logs/make_compute_table_horln_grud_run1.log` to `_run3.log` |
 | **Text (Intro., Methods)** | Mask-only classifier; missing-rate statistics; router cutoffs | 3 folds | `scripts/compute_r2_revisions.py` | `r2_audit/mask_only_baseline.csv`, `r2_audit/router_params.csv` |
 | **Supp. Table S6** | ECL conformal lift gap | Same protocol (`conformal_common.py`) | `scripts/run_ecl_trust_analysis.py` | `ecl_trust/RESULTS_ECL_TRUST.md` |
 

@@ -1,5 +1,5 @@
-"""Reproduction run #1 (GPU): HybridAttn (Finardi et al.) under ITS OWN
-preprocessing vs the shared honest preprocessing.
+"""Preprocessing check (GPU): HybridAttn (Finardi et al.) under its own
+preprocessing vs the shared preprocessing.
 
 Controlled to a single variable. Same architecture (phased.baselines.HybridAttn),
 same fold split, same training recipe; ONLY the input normalisation changes:
@@ -11,11 +11,9 @@ same fold split, same training recipe; ONLY the input normalisation changes:
                  across consumers, so it PRESERVES consumption level -- the very
                  signal Sec. magnitude identifies as the discriminator.
 
-If 'finardi' lifts ROC from ~0.72 toward the published ~0.93 while the
-full-prevalence AP stays low, two things are shown at once: (a) the HybridAttn
-re-implementation is faithful (it reaches the published regime under the
-published preprocessing), and (b) the headline is a ranking/metric effect, not
-an implementation gap. Single seed/fold -- a sanity check, not the n=9 headline.
+The run compares the two preprocessing modes for the same re-implemented
+architecture at native prevalence (results in repro_finardi.json). Single
+seed/fold: a sanity check, not part of the reported n=9 results.
 
 Run under mamba_gpu. Heat-gated.
 """

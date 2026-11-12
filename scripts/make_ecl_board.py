@@ -1,4 +1,4 @@
-"""Build the ECL (synthetic-attack) leaderboard at honest n=9 from LOCKED stored
+"""Build the ECL (synthetic-attack) leaderboard at n=9 from the stored
 predictions in results/phase_n_retrained/ecl_trust/<arm>_<seed>_<fold>.csv.
 
 No GPU re-run: every metric is recomputed from the cached per-fold test

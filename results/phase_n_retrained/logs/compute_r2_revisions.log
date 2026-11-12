@@ -12,7 +12,7 @@ Weekly grid (147, 7) column index -> Calendar Day-of-Week:
   Col 5: Monday
   Col 6: Tuesday
 [data] Loading ./data/SGCC.csv ...
-  loaded (42372, 1037) in 1.4s  NaN=25.6%  theft=8.5%
+  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
 ./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
 <site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
@@ -42,31 +42,31 @@ Weekly grid (147, 7) column index -> Calendar Day-of-Week:
 =====================================================================
 
 --- Summary across cells (9-cell vs 15-cell) ---
-GRU-D            (n= 9) | AP=0.190 [0.183,0.197] | ROC=0.676 [0.669,0.684] | F1=0.258 [0.248,0.267] | P@100=0.309 [0.283,0.328] | P@200=0.278 [0.270,0.288]
+GRU-D            (n= 9) | AP=0.192 [0.187,0.199] | ROC=0.677 [0.668,0.688] | F1=0.262 [0.251,0.274] | P@100=0.316 [0.293,0.331] | P@200=0.274 [0.263,0.290]
 Self-Attn        (n= 9) | AP=0.522 [0.505,0.544] | ROC=0.863 [0.858,0.869] | F1=0.494 [0.477,0.515] | P@100=0.724 [0.699,0.748] | P@200=0.541 [0.518,0.564]
 DKGT-Net         (n= 9) | AP=0.296 [0.277,0.312] | ROC=0.774 [0.762,0.783] | F1=0.331 [0.316,0.348] | P@100=0.446 [0.434,0.452] | P@200=0.345 [0.328,0.367]
 WDCNN            (n= 9) | AP=0.352 [0.334,0.365] | ROC=0.806 [0.803,0.809] | F1=0.371 [0.361,0.383] | P@100=0.494 [0.464,0.514] | P@200=0.403 [0.391,0.410]
 MSDM             (n= 9) | AP=0.409 [0.390,0.437] | ROC=0.813 [0.806,0.825] | F1=0.399 [0.387,0.422] | P@100=0.604 [0.569,0.638] | P@200=0.444 [0.425,0.466]
-HORLN            (n= 9) | AP=0.540 [0.516,0.569] | ROC=0.871 [0.864,0.881] | F1=0.504 [0.484,0.525] | P@100=0.752 [0.723,0.797] | P@200=0.559 [0.531,0.587]
+HORLN            (n= 9) | AP=0.559 [0.529,0.592] | ROC=0.871 [0.864,0.880] | F1=0.521 [0.494,0.553] | P@100=0.761 [0.718,0.792] | P@200=0.580 [0.542,0.619]
 MAMRD (9-cell)   (n= 9) | AP=0.597 [0.576,0.619] | ROC=0.892 [0.884,0.900] | F1=0.557 [0.538,0.577] | P@100=0.808 [0.772,0.832] | P@200=0.619 [0.593,0.646]
 MAMRD (15-cell)  (n=15) | AP=0.600 [0.584,0.616] | ROC=0.892 [0.886,0.898] | F1=0.556 [0.540,0.569] | P@100=0.814 [0.789,0.832] | P@200=0.620 [0.600,0.640]
 Exported ./results/phase_n_retrained/r2_audit/table3_main_results.csv
-Paired 9-cell MAMRD - HORLN ap  : mean=+0.0572 BCa=[+0.0444,+0.0696] Wilcoxon p=0.0039
-Paired 9-cell MAMRD - HORLN roc : mean=+0.0203 BCa=[+0.0175,+0.0230] Wilcoxon p=0.0039
-Paired 9-cell MAMRD - HORLN f1  : mean=+0.0529 BCa=[+0.0401,+0.0632] Wilcoxon p=0.0039
-Paired 9-cell MAMRD - HORLN p100: mean=+0.0556 BCa=[+0.0200,+0.0822] Wilcoxon p=0.0117
-Paired 9-cell MAMRD - HORLN p200: mean=+0.0594 BCa=[+0.0528,+0.0667] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN ap  : mean=+0.0382 BCa=[+0.0261,+0.0529] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN roc : mean=+0.0204 BCa=[+0.0144,+0.0278] Wilcoxon p=0.0039
+Paired 9-cell MAMRD - HORLN f1  : mean=+0.0360 BCa=[+0.0157,+0.0502] Wilcoxon p=0.0195
+Paired 9-cell MAMRD - HORLN p100: mean=+0.0467 BCa=[+0.0222,+0.0767] Wilcoxon p=0.0156
+Paired 9-cell MAMRD - HORLN p200: mean=+0.0389 BCa=[+0.0156,+0.0539] Wilcoxon p=0.0117
 Friedman test (7 detectors, 9 matched seed-fold cells): chi2=53.62, p=8.80e-10
 
 --- Consumer-level bootstrap (seed-averaged scores per consumer within each fold, B=1000) ---
-  GRU-D            | Seed-ensemble AP=0.193 Cons-Boot95%=[0.173,0.223] | ROC=0.680 [0.660,0.700]
+  GRU-D            | Seed-ensemble AP=0.196 Cons-Boot95%=[0.177,0.226] | ROC=0.681 [0.661,0.701]
   Self-Attn        | Seed-ensemble AP=0.539 Cons-Boot95%=[0.504,0.577] | ROC=0.871 [0.857,0.886]
   DKGT-Net         | Seed-ensemble AP=0.301 Cons-Boot95%=[0.269,0.339] | ROC=0.777 [0.758,0.794]
   WDCNN            | Seed-ensemble AP=0.359 Cons-Boot95%=[0.324,0.396] | ROC=0.810 [0.794,0.825]
   MSDM             | Seed-ensemble AP=0.451 Cons-Boot95%=[0.416,0.494] | ROC=0.834 [0.818,0.849]
-  HORLN            | Seed-ensemble AP=0.560 Cons-Boot95%=[0.524,0.598] | ROC=0.882 [0.868,0.895]
+  HORLN            | Seed-ensemble AP=0.596 Cons-Boot95%=[0.563,0.631] | ROC=0.884 [0.871,0.898]
   MAMRD (9-cell)   | Seed-ensemble AP=0.612 Cons-Boot95%=[0.580,0.646] | ROC=0.897 [0.884,0.910]
-  Paired Consumer-Bootstrap MAMRD - HORLN AP: +0.0521 95% CI=[+0.0250, +0.0774] (replicates <= 0: 0 of 1000)
+  Paired Consumer-Bootstrap MAMRD - HORLN AP: +0.0161 95% CI=[-0.0102, +0.0414] (replicates <= 0: 122 of 1000)
 Exported ./results/phase_n_retrained/r2_audit/table3_tests.csv
 
 =====================================================================
@@ -98,18 +98,18 @@ Exported ./results/phase_n_retrained/r2_audit/mask_only_baseline.csv
 =====================================================================
 7. TABLE 4: RECALL & INSPECTED % AT 1 % / 5 % FPR (ROC INTERPOLATION) + WORKFLOW B PROSPECTIVE
 =====================================================================
-GRU-D            | SGCC @1%FPR: Rec=0.048 Insp=1.32% (Prosp: Rec=0.052 FPR=1.05% Insp=1.40%) | @5%FPR: Rec=0.213 Insp=6.38% (Prosp: Rec=0.216 FPR=5.01% Insp=6.41%)
+GRU-D            | SGCC @1%FPR: Rec=0.057 Insp=1.40% (Prosp: Rec=0.057 FPR=1.03% Insp=1.43%) | @5%FPR: Rec=0.213 Insp=6.38% (Prosp: Rec=0.215 FPR=5.00% Insp=6.40%)
 Self-Attn        | SGCC @1%FPR: Rec=0.298 Insp=3.43% (Prosp: Rec=0.303 FPR=1.13% Insp=3.59%) | @5%FPR: Rec=0.502 Insp=8.83% (Prosp: Rec=0.506 FPR=5.18% Insp=9.03%)
 DKGT-Net         | SGCC @1%FPR: Rec=0.112 Insp=1.86% (Prosp: Rec=0.117 FPR=1.09% Insp=1.98%) | @5%FPR: Rec=0.284 Insp=6.98% (Prosp: Rec=0.283 FPR=5.01% Insp=6.98%)
 WDCNN            | SGCC @1%FPR: Rec=0.146 Insp=2.15% (Prosp: Rec=0.147 FPR=1.10% Insp=2.25%) | @5%FPR: Rec=0.345 Insp=7.49% (Prosp: Rec=0.345 FPR=5.11% Insp=7.59%)
 MSDM             | SGCC @1%FPR: Rec=0.218 Insp=2.76% (Prosp: Rec=0.221 FPR=1.02% Insp=2.81%) | @5%FPR: Rec=0.392 Insp=7.90% (Prosp: Rec=0.393 FPR=5.03% Insp=7.94%)
-HORLN            | SGCC @1%FPR: Rec=0.315 Insp=3.59% (Prosp: Rec=0.317 FPR=1.06% Insp=3.65%) | @5%FPR: Rec=0.524 Insp=9.03% (Prosp: Rec=0.527 FPR=5.02% Insp=9.07%)
+HORLN            | SGCC @1%FPR: Rec=0.333 Insp=3.75% (Prosp: Rec=0.331 FPR=1.05% Insp=3.78%) | @5%FPR: Rec=0.541 Insp=9.16% (Prosp: Rec=0.542 FPR=5.04% Insp=9.22%)
 MAMRD (9-cell)   | SGCC @1%FPR: Rec=0.365 Insp=4.02% (Prosp: Rec=0.375 FPR=1.06% Insp=4.15%) | @5%FPR: Rec=0.585 Insp=9.54% (Prosp: Rec=0.590 FPR=5.05% Insp=9.63%)
 MAMRD (15-cell)  | SGCC @1%FPR: Rec=0.369 Insp=4.04% (Prosp: Rec=0.376 FPR=1.04% Insp=4.14%) | @5%FPR: Rec=0.588 Insp=9.56% (Prosp: Rec=0.591 FPR=4.99% Insp=9.58%)
 MAMRD (9-cell)   | ECL  @1%FPR: Rec=0.797 Insp=8.97% (Prosp: Rec=0.796 FPR=1.21% Insp=9.17%) | @5%FPR: Rec=0.817 Insp=12.77% (Prosp: Rec=0.815 FPR=5.18% Insp=12.93%)
-HORLN            | ECL  @1%FPR: Rec=0.779 Insp=8.79% (Prosp: Rec=0.781 FPR=1.12% Insp=8.93%) | @5%FPR: Rec=0.799 Insp=12.59% (Prosp: Rec=0.800 FPR=5.05% Insp=12.66%)
+HORLN            | ECL  @1%FPR: Rec=0.784 Insp=8.84% (Prosp: Rec=0.782 FPR=1.05% Insp=8.87%) | @5%FPR: Rec=0.806 Insp=12.66% (Prosp: Rec=0.807 FPR=5.05% Insp=12.73%)
 WDCNN            | ECL  @1%FPR: Rec=0.759 Insp=8.59% (Prosp: Rec=0.750 FPR=1.12% Insp=8.62%) | @5%FPR: Rec=0.818 Insp=12.78% (Prosp: Rec=0.815 FPR=5.13% Insp=12.88%)
-GRU-D            | ECL  @1%FPR: Rec=0.104 Insp=1.96% (Prosp: Rec=0.128 FPR=1.13% Insp=2.32%) | @5%FPR: Rec=0.638 Insp=10.95% (Prosp: Rec=0.631 FPR=5.03% Insp=10.92%)
+GRU-D            | ECL  @1%FPR: Rec=0.106 Insp=1.97% (Prosp: Rec=0.129 FPR=1.13% Insp=2.32%) | @5%FPR: Rec=0.625 Insp=10.83% (Prosp: Rec=0.617 FPR=5.02% Insp=10.77%)
 Self-Attn        | ECL  @1%FPR: Rec=0.738 Insp=8.38% (Prosp: Rec=0.739 FPR=1.09% Insp=8.48%) | @5%FPR: Rec=0.807 Insp=12.67% (Prosp: Rec=0.807 FPR=5.10% Insp=12.78%)
 MSDM             | ECL  @1%FPR: Rec=0.795 Insp=8.95% (Prosp: Rec=0.794 FPR=1.12% Insp=9.07%) | @5%FPR: Rec=0.810 Insp=12.70% (Prosp: Rec=0.809 FPR=5.15% Insp=12.83%)
 Exported ./results/phase_n_retrained/r2_audit/table4_fpr_budgets.csv and table4_prospective.csv

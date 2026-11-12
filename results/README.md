@@ -27,8 +27,9 @@ The traceability matrix in the root README maps each table and figure to its scr
 | `figures/` | Data-driven figures |
 | `clean_cohort.json`, `dropped_ids.csv`, `keep_idx.npy`, `conflicting_flag_ids.csv` | Outputs of the cohort audit (`scripts/clean_cohort.py`); `conflicting_flag_ids.csv` lists the 497 consumers in exact-duplicate clusters with conflicting labels (flagged, kept in the evaluation cohort) |
 | `repro_finardi.json` | Output of `scripts/run_finardi_repro.py` |
-| `logs/` | Console log of each Tier 1 step, and of the three Supplementary Table S5 hardware runs (`make_compute_table_run*.log`, GPU in `make_compute_table_gpu.txt`) |
+| `logs/` | Console log of each Tier 1 step; the three Supplementary Table S5 hardware runs (`make_compute_table_run*.log`, and `make_compute_table_horln_grud_run*.log` for the HORLN and GRU-D rows; GPU in `make_compute_table_gpu.txt`); and the HORLN SGCC training run (`retrain_horln_sgcc_r3.log`) |
 | `master_retrain.log` | Log of the Tier 2 run of 9 November 2026 |
+| `master_retrain_r3.log` | Log of the Revision 3 retraining of HORLN and GRU-D (Stages 4-7, 12 November 2026); its Stage 4 HORLN cells were replaced by those in `logs/retrain_horln_sgcc_r3.log` |
 
 ## Notes on the logs
 

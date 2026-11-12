@@ -1,6 +1,6 @@
 [load] SGCC ...
 [data] Loading ./data/SGCC.csv ...
-  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
 ./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
   ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
 <site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
@@ -19,18 +19,18 @@ group  theft_cases  theft_case_share  theft_kwh_share  theft_median_daily_kwh  a
   a34_NaME   1-a=0.80 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 28.6% single= 49.1% red= 35.5% [30.2,40.4] | hit H/F= 39.2/ 7.8% lift H/F=3.19/2.44 | recall H/L/F=0.813/0.808/0.838
   a34_NaME   1-a=0.90 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/0.56 | inspect cond= 49.1% single= 83.4% red= 37.2% [32.2,41.2] | hit H/F= 25.0/ 4.3% lift H/F=2.03/1.33 | recall H/L/F=0.909/0.907/0.958
   a34_NaME   1-a=0.95 cells=15 resplits=300 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 67.4% single=100.0% red= 32.6% [29.4,35.8] | hit H/F= 19.4/ 3.2% lift H/F=1.57/0.98 | recall H/L/F=0.959/0.956/1.000
-  HORLN      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 31.6% single= 45.9% red= 26.3% [18.4,33.9] | hit H/F= 32.5/ 8.5% lift H/F=2.64/2.65 | recall H/L/F=0.807/0.803/0.840
-  HORLN      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.62 | inspect cond= 54.0% single= 85.9% red= 34.1% [29.6,38.4] | hit H/F= 23.1/ 4.7% lift H/F=1.87/1.46 | recall H/L/F=0.910/0.912/0.966
-  HORLN      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 76.5% single=100.0% red= 23.5% [17.0,26.5] | hit H/F= 18.1/ 3.3% lift H/F=1.47/1.01 | recall H/L/F=0.958/0.965/1.000
+  HORLN      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 33.2% single= 51.8% red= 30.2% [23.0,37.3] | hit H/F= 35.0/ 8.1% lift H/F=2.85/2.51 | recall H/L/F=0.806/0.816/0.853
+  HORLN      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.62 | inspect cond= 55.1% single= 87.3% red= 34.8% [31.3,38.6] | hit H/F= 23.8/ 4.7% lift H/F=1.93/1.46 | recall H/L/F=0.905/0.915/0.964
+  HORLN      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 74.6% single=100.0% red= 25.4% [21.9,27.4] | hit H/F= 17.9/ 3.3% lift H/F=1.45/1.01 | recall H/L/F=0.955/0.960/1.000
   MSDM       1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 43.8% single= 64.8% red= 28.2% [21.6,34.2] | hit H/F= 25.3/ 5.4% lift H/F=2.06/1.67 | recall H/L/F=0.797/0.812/0.876
   MSDM       1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.55 | inspect cond= 64.2% single= 88.4% red= 25.7% [20.0,31.2] | hit H/F= 18.7/ 4.0% lift H/F=1.52/1.25 | recall H/L/F=0.896/0.909/0.968
   MSDM       1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 80.5% single=100.0% red= 19.5% [17.6,22.0] | hit H/F= 15.4/ 3.1% lift H/F=1.25/0.95 | recall H/L/F=0.950/0.958/1.000
   WDCNN      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 45.2% single= 63.2% red= 26.5% [22.1,31.5] | hit H/F= 24.2/ 6.0% lift H/F=1.97/1.87 | recall H/L/F=0.813/0.809/0.865
   WDCNN      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.58 | inspect cond= 65.6% single= 90.7% red= 26.6% [24.1,29.2] | hit H/F= 19.2/ 3.9% lift H/F=1.56/1.21 | recall H/L/F=0.906/0.910/0.963
   WDCNN      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 78.8% single=100.0% red= 21.2% [20.3,22.5] | hit H/F= 16.6/ 3.2% lift H/F=1.35/1.01 | recall H/L/F=0.958/0.963/1.000
-  GRU-D      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.01 | inspect cond= 66.7% single= 86.0% red= 21.7% [19.4,24.4] | hit H/F= 15.2/ 3.7% lift H/F=1.23/1.14 | recall H/L/F=0.811/0.807/0.851
-  GRU-D      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 84.0% single= 97.6% red= 13.8% [12.3,15.0] | hit H/F= 13.6/ 3.2% lift H/F=1.10/1.00 | recall H/L/F=0.911/0.910/0.962
-  GRU-D      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 92.7% single=100.0% red=  7.3% [6.4,8.1] | hit H/F= 12.8/ 3.2% lift H/F=1.04/0.99 | recall H/L/F=0.954/0.956/1.000
+  GRU-D      1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.01 | inspect cond= 67.3% single= 85.6% red= 20.6% [18.3,23.2] | hit H/F= 15.4/ 3.7% lift H/F=1.25/1.16 | recall H/L/F=0.809/0.818/0.846
+  GRU-D      1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 83.6% single= 97.4% red= 14.2% [11.8,16.0] | hit H/F= 13.6/ 3.3% lift H/F=1.11/1.01 | recall H/L/F=0.909/0.911/0.961
+  GRU-D      1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 92.1% single=100.0% red=  7.9% [6.5,9.5] | hit H/F= 12.9/ 3.2% lift H/F=1.05/0.99 | recall H/L/F=0.955/0.955/1.000
   HybridAttn 1-a=0.80 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.02 | inspect cond= 33.5% single= 48.7% red= 26.2% [18.4,33.5] | hit H/F= 31.0/ 8.0% lift H/F=2.52/2.50 | recall H/L/F=0.801/0.803/0.852
   HybridAttn 1-a=0.90 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/0.59 | inspect cond= 56.0% single= 84.9% red= 31.3% [27.6,35.3] | hit H/F= 22.3/ 4.5% lift H/F=1.81/1.39 | recall H/L/F=0.901/0.910/0.968
   HybridAttn 1-a=0.95 cells= 9 resplits=180 q=inf H/L/F=0.00/0.00/1.00 | inspect cond= 73.7% single=100.0% red= 26.3% [23.2,29.2] | hit H/F= 18.5/ 3.2% lift H/F=1.50/0.99 | recall H/L/F=0.954/0.958/1.000

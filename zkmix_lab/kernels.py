@@ -32,8 +32,8 @@ A full Eq. 7 layer would convolve the 3×3 stack ``g1(V) + g2(V)`` with a
 *learnable* 3×3 filter ŵ.  Because ``g1 + g2`` is a fixed linear map,
 that whole construction is mathematically equivalent to **one 3×3 conv
 whose weights are initialised to the anti-mean prior and then optionally
-trained**.  That equivalence is what makes the lift in this module both
-faithful to the paper and clean to extend.
+trained**.  That equivalence keeps this module consistent with the paper's
+Eq. 7 and simple to extend.
 
 This module therefore exposes:
 

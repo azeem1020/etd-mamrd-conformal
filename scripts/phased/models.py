@@ -1780,9 +1780,9 @@ ARM_BUILDERS = {
     "a30_eng_mamba":           build_a30,        # Phase L (L1): a14 + eng-features — requires mamba_gpu env
 }
 
-# b2 baselines (Zheng WDCNN, Zhu HORLN, Finardi HybridAttn, Che GRU-D, Wang MSDM)
-# wired to the identical (B,W,D)->logit contract so run_n_clean evaluates them
-# under the same honest protocol. Imported lazily-safe (no circular dependency).
+# Baseline re-implementations (Zheng WDCNN, Zhu HORLN, Finardi HybridAttn, Che GRU-D,
+# Wang MSDM, Tian DKGT-Net) wired to the same (B,W,D)->logit contract so run_n_clean
+# evaluates them under the same protocol. Imported lazily-safe (no circular dependency).
 from .baselines import BASELINE_BUILDERS  # noqa: E402
 ARM_BUILDERS.update(BASELINE_BUILDERS)
 

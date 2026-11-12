@@ -1,0 +1,22 @@
+[device] cuda | backbone=horln | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.5s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<site-packages>/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/9] s=0 f=0 kf=0 | PR=0.5404 ROC=0.8599 F1=0.4928 | HD_PR=0.605 HR_PR=0.718 wall=12.6s
+[2/9] s=0 f=1 kf=0 | PR=0.5100 ROC=0.8514 F1=0.4771 | HD_PR=0.588 HR_PR=0.605 wall=18.7s
+[3/9] s=0 f=2 kf=0 | PR=0.6104 ROC=0.8806 F1=0.5671 | HD_PR=0.695 HR_PR=0.688 wall=11.9s
+[4/9] s=1 f=0 kf=0 | PR=0.5699 ROC=0.8727 F1=0.5257 | HD_PR=0.637 HR_PR=0.712 wall=11.7s
+[5/9] s=1 f=1 kf=0 | PR=0.5077 ROC=0.8627 F1=0.4703 | HD_PR=0.617 HR_PR=0.608 wall=11.9s
+[6/9] s=1 f=2 kf=0 | PR=0.6315 ROC=0.8862 F1=0.5830 | HD_PR=0.725 HR_PR=0.688 wall=11.9s
+[7/9] s=2 f=0 kf=0 | PR=0.5539 ROC=0.8669 F1=0.5052 | HD_PR=0.592 HR_PR=0.765 wall=11.7s
+[8/9] s=2 f=1 kf=0 | PR=0.4986 ROC=0.8683 F1=0.4762 | HD_PR=0.587 HR_PR=0.579 wall=11.9s
+[9/9] s=2 f=2 kf=0 | PR=0.6108 ROC=0.8936 F1=0.5885 | HD_PR=0.724 HR_PR=0.655 wall=11.9s
+[done] -> ../results/phase_n_retrained/baselines/horln_manifest.csv
+EXIT 0 09:49:33

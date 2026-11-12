@@ -71,3 +71,4 @@ results/_archive_phase_n_pre_retrain/r2_audit/*_partition_manifest.csv
 # Reference console logs are released (Tier 1 step logs and the Tier 2 run log)
 !results/phase_n_retrained/logs/*.log
 !results/phase_n_retrained/master_retrain.log
+!results/phase_n_retrained/master_retrain_r3.log

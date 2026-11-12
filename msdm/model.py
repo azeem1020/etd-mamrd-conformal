@@ -1,7 +1,7 @@
 """MSDM model — kMSD + AQ + MSCNet + classifier (paper §IV; Fig. 5/8).
 
 Implemented from the paper's equations. Ambiguous structural details are marked
-[ASSUMPTION] and documented in README.md (honest reproduction).
+[ASSUMPTION] and documented in README.md.
 """
 from __future__ import annotations
 import torch
