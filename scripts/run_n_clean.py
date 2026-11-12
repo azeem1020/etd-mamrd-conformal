@@ -1,9 +1,10 @@
-"""Step (a2): a14 monolith phenotype-stratified benchmark on the CLEANED cohort.
+"""Step (a2): phenotype-stratified benchmark runner (training and evaluation of one arm).
 
-Cleaned cohort = keep_idx.npy from clean_cohort.py (drops 2114 no-signal meters).
+Cohort: the full 42,372-consumer SGCC file by default (--full). With --filtered it uses
+keep_idx.npy from clean_cohort.py (drops 2,114 no-signal meters); no reported result uses --filtered.
 Per phenotype + aggregate reports the SHARED metric set for top-tier comparability
 (MSDM/HORLN/Liao): PR-AUC(=AP/MAP), ROC-AUC, F1 (threshold picked on the cal split,
-applied to test — leakage-free operating point), plus aggregate P@100/P@200/P@500.
+applied to test; the operating point uses no test labels), plus aggregate P@100/P@200/P@500.
 
 Leakage firewall: router (tau/medians) fit on TRAIN customers only; F1 threshold on
 cal split only; raw-kWh gap/magnitude per-customer causal; y[te] alignment asserted.

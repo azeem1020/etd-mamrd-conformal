@@ -16,9 +16,9 @@ Official code repository and experiment replication suite for:
 
 ## 1. Overview & Key Contributions
 
-Electricity theft detection (ETD) models frequently report over-optimistic performance due to temporal data leakage and evaluation on artificially balanced test sets. This repository implements:
+Electricity theft detection (ETD) models frequently report over-optimistic performance due to data leakage and evaluation on artificially balanced test sets. This repository implements:
 
-1. **Leakage-Free Native-Prevalence Evaluation Protocol**: Standardized evaluation on the State Grid Corporation of China (SGCC, 42,372 consumers) and ElectricityLoadDiagrams (ECL) benchmarks under true operational class imbalance (~8.5% theft) without retrospective or temporal leakage.
+1. **Native-Prevalence Evaluation Protocol**: Evaluation on the State Grid Corporation of China (SGCC, 42,372 consumers) and ElectricityLoadDiagrams (ECL) benchmarks at the natural class imbalance (8.53% theft on SGCC), with customer-disjoint partitions and per-consumer normalization on SGCC and window-level partitions on ECL.
 2. **Missingness-Aware Multi-Representation Detector (MAMRD)**: A compact 0.97M-parameter deep learning architecture (`a34_generic`) that fuses five complementary consumption and missingness representations under single-task binary cross-entropy:
    - Front end: Context-Conditioned Missing-Value Imputation (CC-MVI in the manuscript; `CC-NaME` / `ccname` in the code), which replaces each missing reading with a learned token conditioned on the consumer's context vector
    - Branch 1: Bidirectional Mamba2 selective state-space sequence backbone ($\mathbb{R}^{90}$)
@@ -164,7 +164,7 @@ export MAMRD_RESULTS=../results/phase_n_retrained
 
 To support transparent peer review and independent replication, the repository implements an explicit two-tier replication architecture:
 - **Tier 1 (Regeneration from cached predictions, about 3.5 minutes on a 16-core CPU, no GPU)**: Starting from the cached prediction-level records of every trained model, it verifies the customer-disjoint partition manifests, re-runs every analysis script (Tables 2–6, Supplementary Tables S2–S4, S6, S7 and the statistics quoted in the text), and regenerates all data-driven main and supplementary figures. It does not retrain any model. Every number in Tables 2–6 is the single rounding of a value in a released CSV.
-- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on one NVIDIA GeForce RTX 5070 Ti Laptop GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after cohort cleaning, then runs the Tier 1 post-processing (`reproduce_all_r2.py`). The console log of the reference run is `results/phase_n_retrained/master_retrain.log`; HORLN and GRU-D were retrained with the Stage 4 and Stage 5 commands in Revision 3, and their logs are `master_retrain_r3.log` and `logs/retrain_horln_sgcc_r3.log` (the HORLN SGCC cells come from the latter). GPU training is not bit-for-bit deterministic, so re-running Tier 2 reproduces the reported values up to small run-to-run differences; Tier 1 is exact.
+- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on one NVIDIA GeForce RTX 5070 Ti Laptop GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after the chronological preparation of the SGCC file and a no-signal cohort audit (training uses all 42,372 SGCC consumers), then runs the Tier 1 post-processing (`reproduce_all_r2.py`). The console log of the reference run is `results/phase_n_retrained/master_retrain.log`; HORLN and GRU-D were retrained with the Stage 4 and Stage 5 commands in Revision 3, and their logs are `master_retrain_r3.log` and `logs/retrain_horln_sgcc_r3.log` (the HORLN SGCC cells come from the latter). GPU training is not bit-for-bit deterministic, so re-running Tier 2 reproduces the reported values up to small run-to-run differences; Tier 1 is exact.
 
 ---
 
@@ -207,12 +207,14 @@ mkdir -p data && cd data
 cd ..
 
 # ==============================================================================
-# Stage 1: Cohort Cleaning & Chronological Alignment
+# Stage 1: Chronological Preparation, Cohort Audit & Partition Check
 # ==============================================================================
 # 1. Strict chronological ISO-8601 sort & single-date Sunday 2016-09-18 interpolation (natural NaNs strictly preserved).
 #    Required: training reads the date columns in file order and stops unless this step has been run.
 python scripts/prepare_sgcc_dataset.py
-# 2. Cohort cleaning (filter uninformative meters nansum(|x|) < 1e-6)
+# 2. No-signal cohort audit: lists meters with nansum(|x|) < 1e-6 (clean_cohort.json, keep_idx.npy).
+#    The benchmark keeps all 42,372 consumers; run_n_clean.py reads keep_idx.npy only with --filtered,
+#    which no reported result uses.
 python scripts/clean_cohort.py
 # 3. Verify 100% customer-disjoint and window-disjoint partition manifests
 python scripts/verify_partition_manifests.py
@@ -289,7 +291,7 @@ Every result reported in the manuscript is traceable to its corresponding config
 | **Table 3** | Protocol-Matched Main Results | AdamW ($\text{lr}=3\times 10^{-4}$, $\text{wd}=10^{-4}$, $\text{bs}=128$, 30 ep); Seeds 0–4 $\times$ Folds 0–2 (15 cells) for MAMRD; Seeds 0–2 $\times$ Folds 0–2 (9 cells) for baselines; cell BCa ($B=2{,}000$, seed 12345); MAP@100/P@100 averaged over random orderings of tied scores | `scripts/compute_r2_revisions.py` | `r2_audit/table3_main_results.csv`, `r2_audit/table3_tests.csv` (paired tests, Friedman, consumer bootstrap) |
 | **Table 4** | Fixed FPR Budgets ($1\%, 5\%$) | Rows: recall at FPR $\in\{0.01, 0.05\}$ by ROC interpolation (`zkmix_lab.metrics.recall_at_fpr`), inspected % $=\pi\cdot$recall$+(1-\pi)\cdot$FPR; note: threshold from conformal-calibration negatives on the Table 6 resplits | `scripts/compute_r2_revisions.py` | `r2_audit/table4_fpr_budgets.csv`, `r2_audit/table4_prospective.csv` |
 | **Table 5** | Architectural Ablation Suite | Seeds 0–2 $\times$ Folds 0–2 ($M=9$ matched cells; $M=15$ for $\mathcal{S}_4$ only); $\mathcal{A}_{34,\text{no-miss}}$ (`use_mask=False, use_cc=False`); paired BCa ($B=2{,}000$), exact Wilcoxon | `scripts/compute_r2_revisions.py` | `r2_audit/table5_ablation.csv` |
-| **Table 6** | Mondrian Conformal Audit (all six columns) | Target $1-\alpha = 0.80$; exact order stat $k_\phi = \lceil(n_\phi+1)(1-\alpha)\rceil$, $\hat q=+\infty$ (inspect whole group) when $k_\phi > n_\phi$; all 20 stratified 50/50 resplits per cell (300 MAMRD, 180 per baseline); cell-clustered BCa ($B=2{,}000$) | `scripts/run_decision_value.py` | `trust/decision_value_sgcc.csv`, `trust/decision_value_sgcc_resplits.csv` |
+| **Table 6** | Mondrian Conformal Audit (all six columns) | Target $1-\alpha = 0.80$; exact order stat $k_\phi = \lceil(n_\phi+1)(1-\alpha)\rceil$, score threshold $\hat q = 0$ (infinite conformal quantile; whole group inspected) when $k_\phi > n_\phi$; all 20 stratified 50/50 resplits per cell (300 MAMRD, 180 per baseline); cell-clustered BCa ($B=2{,}000$) | `scripts/run_decision_value.py` | `trust/decision_value_sgcc.csv`, `trust/decision_value_sgcc_resplits.csv` |
 | **Figure 2** | Test PR and ROC Curves | 200-point uniform grid interpolation over held-out test predictions; mean $\pm 1\,\sigma$ ribbon | `scripts/make_manuscript_figures.py` | `figures/fig2_performance_curves.pdf` |
 | **Figure 3** | Sequential / Subtractive Ablation | Step additions $\mathcal{S}_0 \to \mathcal{S}_4$ & paired drop contrasts ($\Delta\text{AP}$ with 95% BCa intervals) | `scripts/make_manuscript_figures.py` | `figures/fig3_ablation_bars.pdf` |
 | **Figure 4** | Probability Calibration & ECE | Alternating split ($\mathcal{I}_{\text{cal}} / \mathcal{I}_{\text{eval}}$) of the test predictions; 10 equal-width bins; $L_2$-logistic fit ($C=10^4$) | `scripts/make_manuscript_figures.py` | `figures/fig4_calibration_reliability.pdf`, `trust/fig4_ece_by_detector.csv` (ECE and Brier score before/after recalibration, fitted $\hat{w}$, $\hat{b}$; also the calibration table of the response letter) |
