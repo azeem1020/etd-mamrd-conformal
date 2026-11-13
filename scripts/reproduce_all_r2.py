@@ -5,6 +5,7 @@ Command-line usage:
     python scripts/reproduce_all_r2.py --config configs/default.yaml
 
 Tier-1 reproduction from the cached prediction-level records (no retraining):
+  0. check the chronological order and dates of data/SGCC.csv (prepare_sgcc_dataset.py);
   1. verify customer/window disjointness of the partition manifests (Table 2);
   2. run the conformal audit analyses on the shared protocol (conformal_common.py):
      run_decision_value (Table 6, Fig. 5b), run_empirical_comparator (Fig. 5a),

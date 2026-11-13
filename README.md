@@ -148,8 +148,18 @@ PYTHONPATH=.. python -c "from phased.models import build_arm; m = build_arm('a34
 
 Raw datasets are not distributed in this repository due to licensing. Please refer to [`data/README.md`](data/README.md):
 
-1. **SGCC**: State Grid Corporation of China electricity theft benchmark (42,372 consumers, 1,035 days). Place the consumer-by-day CSV at `data/SGCC.csv`.
-2. **ECL**: UCI `ElectricityLoadDiagrams20112014` (370 industrial/commercial profiles). Place at `data/LD2011_2014.txt`.
+1. **SGCC**: State Grid Corporation of China electricity theft benchmark (42,372 consumers, 1,035 days), released with Zheng et al. (2018) at https://github.com/henryRDlab/ElectricityTheftDetection (download `data.zip`, `data.z01` and `data.z02` and unzip them together). Place the extracted consumer-by-day CSV at `data/SGCC.csv`.
+2. **ECL**: UCI `ElectricityLoadDiagrams20112014` (370 industrial/commercial profiles), https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014. Place at `data/LD2011_2014.txt`.
+
+SHA-256 checksums of the files used for the reported results:
+
+| File | Bytes | SHA-256 |
+| :--- | ---: | :--- |
+| SGCC CSV as extracted from the archive (before `prepare_sgcc_dataset.py`) | 175,194,613 | `99f8fd315626b1f729a9a03a97cb52ed097ab4d43e5771e21554c9e0c369b9b7` |
+| `data/SGCC.csv` after `prepare_sgcc_dataset.py` (chronological order, 2016-09-18 filled) | 175,529,148 | `b41e1dca7c40c53f62689a0f9dda3d2a252ebf0311b646e8a95917f032331180` |
+| `data/LD2011_2014.txt` | 710,998,915 | `d51565f2cb5a6b768d06ba1bbd3c084c6e2f3aab07f00c6f2dcb80e90175124b` |
+
+`prepare_sgcc_dataset.py` rewrites `data/SGCC.csv` in place; applied to the first file it produces the second byte for byte.
 
 Path overrides can be set using environment variables without modifying any code:
 ```bash
@@ -164,12 +174,12 @@ export MAMRD_RESULTS=../results/phase_n_retrained
 
 To support transparent peer review and independent replication, the repository implements an explicit two-tier replication architecture:
 - **Tier 1 (Regeneration from cached predictions, about 3.5 minutes on a 16-core CPU, no GPU)**: Starting from the cached prediction-level records of every trained model, it verifies the customer-disjoint partition manifests, re-runs every analysis script (Tables 2–6, Supplementary Tables S2–S4, S6, S7 and the statistics quoted in the text), and regenerates all data-driven main and supplementary figures. It does not retrain any model. Every number in Tables 2–6 is the single rounding of a value in a released CSV.
-- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on one NVIDIA GeForce RTX 5070 Ti Laptop GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after the chronological preparation of the SGCC file and a no-signal cohort audit (training uses all 42,372 SGCC consumers), then runs the Tier 1 post-processing (`reproduce_all_r2.py`). The console log of the reference run is `results/phase_n_retrained/master_retrain.log`; HORLN and GRU-D were retrained with the Stage 4 and Stage 5 commands in Revision 3, and their logs are `master_retrain_r3.log` and `logs/retrain_horln_sgcc_r3.log` (the HORLN SGCC cells come from the latter). GPU training is not bit-for-bit deterministic, so re-running Tier 2 reproduces the reported values up to small run-to-run differences; Tier 1 is exact.
+- **Tier 2 (Complete End-to-End Retraining from Scratch, 103.8 minutes on one NVIDIA GeForce RTX 5070 Ti Laptop GPU)**: Independently executes all 177 neural-network training runs (on SGCC: 15 MAMRD cells, 54 ablation cells, 54 baseline cells; on ECL: 54 cells for 6 detectors) after the chronological preparation of the SGCC file and a no-signal cohort audit (training uses all 42,372 SGCC consumers), then runs the Tier 1 post-processing (`reproduce_all_r2.py`). The console log of the reference run is `results/phase_n_retrained/master_retrain.log`; HORLN and GRU-D were retrained with the Stage 4 and Stage 5 commands in Revision 3, and their logs are `master_retrain_r3.log` and `logs/retrain_horln_sgcc_r3.log` (the HORLN SGCC cells come from the latter: the HORLN section of `master_retrain_r3.log` ran before HORLN was set to its published configuration, and its SGCC cells were replaced; the ECL HORLN cells in that log use the published configuration). The 103.8 minutes are the wall time of the 9 November 2026 reference run, which used the earlier HORLN and GRU-D versions. The released repository already contains the outputs of all 177 runs, and `run_master_retrain.py` skips every run whose output file exists unless `--force` is given, so the complete retraining command is `python scripts/run_master_retrain.py --force` (Tier 2 below). GPU training is not bit-for-bit deterministic, so re-running Tier 2 reproduces the reported values up to small run-to-run differences; Tier 1 is exact.
 
 ---
 
 ### Tier 1: Master Reproduction Suite from Cached Predictions (about 3.5 minutes)
-To regenerate every table (Tables 2–6; Supp. Tables S2–S4, S6, S7) and every data-driven figure (Figures 2–5; Supp. Figures S1–S4) from the cached predictions without retraining; the script runs the steps below in order, stops at the first failure and writes each step's console output to `results/phase_n_retrained/logs/<script>.log`:
+To regenerate every table (Tables 2–6; Supp. Tables S2–S4, S6, S7) and every data-driven figure (Figures 2–5; Supp. Figures S1–S4) from the cached predictions without retraining. Tier 1 reads the two raw data files of Section 4: Step 0 stops if `data/SGCC.csv` is missing, and without `data/LD2011_2014.txt` the ECL per-attack recall (`compute_table_a.py`) and the ECL rows of Table 2 (`compute_r2_revisions.py`) are read from the released files instead of being recomputed (the step logs say so). The script runs the steps below in order, stops at the first failure and writes each step's console output to `results/phase_n_retrained/logs/<script>.log`:
 ```bash
 python scripts/reproduce_all_r2.py --config configs/default.yaml
 ```
@@ -182,7 +192,7 @@ python scripts/reproduce_all_r2.py --config configs/default.yaml
 | 4 | `compute_r2_revisions.py` | `r2_audit/table2_partition_ledger.csv` … `table5_ablation.csv`, `table3_tests.csv`, `table4_prospective.csv`, `mask_only_baseline.csv`, `router_params.csv`, conformal eligibility ledger |
 | 5 | `make_manuscript_figures.py`, `make_trust_figure.py`, `make_figures.py`, `make_mechanism_figure.py` | `figures/`, `trust/fig4_ece_by_detector.csv` |
 
-Re-running Tier 1 on the released records reproduces every CSV/Markdown output byte-for-byte; console logs of the reference run are in `results/phase_n_retrained/logs/`. Supplementary Table S5 (inference latency and peak memory) is a hardware measurement made with `scripts/make_compute_table.py` on the Tier 2 machine (NVIDIA GeForce RTX 5070 Ti Laptop GPU, batch 256; latency is the median of three runs, logged in `results/phase_n_retrained/logs/make_compute_table_run1.log` to `_run3.log`, and for the HORLN and GRU-D rows in `make_compute_table_horln_grud_run1.log` to `_run3.log`) and is not part of Tier 1; its parameter counts are deterministic.
+Re-running Tier 1 on the released records reproduces every CSV/Markdown output and figure byte-for-byte, with one exception that depends on the machine: the mask-only logistic regression (`r2_audit/mask_only_baseline.csv`) changes beyond the third decimal with the number of BLAS threads. In our runs with 1, 8, 16 and 32 threads it gave AP = 0.168 throughout and ROC-AUC = 0.650–0.651, and every other output was identical; the released file was computed with the default 32 threads of the reference machine. Console logs of the reference run are in `results/phase_n_retrained/logs/` (only their load-time lines change between runs). Supplementary Table S5 (inference latency and peak memory) is a hardware measurement made with `scripts/make_compute_table.py` on the Tier 2 machine (NVIDIA GeForce RTX 5070 Ti Laptop GPU, batch 256; latency is the median of three runs, logged in `results/phase_n_retrained/logs/make_compute_table_run1.log` to `_run3.log`, and for the HORLN and GRU-D rows in `make_compute_table_horln_grud_run1.log` to `_run3.log`) and is not part of Tier 1; its parameter counts are deterministic.
 *Note: Figure 1 (MAMRD Architectural Framework) is a conceptual schematic drawn in TikZ; it is not generated from data, and its source is not part of this repository. Figure 2 (Precision-Recall and ROC curves) is dynamically interpolated and rendered by `make_manuscript_figures.py` as part of this routine.*
 
 ---
@@ -190,10 +200,11 @@ Re-running Tier 1 on the released records reproduces every CSV/Markdown output b
 ### Tier 2: Complete End-to-End Retraining from Raw Datasets
 
 #### Master One-Command Retraining Runner (103.8 min on one NVIDIA GeForce RTX 5070 Ti Laptop GPU):
-To independently execute the full end-to-end retraining pipeline from scratch into `results/phase_n_retrained/`:
+To retrain all 177 models from scratch into `results/phase_n_retrained/` and then run the Tier 1 post-processing:
 ```bash
-python scripts/run_master_retrain.py
+python scripts/run_master_retrain.py --force
 ```
+`--force` is required on the released repository. Without it the script resumes an interrupted run: it skips every SGCC cell and ECL cell whose output file already exists (this is how only HORLN and GRU-D were retrained in Revision 3), and on a fresh clone it therefore trains nothing. With `--force` it retrains every cell and overwrites the released prediction records; to keep them, run it in a separate copy of the repository, or restore them afterwards with `git checkout -- results/`. Because GPU training is not bit-for-bit deterministic, the retrained values differ slightly from the released ones.
 
 #### Step-by-Step 7-Stage Retraining Pipeline:
 Alternatively, each of the seven stages implemented in `scripts/run_master_retrain.py` can be executed independently from the repository root:
@@ -203,7 +214,9 @@ Alternatively, each of the seven stages implemented in `scripts/run_master_retra
 # Stage 0: Data Acquisition (see data/README.md)
 # ==============================================================================
 mkdir -p data && cd data
-# Download raw SGCC.csv and UCI ElectricityLoadDiagrams20112014 (LD2011_2014.txt)
+# SGCC: https://github.com/henryRDlab/ElectricityTheftDetection (unzip data.zip + data.z01 + data.z02) -> data/SGCC.csv
+# ECL:  https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014 -> data/LD2011_2014.txt
+# Check the SHA-256 checksums in Section 4.
 cd ..
 
 # ==============================================================================
@@ -261,7 +274,7 @@ done
 # ==============================================================================
 # Stage 5: ECL Industrial Transfer Benchmark
 # ==============================================================================
-python scripts/run_ecl_trust.py
+python scripts/run_ecl_trust.py --epochs 30 --force   # without --force, cells whose output exists are skipped
 python scripts/run_ecl_trust_analysis.py
 
 # ==============================================================================
@@ -302,7 +315,7 @@ Every result reported in the manuscript is traceable to its corresponding config
 | **Supp. Table S3** | Prevalence-matched per-group contrasts | negatives subsampled to a common prevalence (100 draws); paired BCa over 15 cells; Friedman test | `scripts/compute_table_c.py` → `scripts/table_c_contrasts.py` | `tableC/tableC_contrasts.csv`, `tableC/tableC_friedman.csv` |
 | **Supp. Table S7** | ECL metric suite | 9 cells; $F_1$ at the per-fold maximising threshold (oracle); MAP@100 tie-neutral | `scripts/make_ecl_board.py` | `ecl_board.csv` |
 | **Supp. Figs. S1, S2, S3** | Detectability ceiling; metric inflation; illustrative mechanism | S1(b): per-branch increments read from the Table 5 ledger `r2_audit/table5_ablation.csv` (no hand-entered values) | `scripts/make_figures.py`, `scripts/make_mechanism_figure.py` | `figures/fig4_ceiling.pdf`, `figures/fig1_metric_inflation.pdf`, `figures/fig_mechanism.pdf` |
-| **Table 1, Supp. Table S1, Figure 1, Supp. Fig. S5** | Layer specification, training hyper-parameters, architecture and workflow schematics | not data-driven: written from the model and training code (`scripts/phased/models.py`, `zkmix_lab/training.py` `TrainConfig`); parameter counts as in Supp. Table S5 | `scripts/make_compute_table.py` (parameter counts) | — (schematics are drawn, not generated) |
+| **Table 1, Supp. Tables S1 and S8, Figure 1, Supp. Fig. S5** | Layer specification, training hyper-parameters, baseline re-implementation details, architecture and workflow schematics | not data-driven: written from the model, baseline and training code (`scripts/phased/models.py`, `scripts/phased/baselines.py`, `zkmix_lab/training.py` `TrainConfig`); parameter counts as in Supp. Table S5 | `scripts/make_compute_table.py` (parameter counts) | — (schematics are drawn, not generated) |
 | **Supp. Table S5** | Parameters, inference latency, peak memory | hardware measurement on the Tier 2 machine (RTX 5070 Ti Laptop GPU, batch 256, median of three runs); not part of Tier 1 | `scripts/make_compute_table.py` | `logs/make_compute_table_run1.log` to `_run3.log`; HORLN and GRU-D rows: `logs/make_compute_table_horln_grud_run1.log` to `_run3.log` |
 | **Text (Intro., Methods)** | Mask-only classifier; missing-rate statistics; router cutoffs | 3 folds | `scripts/compute_r2_revisions.py` | `r2_audit/mask_only_baseline.csv`, `r2_audit/router_params.csv` |
 | **Supp. Table S6** | ECL conformal lift gap | Same protocol (`conformal_common.py`) | `scripts/run_ecl_trust_analysis.py` | `ecl_trust/RESULTS_ECL_TRUST.md` |

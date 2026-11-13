@@ -5,7 +5,8 @@ Protocol: 30-min resolution, non-overlapping 7-day windows (336 readings), at mo
 shuffled 5-fold KFold (random state 0) on windows, held-out fold split 33/33/34 into
 (unused, early-stopping, test); 3 folds x 3 seeds per detector. Each cell dumps the
 per-window test scores, labels and observed load magnitude for the conformal audit
-(run_ecl_trust_analysis.py). Self-contained, resumable (skips existing cells), GPU heat-gated.
+(run_ecl_trust_analysis.py). Self-contained and GPU heat-gated. By default it resumes: cells whose
+output file exists are skipped; --force retrains every cell and overwrites the existing files.
 
 ECL has NO calendar/weekday structure and carries injected FDI -> the SGCC column-gap
 (Dropper/Riser) phenotype is NOT meaningful here. Per the locked finding ("detectability =
@@ -15,6 +16,7 @@ base-rate-normalized LIFT (same prevalence-confound control as SGCC).
 
 Run smoke:  $P run_ecl_trust.py --smoke
 Run full :  $P run_ecl_trust.py            (background; ~6 arms x 9 cells, heat-gated)
+Retrain  :  $P run_ecl_trust.py --force    (all 54 cells, overwriting existing outputs)
 """
 from __future__ import annotations
 import sys, csv, json, time, argparse, subprocess
@@ -119,7 +121,7 @@ def dump(arm, s, f, te, yt, sc, mag, tr_mag_median):
           f"n={len(te)} pos={row['n_pos']} T={gpu_temp()}C", flush=True)
 
 
-def run(seeds, folds, epochs, device, smoke):
+def run(seeds, folds, epochs, device, smoke, force=False):
     Wp, y, mag = build_dataset()
     print(f"[ecl] {Wp.shape} theft%={100*y.mean():.2f} mag[min/med/max]="
           f"{mag.min():.3f}/{np.median(mag):.3f}/{mag.max():.3f}", flush=True)
@@ -132,7 +134,7 @@ def run(seeds, folds, epochs, device, smoke):
         for s in seeds:
             for f in folds:
                 fp = OUT / f"{arm}_{s}_{f}.csv"
-                if fp.exists() and not smoke:
+                if fp.exists() and not smoke and not force:
                     print(f"[skip] {fp.name}", flush=True); continue
                 while gpu_temp() > GATE:
                     time.sleep(20)
@@ -167,5 +169,7 @@ if __name__ == "__main__":
     ap.add_argument("--epochs", type=int, default=30)
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--force", action="store_true",
+                    help="retrain every cell even if its output file exists (default: skip existing cells)")
     a = ap.parse_args()
-    run(a.seeds, a.folds, (3 if a.smoke else a.epochs), a.device, a.smoke)
+    run(a.seeds, a.folds, (3 if a.smoke else a.epochs), a.device, a.smoke, force=a.force)

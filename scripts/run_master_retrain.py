@@ -1,7 +1,11 @@
 """Master Retraining Orchestrator for Scientific Reports Revision 3.
 
-Executes the complete, isolated retraining pipeline from scratch into RESULTS_DIR
-(default: results/phase_n_retrained/), ensuring bit-for-bit isolation from older results.
+Executes the complete retraining pipeline into RESULTS_DIR (default: results/phase_n_retrained/).
+
+Usage:
+  python scripts/run_master_retrain.py --force   # retrain all 177 models, overwriting existing outputs
+  python scripts/run_master_retrain.py           # resume: skip every cell whose output file exists
+On the released repository all outputs exist, so a complete retraining needs --force.
 
 Stages:
   1. Cohort Cleaning: scripts/clean_cohort.py
@@ -202,7 +206,11 @@ def stage_ecl(args):
         log(f"ECL trust results exist in {ecl_trust_dir}. Skipping.")
         return True
 
-    if not run_cmd([sys.executable, "run_ecl_trust.py"], "ECL Trust Benchmark Training"):
+    # --force is passed on so that run_ecl_trust.py retrains cells whose output files exist
+    ecl_cmd = [sys.executable, "run_ecl_trust.py", "--epochs", str(args.epochs)]
+    if args.force:
+        ecl_cmd.append("--force")
+    if not run_cmd(ecl_cmd, "ECL Trust Benchmark Training"):
         return False
     if not run_cmd([sys.executable, "run_ecl_trust_analysis.py"], "ECL Trust Analysis"):
         return False
@@ -237,7 +245,7 @@ def main():
     parser.add_argument("--stages", nargs="+", default=["all"],
                         choices=["all", "cohort", "mamrd", "ablations", "baselines", "ecl", "trust", "postproc"])
     parser.add_argument("--epochs", type=int, default=30)
-    parser.add_argument("--force", action="store_true", help="Force rerun even if cell files exist")
+    parser.add_argument("--force", action="store_true", help="Retrain every cell even if its output file exists (also passed to run_ecl_trust.py)")
     args = parser.parse_args()
 
     stages = args.stages
