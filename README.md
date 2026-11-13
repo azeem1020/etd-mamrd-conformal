@@ -272,7 +272,7 @@ for b in wdcnn horln hybridattn grud msdm_net dkgt; do
 done
 
 # ==============================================================================
-# Stage 5: ECL Industrial Transfer Benchmark
+# Stage 5: ECL Benchmark (window-level evaluation across 370 clients)
 # ==============================================================================
 python scripts/run_ecl_trust.py --epochs 30 --force   # without --force, cells whose output exists are skipped
 python scripts/run_ecl_trust_analysis.py

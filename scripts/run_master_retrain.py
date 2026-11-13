@@ -19,7 +19,7 @@ Stages:
      - A34_no_miss: a34_no_missingness (controlled S4 ablation)
   4. Baseline detectors (9 cells each: seeds 0..2, folds 0..2):
      - wdcnn, horln, hybridattn, grud, msdm_net, dkgt
-  5. ECL Transfer Benchmark:
+  5. ECL Benchmark (window-level, within-client: test clients also contribute training windows):
      - run_ecl_trust.py + run_ecl_trust_analysis.py
   6. Conformal Calibration & Trust Layer:
      - run_ceiling_estimate.py, run_trust_layer.py, run_decision_value.py,
@@ -200,7 +200,7 @@ def stage_baselines(args):
 
 
 def stage_ecl(args):
-    log("=== STAGE 5: ECL TRANSFER BENCHMARK ===")
+    log("=== STAGE 5: ECL BENCHMARK (WINDOW-LEVEL, WITHIN-CLIENT) ===")
     ecl_trust_dir = OUT / "ecl_trust"
     if (ecl_trust_dir / "ecl_trust_percell.csv").exists() and not args.force:
         log(f"ECL trust results exist in {ecl_trust_dir}. Skipping.")
