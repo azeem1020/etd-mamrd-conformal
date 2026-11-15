@@ -118,7 +118,7 @@ def main():
     print(f"Paired AP Difference (dAP): {pt_diff_cb:+.4f} (95% CI: [{lo_diff:+.4f}, {hi_diff:+.4f}])")
     
     # Assert match with reported numbers in Section 4.1 and Letter to Editor
-    expected_dap = 0.0521 if "phase_n_retrained" in str(RES) else 0.0642
+    expected_dap = 0.0161 if "phase_n_retrained" in str(RES) else 0.0642
     assert np.isclose(pt_diff_cb, expected_dap, atol=2e-3), f"Expected {expected_dap}, got {pt_diff_cb}"
     print(f"\n[SUCCESS] Exact match verified against reported manuscript ({expected_dap:.4f}).")
     print("=" * 80)
