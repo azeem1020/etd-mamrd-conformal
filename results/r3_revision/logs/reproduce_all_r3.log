@@ -1,0 +1,272 @@
+===========================================================================
+MAMRD REVISION 3 TIER-1 CPU REPRODUCTION SUITE
+Repository Root: .
+===========================================================================
+
+===========================================================================
+>> RUNNING STEP: 1. Verify 5-fold SGCC and 5-fold client-disjoint ECL manifests
+   Script: ./scripts/verify_partition_manifests.py
+===========================================================================
+========================================================================
+MAMRD REVISION 3 (5-FOLD) PARTITION DISJOINTNESS & TABLE 2 AUDIT
+========================================================================
+Using manifest directory: ./partition_manifests
+
+[1/2] Auditing SGCC Partition Manifest: sgcc_partition_manifest.csv
+========================================================================
+Total manifest rows read: 211860 (Expected 211,860 across 5 folds)
+
+Fold 0: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 254 (Heavy=156, Light=81, Flat=17)
+
+Fold 1: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 230 (Heavy=133, Light=79, Flat=18)
+
+Fold 2: Total customers = 42372 (Train=33898, ES=2795, Cal=2795, Test=2884)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 249 (Heavy=155, Light=81, Flat=13)
+
+Fold 3: Total customers = 42372 (Train=33898, ES=2796, Cal=2796, Test=2882)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 261 (Heavy=146, Light=98, Flat=17)
+
+Fold 4: Total customers = 42372 (Train=33898, ES=2795, Cal=2795, Test=2884)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 241 (Heavy=131, Light=99, Flat=11)
+
+  [OK] Cross-fold test customer overlap: 0 across all 10 fold pairs (14420 unique test consumers, 1235 thefts, 76 Flat thefts)
+
+SGCC Mean Counts Across Folds 0--4 (Reconciling Table 2):
+  Training (D_train):     33897.6 total | 2892.0 pos (8.53%)
+  Early-Stopping (D_es):  2795.2 total | 238.0 pos (8.51%)
+  Threshold-Cal (D_cal):  2795.2 total | 238.0 pos (8.51%)
+  Held-Out Test (D_test): 2884.0 total | 247.0 pos (8.56%)
+    -> Test Positives Breakdown: Heavy=144.2, Light=87.6, Flat=15.2
+
+[2/2] Auditing ECL Partition Manifest: ecl_partition_manifest.csv
+========================================================================
+Total manifest rows read: 125000 (Expected 125,000 across 5 folds)
+
+Fold 0: Total windows = 25000 (Train=20004, ES=1824, Test=3172)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+Fold 1: Total windows = 25000 (Train=20001, ES=1731, Test=3268)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+Fold 2: Total windows = 25000 (Train=19998, ES=1819, Test=3183)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+Fold 3: Total windows = 25000 (Train=19998, ES=1737, Test=3265)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+Fold 4: Total windows = 25000 (Train=19999, ES=1743, Test=3258)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+  [OK] Cross-fold held-out client overlap: 0 across all 10 fold pairs (all 370 clients partitioned)
+
+ECL Mean Counts Across Folds 0--4 (Client-Disjoint GroupKFold, Reconciling Table 2):
+  Training (D_train):     20000.0 total | 2000.0 pos (10.00%) | 296 clients
+  Early-Stopping (D_es):  1770.8 total | 170.6 pos (9.63%) | 26 clients
+  Held-Out Test (D_test): 3229.2 total | 329.4 pos (10.20%) | 48 clients
+
+========================================================================
+[PASS] ALL PARTITIONS 100% DISJOINT ACROSS ALL 5 FOLDS (EXIT 0)
+========================================================================
+[PASS] 1. Verify 5-fold SGCC and 5-fold client-disjoint ECL manifests completed.
+
+===========================================================================
+>> RUNNING STEP: 2. Recompute 5-fold client-disjoint ECL tables (Table 2, Supp. Tables S6-S7)
+   Script: ./scripts/r3/compute_r3_ecl_tables.py
+===========================================================================
+{
+  "fold_part_summary": {
+    "te_win_mean": 3229.2,
+    "te_pos_mean": 329.4,
+    "te_hi_win_mean": 1604.0,
+    "te_hi_pos_mean": 125.2,
+    "te_lo_win_mean": 1625.2,
+    "te_lo_pos_mean": 204.2,
+    "cal_hi_pos_mean": 62.169999999999995,
+    "cal_lo_pos_mean": 102.23,
+    "eval_hi_pos_mean": 63.03000000000001,
+    "eval_lo_pos_mean": 101.97,
+    "high_prev_pct": 7.703330261810281,
+    "low_prev_pct": 12.581722763783887
+  },
+  "board_rows": [
+    {
+      "detector": "GRU-D",
+      "n_cells": 15,
+      "ap_mean": 0.6225233299794392,
+      "roc_mean": 0.8806541612443528,
+      "f1_oracle_mean": 0.6323111242780574,
+      "map100_mean": 0.8316531841099029
+    },
+    {
+      "detector": "Self-Attn",
+      "n_cells": 15,
+      "ap_mean": 0.8038992692681968,
+      "roc_mean": 0.9080636329847608,
+      "f1_oracle_mean": 0.8261306074560755,
+      "map100_mean": 0.9471892590384065
+    },
+    {
+      "detector": "WDCNN",
+      "n_cells": 15,
+      "ap_mean": 0.7925734506676113,
+      "roc_mean": 0.9073707401303571,
+      "f1_oracle_mean": 0.8519314953457648,
+      "map100_mean": 0.9008689094686632
+    },
+    {
+      "detector": "MSDM",
+      "n_cells": 15,
+      "ap_mean": 0.8457647489051585,
+      "roc_mean": 0.9038753490597593,
+      "f1_oracle_mean": 0.86811504521577,
+      "map100_mean": 0.990127040393556
+    },
+    {
+      "detector": "HORLN",
+      "n_cells": 15,
+      "ap_mean": 0.821251829332452,
+      "roc_mean": 0.9118244405747947,
+      "f1_oracle_mean": 0.8539777024602415,
+      "map100_mean": 0.9302247716656605
+    },
+    {
+      "detector": "MAMRD",
+      "n_cells": 15,
+      "ap_mean": 0.8351026416610676,
+      "roc_mean": 0.9112111821296486,
+      "f1_oracle_mean": 0.8625150805156252,
+      "map100_mean": 0.9512692222291864
+    }
+  ],
+  "liftgap_rows": [
+    {
+      "detector": "GRU-D",
+      "n_cells": 15,
+      "lift_high": 6.45251969037693,
+      "lift_low": 3.1585070568571165,
+      "gap_mean": 3.2940126335198148,
+      "gap_ci_lo": 1.7992799763057523,
+      "gap_ci_hi": 5.108967445949455,
+      "rec_high_pct": 80.11768005619874,
+      "rec_low_pct": 79.66764966699212,
+      "cond_insp_pct": 21.940152319614008,
+      "single_insp_pct": 26.800531889342867,
+      "workload_red_pct": 14.553273353651116
+    },
+    {
+      "detector": "Self-Attn",
+      "n_cells": 15,
+      "lift_high": 10.358941560510162,
+      "lift_low": 5.279856345633766,
+      "gap_mean": 5.079085214876396,
+      "gap_ci_lo": 3.2693731546446343,
+      "gap_ci_hi": 6.624804772790297,
+      "rec_high_pct": 80.86316181589912,
+      "rec_low_pct": 80.75556508544423,
+      "cond_insp_pct": 13.889788966510707,
+      "single_insp_pct": 17.833699856561896,
+      "workload_red_pct": 15.863885654698773
+    },
+    {
+      "detector": "WDCNN",
+      "n_cells": 15,
+      "lift_high": 10.645127421724021,
+      "lift_low": 5.80785563410491,
+      "gap_mean": 4.83727178761911,
+      "gap_ci_lo": 3.065569161507808,
+      "gap_ci_hi": 6.20372861283939,
+      "rec_high_pct": 81.78845727503786,
+      "rec_low_pct": 80.90547383000056,
+      "cond_insp_pct": 13.459882225253425,
+      "single_insp_pct": 17.778027162288083,
+      "workload_red_pct": 15.310087799241792
+    },
+    {
+      "detector": "MSDM",
+      "n_cells": 15,
+      "lift_high": 10.797288652763074,
+      "lift_low": 5.528401279708535,
+      "gap_mean": 5.26888737305454,
+      "gap_ci_lo": 3.716918672534679,
+      "gap_ci_hi": 6.591572517478281,
+      "rec_high_pct": 80.67426930823322,
+      "rec_low_pct": 80.14269551028332,
+      "cond_insp_pct": 13.519810773286798,
+      "single_insp_pct": 18.607204734964306,
+      "workload_red_pct": 20.877495484872508
+    },
+    {
+      "detector": "HORLN",
+      "n_cells": 15,
+      "lift_high": 10.960567173666087,
+      "lift_low": 5.9909190194040916,
+      "gap_mean": 4.969648154261995,
+      "gap_ci_lo": 3.4316228103409254,
+      "gap_ci_hi": 6.3139011940486425,
+      "rec_high_pct": 81.03891481587814,
+      "rec_low_pct": 80.39398280677287,
+      "cond_insp_pct": 12.598604597753955,
+      "single_insp_pct": 16.530923391846716,
+      "workload_red_pct": 15.230425901962905
+    },
+    {
+      "detector": "MAMRD",
+      "n_cells": 15,
+      "lift_high": 11.09959225758326,
+      "lift_low": 6.303950097327496,
+      "gap_mean": 4.795642160255767,
+      "gap_ci_lo": 3.2704206741496575,
+      "gap_ci_hi": 6.179822710722608,
+      "rec_high_pct": 80.43897534976787,
+      "rec_low_pct": 79.98092504245872,
+      "cond_insp_pct": 11.791844099516887,
+      "single_insp_pct": 15.61931802744692,
+      "workload_red_pct": 14.382645569627073
+    }
+  ]
+}
+[PASS] 2. Recompute 5-fold client-disjoint ECL tables (Table 2, Supp. Tables S6-S7) completed.
+
+===========================================================================
+>> RUNNING STEP: 3. Rebuild 5-fold verified ledger, flat CSVs, Tables S2-S4, and 7 vector figures
+   Script: ./scripts/r3/build_r3_5fold_tables_and_figures.py
+===========================================================================
+[1/7] Computing 5-fold SGCC partitions & router statistics...
+[2/7] Computing 5-fold SGCC conformal splits & Light/Unadjusted stats...
+[3/7] Computing 5-fold Table 4 prospective & retrospective operating points...
+[4/7] Computing 5-fold C6 (4 groupings) & 5-fold C4 conformal sensitivity...
+[5/7] Verifying 5-fold C8 constrained positive calibration across 115 fits...
+[6/7] Updating 5-fold Supplementary Tables S2, S3, S4...
+[7/7] Regenerating all 5-fold vector PDF figures...
+  wrote fig2_performance_curves.pdf (+ preview PNG)
+  wrote fig3_ablation_bars.pdf (+ preview PNG)
+  wrote fig4_calibration_reliability.pdf (+ preview PNG)
+  wrote fig5_conformal_tradeoffs.pdf (+ preview PNG)
+  wrote fig1_metric_inflation.pdf (+ preview PNG)
+  wrote fig6_trust_guarantee.pdf (+ preview PNG)
+  wrote fig_s6_r3_conformal_robustness.pdf (+ preview PNG)
+  wrote tables/table4_5fold_prospective.csv
+  wrote tables/table6_5fold_conformal.csv
+  wrote tables/c4_pooled_5fold_flat.csv
+  wrote tables/c4_ipw_5fold.csv
+  wrote tables/c4_shift_5fold.csv
+  wrote tables/c6_alt_groupings_5fold.csv
+  wrote tables/c8_5fold_constrained_cal.csv
+[DONE] Verified 5-fold ledger saved -> r3_manuscript_verified_ledger.json
+[PASS] 3. Rebuild 5-fold verified ledger, flat CSVs, Tables S2-S4, and 7 vector figures completed.
+
+###########################################################################
+# ALL REVISION 3 TABLES AND FIGURES REGENERATED ON CPU IN 40.6s
+# Outputs (results/r3_revision/):
+#   - r3_manuscript_verified_ledger.json
+#   - C3_ecl_client_disjoint/c3_tables_verified.json
+#   - tables/{tab_strata,tab_matched,tab_perstratum}.tex + 7 CSV tables
+#   - figures/fig{1,2,3,4,5,6}_*.pdf + fig_s6_r3_conformal_robustness.pdf
+###########################################################################

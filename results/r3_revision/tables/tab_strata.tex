@@ -1,0 +1,18 @@
+% LaTeX table fragment for \input{} in manuscript/supplementary; requires \revthree, \name, \prauc, \rocauc, \ci macros.
+\begin{table*}[!t]
+\centering
+\caption{\revthree{Per-group detectability of \name{} on SGCC across all five folds ($n=25$ cells, BCa $95\,\%$ CI).} (+)/($-$): positive ($g_i > \tau_f$) or negative ($g_i < -\tau_f$) intra-block column contrast; Flat: $|g_i| \le \tau_f$ (\revthree{Section~3.8} of the main article).}
+\label{tab:strata}
+\begin{tabular}{lccccc}
+\toprule Group & Pop.\ (\%) & Theft (\%) & $\prauc$~(95\,\% CI) & $\rocauc$ & $F_1$ \\
+\midrule
+Heavy (+) & \revthree{28.7} & \revthree{12.0} & \revthree{$0.684$~\ci{0.657}{0.711}} & \revthree{0.894} & \revthree{0.626} \\
+Heavy ($-$) & \revthree{13.2} & \revthree{11.8} & \revthree{$0.688$~\ci{0.661}{0.716}} & \revthree{0.901} & \revthree{0.615} \\
+Light (+) & \revthree{28.4} & \revthree{7.5} & \revthree{$0.582$~\ci{0.563}{0.600}} & \revthree{0.898} & \revthree{0.532} \\
+Light ($-$) & \revthree{12.9} & \revthree{7.0} & \revthree{$0.507$~\ci{0.474}{0.537}} & \revthree{0.877} & \revthree{0.471} \\
+Flat & \revthree{16.8} & \revthree{3.1} & \revthree{$0.310$~\ci{0.280}{0.337}} & \revthree{0.863} & \revthree{0.280} \\
+\midrule
+Aggregate & 100.0 & \revthree{8.6} & \revthree{$0.610$~\ci{0.596}{0.625}} & \revthree{0.894} & \revthree{0.562} \\
+\bottomrule
+\end{tabular}
+\end{table*}

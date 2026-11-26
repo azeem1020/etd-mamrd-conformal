@@ -1,0 +1,137 @@
+=== C3: CLIENT-DISJOINT 5-FOLD ECL PARTITIONS (0% CLIENT OVERLAP) ===
+ fold  train_win  train_pos  train_clients  es_win  es_pos  es_clients  te_win  te_pos  te_clients  client_overlap
+    0      20004       2030            296    1824     146          26    3172     324          48               0
+    1      20001       1987            296    1731     178          26    3268     335          48               0
+    2      19998       2004            296    1819     170          26    3183     326          48               0
+    3      19998       1974            296    1737     187          26    3265     339          48               0
+    4      19999       2005            296    1743     172          26    3258     323          48               0
+[1/90] a34_generic s=0 f=0 | AP=0.8139 ROC=0.9057 R@5%=0.830 wall=23.7s
+[2/90] a34_generic s=0 f=1 | AP=0.8446 ROC=0.9067 R@5%=0.833 wall=8.6s
+[3/90] a34_generic s=0 f=2 | AP=0.8804 ROC=0.9223 R@5%=0.853 wall=9.1s
+[4/90] a34_generic s=0 f=3 | AP=0.8656 ROC=0.9199 R@5%=0.864 wall=9.1s
+[5/90] a34_generic s=0 f=4 | AP=0.7124 ROC=0.8943 R@5%=0.830 wall=9.4s
+[6/90] a34_generic s=1 f=0 | AP=0.7567 ROC=0.9037 R@5%=0.830 wall=9.2s
+[7/90] a34_generic s=1 f=1 | AP=0.8510 ROC=0.9085 R@5%=0.833 wall=9.2s
+[8/90] a34_generic s=1 f=2 | AP=0.8756 ROC=0.9216 R@5%=0.847 wall=9.2s
+[9/90] a34_generic s=1 f=3 | AP=0.8627 ROC=0.9195 R@5%=0.861 wall=8.7s
+[10/90] a34_generic s=1 f=4 | AP=0.8282 ROC=0.9037 R@5%=0.827 wall=9.2s
+[11/90] a34_generic s=2 f=0 | AP=0.8142 ROC=0.9062 R@5%=0.827 wall=9.2s
+[12/90] a34_generic s=2 f=1 | AP=0.8487 ROC=0.9086 R@5%=0.833 wall=9.4s
+[13/90] a34_generic s=2 f=2 | AP=0.8766 ROC=0.9210 R@5%=0.853 wall=9.4s
+[14/90] a34_generic s=2 f=3 | AP=0.8570 ROC=0.9209 R@5%=0.861 wall=9.2s
+[15/90] a34_generic s=2 f=4 | AP=0.8390 ROC=0.9055 R@5%=0.824 wall=9.5s
+[16/90] horln s=0 f=0 | AP=0.8425 ROC=0.9093 R@5%=0.836 wall=8.8s
+[17/90] horln s=0 f=1 | AP=0.8289 ROC=0.9022 R@5%=0.824 wall=7.7s
+[18/90] horln s=0 f=2 | AP=0.8736 ROC=0.9198 R@5%=0.850 wall=7.8s
+[19/90] horln s=0 f=3 | AP=0.8616 ROC=0.9264 R@5%=0.867 wall=7.5s
+[20/90] horln s=0 f=4 | AP=0.7815 ROC=0.8958 R@5%=0.814 wall=7.6s
+[21/90] horln s=1 f=0 | AP=0.8114 ROC=0.9084 R@5%=0.830 wall=7.7s
+[22/90] horln s=1 f=1 | AP=0.8352 ROC=0.9050 R@5%=0.827 wall=7.7s
+[23/90] horln s=1 f=2 | AP=0.8647 ROC=0.9197 R@5%=0.840 wall=7.8s
+[24/90] horln s=1 f=3 | AP=0.7977 ROC=0.9238 R@5%=0.864 wall=7.5s
+[25/90] horln s=1 f=4 | AP=0.7633 ROC=0.8962 R@5%=0.827 wall=7.7s
+[26/90] horln s=2 f=0 | AP=0.8131 ROC=0.9085 R@5%=0.830 wall=7.8s
+[27/90] horln s=2 f=1 | AP=0.8317 ROC=0.9201 R@5%=0.836 wall=7.8s
+[28/90] horln s=2 f=2 | AP=0.8709 ROC=0.9170 R@5%=0.844 wall=7.9s
+[29/90] horln s=2 f=3 | AP=0.7926 ROC=0.9317 R@5%=0.861 wall=7.7s
+[30/90] horln s=2 f=4 | AP=0.7501 ROC=0.8936 R@5%=0.811 wall=7.8s
+[31/90] msdm s=0 f=0 | AP=0.8442 ROC=0.8987 R@5%=0.812 wall=49.4s
+[32/90] msdm s=0 f=1 | AP=0.8422 ROC=0.8856 R@5%=0.812 wall=50.0s
+[33/90] msdm s=0 f=2 | AP=0.8698 ROC=0.9117 R@5%=0.840 wall=50.8s
+[34/90] msdm s=0 f=3 | AP=0.8166 ROC=0.8934 R@5%=0.826 wall=51.1s
+[35/90] msdm s=0 f=4 | AP=0.8387 ROC=0.9032 R@5%=0.817 wall=51.1s
+[36/90] msdm s=1 f=0 | AP=0.8465 ROC=0.9086 R@5%=0.806 wall=51.1s
+[37/90] msdm s=1 f=1 | AP=0.8432 ROC=0.8856 R@5%=0.809 wall=51.1s
+[38/90] msdm s=1 f=2 | AP=0.8626 ROC=0.9157 R@5%=0.834 wall=51.0s
+[39/90] msdm s=1 f=3 | AP=0.8337 ROC=0.8932 R@5%=0.823 wall=50.8s
+[40/90] msdm s=1 f=4 | AP=0.8383 ROC=0.9074 R@5%=0.811 wall=50.9s
+[41/90] msdm s=2 f=0 | AP=0.8550 ROC=0.9107 R@5%=0.827 wall=50.7s
+[42/90] msdm s=2 f=1 | AP=0.8471 ROC=0.8967 R@5%=0.818 wall=51.0s
+[43/90] msdm s=2 f=2 | AP=0.8739 ROC=0.9357 R@5%=0.853 wall=50.1s
+[44/90] msdm s=2 f=3 | AP=0.8472 ROC=0.9022 R@5%=0.829 wall=50.2s
+[45/90] msdm s=2 f=4 | AP=0.8261 ROC=0.9115 R@5%=0.817 wall=50.4s
+[46/90] wdcnn s=0 f=0 | AP=0.8096 ROC=0.8990 R@5%=0.830 wall=2.3s
+[47/90] wdcnn s=0 f=1 | AP=0.7982 ROC=0.9108 R@5%=0.833 wall=2.3s
+[48/90] wdcnn s=0 f=2 | AP=0.8752 ROC=0.9150 R@5%=0.850 wall=2.4s
+[49/90] wdcnn s=0 f=3 | AP=0.8112 ROC=0.9293 R@5%=0.858 wall=2.2s
+[50/90] wdcnn s=0 f=4 | AP=0.7394 ROC=0.8863 R@5%=0.824 wall=2.3s
+[51/90] wdcnn s=1 f=0 | AP=0.8011 ROC=0.8981 R@5%=0.830 wall=2.3s
+[52/90] wdcnn s=1 f=1 | AP=0.7790 ROC=0.9062 R@5%=0.830 wall=2.4s
+[53/90] wdcnn s=1 f=2 | AP=0.8751 ROC=0.9163 R@5%=0.850 wall=2.3s
+[54/90] wdcnn s=1 f=3 | AP=0.7630 ROC=0.9259 R@5%=0.858 wall=2.2s
+[55/90] wdcnn s=1 f=4 | AP=0.7005 ROC=0.8851 R@5%=0.820 wall=2.3s
+[56/90] wdcnn s=2 f=0 | AP=0.7994 ROC=0.8981 R@5%=0.830 wall=2.2s
+[57/90] wdcnn s=2 f=1 | AP=0.8005 ROC=0.9098 R@5%=0.833 wall=2.3s
+[58/90] wdcnn s=2 f=2 | AP=0.8733 ROC=0.9160 R@5%=0.847 wall=2.2s
+[59/90] wdcnn s=2 f=3 | AP=0.7829 ROC=0.9292 R@5%=0.858 wall=2.2s
+[60/90] wdcnn s=2 f=4 | AP=0.6802 ROC=0.8854 R@5%=0.820 wall=2.3s
+[61/90] hybridattn s=0 f=0 | AP=0.7944 ROC=0.8990 R@5%=0.809 wall=9.2s
+[62/90] hybridattn s=0 f=1 | AP=0.8139 ROC=0.9133 R@5%=0.833 wall=7.7s
+[63/90] hybridattn s=0 f=2 | AP=0.8696 ROC=0.9182 R@5%=0.840 wall=7.6s
+[64/90] hybridattn s=0 f=3 | AP=0.7761 ROC=0.9093 R@5%=0.841 wall=7.4s
+[65/90] hybridattn s=0 f=4 | AP=0.7678 ROC=0.8944 R@5%=0.805 wall=7.8s
+[66/90] hybridattn s=1 f=0 | AP=0.8057 ROC=0.9032 R@5%=0.824 wall=7.8s
+[67/90] hybridattn s=1 f=1 | AP=0.8217 ROC=0.9119 R@5%=0.833 wall=7.9s
+[68/90] hybridattn s=1 f=2 | AP=0.8622 ROC=0.9139 R@5%=0.837 wall=7.9s
+[69/90] hybridattn s=1 f=3 | AP=0.7603 ROC=0.9165 R@5%=0.847 wall=7.6s
+[70/90] hybridattn s=1 f=4 | AP=0.7511 ROC=0.8977 R@5%=0.805 wall=7.7s
+[71/90] hybridattn s=2 f=0 | AP=0.7833 ROC=0.9032 R@5%=0.821 wall=7.7s
+[72/90] hybridattn s=2 f=1 | AP=0.8264 ROC=0.9103 R@5%=0.824 wall=13.3s
+[73/90] hybridattn s=2 f=2 | AP=0.8746 ROC=0.9213 R@5%=0.850 wall=8.2s
+[74/90] hybridattn s=2 f=3 | AP=0.8034 ROC=0.9145 R@5%=0.850 wall=8.0s
+[75/90] hybridattn s=2 f=4 | AP=0.7859 ROC=0.8910 R@5%=0.802 wall=8.2s
+[76/90] grud s=0 f=0 | AP=0.7346 ROC=0.8851 R@5%=0.710 wall=6.4s
+[77/90] grud s=0 f=1 | AP=0.6802 ROC=0.8981 R@5%=0.725 wall=7.1s
+[78/90] grud s=0 f=2 | AP=0.6616 ROC=0.8757 R@5%=0.666 wall=5.7s
+[79/90] grud s=0 f=3 | AP=0.4319 ROC=0.8893 R@5%=0.440 wall=5.3s
+[80/90] grud s=0 f=4 | AP=0.6077 ROC=0.8583 R@5%=0.471 wall=5.6s
+[81/90] grud s=1 f=0 | AP=0.7377 ROC=0.8856 R@5%=0.716 wall=5.6s
+[82/90] grud s=1 f=1 | AP=0.6929 ROC=0.9001 R@5%=0.725 wall=8.2s
+[83/90] grud s=1 f=2 | AP=0.6554 ROC=0.8746 R@5%=0.656 wall=9.4s
+[84/90] SKIP grud_1_3.csv AP=0.4393
+[85/90] grud s=1 f=4 | AP=0.6070 ROC=0.8584 R@5%=0.446 wall=8.6s
+[86/90] grud s=2 f=0 | AP=0.7307 ROC=0.8844 R@5%=0.713 wall=9.2s
+[87/90] grud s=2 f=1 | AP=0.6653 ROC=0.8951 R@5%=0.663 wall=9.8s
+[88/90] grud s=2 f=2 | AP=0.6577 ROC=0.8721 R@5%=0.660 wall=9.4s
+[89/90] grud s=2 f=3 | AP=0.4499 ROC=0.8924 R@5%=0.466 wall=9.1s
+[90/90] grud s=2 f=4 | AP=0.5859 ROC=0.8502 R@5%=0.471 wall=8.6s
+
+--- C3 Client-Disjoint 5-Fold ECL Summary (15 cells/detector) ---
+ detector         arm  n_cells  ap_mean  ap_ci_lo  ap_ci_hi  roc_mean  roc_ci_lo  roc_ci_hi  rec_1pct_mean  rec_5pct_mean
+    MAMRD a34_generic       15 0.835103  0.801407  0.852780  0.911211   0.906673   0.915265       0.809217       0.840347
+    HORLN       horln       15 0.821252  0.800777  0.839339  0.911824   0.905895   0.917328       0.797260       0.837477
+     MSDM        msdm       15 0.845678  0.838956  0.853444  0.903996   0.898714   0.911579       0.803598       0.822304
+    WDCNN       wdcnn       15 0.792573  0.762543  0.819005  0.907371   0.900021   0.914019       0.718607       0.838126
+Self-Attn  hybridattn       15 0.806422  0.788051  0.827864  0.907855   0.903248   0.911877       0.724559       0.827967
+    GRU-D        grud       15 0.622523  0.566002  0.667511  0.880654   0.872261   0.886885       0.325728       0.599506
+
+--- C3 Paired Contrasts ---
+         contrast       dAP     ci_lo    ci_hi  wilcoxon_p  mamrd_wins_of_15
+    MAMRD - HORLN  0.013851 -0.007670 0.035297    0.135376                12
+     MAMRD - MSDM -0.010575 -0.043361 0.006128    0.934082                10
+    MAMRD - WDCNN  0.042529  0.017817 0.073408    0.005371                13
+MAMRD - Self-Attn  0.028680  0.006589 0.048481    0.025574                13
+    MAMRD - GRU-D  0.212579  0.156428 0.274998    0.000061                15
+
+--- C3 Per-Attack Recall@5%FPR (FDI1 vs FDI2-FDI6) ---
+detector attack  n_cells  rec_at_5pct_fpr_mean    ci_lo    ci_hi
+   MAMRD   FDI1       15              0.078776 0.064106 0.091577
+   MAMRD   FDI2       15              1.000000 1.000000 1.000000
+   MAMRD   FDI3       15              1.000000 1.000000 1.000000
+   MAMRD   FDI4       15              1.000000 1.000000 1.000000
+   MAMRD   FDI5       15              1.000000 1.000000 1.000000
+   MAMRD   FDI6       15              0.980166 0.971209 0.987896
+   HORLN   FDI1       15              0.070860 0.055691 0.088279
+   HORLN   FDI2       15              0.989643 0.979739 0.996121
+   HORLN   FDI3       15              1.000000 1.000000 1.000000
+   HORLN   FDI4       15              0.998450 0.992250 1.000000
+   HORLN   FDI5       15              1.000000 1.000000 1.000000
+   HORLN   FDI6       15              0.980280 0.973994 0.987126
+    MSDM   FDI1       15              0.046506 0.033386 0.064161
+    MSDM   FDI2       15              0.969953 0.950790 0.982736
+    MSDM   FDI3       15              0.997576 0.991872 0.998788
+    MSDM   FDI4       15              1.000000 1.000000 1.000000
+    MSDM   FDI5       15              1.000000 1.000000 1.000000
+    MSDM   FDI6       15              0.937491 0.909401 0.957775
+
+[DONE] C3 completed in 22.97 min -> ./results/r3_revision/C3_ecl_client_disjoint

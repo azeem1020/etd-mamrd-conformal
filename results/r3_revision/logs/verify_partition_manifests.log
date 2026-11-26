@@ -1,0 +1,67 @@
+========================================================================
+MAMRD REVISION 3 (5-FOLD) PARTITION DISJOINTNESS & TABLE 2 AUDIT
+========================================================================
+Using manifest directory: ./partition_manifests
+
+[1/2] Auditing SGCC Partition Manifest: sgcc_partition_manifest.csv
+========================================================================
+Total manifest rows read: 211860 (Expected 211,860 across 5 folds)
+
+Fold 0: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 254 (Heavy=156, Light=81, Flat=17)
+
+Fold 1: Total customers = 42372 (Train=33897, ES=2795, Cal=2795, Test=2885)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 230 (Heavy=133, Light=79, Flat=18)
+
+Fold 2: Total customers = 42372 (Train=33898, ES=2795, Cal=2795, Test=2884)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 249 (Heavy=155, Light=81, Flat=13)
+
+Fold 3: Total customers = 42372 (Train=33898, ES=2796, Cal=2796, Test=2882)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 261 (Heavy=146, Light=98, Flat=17)
+
+Fold 4: Total customers = 42372 (Train=33898, ES=2795, Cal=2795, Test=2884)
+  [OK] Within-fold pairwise customer overlap: 0 across all 6 split pairs
+  Test Positives: 241 (Heavy=131, Light=99, Flat=11)
+
+  [OK] Cross-fold test customer overlap: 0 across all 10 fold pairs (14420 unique test consumers, 1235 thefts, 76 Flat thefts)
+
+SGCC Mean Counts Across Folds 0--4 (Reconciling Table 2):
+  Training (D_train):     33897.6 total | 2892.0 pos (8.53%)
+  Early-Stopping (D_es):  2795.2 total | 238.0 pos (8.51%)
+  Threshold-Cal (D_cal):  2795.2 total | 238.0 pos (8.51%)
+  Held-Out Test (D_test): 2884.0 total | 247.0 pos (8.56%)
+    -> Test Positives Breakdown: Heavy=144.2, Light=87.6, Flat=15.2
+
+[2/2] Auditing ECL Partition Manifest: ecl_partition_manifest.csv
+========================================================================
+Total manifest rows read: 125000 (Expected 125,000 across 5 folds)
+
+Fold 0: Total windows = 25000 (Train=20004, ES=1824, Test=3172)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+Fold 1: Total windows = 25000 (Train=20001, ES=1731, Test=3268)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+Fold 2: Total windows = 25000 (Train=19998, ES=1819, Test=3183)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+Fold 3: Total windows = 25000 (Train=19998, ES=1737, Test=3265)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+Fold 4: Total windows = 25000 (Train=19999, ES=1743, Test=3258)
+  [OK] Window overlap: 0 across all 3 pairs; Client overlap: 0 across all 3 pairs (Train=296, ES=26, Test=48 clients)
+
+  [OK] Cross-fold held-out client overlap: 0 across all 10 fold pairs (all 370 clients partitioned)
+
+ECL Mean Counts Across Folds 0--4 (Client-Disjoint GroupKFold, Reconciling Table 2):
+  Training (D_train):     20000.0 total | 2000.0 pos (10.00%) | 296 clients
+  Early-Stopping (D_es):  1770.8 total | 170.6 pos (9.63%) | 26 clients
+  Held-Out Test (D_test): 3229.2 total | 329.4 pos (10.20%) | 48 clients
+
+========================================================================
+[PASS] ALL PARTITIONS 100% DISJOINT ACROSS ALL 5 FOLDS (EXIT 0)
+========================================================================

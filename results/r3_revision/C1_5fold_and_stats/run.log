@@ -1,0 +1,85 @@
+[1/46] a34_cell s=0 f=3 | PR=0.6673 ROC=0.9084 F1=0.6052 wall=48.5s T=63C
+[2/46] a34_cell s=0 f=4 | PR=0.5888 ROC=0.8905 F1=0.5312 wall=25.4s T=65C
+[3/46] a34_cell s=1 f=3 | PR=0.6559 ROC=0.9013 F1=0.5964 wall=25.4s T=66C
+[4/46] a34_cell s=1 f=4 | PR=0.5832 ROC=0.8875 F1=0.5413 wall=25.6s T=67C
+[5/46] a34_cell s=2 f=3 | PR=0.6682 ROC=0.9046 F1=0.5967 wall=25.5s T=67C
+[6/46] a34_cell s=2 f=4 | PR=0.5810 ROC=0.8872 F1=0.5492 wall=26.5s T=68C
+[7/46] a34_cell s=3 f=3 | PR=0.6771 ROC=0.9052 F1=0.6027 wall=24.9s T=67C
+[8/46] a34_cell s=3 f=4 | PR=0.6071 ROC=0.8885 F1=0.5589 wall=25.5s T=67C
+[9/46] a34_cell s=4 f=3 | PR=0.6403 ROC=0.9062 F1=0.5892 wall=25.0s T=67C
+[10/46] a34_cell s=4 f=4 | PR=0.5855 ROC=0.8842 F1=0.5420 wall=25.6s T=67C
+[11/46] horln s=0 f=3 | PR=0.6326 ROC=0.8948 F1=0.5691 wall=13.5s T=67C
+[12/46] horln s=0 f=4 | PR=0.5299 ROC=0.8680 F1=0.5164 wall=12.5s T=67C
+[13/46] horln s=1 f=3 | PR=0.6393 ROC=0.9022 F1=0.5915 wall=12.2s T=66C
+[14/46] horln s=1 f=4 | PR=0.5539 ROC=0.8701 F1=0.5251 wall=12.3s T=66C
+[15/46] horln s=2 f=3 | PR=0.6668 ROC=0.8943 F1=0.5862 wall=12.1s T=67C
+[16/46] horln s=2 f=4 | PR=0.5533 ROC=0.8711 F1=0.5111 wall=12.5s T=67C
+[17/46] wdcnn s=0 f=3 | PR=0.4443 ROC=0.8360 F1=0.4467 wall=4.3s T=64C
+[18/46] wdcnn s=0 f=4 | PR=0.3642 ROC=0.7993 F1=0.3921 wall=3.5s T=63C
+[19/46] wdcnn s=1 f=3 | PR=0.4221 ROC=0.8334 F1=0.4363 wall=3.4s T=62C
+[20/46] wdcnn s=1 f=4 | PR=0.3546 ROC=0.7973 F1=0.3629 wall=3.4s T=61C
+[21/46] wdcnn s=2 f=3 | PR=0.4147 ROC=0.8259 F1=0.4358 wall=3.4s T=60C
+[22/46] wdcnn s=2 f=4 | PR=0.3544 ROC=0.7919 F1=0.3748 wall=3.4s T=60C
+[23/46] msdm_net s=0 f=3 | PR=0.4860 ROC=0.8406 F1=0.4584 wall=45.4s T=66C
+[24/46] msdm_net s=0 f=4 | PR=0.4618 ROC=0.8431 F1=0.4520 wall=46.6s T=67C
+[25/46] msdm_net s=1 f=3 | PR=0.4730 ROC=0.8511 F1=0.4230 wall=45.5s T=68C
+[26/46] msdm_net s=1 f=4 | PR=0.4513 ROC=0.8421 F1=0.4421 wall=46.8s T=68C
+[27/46] msdm_net s=2 f=3 | PR=0.4557 ROC=0.8325 F1=0.4379 wall=45.8s T=68C
+[28/46] msdm_net s=2 f=4 | PR=0.4587 ROC=0.8463 F1=0.4490 wall=46.8s T=68C
+[29/46] dkgt s=0 f=3 | PR=0.3483 ROC=0.7901 F1=0.3577 wall=16.2s T=68C
+[30/46] dkgt s=0 f=4 | PR=0.3098 ROC=0.7825 F1=0.3230 wall=16.0s T=68C
+[31/46] dkgt s=1 f=3 | PR=0.3370 ROC=0.7869 F1=0.3545 wall=15.9s T=69C
+[32/46] dkgt s=1 f=4 | PR=0.3058 ROC=0.7780 F1=0.3392 wall=16.2s T=69C
+[33/46] dkgt s=2 f=3 | PR=0.3569 ROC=0.7891 F1=0.3714 wall=16.0s T=69C
+[34/46] dkgt s=2 f=4 | PR=0.2903 ROC=0.7723 F1=0.3296 wall=16.3s T=68C
+[35/46] hybridattn s=0 f=3 | PR=0.6036 ROC=0.8906 F1=0.5411 wall=42.1s T=69C
+[36/46] hybridattn s=0 f=4 | PR=0.5539 ROC=0.8689 F1=0.4912 wall=43.5s T=68C
+[37/46] hybridattn s=1 f=3 | PR=0.6179 ROC=0.8899 F1=0.5695 wall=42.6s T=68C
+[38/46] hybridattn s=1 f=4 | PR=0.5308 ROC=0.8683 F1=0.5077 wall=42.7s T=68C
+[39/46] hybridattn s=2 f=3 | PR=0.5928 ROC=0.8837 F1=0.5655 wall=42.2s T=68C
+[40/46] hybridattn s=2 f=4 | PR=0.5285 ROC=0.8651 F1=0.4932 wall=42.8s T=68C
+[41/46] grud s=0 f=3 | PR=0.2257 ROC=0.6676 F1=0.2761 wall=105.5s T=58C
+[42/46] grud s=0 f=4 | PR=0.1977 ROC=0.6491 F1=0.2417 wall=113.4s T=57C
+[43/46] grud s=1 f=3 | PR=0.2333 ROC=0.6742 F1=0.2625 wall=105.1s T=56C
+[44/46] grud s=1 f=4 | PR=0.1912 ROC=0.6524 F1=0.2481 wall=107.9s T=56C
+[45/46] grud s=2 f=3 | PR=0.2254 ROC=0.6874 F1=0.2655 wall=103.3s T=55C
+[46/46] grud s=2 f=4 | PR=0.2072 ROC=0.6493 F1=0.2415 wall=106.3s T=56C
+[DISJOINT PASS] All 5 test folds pairwise disjoint: 14420 unique test consumers, 1235 unique test thefts (8.56%)
+
+--- 5-Fold SGCC Main Results (Folds 0-4) ---
+       detector  n_cells  n_folds  n_seeds  ap_mean  ap_ci_lo  ap_ci_hi  roc_mean  roc_ci_lo  roc_ci_hi  f1_mean  f1_ci_lo  f1_ci_hi  map100_mean  p100_mean
+          GRU-D       15        5        3 0.200703  0.193503  0.209591  0.671803   0.663889   0.680575 0.259672  0.251890  0.268089     0.409808   0.338667
+      Self-Attn       15        5        3 0.541814  0.522405  0.562500  0.869104   0.863771   0.875236 0.507843  0.490112  0.524440     0.885004   0.753333
+       DKGT-Net       15        5        3 0.307573  0.292835  0.321513  0.777449   0.769111   0.783312 0.336840  0.324706  0.347545     0.609675   0.474667
+          WDCNN       15        5        3 0.368075  0.352529  0.386733  0.809099   0.803527   0.816486 0.386113  0.372452  0.402354     0.686899   0.534667
+           MSDM       15        5        3 0.430917  0.410577  0.449020  0.824929   0.815743   0.833694 0.417176  0.401531  0.432035     0.794201   0.622000
+          HORLN       15        5        3 0.573930  0.548301  0.600787  0.876189   0.869184   0.883288 0.532349  0.511093  0.554650     0.911407   0.776000
+MAMRD (matched)       15        5        3 0.608104  0.589100  0.627707  0.893661   0.887469   0.899019 0.561977  0.545754  0.577419     0.916132   0.820667
+ MAMRD (5-seed)       25        5        5 0.610064  0.596074  0.624573  0.893819   0.889365   0.898088 0.561936  0.550296  0.573370     0.917644   0.826000
+
+[15-Cell Paired MAMRD - HORLN] dAP = +0.0342 [+0.0254, +0.0451], Wilcoxon p = 6.103516e-05, MAMRD>HORLN in 15/15 cells | Friedman chi2=89.26, p=4.322e-17
+
+--- Consumer-Level Bootstrap: 3-Fold vs. 5-Fold (Seed-Ensemble & Single-Model) ---
+          fold_set                    mode  point_ap     ci_lo    ci_hi  n_rep_le_0  p_one_sided_boot
+3_fold (Folds 0-2)           seed_ensemble  0.016055 -0.010248 0.041412       122.0             0.122
+3_fold (Folds 0-2)     single_model_seed_0  0.041712  0.012697 0.070701         0.0             0.000
+3_fold (Folds 0-2)     single_model_seed_1  0.031598  0.002300 0.062585        19.0             0.019
+3_fold (Folds 0-2)     single_model_seed_2  0.041352  0.013223 0.068431         4.0             0.004
+3_fold (Folds 0-2) single_model_3seed_mean  0.038221  0.012844 0.062876         1.0             0.001
+5_fold (Folds 0-4)           seed_ensemble  0.010315 -0.007966 0.029169       156.0             0.156
+5_fold (Folds 0-4)     single_model_seed_0  0.043752  0.022713 0.064429         0.0             0.000
+5_fold (Folds 0-4)     single_model_seed_1  0.028144  0.003095 0.051150        11.0             0.011
+5_fold (Folds 0-4)     single_model_seed_2  0.030631  0.009062 0.051580         2.0             0.002
+5_fold (Folds 0-4) single_model_3seed_mean  0.034176  0.015725 0.052373         0.0             0.000
+
+--- 5-Fold SGCC Mondrian Conformal Audit (@ 80% target) ---
+      detector  n_cells  heavy_hit_pct  heavy_lift  flat_hit_pct  flat_lift  cond_insp_pct  single_insp_pct  workload_red_pct  workload_red_ci_lo  workload_red_ci_hi  flat_recall_pct  flat_viol_pct
+MAMRD (5-seed)       25      40.453713    3.394521      8.131289   2.584894      27.644231        47.209127         35.467861           32.196732           38.817551        85.503316      29.000000
+         HORLN       15      36.282398    3.044501      6.982333   2.219647      32.554054        53.693901         34.085190           27.964247           38.604165        86.753874      25.333333
+          MSDM       15      27.524641    2.309627      5.118854   1.627257      41.841153        64.634191         30.654097           25.327288           35.758861        87.120594      23.333333
+         WDCNN       15      24.825133    2.083108      5.350702   1.700960      45.200912        65.155539         28.903650           25.308437           32.050887        84.077220      31.333333
+         GRU-D       15      14.551612    1.221044      3.709667   1.179284      68.337770        85.404718         19.250049           17.094252           21.334932        83.690038      30.666667
+     Self-Attn       15      33.072253    2.775134      7.319019   2.326678      33.013920        50.273320         29.357807           23.438023           34.252736        85.900090      25.000000
+      DKGT-Net       15      22.534973    1.890937      3.982093   1.265886      51.740201        73.072223         27.717751           25.235946           30.738741        87.111949      26.000000
+
+[DONE] C1 completed in 32.02 min -> ./results/r3_revision/C1_5fold_and_stats

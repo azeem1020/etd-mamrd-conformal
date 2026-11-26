@@ -102,7 +102,7 @@ def main():
         print(f"  Batch Size: {t_cfg.get('batch_size', 128)} (eval: {t_cfg.get('eval_batch_size', 256)}) | Epochs: {t_cfg.get('epochs', 30)}")
     if cfg_dict and "model" in cfg_dict:
         m_cfg = cfg_dict["model"]
-        print(f"  Model Architecture: {m_cfg.get('architecture', 'a34_generic')} ({m_cfg.get('parameters', 970817)} params)")
+        print(f"  Model Architecture: {m_cfg.get('architecture', 'a34_generic')} ({m_cfg.get('parameters', 975076)} params)")
         print(f"  Grid Shapes: SGCC {m_cfg.get('sgcc_input_shape', [147, 7])} | ECL {m_cfg.get('ecl_input_shape', [7, 48])}")
 
     py_exec = sys.executable
@@ -120,7 +120,7 @@ def main():
     verify_script = THIS / "verify_partition_manifests.py"
     if verify_script.exists():
         run_step(
-            "1. Partition manifest disjointness audit",
+            "1. Partition manifest disjointness audit (active 5-fold manifests; Steps 2-5 regenerate legacy Folds 0-2 cache)",
             [py_exec, str(verify_script)],
             cwd=THIS,
         )

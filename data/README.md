@@ -1,7 +1,7 @@
 # Data
 
 The raw datasets are not redistributed here (size and licensing). Obtain them as
-below and point the scripts at them (see the *Path configuration* table in the
+below and point the scripts at them (see Section 4 of the
 top-level `README.md`).
 
 ## SGCC — State Grid Corporation of China electricity-theft benchmark

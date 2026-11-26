@@ -220,7 +220,7 @@ else:
     print(f"[INFO] SGCC raw CSV not found at {SGCC_PATH}. Loading precomputed verified partition manifests.")
     manifest_fstats = OUT_R2 / "sgcc_fold_counts.csv"
     if not manifest_fstats.exists():
-        manifest_fstats = THIS.parent / "partition_manifests" / "sgcc_fold_counts.csv"
+        manifest_fstats = THIS.parent / "partition_manifests" / "archive_r2" / "sgcc_fold_counts.csv"
     if manifest_fstats.exists():
         df_fstats = pd.read_csv(manifest_fstats)
         print(df_fstats.to_string(index=False))
@@ -325,7 +325,7 @@ else:
     print(f"[INFO] ECL raw dataset not found at {ECL_PATH}. Loading precomputed verified partition manifests.")
     manifest_ecl = OUT_R2 / "ecl_fold_counts.csv"
     if not manifest_ecl.exists():
-        manifest_ecl = THIS.parent / "partition_manifests" / "ecl_fold_counts.csv"
+        manifest_ecl = THIS.parent / "partition_manifests" / "archive_r2" / "ecl_fold_counts.csv"
     if manifest_ecl.exists():
         df_ecl_sum = pd.read_csv(manifest_ecl)
         print(df_ecl_sum.to_string(index=False))

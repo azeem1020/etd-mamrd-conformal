@@ -6,14 +6,18 @@ experiment:
   benchmark: SGCC
   data_path: data/SGCC.csv
   output_dir: results/phase_n_retrained
+  r3_output_dir: results/r3_revision
   seed_discipline: [0, 1, 2]
-  fold_discipline: [0, 1, 2]
+  # Full Revision 3 evaluation covers Folds 0-4 (Folds 0-2 in output_dir; Folds 3-4 in
+  # r3_output_dir/C1_5fold_and_stats/raw_folds34/). Controlled ablations (S0-S4) and C2/C5/C7
+  # sensitivity suites evaluate Folds 0-2.
+  fold_discipline: [0, 1, 2, 3, 4]
   extended_seeds: [3, 4]
 
 model:
   architecture: a34_generic
   description: "Missingness-Aware Multi-Representation Detector (MAMRD)"
-  parameters: 975076  # 0.97M total (974,833 trainable; 243 frozen Laplacian stencil weights)
+  parameters: 975076  # 0.97M trainable (975,076 total: 974,833 trainable; 243 frozen Laplacian stencil weights)
   branches:
     - branch_1_wide_bimamba2_90
     - branch_2_value_2d_laplacian_cnn_60
@@ -43,9 +47,9 @@ training:
 evaluation:
   cohorts:
     # Outer split: shuffled (unstratified) 5-fold KFold, random_state 0 (zkmix_lab.data.KFoldSpec,
-    # family "random"); Folds 0-2 are evaluated. Each held-out fold (20 %) is split by stratified
-    # sampling into three parts (rng = default_rng(fold)).
-    outer_split: {method: KFold, shuffle: true, random_state: 0, n_folds: 5, evaluated_folds: [0, 1, 2]}
+    # family "random"); Revision 3 evaluates all Folds 0-4. Each held-out fold (20 %) is split by
+    # stratified sampling into three parts (rng = default_rng(fold)).
+    outer_split: {method: KFold, shuffle: true, random_state: 0, n_folds: 5, evaluated_folds: [0, 1, 2, 3, 4]}
     training_fraction: 0.80
     heldout_fraction: 0.20
     heldout_split:          # order as returned by _stratified_three_way_split, SGCC (run_n_clean.py)

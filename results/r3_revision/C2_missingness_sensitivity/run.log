@@ -1,0 +1,141 @@
+
+--- Part A: Cached Test-Set Cohort Exclusion Sensitivity (3-Fold) ---
+               detector                     subset  n_test_mean  prev_pct  ap_mean  roc_mean
+        MAMRD (matched)       full_cohort (42,372)  2884.666667  8.470091 0.597459  0.891723
+        MAMRD (matched)          excl_all_nan (-5)  2884.333333  8.471108 0.597604  0.891770
+        MAMRD (matched)     excl_all_zero (-2,109)  2729.333333  8.890417 0.603165  0.891110
+        MAMRD (matched)    excl_conflicting (-497)  2848.666667  8.542368 0.599836  0.893128
+        MAMRD (matched) excl_all_nosignal (-2,114)  2729.000000  8.891544 0.603311  0.891160
+        MAMRD (matched)      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
+            A34_no-miss       full_cohort (42,372)  2884.666667  8.470091 0.570386  0.883701
+            A34_no-miss          excl_all_nan (-5)  2884.333333  8.471108 0.570607  0.883760
+            A34_no-miss     excl_all_zero (-2,109)  2729.333333  8.890417 0.575660  0.882644
+            A34_no-miss    excl_conflicting (-497)  2848.666667  8.542368 0.572804  0.885168
+            A34_no-miss excl_all_nosignal (-2,114)  2729.000000  8.891544 0.575882  0.882707
+            A34_no-miss      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
+                  HORLN       full_cohort (42,372)  2884.666667  8.470091 0.559239  0.871362
+                  HORLN          excl_all_nan (-5)  2884.333333  8.471108 0.559434  0.871419
+                  HORLN     excl_all_zero (-2,109)  2729.333333  8.890417 0.571186  0.872956
+                  HORLN    excl_conflicting (-497)  2848.666667  8.542368 0.562522  0.873813
+                  HORLN excl_all_nosignal (-2,114)  2729.000000  8.891544 0.571387  0.873017
+                  HORLN      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
+              Self-Attn       full_cohort (42,372)  2884.666667  8.470091 0.522174  0.863342
+              Self-Attn          excl_all_nan (-5)  2884.333333  8.471108 0.522319  0.863396
+              Self-Attn     excl_all_zero (-2,109)  2729.333333  8.890417 0.529190  0.863233
+              Self-Attn    excl_conflicting (-497)  2848.666667  8.542368 0.524690  0.865226
+              Self-Attn excl_all_nosignal (-2,114)  2729.000000  8.891544 0.529338  0.863290
+              Self-Attn      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
+                   MSDM       full_cohort (42,372)  2884.666667  8.470091 0.408573  0.813128
+                   MSDM          excl_all_nan (-5)  2884.333333  8.471108 0.408805  0.813197
+                   MSDM     excl_all_zero (-2,109)  2729.333333  8.890417 0.412939  0.811387
+                   MSDM    excl_conflicting (-497)  2848.666667  8.542368 0.411322  0.816036
+                   MSDM excl_all_nosignal (-2,114)  2729.000000  8.891544 0.413173  0.811460
+                   MSDM      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
+                  WDCNN       full_cohort (42,372)  2884.666667  8.470091 0.351860  0.805810
+                  WDCNN          excl_all_nan (-5)  2884.333333  8.471108 0.351861  0.805793
+                  WDCNN     excl_all_zero (-2,109)  2729.333333  8.890417 0.354113  0.801292
+                  WDCNN    excl_conflicting (-497)  2848.666667  8.542368 0.353000  0.805907
+                  WDCNN excl_all_nosignal (-2,114)  2729.000000  8.891544 0.354114  0.801273
+                  WDCNN      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
+               DKGT-Net       full_cohort (42,372)  2884.666667  8.470091 0.296174  0.773682
+               DKGT-Net          excl_all_nan (-5)  2884.333333  8.471108 0.296176  0.773665
+               DKGT-Net     excl_all_zero (-2,109)  2729.333333  8.890417 0.298225  0.768437
+               DKGT-Net    excl_conflicting (-497)  2848.666667  8.542368 0.297130  0.773613
+               DKGT-Net excl_all_nosignal (-2,114)  2729.000000  8.891544 0.298227  0.768417
+               DKGT-Net      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
+                  GRU-D       full_cohort (42,372)  2884.666667  8.470091 0.192213  0.677459
+                  GRU-D          excl_all_nan (-5)  2884.333333  8.471108 0.192610  0.677543
+                  GRU-D     excl_all_zero (-2,109)  2729.333333  8.890417 0.196053  0.667717
+                  GRU-D    excl_conflicting (-497)  2848.666667  8.542368 0.193091  0.676506
+                  GRU-D excl_all_nosignal (-2,114)  2729.000000  8.891544 0.196473  0.667805
+                  GRU-D      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
+Logistic-MaskOnly (30f)       full_cohort (42,372)  2884.666667  8.470091 0.167954  0.650718
+Logistic-MaskOnly (30f)          excl_all_nan (-5)  2884.333333  8.471108 0.168828  0.650799
+Logistic-MaskOnly (30f)     excl_all_zero (-2,109)  2729.333333  8.890417 0.181872  0.652713
+Logistic-MaskOnly (30f)    excl_conflicting (-497)  2848.666667  8.542368 0.170873  0.653600
+Logistic-MaskOnly (30f) excl_all_nosignal (-2,114)  2729.000000  8.891544 0.182894  0.652799
+Logistic-MaskOnly (30f)      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
+
+=== PART B: CLEAN-COHORT RETRAINING (N=40,258) ===
+  [clean_mamrd s=0 f=0] PR=0.6181 ROC=0.8930 F1=0.5760 wall=36.3s
+  [clean_mamrd s=0 f=1] PR=0.6165 ROC=0.9007 F1=0.5671 wall=24.7s
+  [clean_mamrd s=0 f=2] PR=0.5594 ROC=0.8797 F1=0.5406 wall=24.6s
+  [clean_mamrd s=1 f=0] PR=0.6263 ROC=0.8937 F1=0.5935 wall=24.6s
+  [clean_mamrd s=1 f=1] PR=0.6032 ROC=0.9009 F1=0.5962 wall=25.5s
+  [clean_mamrd s=1 f=2] PR=0.5746 ROC=0.8825 F1=0.5427 wall=25.0s
+  [clean_mamrd s=2 f=0] PR=0.5966 ROC=0.8873 F1=0.5726 wall=24.8s
+  [clean_mamrd s=2 f=1] PR=0.6232 ROC=0.9017 F1=0.5986 wall=25.6s
+  [clean_mamrd s=2 f=2] PR=0.5672 ROC=0.8831 F1=0.5290 wall=24.8s
+  [clean_a34_nomiss s=0 f=0] PR=0.5991 ROC=0.8836 F1=0.5272 wall=21.5s
+  [clean_a34_nomiss s=0 f=1] PR=0.6042 ROC=0.8914 F1=0.5492 wall=22.1s
+  [clean_a34_nomiss s=0 f=2] PR=0.5060 ROC=0.8608 F1=0.5289 wall=21.7s
+  [clean_a34_nomiss s=1 f=0] PR=0.5779 ROC=0.8755 F1=0.5275 wall=21.5s
+  [clean_a34_nomiss s=1 f=1] PR=0.5963 ROC=0.8883 F1=0.5613 wall=22.0s
+  [clean_a34_nomiss s=1 f=2] PR=0.5047 ROC=0.8629 F1=0.4666 wall=21.6s
+  [clean_a34_nomiss s=2 f=0] PR=0.5969 ROC=0.8910 F1=0.5194 wall=21.6s
+  [clean_a34_nomiss s=2 f=1] PR=0.6021 ROC=0.8965 F1=0.5592 wall=22.0s
+  [clean_a34_nomiss s=2 f=2] PR=0.5181 ROC=0.8631 F1=0.4954 wall=21.6s
+  [clean_horln s=0 f=0] PR=0.5877 ROC=0.8849 F1=0.5333 wall=12.2s
+  [clean_horln s=0 f=1] PR=0.5508 ROC=0.8936 F1=0.5130 wall=12.6s
+  [clean_horln s=0 f=2] PR=0.5489 ROC=0.8725 F1=0.5278 wall=12.3s
+  [clean_horln s=1 f=0] PR=0.6002 ROC=0.8804 F1=0.5584 wall=12.3s
+  [clean_horln s=1 f=1] PR=0.5957 ROC=0.9011 F1=0.5574 wall=12.6s
+  [clean_horln s=1 f=2] PR=0.5685 ROC=0.8712 F1=0.5583 wall=12.3s
+  [clean_horln s=2 f=0] PR=0.6081 ROC=0.8883 F1=0.5685 wall=12.3s
+  [clean_horln s=2 f=1] PR=0.5663 ROC=0.8936 F1=0.4912 wall=12.5s
+  [clean_horln s=2 f=2] PR=0.5665 ROC=0.8759 F1=0.5431 wall=12.2s
+
+=== PART C: TRUE 3-WAY NEURAL MISSINGNESS VS. CONSUMPTION DECOMPOSITION ===
+  [mask_only_neural s=0 f=0] PR=0.5221 ROC=0.8580 F1=0.5095 wall=24.9s
+  [mask_only_neural s=0 f=1] PR=0.4960 ROC=0.8485 F1=0.5000 wall=25.4s
+  [mask_only_neural s=0 f=2] PR=0.5655 ROC=0.8750 F1=0.5620 wall=25.9s
+  [mask_only_neural s=1 f=0] PR=0.5281 ROC=0.8599 F1=0.5118 wall=25.4s
+  [mask_only_neural s=1 f=1] PR=0.4999 ROC=0.8601 F1=0.5021 wall=25.9s
+  [mask_only_neural s=1 f=2] PR=0.5426 ROC=0.8689 F1=0.5720 wall=25.4s
+  [mask_only_neural s=2 f=0] PR=0.5277 ROC=0.8635 F1=0.5358 wall=24.8s
+  [mask_only_neural s=2 f=1] PR=0.4925 ROC=0.8560 F1=0.5033 wall=25.1s
+  [mask_only_neural s=2 f=2] PR=0.5358 ROC=0.8750 F1=0.5630 wall=25.2s
+  [consumption_only_linear_interp s=0 f=0] PR=0.3465 ROC=0.8157 F1=0.3958 wall=21.6s
+  [consumption_only_linear_interp s=0 f=1] PR=0.3511 ROC=0.7981 F1=0.3799 wall=22.1s
+  [consumption_only_linear_interp s=0 f=2] PR=0.3971 ROC=0.8087 F1=0.3872 wall=22.3s
+  [consumption_only_linear_interp s=1 f=0] PR=0.3321 ROC=0.8011 F1=0.3453 wall=21.9s
+  [consumption_only_linear_interp s=1 f=1] PR=0.3599 ROC=0.8072 F1=0.3601 wall=22.8s
+  [consumption_only_linear_interp s=1 f=2] PR=0.3637 ROC=0.7956 F1=0.4071 wall=22.5s
+  [consumption_only_linear_interp s=2 f=0] PR=0.3380 ROC=0.8012 F1=0.3541 wall=22.0s
+  [consumption_only_linear_interp s=2 f=1] PR=0.3703 ROC=0.8088 F1=0.3737 wall=22.3s
+  [consumption_only_linear_interp s=2 f=2] PR=0.3882 ROC=0.8091 F1=0.4045 wall=22.7s
+  [consumption_only_mean_fill s=0 f=0] PR=0.3575 ROC=0.8194 F1=0.3716 wall=22.1s
+  [consumption_only_mean_fill s=0 f=1] PR=0.3934 ROC=0.8034 F1=0.3847 wall=22.4s
+  [consumption_only_mean_fill s=0 f=2] PR=0.3855 ROC=0.8017 F1=0.4098 wall=22.8s
+  [consumption_only_mean_fill s=1 f=0] PR=0.3639 ROC=0.8078 F1=0.3443 wall=22.2s
+  [consumption_only_mean_fill s=1 f=1] PR=0.4038 ROC=0.8152 F1=0.4049 wall=22.4s
+  [consumption_only_mean_fill s=1 f=2] PR=0.3687 ROC=0.7918 F1=0.4168 wall=22.6s
+  [consumption_only_mean_fill s=2 f=0] PR=0.3829 ROC=0.8175 F1=0.3718 wall=22.2s
+  [consumption_only_mean_fill s=2 f=1] PR=0.4138 ROC=0.8120 F1=0.4053 wall=22.7s
+  [consumption_only_mean_fill s=2 f=2] PR=0.3889 ROC=0.8095 F1=0.4000 wall=22.5s
+
+--- Part B Summary ---
+             group          variant  n_cells  ap_mean  ap_ci_lo  ap_ci_hi  roc_mean  roc_ci_lo  roc_ci_hi  f1_mean  f1_ci_lo  f1_ci_hi  map100_mean  p100_mean
+clean_cohort_40258      clean_mamrd        9 0.598349  0.581338  0.612297  0.891396   0.886176   0.896538 0.568489  0.551479  0.583745     0.881499   0.793333
+clean_cohort_40258 clean_a34_nomiss        9 0.567262  0.535672  0.589572  0.879235   0.870110   0.887529 0.526088  0.502417  0.542382     0.864251   0.770000
+clean_cohort_40258      clean_horln        9 0.576965  0.563596  0.590879  0.884615   0.878309   0.891381 0.539003  0.520298  0.552129     0.889054   0.760000
+
+--- Part C Summary (True 3-Way Neural Comparison) ---
+          group                        variant  n_cells  ap_mean  ap_ci_lo  ap_ci_hi  roc_mean  roc_ci_lo  roc_ci_hi  f1_mean  f1_ci_lo  f1_ci_hi  map100_mean  p100_mean
+full_42372_3way               mask_only_neural        9 0.523359  0.509172  0.539031  0.862774   0.857587   0.868219 0.528841  0.512585  0.549208     0.862267   0.730000
+full_42372_3way consumption_only_linear_interp        9 0.360764  0.349116  0.377143  0.805055   0.801475   0.809126 0.378639  0.363785  0.391483     0.697709   0.517778
+full_42372_3way     consumption_only_mean_fill        9 0.384265  0.372737  0.395464  0.808687   0.802601   0.813578 0.389910  0.372992  0.402341     0.723979   0.566667
+full_42372_3way          a34_no_miss_token_ref        9 0.570386  0.554524  0.594478  0.883698   0.877523   0.889373 0.527595  0.512857  0.548821     0.905920   0.766667
+full_42372_3way             combined_mamrd_ref        9 0.597462  0.575965  0.618803  0.891724   0.884192   0.900197 0.556631  0.537507  0.576881     0.913280   0.807778
+
+--- C2 Paired Contrasts ---
+                                                              contrast     ap_a     ap_b  delta_ap     ci_lo     ci_hi    rel_pct  wilcoxon_p  wins  n_cells
+                                      CleanCohort: MAMRD - A34_no_miss 0.598349 0.567262  0.031087  0.017221  0.047567   5.480193    0.007812     8        9
+                                            CleanCohort: MAMRD - HORLN 0.598349 0.576965  0.021384  0.007843  0.040555   3.706312    0.039062     8        9
+                 3Way: Combined MAMRD - ConsumptionOnly (LinearInterp) 0.597462 0.360764  0.236698  0.217297  0.254651  65.610194    0.003906     9        9
+                     3Way: Combined MAMRD - ConsumptionOnly (MeanFill) 0.597462 0.384265  0.213197  0.182880  0.240112  55.481642    0.003906     9        9
+                                 3Way: Combined MAMRD - MaskOnlyNeural 0.597462 0.523359  0.074103  0.063831  0.085102  14.159027    0.003906     9        9
+                 3Way: ConsumptionOnly (LinearInterp) - MaskOnlyNeural 0.360764 0.523359 -0.162595 -0.177051 -0.145955 -31.067633    0.003906     0        9
+3Way: A34_no_miss (tau_base sentinel) - ConsumptionOnly (LinearInterp) 0.570386 0.360764  0.209622  0.194830  0.220741  58.104981    0.003906     9        9
+
+[DONE] C2 completed in 22.31 min -> ./results/r3_revision/C2_missingness_sensitivity

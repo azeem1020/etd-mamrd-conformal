@@ -1,0 +1,17 @@
+% LaTeX table fragment for \input{} in manuscript/supplementary; requires \revthree, \name, \prauc, \rocauc, \ci macros.
+\begin{table*}[!t]
+\centering
+\caption{\revthree{Prevalence-matched per-group detectability of \name{} on SGCC across all five folds:} negatives subsampled within each group to a common prevalence, $100$ draws averaged per cell, contrasts paired over \revthree{$n=25$ cells (BCa $95\,\%$ CI). The coarse consumption hierarchy is resolved (Friedman $\chi^2_4 = 40.22$, $p = 3.89 \times 10^{-8}$).}}
+\label{tab:matched}
+\begin{tabular}{lcc}
+\toprule Contrast & $\Delta\prauc$~(95\,\% CI) & Resolved \\
+\midrule
+Heavy ($-$) $-$ Flat              & \revthree{$+0.134$~\ci{+0.095}{+0.170}} & \revthree{yes} \\
+Heavy (+) $-$ Flat                & \revthree{$+0.128$~\ci{+0.093}{+0.168}} & \revthree{yes} \\
+Flat $-$ Light (+)                & \revthree{$-0.110$~\ci{-0.133}{-0.091}} & \revthree{yes} \\
+Flat $-$ Light ($-$)              & \revthree{$-0.061$~\ci{-0.104}{-0.020}} & \revthree{yes} \\
+Heavy ($-$) $-$ Light (+)         & \revthree{$+0.024$~\ci{-0.011}{+0.059}} & \revthree{no} \\
+Heavy (pooled) $-$ Light (pooled) & \revthree{$+0.036$~\ci{+0.006}{+0.062}} & \revthree{yes} \\
+\bottomrule
+\end{tabular}
+\end{table*}

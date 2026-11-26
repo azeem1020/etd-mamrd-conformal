@@ -5,9 +5,15 @@ experiment:
   name: mamrd_ecl_benchmark
   benchmark: ECL
   data_path: data/LD2011_2014.txt
-  output_dir: results/phase_n_retrained/ecl_trust
+  # Authoritative 5-fold client-disjoint GroupKFold protocol (legacy window-level R2 outputs
+  # remain in results/phase_n_retrained/ecl_trust).
+  output_dir: results/r3_revision/C3_ecl_client_disjoint
+  split_protocol: client_disjoint_groupkfold
+  n_clients: 370
+  clients_per_fold: {train: 296, early_stop: 26, test: 48}
+  client_overlap: 0
   seed_discipline: [0, 1, 2]
-  fold_discipline: [0, 1, 2]
+  fold_discipline: [0, 1, 2, 3, 4]
 
 dataset:
   resample_interval: "30min"

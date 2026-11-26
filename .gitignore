@@ -72,3 +72,8 @@ results/_archive_phase_n_pre_retrain/r2_audit/*_partition_manifest.csv
 !results/phase_n_retrained/logs/*.log
 !results/phase_n_retrained/master_retrain.log
 !results/phase_n_retrained/master_retrain_r3.log
+
+# Revision 3 experiment and Tier-1 reproduction logs
+!results/r3_revision/*/run.log
+!results/r3_revision/_3fold_diagnostics/*/run.log
+!results/r3_revision/logs/*.log

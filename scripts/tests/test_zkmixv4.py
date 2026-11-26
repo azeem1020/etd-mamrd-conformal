@@ -142,7 +142,18 @@ class TestOutputContract:
                     d_mult = 2
             x   = _batch(d_mult=d_mult)
             eng = torch.randn(4, cfg.eng_features_n) if (cfg is not None and getattr(cfg, 'use_eng_features', False)) else None
-            out = m(x, eng_feat=eng) if eng is not None else m(x)
+            with torch.no_grad():
+                try:
+                    out = m(x, eng_feat=eng) if eng is not None else m(x)
+                except RuntimeError as exc:
+                    if "is_cuda()" not in str(exc):
+                        raise
+                    if not torch.cuda.is_available():
+                        continue  # Mamba2 causal_conv1d kernel requires CUDA
+                    m = m.cuda()
+                    x_c = x.cuda()
+                    eng_c = eng.cuda() if eng is not None else None
+                    out = m(x_c, eng_feat=eng_c) if eng_c is not None else m(x_c)
             assert out.shape == (4,), \
                 f"Arm {name}: forward must return (N,); got {tuple(out.shape)}."
 

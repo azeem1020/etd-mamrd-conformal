@@ -1,0 +1,20 @@
+% LaTeX table fragment for \input{} in manuscript/supplementary; requires \revthree, \name, \prauc, \rocauc, \ci macros.
+\begin{table*}[!t]
+\centering\footnotesize
+\setlength{\tabcolsep}{1.5pt}
+\caption{\revthree{Cross-detector per-group $\prauc$ on SGCC across all five evaluation folds (means; \name{} $n=25$, each baseline $n=15$, paired \name{}$-$best-baseline gap over the $15$ matched cells).} Best values per row in bold.}
+\label{tab:perstratum}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccccccc@{}}
+\toprule Group & WDCNN & HORLN & Self-Attn & GRU-D & MSDM & DKGT & \name{} ($n{=}25$) & Gap vs.\ Best ($n{=}15$) \\
+\midrule
+Heavy (+) & \revthree{0.504} & \revthree{0.663} & \revthree{0.633} & \revthree{0.262} & \revthree{0.578} & \revthree{0.439} & \revthree{\textbf{0.684}} & \revthree{$+0.019$~\ci{+0.001}{+0.036}} \\
+Heavy ($-$) & \revthree{0.452} & \revthree{0.666} & \revthree{0.606} & \revthree{0.311} & \revthree{0.500} & \revthree{0.370} & \revthree{\textbf{0.688}} & \revthree{$+0.017$~\ci{+0.000}{+0.034}} \\
+Light (+) & \revthree{0.311} & \revthree{0.527} & \revthree{0.505} & \revthree{0.160} & \revthree{0.325} & \revthree{0.265} & \revthree{\textbf{0.582}} & \revthree{$+0.054$~\ci{+0.009}{+0.095}} \\
+Light ($-$) & \revthree{0.221} & \revthree{0.425} & \revthree{0.371} & \revthree{0.182} & \revthree{0.292} & \revthree{0.193} & \revthree{\textbf{0.507}} & \revthree{$+0.078$~\ci{+0.044}{+0.119}} \\
+Flat & \revthree{0.162} & \revthree{0.303} & \revthree{\textbf{0.334}} & \revthree{0.113} & \revthree{0.196} & \revthree{0.157} & \revthree{0.310} & \revthree{$-0.023$~\ci{-0.066}{+0.013}} \\
+\midrule
+Aggregate & \revthree{0.368} & \revthree{0.574} & \revthree{0.542} & \revthree{0.201} & \revthree{0.431} & \revthree{0.308} & \revthree{\textbf{0.610}} & \revthree{$+0.034$~\ci{+0.025}{+0.045}} \\
+\bottomrule
+\end{tabular*}
+\par\vspace{2pt}\raggedright\scriptsize\textit{Note:} \revthree{Primary model comparisons and paired gaps use the 15 matched seed--fold cells (Folds 0--4 $\times$ Seeds 0--2) common to all architectures (MAMRD 15-cell matched means are: Heavy (+) 0.682, Heavy ($-$) 0.683, Light (+) 0.581, Light ($-$) 0.504, Flat 0.310, Aggregate 0.608). The MAMRD column reports all 25 evaluated cells (Seeds 0--4 $\times$ Folds 0--4).}
+\end{table*}

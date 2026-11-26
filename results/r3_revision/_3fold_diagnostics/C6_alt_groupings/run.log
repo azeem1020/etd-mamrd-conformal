@@ -1,0 +1,64 @@
+=== C6: ALTERNATIVE MONDRIAN GROUPINGS (data=./data/SGCC.csv) ===
+1,029 modeled days: 735 Mon-Fri days, 294 Sat-Sun days
+Calendar router cutoffs (Folds 0-2): [
+  {
+    "fold": 0,
+    "orig_tau": 0.013557781977195003,
+    "orig_med_d": 7.237148664343784,
+    "orig_med_r": 5.895033444816054,
+    "cal_tau": 0.015659638413410164,
+    "cal_med_d": 6.41137122002085,
+    "cal_med_r": 7.076560810810818
+  },
+  {
+    "fold": 1,
+    "orig_tau": 0.013822113902232473,
+    "orig_med_d": 7.177355889724311,
+    "orig_med_r": 5.904923619271442,
+    "cal_tau": 0.015775739212068405,
+    "cal_med_d": 6.414264214046823,
+    "cal_med_r": 7.026852216748761
+  },
+  {
+    "fold": 2,
+    "orig_tau": 0.013527753339069575,
+    "orig_med_d": 7.195718870346597,
+    "orig_med_r": 5.835800781249996,
+    "cal_tau": 0.015531908045520071,
+    "cal_med_d": 6.396623154981555,
+    "cal_med_r": 7.041838795970881
+  }
+]
+
+[SANITY PASS] original_block_contrast @ 0.80 MAMRD matches Table 6: Cond=28.6% Single=49.1% Red=35.5%
+
+--- MAMRD Across 4 Grouping Schemes (@ 0.80, 0.90, 0.95) ---
+                  scheme  guarantee  cond_insp_pct  single_insp_pct  workload_red_pct  workload_red_ci_lo_pct  workload_red_ci_hi_pct  overall_realized_recall_pct
+ original_block_contrast       0.80      28.644029        49.059136         35.527696               30.173167               40.439871                    81.283349
+ original_block_contrast       0.90      49.092862        83.352737         37.180393               32.208443               41.168674                    91.199825
+ original_block_contrast       0.95      67.410256       100.000000         32.589744               29.399038               35.801908                    96.064283
+calendar_weekday_weekend       0.80      27.175791        42.036498         31.515165               27.751939               35.701599                    80.998885
+calendar_weekday_weekend       0.90      50.520444        86.101871         38.166144               35.370034               40.157498                    91.108882
+calendar_weekday_weekend       0.95      68.225687       100.000000         31.774313               27.343908               35.776471                    96.022898
+      magnitude_tertiles       0.80      26.859090        35.048741         22.192894               19.966377               24.002943                    81.229733
+      magnitude_tertiles       0.90      46.427119        58.316701         18.557631               15.428486               21.149926                    90.909932
+      magnitude_tertiles       0.95      67.033495        82.158235         17.588429               16.253174               19.228428                    96.209362
+ magnitude_x_variability       0.80      29.462924        57.427812         42.895670               38.548786               47.188258                    81.552921
+ magnitude_x_variability       0.90      53.397320        97.153615         44.656459               40.889611               47.965230                    91.433873
+ magnitude_x_variability       0.95      70.593671       100.000000         29.406329               24.171991               34.170047                    96.598862
+
+--- MAMRD Per-Group Eligibility & Recall Details (@ 0.80) ---
+                  scheme           group  base_rate_pct  ncal_mean  ncal_min  finite_quantile_pct  realized_recall_pct  target_violation_pct  hit_rate_pct     lift
+ original_block_contrast           Heavy      12.309398  73.613333        57           100.000000            81.259469             40.333333     39.239282 3.187750
+ original_block_contrast           Light       6.779184  40.273333        30           100.000000            80.838170             44.666667     23.054584 3.400790
+ original_block_contrast            Flat       3.217158   8.113333         3            98.000000            83.765803             32.333333      7.838353 2.436421
+calendar_weekday_weekend           Heavy      11.860209  71.506667        52           100.000000            80.916186             41.000000     39.163347 3.302079
+calendar_weekday_weekend           Light       7.262570  43.430000        33           100.000000            80.399967             43.333333     23.227871 3.198299
+calendar_weekday_weekend            Flat       2.916667   7.063333         1            95.333333            85.144994             27.333333      8.820654 3.024224
+      magnitude_tertiles        High_kWh      13.458904  65.343333        51           100.000000            80.972957             41.333333     41.661986 3.095496
+      magnitude_tertiles         Mid_kWh       7.635983  36.753333        20           100.000000            80.718863             43.000000     26.217540 3.433420
+      magnitude_tertiles         Low_kWh       4.221912  19.903333        11           100.000000            82.661954             31.333333     13.510698 3.200137
+ magnitude_x_variability HighMag_HighVar      13.362193  76.966667        63           100.000000            80.861904             43.666667     42.687330 3.194635
+ magnitude_x_variability  HighMag_LowVar       3.958091   5.803333         1            86.666667            88.001190             22.666667      9.744090 2.461816
+ magnitude_x_variability  LowMag_HighVar       9.673367  12.893333         4           100.000000            81.490503             39.000000     27.442321 2.836894
+ magnitude_x_variability   LowMag_LowVar       4.499151  26.336667        16           100.000000            82.204097             35.666667     14.327674 3.184528
