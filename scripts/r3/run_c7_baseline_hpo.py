@@ -286,12 +286,18 @@ def main() -> None:
             r, skipped = get_or_run(f"wdcnn_lininterp_{s}_{f}.csv", X_lin, "wdcnn_linear_interp", "wdcnn", s, f, 3e-4, 1e-4)
             wd_cells.append(r)
             log(f"  [{'SKIP' if skipped else 'RUN'}] wdcnn_lininterp s={s} f={f} PR={r['pr_auc']:.4f}")
-    df_wd = pd.DataFrame(wd_cells)
-    alo, ahi = bca_ci(df_wd["pr_auc"].astype(float).values)
+    df_wd = pd.DataFrame(wd_cells).sort_values(["seed", "fold"])
+    wd_aps = df_wd["pr_auc"].astype(float).values
+    alo, ahi = bca_ci(wd_aps)
+    wd_diff = np.array(mamrd_ref) - wd_aps
+    wd_dlo, wd_dhi = bca_ci(wd_diff)
+    _, wd_p = wilcoxon(wd_diff, zero_method="wilcox", alternative="two-sided", method="exact")
     wd_sum = [{
         "variant": "wdcnn_linear_interp", "n_cells": 9,
-        "ap_mean": float(df_wd["pr_auc"].astype(float).mean()), "ap_ci_lo": alo, "ap_ci_hi": ahi,
+        "ap_mean": float(wd_aps.mean()), "ap_ci_lo": alo, "ap_ci_hi": ahi,
         "roc_mean": float(df_wd["roc_auc"].astype(float).mean()), "f1_mean": float(df_wd["f1"].astype(float).mean()),
+        "mamrd_minus_var_dAP": float(wd_diff.mean()), "dAP_ci_lo": wd_dlo, "dAP_ci_hi": wd_dhi,
+        "wilcoxon_p": float(wd_p), "mamrd_wins_of_9": int(np.sum(wd_diff > 0)),
     }]
     pd.DataFrame(wd_sum).to_csv(OUT / "c7_wdcnn_interp_summary.csv", index=False)
 
@@ -308,12 +314,18 @@ def main() -> None:
                                     "hybridattn_finardi_qt", "hybridattn", s, f, 3e-4, 1e-4)
             fin_cells.append(r)
             log(f"  [{'SKIP' if skipped else 'RUN'}] hybridattn_finardi_qt s={s} f={f} PR={r['pr_auc']:.4f}")
-    df_fin = pd.DataFrame(fin_cells)
-    alo, ahi = bca_ci(df_fin["pr_auc"].astype(float).values)
+    df_fin = pd.DataFrame(fin_cells).sort_values(["seed", "fold"])
+    fin_aps = df_fin["pr_auc"].astype(float).values
+    alo, ahi = bca_ci(fin_aps)
+    fin_diff = np.array(mamrd_ref) - fin_aps
+    fin_dlo, fin_dhi = bca_ci(fin_diff)
+    _, fin_p = wilcoxon(fin_diff, zero_method="wilcox", alternative="two-sided", method="exact")
     fin_sum = [{
         "variant": "hybridattn_finardi_native_qt10", "n_cells": 9,
-        "ap_mean": float(df_fin["pr_auc"].astype(float).mean()), "ap_ci_lo": alo, "ap_ci_hi": ahi,
+        "ap_mean": float(fin_aps.mean()), "ap_ci_lo": alo, "ap_ci_hi": ahi,
         "roc_mean": float(df_fin["roc_auc"].astype(float).mean()), "f1_mean": float(df_fin["f1"].astype(float).mean()),
+        "mamrd_minus_var_dAP": float(fin_diff.mean()), "dAP_ci_lo": fin_dlo, "dAP_ci_hi": fin_dhi,
+        "wilcoxon_p": float(fin_p), "mamrd_wins_of_9": int(np.sum(fin_diff > 0)),
     }]
     pd.DataFrame(fin_sum).to_csv(OUT / "c7_finardi_native_9cell.csv", index=False)
     pd.DataFrame(tuned_summary).to_csv(OUT / "c7_tuned_baselines_summary.csv", index=False)

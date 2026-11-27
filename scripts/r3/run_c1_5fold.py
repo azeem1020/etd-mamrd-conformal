@@ -475,13 +475,23 @@ def compute_all_stats(y_all: np.ndarray, g_all: np.ndarray, m_all: np.ndarray, f
                 ci, ti = np.arange(0, len(y_v), 2), np.arange(1, len(y_v), 2)
                 zc = np.log(sc[ci] / (1.0 - sc[ci])); ze = np.log(sc[ti] / (1.0 - sc[ti]))
                 yc, ye = y_v[ci], y_v[ti]
+                n_cal = float(len(yc))
                 def fn(th):
-                    w = np.exp(np.clip(th[0], -20, 20)); lin = w * zc + th[1]
-                    nll = np.sum(np.logaddexp(0.0, lin) - yc * lin) + 0.5 * (w ** 2) / 1e4
+                    w = np.exp(np.clip(th[0], -20.0, 20.0)); lin = w * zc + th[1]
+                    nll = (np.sum(np.logaddexp(0.0, lin) - yc * lin) + 0.5 * (w ** 2) / 1e4) / n_cal
                     r_ = expit(lin) - yc
-                    return float(nll), np.array([float(np.sum(r_ * zc)) * w + (w ** 2) / 1e4, float(np.sum(r_))])
-                res = minimize(fn, np.array([0.0, 0.0]), method="BFGS", jac=True)
+                    return float(nll), np.array([((float(np.sum(r_ * zc)) + w / 1e4) * w) / n_cal, float(np.sum(r_)) / n_cal])
+                res = minimize(fn, np.array([0.0, 0.0]), method="BFGS", jac=True, options={"gtol": 1e-9, "maxiter": 500})
                 w_hat, b_hat = float(np.exp(res.x[0])), float(res.x[1])
+                if not res.success:
+                    def fn_box(wb):
+                        w, b = float(wb[0]), float(wb[1]); lin = w * zc + b
+                        nll = (np.sum(np.logaddexp(0.0, lin) - yc * lin) + 0.5 * (w ** 2) / 1e4) / n_cal
+                        r_ = expit(lin) - yc
+                        return float(nll), np.array([(float(np.sum(r_ * zc)) + w / 1e4) / n_cal, float(np.sum(r_)) / n_cal])
+                    res_lb = minimize(fn_box, np.array([1.0, 0.0]), method="L-BFGS-B", jac=True, bounds=[(1e-8, None), (None, None)], options={"ftol": 1e-13, "gtol": 1e-9, "maxiter": 500})
+                    if res_lb.success:
+                        w_hat, b_hat = float(res_lb.x[0]), float(res_lb.x[1])
                 pa = expit(w_hat * ze + b_hat)
                 er_l.append(ece_bin(sc[ti], ye)); ea_l.append(ece_bin(pa, ye))
                 br_l.append(float(np.mean((sc[ti] - ye) ** 2))); ba_l.append(float(np.mean((pa - ye) ** 2)))
