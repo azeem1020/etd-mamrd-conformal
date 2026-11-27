@@ -1,6 +1,6 @@
 cff-version: 1.2.0
-version: "v4.0-R3"
-date-released: "2026-11-26"
+version: "v4.1-R3"
+date-released: "2026-11-27"
 message: "If you use this codebase, models, or benchmark protocol in your research, please cite our paper."
 title: "Trustworthy electricity theft detection integrating informative missingness learning and certified conformal audits"
 authors:

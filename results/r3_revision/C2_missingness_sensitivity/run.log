@@ -49,93 +49,129 @@
                   GRU-D    excl_conflicting (-497)  2848.666667  8.542368 0.193091  0.676506
                   GRU-D excl_all_nosignal (-2,114)  2729.000000  8.891544 0.196473  0.667805
                   GRU-D      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
-Logistic-MaskOnly (30f)       full_cohort (42,372)  2884.666667  8.470091 0.167954  0.650718
-Logistic-MaskOnly (30f)          excl_all_nan (-5)  2884.333333  8.471108 0.168828  0.650799
-Logistic-MaskOnly (30f)     excl_all_zero (-2,109)  2729.333333  8.890417 0.181872  0.652713
-Logistic-MaskOnly (30f)    excl_conflicting (-497)  2848.666667  8.542368 0.170873  0.653600
-Logistic-MaskOnly (30f) excl_all_nosignal (-2,114)  2729.000000  8.891544 0.182894  0.652799
+Logistic-MaskOnly (30f)       full_cohort (42,372)  2884.666667  8.470091 0.167822  0.650274
+Logistic-MaskOnly (30f)          excl_all_nan (-5)  2884.333333  8.471108 0.168703  0.650356
+Logistic-MaskOnly (30f)     excl_all_zero (-2,109)  2729.333333  8.890417 0.181741  0.652242
+Logistic-MaskOnly (30f)    excl_conflicting (-497)  2848.666667  8.542368 0.170746  0.653148
+Logistic-MaskOnly (30f) excl_all_nosignal (-2,114)  2729.000000  8.891544 0.182776  0.652328
 Logistic-MaskOnly (30f)      nosignal_only (2,114)   155.666667  1.022652      NaN       NaN
 
 === PART B: CLEAN-COHORT RETRAINING (N=40,258) ===
-  [clean_mamrd s=0 f=0] PR=0.6181 ROC=0.8930 F1=0.5760 wall=36.3s
-  [clean_mamrd s=0 f=1] PR=0.6165 ROC=0.9007 F1=0.5671 wall=24.7s
-  [clean_mamrd s=0 f=2] PR=0.5594 ROC=0.8797 F1=0.5406 wall=24.6s
-  [clean_mamrd s=1 f=0] PR=0.6263 ROC=0.8937 F1=0.5935 wall=24.6s
-  [clean_mamrd s=1 f=1] PR=0.6032 ROC=0.9009 F1=0.5962 wall=25.5s
-  [clean_mamrd s=1 f=2] PR=0.5746 ROC=0.8825 F1=0.5427 wall=25.0s
-  [clean_mamrd s=2 f=0] PR=0.5966 ROC=0.8873 F1=0.5726 wall=24.8s
-  [clean_mamrd s=2 f=1] PR=0.6232 ROC=0.9017 F1=0.5986 wall=25.6s
-  [clean_mamrd s=2 f=2] PR=0.5672 ROC=0.8831 F1=0.5290 wall=24.8s
-  [clean_a34_nomiss s=0 f=0] PR=0.5991 ROC=0.8836 F1=0.5272 wall=21.5s
-  [clean_a34_nomiss s=0 f=1] PR=0.6042 ROC=0.8914 F1=0.5492 wall=22.1s
-  [clean_a34_nomiss s=0 f=2] PR=0.5060 ROC=0.8608 F1=0.5289 wall=21.7s
-  [clean_a34_nomiss s=1 f=0] PR=0.5779 ROC=0.8755 F1=0.5275 wall=21.5s
-  [clean_a34_nomiss s=1 f=1] PR=0.5963 ROC=0.8883 F1=0.5613 wall=22.0s
-  [clean_a34_nomiss s=1 f=2] PR=0.5047 ROC=0.8629 F1=0.4666 wall=21.6s
-  [clean_a34_nomiss s=2 f=0] PR=0.5969 ROC=0.8910 F1=0.5194 wall=21.6s
-  [clean_a34_nomiss s=2 f=1] PR=0.6021 ROC=0.8965 F1=0.5592 wall=22.0s
-  [clean_a34_nomiss s=2 f=2] PR=0.5181 ROC=0.8631 F1=0.4954 wall=21.6s
-  [clean_horln s=0 f=0] PR=0.5877 ROC=0.8849 F1=0.5333 wall=12.2s
-  [clean_horln s=0 f=1] PR=0.5508 ROC=0.8936 F1=0.5130 wall=12.6s
-  [clean_horln s=0 f=2] PR=0.5489 ROC=0.8725 F1=0.5278 wall=12.3s
-  [clean_horln s=1 f=0] PR=0.6002 ROC=0.8804 F1=0.5584 wall=12.3s
-  [clean_horln s=1 f=1] PR=0.5957 ROC=0.9011 F1=0.5574 wall=12.6s
-  [clean_horln s=1 f=2] PR=0.5685 ROC=0.8712 F1=0.5583 wall=12.3s
-  [clean_horln s=2 f=0] PR=0.6081 ROC=0.8883 F1=0.5685 wall=12.3s
-  [clean_horln s=2 f=1] PR=0.5663 ROC=0.8936 F1=0.4912 wall=12.5s
-  [clean_horln s=2 f=2] PR=0.5665 ROC=0.8759 F1=0.5431 wall=12.2s
+  [SKIP] clean_mamrd_0_0.csv PR=0.6181
+  [SKIP] clean_mamrd_0_1.csv PR=0.6165
+  [SKIP] clean_mamrd_0_2.csv PR=0.5594
+  [clean_mamrd s=0 f=3] PR=0.5962 ROC=0.8895 F1=0.5662 wall=59.3s
+  [clean_mamrd s=0 f=4] PR=0.6420 ROC=0.9110 F1=0.5763 wall=46.1s
+  [SKIP] clean_mamrd_1_0.csv PR=0.6263
+  [SKIP] clean_mamrd_1_1.csv PR=0.6032
+  [SKIP] clean_mamrd_1_2.csv PR=0.5746
+  [clean_mamrd s=1 f=3] PR=0.5978 ROC=0.8868 F1=0.5673 wall=45.3s
+  [clean_mamrd s=1 f=4] PR=0.6415 ROC=0.9086 F1=0.5775 wall=46.2s
+  [SKIP] clean_mamrd_2_0.csv PR=0.5966
+  [SKIP] clean_mamrd_2_1.csv PR=0.6232
+  [SKIP] clean_mamrd_2_2.csv PR=0.5672
+  [clean_mamrd s=2 f=3] PR=0.5952 ROC=0.8833 F1=0.5462 wall=45.2s
+  [clean_mamrd s=2 f=4] PR=0.6545 ROC=0.9129 F1=0.5791 wall=46.2s
+  [SKIP] clean_a34_nomiss_0_0.csv PR=0.5991
+  [SKIP] clean_a34_nomiss_0_1.csv PR=0.6042
+  [SKIP] clean_a34_nomiss_0_2.csv PR=0.5060
+  [clean_a34_nomiss s=0 f=3] PR=0.5554 ROC=0.8641 F1=0.5398 wall=39.1s
+  [clean_a34_nomiss s=0 f=4] PR=0.5958 ROC=0.8993 F1=0.5817 wall=42.3s
+  [SKIP] clean_a34_nomiss_1_0.csv PR=0.5779
+  [SKIP] clean_a34_nomiss_1_1.csv PR=0.5963
+  [SKIP] clean_a34_nomiss_1_2.csv PR=0.5047
+  [clean_a34_nomiss s=1 f=3] PR=0.5761 ROC=0.8722 F1=0.5469 wall=42.0s
+  [clean_a34_nomiss s=1 f=4] PR=0.6238 ROC=0.9022 F1=0.5754 wall=39.9s
+  [SKIP] clean_a34_nomiss_2_0.csv PR=0.5969
+  [SKIP] clean_a34_nomiss_2_1.csv PR=0.6021
+  [SKIP] clean_a34_nomiss_2_2.csv PR=0.5181
+  [clean_a34_nomiss s=2 f=3] PR=0.5518 ROC=0.8697 F1=0.5135 wall=39.1s
+  [clean_a34_nomiss s=2 f=4] PR=0.6304 ROC=0.9050 F1=0.5643 wall=29.6s
+  [SKIP] clean_horln_0_0.csv PR=0.5877
+  [SKIP] clean_horln_0_1.csv PR=0.5508
+  [SKIP] clean_horln_0_2.csv PR=0.5489
+  [clean_horln s=0 f=3] PR=0.5958 ROC=0.8665 F1=0.5368 wall=21.9s
+  [clean_horln s=0 f=4] PR=0.6405 ROC=0.9105 F1=0.5820 wall=22.3s
+  [SKIP] clean_horln_1_0.csv PR=0.6002
+  [SKIP] clean_horln_1_1.csv PR=0.5957
+  [SKIP] clean_horln_1_2.csv PR=0.5685
+  [clean_horln s=1 f=3] PR=0.5575 ROC=0.8571 F1=0.5272 wall=21.8s
+  [clean_horln s=1 f=4] PR=0.5986 ROC=0.8972 F1=0.5273 wall=21.9s
+  [SKIP] clean_horln_2_0.csv PR=0.6081
+  [SKIP] clean_horln_2_1.csv PR=0.5663
+  [SKIP] clean_horln_2_2.csv PR=0.5665
+  [clean_horln s=2 f=3] PR=0.5769 ROC=0.8609 F1=0.5476 wall=21.5s
+  [clean_horln s=2 f=4] PR=0.6091 ROC=0.9018 F1=0.5379 wall=20.4s
 
 === PART C: TRUE 3-WAY NEURAL MISSINGNESS VS. CONSUMPTION DECOMPOSITION ===
-  [mask_only_neural s=0 f=0] PR=0.5221 ROC=0.8580 F1=0.5095 wall=24.9s
-  [mask_only_neural s=0 f=1] PR=0.4960 ROC=0.8485 F1=0.5000 wall=25.4s
-  [mask_only_neural s=0 f=2] PR=0.5655 ROC=0.8750 F1=0.5620 wall=25.9s
-  [mask_only_neural s=1 f=0] PR=0.5281 ROC=0.8599 F1=0.5118 wall=25.4s
-  [mask_only_neural s=1 f=1] PR=0.4999 ROC=0.8601 F1=0.5021 wall=25.9s
-  [mask_only_neural s=1 f=2] PR=0.5426 ROC=0.8689 F1=0.5720 wall=25.4s
-  [mask_only_neural s=2 f=0] PR=0.5277 ROC=0.8635 F1=0.5358 wall=24.8s
-  [mask_only_neural s=2 f=1] PR=0.4925 ROC=0.8560 F1=0.5033 wall=25.1s
-  [mask_only_neural s=2 f=2] PR=0.5358 ROC=0.8750 F1=0.5630 wall=25.2s
-  [consumption_only_linear_interp s=0 f=0] PR=0.3465 ROC=0.8157 F1=0.3958 wall=21.6s
-  [consumption_only_linear_interp s=0 f=1] PR=0.3511 ROC=0.7981 F1=0.3799 wall=22.1s
-  [consumption_only_linear_interp s=0 f=2] PR=0.3971 ROC=0.8087 F1=0.3872 wall=22.3s
-  [consumption_only_linear_interp s=1 f=0] PR=0.3321 ROC=0.8011 F1=0.3453 wall=21.9s
-  [consumption_only_linear_interp s=1 f=1] PR=0.3599 ROC=0.8072 F1=0.3601 wall=22.8s
-  [consumption_only_linear_interp s=1 f=2] PR=0.3637 ROC=0.7956 F1=0.4071 wall=22.5s
-  [consumption_only_linear_interp s=2 f=0] PR=0.3380 ROC=0.8012 F1=0.3541 wall=22.0s
-  [consumption_only_linear_interp s=2 f=1] PR=0.3703 ROC=0.8088 F1=0.3737 wall=22.3s
-  [consumption_only_linear_interp s=2 f=2] PR=0.3882 ROC=0.8091 F1=0.4045 wall=22.7s
-  [consumption_only_mean_fill s=0 f=0] PR=0.3575 ROC=0.8194 F1=0.3716 wall=22.1s
-  [consumption_only_mean_fill s=0 f=1] PR=0.3934 ROC=0.8034 F1=0.3847 wall=22.4s
-  [consumption_only_mean_fill s=0 f=2] PR=0.3855 ROC=0.8017 F1=0.4098 wall=22.8s
-  [consumption_only_mean_fill s=1 f=0] PR=0.3639 ROC=0.8078 F1=0.3443 wall=22.2s
-  [consumption_only_mean_fill s=1 f=1] PR=0.4038 ROC=0.8152 F1=0.4049 wall=22.4s
-  [consumption_only_mean_fill s=1 f=2] PR=0.3687 ROC=0.7918 F1=0.4168 wall=22.6s
-  [consumption_only_mean_fill s=2 f=0] PR=0.3829 ROC=0.8175 F1=0.3718 wall=22.2s
-  [consumption_only_mean_fill s=2 f=1] PR=0.4138 ROC=0.8120 F1=0.4053 wall=22.7s
-  [consumption_only_mean_fill s=2 f=2] PR=0.3889 ROC=0.8095 F1=0.4000 wall=22.5s
+  [SKIP] mask_only_neural_0_0.csv PR=0.5221
+  [SKIP] mask_only_neural_0_1.csv PR=0.4960
+  [SKIP] mask_only_neural_0_2.csv PR=0.5655
+  [mask_only_neural s=0 f=3] PR=0.6332 ROC=0.8966 F1=0.6354 wall=48.5s
+  [mask_only_neural s=0 f=4] PR=0.5496 ROC=0.8790 F1=0.5661 wall=46.6s
+  [SKIP] mask_only_neural_1_0.csv PR=0.5281
+  [SKIP] mask_only_neural_1_1.csv PR=0.4999
+  [SKIP] mask_only_neural_1_2.csv PR=0.5426
+  [mask_only_neural s=1 f=3] PR=0.6473 ROC=0.9009 F1=0.6355 wall=46.0s
+  [mask_only_neural s=1 f=4] PR=0.5264 ROC=0.8709 F1=0.5363 wall=49.6s
+  [SKIP] mask_only_neural_2_0.csv PR=0.5277
+  [SKIP] mask_only_neural_2_1.csv PR=0.4925
+  [SKIP] mask_only_neural_2_2.csv PR=0.5358
+  [mask_only_neural s=2 f=3] PR=0.6596 ROC=0.8988 F1=0.6411 wall=45.7s
+  [mask_only_neural s=2 f=4] PR=0.5499 ROC=0.8796 F1=0.5410 wall=49.6s
+  [SKIP] consumption_only_linear_interp_0_0.csv PR=0.3465
+  [SKIP] consumption_only_linear_interp_0_1.csv PR=0.3511
+  [SKIP] consumption_only_linear_interp_0_2.csv PR=0.3971
+  [consumption_only_linear_interp s=0 f=3] PR=0.3770 ROC=0.8082 F1=0.3897 wall=40.4s
+  [consumption_only_linear_interp s=0 f=4] PR=0.3349 ROC=0.7904 F1=0.3853 wall=23.6s
+  [SKIP] consumption_only_linear_interp_1_0.csv PR=0.3321
+  [SKIP] consumption_only_linear_interp_1_1.csv PR=0.3599
+  [SKIP] consumption_only_linear_interp_1_2.csv PR=0.3637
+  [consumption_only_linear_interp s=1 f=3] PR=0.3863 ROC=0.8023 F1=0.4027 wall=23.2s
+  [consumption_only_linear_interp s=1 f=4] PR=0.3396 ROC=0.7959 F1=0.3691 wall=23.9s
+  [SKIP] consumption_only_linear_interp_2_0.csv PR=0.3380
+  [SKIP] consumption_only_linear_interp_2_1.csv PR=0.3703
+  [SKIP] consumption_only_linear_interp_2_2.csv PR=0.3882
+  [consumption_only_linear_interp s=2 f=3] PR=0.3878 ROC=0.8074 F1=0.4161 wall=23.4s
+  [consumption_only_linear_interp s=2 f=4] PR=0.3414 ROC=0.7878 F1=0.3816 wall=23.8s
+  [SKIP] consumption_only_mean_fill_0_0.csv PR=0.3575
+  [SKIP] consumption_only_mean_fill_0_1.csv PR=0.3934
+  [SKIP] consumption_only_mean_fill_0_2.csv PR=0.3855
+  [consumption_only_mean_fill s=0 f=3] PR=0.4073 ROC=0.8179 F1=0.4444 wall=36.2s
+  [consumption_only_mean_fill s=0 f=4] PR=0.3608 ROC=0.8044 F1=0.3985 wall=44.5s
+  [SKIP] consumption_only_mean_fill_1_0.csv PR=0.3639
+  [SKIP] consumption_only_mean_fill_1_1.csv PR=0.4038
+  [SKIP] consumption_only_mean_fill_1_2.csv PR=0.3687
+  [consumption_only_mean_fill s=1 f=3] PR=0.3981 ROC=0.8103 F1=0.4327 wall=40.1s
+  [consumption_only_mean_fill s=1 f=4] PR=0.3561 ROC=0.8024 F1=0.3713 wall=42.4s
+  [SKIP] consumption_only_mean_fill_2_0.csv PR=0.3829
+  [SKIP] consumption_only_mean_fill_2_1.csv PR=0.4138
+  [SKIP] consumption_only_mean_fill_2_2.csv PR=0.3889
+  [consumption_only_mean_fill s=2 f=3] PR=0.4013 ROC=0.8109 F1=0.4272 wall=43.4s
+  [consumption_only_mean_fill s=2 f=4] PR=0.3741 ROC=0.8041 F1=0.4232 wall=41.1s
 
 --- Part B Summary ---
              group          variant  n_cells  ap_mean  ap_ci_lo  ap_ci_hi  roc_mean  roc_ci_lo  roc_ci_hi  f1_mean  f1_ci_lo  f1_ci_hi  map100_mean  p100_mean
-clean_cohort_40258      clean_mamrd        9 0.598349  0.581338  0.612297  0.891396   0.886176   0.896538 0.568489  0.551479  0.583745     0.881499   0.793333
-clean_cohort_40258 clean_a34_nomiss        9 0.567262  0.535672  0.589572  0.879235   0.870110   0.887529 0.526088  0.502417  0.542382     0.864251   0.770000
-clean_cohort_40258      clean_horln        9 0.576965  0.563596  0.590879  0.884615   0.878309   0.891381 0.539003  0.520298  0.552129     0.889054   0.760000
+clean_cohort_40258      clean_mamrd       15 0.607496  0.594036  0.621021  0.894316   0.889312   0.899971 0.568589  0.557949  0.578700     0.899003   0.813333
+clean_cohort_40258 clean_a34_nomiss       15 0.575910  0.553375  0.593344  0.881715   0.874130   0.889419 0.537101  0.519933  0.550147     0.879540   0.776667
+clean_cohort_40258      clean_horln       15 0.584734  0.572863  0.598198  0.883695   0.876105   0.891304 0.540653  0.529092  0.551444     0.904663   0.781333
 
 --- Part C Summary (True 3-Way Neural Comparison) ---
           group                        variant  n_cells  ap_mean  ap_ci_lo  ap_ci_hi  roc_mean  roc_ci_lo  roc_ci_hi  f1_mean  f1_ci_lo  f1_ci_hi  map100_mean  p100_mean
-full_42372_3way               mask_only_neural        9 0.523359  0.509172  0.539031  0.862774   0.857587   0.868219 0.528841  0.512585  0.549208     0.862267   0.730000
-full_42372_3way consumption_only_linear_interp        9 0.360764  0.349116  0.377143  0.805055   0.801475   0.809126 0.378639  0.363785  0.391483     0.697709   0.517778
-full_42372_3way     consumption_only_mean_fill        9 0.384265  0.372737  0.395464  0.808687   0.802601   0.813578 0.389910  0.372992  0.402341     0.723979   0.566667
-full_42372_3way          a34_no_miss_token_ref        9 0.570386  0.554524  0.594478  0.883698   0.877523   0.889373 0.527595  0.512857  0.548821     0.905920   0.766667
-full_42372_3way             combined_mamrd_ref        9 0.597462  0.575965  0.618803  0.891724   0.884192   0.900197 0.556631  0.537507  0.576881     0.913280   0.807778
+full_42372_3way               mask_only_neural       15 0.551746  0.529326  0.582260  0.872724   0.865270   0.880781 0.554327  0.532271  0.579745     0.869647   0.761673
+full_42372_3way consumption_only_linear_interp       15 0.360922  0.350422  0.371497  0.802505   0.798512   0.806258 0.383489  0.373073  0.392824     0.678466   0.531333
+full_42372_3way     consumption_only_mean_fill       15 0.383736  0.374399  0.392753  0.808544   0.804579   0.811937 0.400435  0.385992  0.412529     0.703605   0.568000
+full_42372_3way          a34_no_miss_token_ref       15 0.578118  0.563484  0.594602  0.883954   0.878348   0.889255 0.537576  0.523209  0.554375     0.905619   0.778000
+full_42372_3way             combined_mamrd_ref       15 0.608104  0.589100  0.627707  0.893661   0.887469   0.899019 0.561977  0.545754  0.577419     0.916132   0.820667
 
 --- C2 Paired Contrasts ---
                                                               contrast     ap_a     ap_b  delta_ap     ci_lo     ci_hi    rel_pct  wilcoxon_p  wins  n_cells
-                                      CleanCohort: MAMRD - A34_no_miss 0.598349 0.567262  0.031087  0.017221  0.047567   5.480193    0.007812     8        9
-                                            CleanCohort: MAMRD - HORLN 0.598349 0.576965  0.021384  0.007843  0.040555   3.706312    0.039062     8        9
-                 3Way: Combined MAMRD - ConsumptionOnly (LinearInterp) 0.597462 0.360764  0.236698  0.217297  0.254651  65.610194    0.003906     9        9
-                     3Way: Combined MAMRD - ConsumptionOnly (MeanFill) 0.597462 0.384265  0.213197  0.182880  0.240112  55.481642    0.003906     9        9
-                                 3Way: Combined MAMRD - MaskOnlyNeural 0.597462 0.523359  0.074103  0.063831  0.085102  14.159027    0.003906     9        9
-                 3Way: ConsumptionOnly (LinearInterp) - MaskOnlyNeural 0.360764 0.523359 -0.162595 -0.177051 -0.145955 -31.067633    0.003906     0        9
-3Way: A34_no_miss (tau_base sentinel) - ConsumptionOnly (LinearInterp) 0.570386 0.360764  0.209622  0.194830  0.220741  58.104981    0.003906     9        9
+                                      CleanCohort: MAMRD - A34_no_miss 0.607496 0.575910  0.031587  0.022178  0.041503   5.484646    0.000122    14       15
+                                            CleanCohort: MAMRD - HORLN 0.607496 0.584734  0.022763  0.011935  0.035545   3.892803    0.001160    14       15
+                 3Way: Combined MAMRD - ConsumptionOnly (LinearInterp) 0.608104 0.360922  0.247182  0.231090  0.259754  68.486108    0.000061    15       15
+                     3Way: Combined MAMRD - ConsumptionOnly (MeanFill) 0.608104 0.383736  0.224368  0.201397  0.241619  58.469503    0.000061    15       15
+                                 3Way: Combined MAMRD - MaskOnlyNeural 0.608104 0.551746  0.056357  0.041803  0.069216  10.214385    0.000061    15       15
+                 3Way: ConsumptionOnly (LinearInterp) - MaskOnlyNeural 0.360922 0.551746 -0.190824 -0.214169 -0.169720 -34.585476    0.000061     0       15
+3Way: A34_no_miss (tau_base sentinel) - ConsumptionOnly (LinearInterp) 0.578118 0.360922  0.217196  0.206590  0.226055  60.178083    0.000061    15       15
 
-[DONE] C2 completed in 22.31 min -> ./results/r3_revision/C2_missingness_sensitivity
+[DONE] C2 completed in 25.81 min -> ./results/r3_revision/C2_missingness_sensitivity

@@ -5,13 +5,14 @@
    - Candidate grid (6 configs): (lr, wd) in {(1e-4, 1e-4), (3e-4, 1e-4), (1e-3, 1e-4),
                                             (3e-4, 0.0), (3e-4, 1e-3), (1e-3, 1e-3)}.
    - Evaluates all 6 on Fold 0, Seed 0; selects argmax(best_val_pr_auc on D_es).
-   - Evaluates the validation winner across all 9 matched cells (Folds 0-2 x Seeds 0-2)
-     to test whether validation-tuned baselines close the gap with MAMRD (0.597 AP).
+   - Evaluates the validation winner across the matched cells (Folds 0-4 x Seeds 0-2 = 15 by
+     default; --folds) to test whether validation-tuned baselines close the gap with MAMRD.
 2. WDCNN with Zheng et al. (2018) linear neighbor interpolation (inside [0,1], 0 NaNs)
-   across Folds 0-2 x Seeds 0-2 (9 cells).
+   across the same matched cells.
 3. Self-Attention (hybridattn) with Finardi et al. (2020) train-fit QuantileTransformer
    (n_quantiles=10, uniform, fit on D_train only) under the shared main protocol across
-   all 9 matched cells (Folds 0-2 x Seeds 0-2).
+   the same matched cells.
+The HPO selection itself (item 1) always uses Fold 0, Seed 0 D_es only.
 """
 from __future__ import annotations
 import sys, os, csv, gc, json, time, argparse, subprocess
@@ -38,6 +39,7 @@ from repro_config import _ROOT, RESULTS_DIR, SGCC_PATH, scrub_paths
 ORIG_REPO = _ROOT
 ORIG_RES = RESULTS_DIR
 R3_RES = _ROOT / "results" / "r3_revision"
+RAW34 = R3_RES / "C1_5fold_and_stats" / "raw_folds34"   # MAMRD Folds 3-4 (run_c1_5fold.py)
 OUT = R3_RES / "C7_baseline_hpo"
 CELLS_DIR = OUT / "cells"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -191,6 +193,8 @@ def main() -> None:
     ap.add_argument("--epochs", type=int, default=30)
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--resume", action="store_true", default=True)
+    ap.add_argument("--folds", nargs="+", type=int, default=[0, 1, 2, 3, 4],
+                    help="outer folds for the evaluation cells (Revision 3 default: all five)")
     args = ap.parse_args()
 
     if args.self_test:
@@ -249,16 +253,16 @@ def main() -> None:
 
     pd.DataFrame(hpo_rows).to_csv(OUT / "c7_hpo_validation_grid.csv", index=False)
 
-    # Evaluate validation winner across all 9 cells (or runner-up across 9 cells if default won, to verify!)
+    # Evaluate the validation winner across all matched evaluation cells
     tuned_rows, tuned_summary = [], []
-    mamrd_ref = [float(next(csv.DictReader(open(ORIG_RES / f"a34_cell_{s}_{f}.csv")))["pr_auc"])
-                 for s in range(3) for f in range(3)]
+    mamrd_ref = [float(next(csv.DictReader(open((ORIG_RES if f < 3 else RAW34) / f"a34_cell_{s}_{f}.csv")))["pr_auc"])
+                 for s in range(3) for f in args.folds]
     for backbone in ("horln", "hybridattn"):
         w_lr, w_wd, _ = winners[backbone]
         lbl = f"tuned_{backbone}"
         v_cells = []
         for s in range(3):
-            for f in range(3):
+            for f in args.folds:
                 r, skipped = get_or_run(f"{lbl}_{s}_{f}.csv", X_base, lbl, backbone, s, f, w_lr, w_wd)
                 v_cells.append(r); tuned_rows.append(r)
                 log(f"  [{'SKIP' if skipped else 'RUN'}] {lbl} s={s} f={f} (lr={w_lr}, wd={w_wd}) PR={r['pr_auc']:.4f} val={r['best_val_ap']:.4f}")
@@ -269,20 +273,20 @@ def main() -> None:
         dlo, dhi = bca_ci(diff)
         _, p = wilcoxon(diff, zero_method="wilcox", alternative="two-sided", method="exact")
         tuned_summary.append({
-            "backbone": backbone, "lr_selected": w_lr, "wd_selected": w_wd, "n_cells": 9,
+            "backbone": backbone, "lr_selected": w_lr, "wd_selected": w_wd, "n_cells": len(aps),
             "ap_mean": float(aps.mean()), "ap_ci_lo": alo, "ap_ci_hi": ahi,
             "roc_mean": float(dfv["roc_auc"].astype(float).mean()),
             "f1_mean": float(dfv["f1"].astype(float).mean()),
             "mamrd_minus_tuned_dAP": float(diff.mean()), "dAP_ci_lo": dlo, "dAP_ci_hi": dhi,
-            "wilcoxon_p": float(p), "mamrd_wins_of_9": int(np.sum(diff > 0)),
+            "wilcoxon_p": float(p), "mamrd_wins": int(np.sum(diff > 0)),
         })
 
-    # 2. WDCNN with Zheng et al. linear neighbor interpolation (9 cells)
-    log("\n=== WDCNN with Zheng Linear Neighbor Interpolation (9 cells) ===")
+    # 2. WDCNN with Zheng et al. linear neighbor interpolation (matched cells)
+    log(f"\n=== WDCNN with Zheng Linear Neighbor Interpolation ({3 * len(args.folds)} cells) ===")
     X_lin = make_linear_interp_grid(X_base)
     wd_cells = []
     for s in range(3):
-        for f in range(3):
+        for f in args.folds:
             r, skipped = get_or_run(f"wdcnn_lininterp_{s}_{f}.csv", X_lin, "wdcnn_linear_interp", "wdcnn", s, f, 3e-4, 1e-4)
             wd_cells.append(r)
             log(f"  [{'SKIP' if skipped else 'RUN'}] wdcnn_lininterp s={s} f={f} PR={r['pr_auc']:.4f}")
@@ -293,20 +297,20 @@ def main() -> None:
     wd_dlo, wd_dhi = bca_ci(wd_diff)
     _, wd_p = wilcoxon(wd_diff, zero_method="wilcox", alternative="two-sided", method="exact")
     wd_sum = [{
-        "variant": "wdcnn_linear_interp", "n_cells": 9,
+        "variant": "wdcnn_linear_interp", "n_cells": len(wd_aps),
         "ap_mean": float(wd_aps.mean()), "ap_ci_lo": alo, "ap_ci_hi": ahi,
         "roc_mean": float(df_wd["roc_auc"].astype(float).mean()), "f1_mean": float(df_wd["f1"].astype(float).mean()),
         "mamrd_minus_var_dAP": float(wd_diff.mean()), "dAP_ci_lo": wd_dlo, "dAP_ci_hi": wd_dhi,
-        "wilcoxon_p": float(wd_p), "mamrd_wins_of_9": int(np.sum(wd_diff > 0)),
+        "wilcoxon_p": float(wd_p), "mamrd_wins": int(np.sum(wd_diff > 0)),
     }]
     pd.DataFrame(wd_sum).to_csv(OUT / "c7_wdcnn_interp_summary.csv", index=False)
 
-    # 3. Finardi Self-Attn Native QuantileTransformer across ALL 9 matched cells (Folds 0-2 x Seeds 0-2)
-    log("\n=== Self-Attn (hybridattn) with Finardi Native Train-Fit QuantileTransformer (9 cells) ===")
+    # 3. Finardi Self-Attn Native QuantileTransformer across all matched cells
+    log(f"\n=== Self-Attn (hybridattn) with Finardi Native Train-Fit QuantileTransformer ({3 * len(args.folds)} cells) ===")
     qt_cache = {}
     fin_cells = []
     for s in range(3):
-        for f in range(3):
+        for f in args.folds:
             if f not in qt_cache:
                 tr, _ = folds[f]
                 qt_cache[f] = prep_finardi_quantile_fold(raw_2d, tr)
@@ -321,13 +325,13 @@ def main() -> None:
     fin_dlo, fin_dhi = bca_ci(fin_diff)
     _, fin_p = wilcoxon(fin_diff, zero_method="wilcox", alternative="two-sided", method="exact")
     fin_sum = [{
-        "variant": "hybridattn_finardi_native_qt10", "n_cells": 9,
+        "variant": "hybridattn_finardi_native_qt10", "n_cells": len(fin_aps),
         "ap_mean": float(fin_aps.mean()), "ap_ci_lo": alo, "ap_ci_hi": ahi,
         "roc_mean": float(df_fin["roc_auc"].astype(float).mean()), "f1_mean": float(df_fin["f1"].astype(float).mean()),
         "mamrd_minus_var_dAP": float(fin_diff.mean()), "dAP_ci_lo": fin_dlo, "dAP_ci_hi": fin_dhi,
-        "wilcoxon_p": float(fin_p), "mamrd_wins_of_9": int(np.sum(fin_diff > 0)),
+        "wilcoxon_p": float(fin_p), "mamrd_wins": int(np.sum(fin_diff > 0)),
     }]
-    pd.DataFrame(fin_sum).to_csv(OUT / "c7_finardi_native_9cell.csv", index=False)
+    pd.DataFrame(fin_sum).to_csv(OUT / "c7_finardi_native_summary.csv", index=False)
     pd.DataFrame(tuned_summary).to_csv(OUT / "c7_tuned_baselines_summary.csv", index=False)
 
     log("\n--- C7 Tuned Baselines Summary ---")
@@ -337,7 +341,7 @@ def main() -> None:
 
     (OUT / "c7_summary.json").write_text(json.dumps({
         "hpo_winners": winners, "tuned_summary": tuned_summary,
-        "wdcnn_linear_interp": wd_sum, "finardi_native_9cell": fin_sum,
+        "wdcnn_linear_interp": wd_sum, "finardi_native": fin_sum,
     }, indent=2))
     log(f"\n[DONE] C7 completed in {(time.time() - t0)/60.0:.2f} min -> {OUT}")
     (OUT / "run.log").write_text(scrub_paths("\n".join(log_lines) + "\n"))

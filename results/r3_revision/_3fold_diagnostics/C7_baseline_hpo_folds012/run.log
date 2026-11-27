@@ -1,0 +1,70 @@
+
+=== HPO Grid on D_es (Fold 0, Seed 0) for horln ===
+  [SKIP] horln lr=0.0001 wd=0.0001 | val_AP=0.6047 test_AP=0.5395 ep=26
+  [SKIP] horln lr=0.0003 wd=0.0001 | val_AP=0.6047 test_AP=0.5581 ep=20
+  [RUN] horln lr=0.001 wd=0.0001 | val_AP=0.5871 test_AP=0.5491 ep=17
+  [SKIP] horln lr=0.0003 wd=0.0 | val_AP=0.6071 test_AP=0.5487 ep=20
+  [SKIP] horln lr=0.0003 wd=0.001 | val_AP=0.6132 test_AP=0.5547 ep=20
+  [SKIP] horln lr=0.001 wd=0.001 | val_AP=0.5886 test_AP=0.5406 ep=8
+  -> Winner on D_es for horln: lr=0.0003, wd=0.001 (val_AP=0.6132)
+
+=== HPO Grid on D_es (Fold 0, Seed 0) for hybridattn ===
+  [SKIP] hybridattn lr=0.0001 wd=0.0001 | val_AP=0.5508 test_AP=0.4691 ep=29
+  [SKIP] hybridattn lr=0.0003 wd=0.0001 | val_AP=0.5931 test_AP=0.5173 ep=26
+  [SKIP] hybridattn lr=0.001 wd=0.0001 | val_AP=0.6173 test_AP=0.5631 ep=20
+  [SKIP] hybridattn lr=0.0003 wd=0.0 | val_AP=0.5927 test_AP=0.5209 ep=29
+  [SKIP] hybridattn lr=0.0003 wd=0.001 | val_AP=0.5829 test_AP=0.5151 ep=29
+  [RUN] hybridattn lr=0.001 wd=0.001 | val_AP=0.6043 test_AP=0.5348 ep=17
+  -> Winner on D_es for hybridattn: lr=0.001, wd=0.0001 (val_AP=0.6173)
+  [SKIP] tuned_horln s=0 f=0 (lr=0.0003, wd=0.001) PR=0.5481 val=0.6173
+  [SKIP] tuned_horln s=0 f=1 (lr=0.0003, wd=0.001) PR=0.5116 val=0.5359
+  [SKIP] tuned_horln s=0 f=2 (lr=0.0003, wd=0.001) PR=0.5895 val=0.5695
+  [SKIP] tuned_horln s=1 f=0 (lr=0.0003, wd=0.001) PR=0.5772 val=0.6427
+  [RUN] tuned_horln s=1 f=1 (lr=0.0003, wd=0.001) PR=0.5089 val=0.5378
+  [RUN] tuned_horln s=1 f=2 (lr=0.0003, wd=0.001) PR=0.6300 val=0.5561
+  [RUN] tuned_horln s=2 f=0 (lr=0.0003, wd=0.001) PR=0.5584 val=0.6089
+  [RUN] tuned_horln s=2 f=1 (lr=0.0003, wd=0.001) PR=0.5091 val=0.5464
+  [RUN] tuned_horln s=2 f=2 (lr=0.0003, wd=0.001) PR=0.6113 val=0.5710
+  [RUN] tuned_hybridattn s=0 f=0 (lr=0.001, wd=0.0001) PR=0.5436 val=0.6319
+  [RUN] tuned_hybridattn s=0 f=1 (lr=0.001, wd=0.0001) PR=0.5247 val=0.5764
+  [RUN] tuned_hybridattn s=0 f=2 (lr=0.001, wd=0.0001) PR=0.5948 val=0.5843
+  [RUN] tuned_hybridattn s=1 f=0 (lr=0.001, wd=0.0001) PR=0.5389 val=0.6066
+  [RUN] tuned_hybridattn s=1 f=1 (lr=0.001, wd=0.0001) PR=0.5271 val=0.5264
+  [RUN] tuned_hybridattn s=1 f=2 (lr=0.001, wd=0.0001) PR=0.5962 val=0.5636
+  [RUN] tuned_hybridattn s=2 f=0 (lr=0.001, wd=0.0001) PR=0.5605 val=0.6236
+  [RUN] tuned_hybridattn s=2 f=1 (lr=0.001, wd=0.0001) PR=0.5534 val=0.5627
+  [RUN] tuned_hybridattn s=2 f=2 (lr=0.001, wd=0.0001) PR=0.6057 val=0.6001
+
+=== WDCNN with Zheng Linear Neighbor Interpolation (9 cells) ===
+  [RUN] wdcnn_lininterp s=0 f=0 PR=0.3047
+  [RUN] wdcnn_lininterp s=0 f=1 PR=0.3339
+  [RUN] wdcnn_lininterp s=0 f=2 PR=0.3682
+  [RUN] wdcnn_lininterp s=1 f=0 PR=0.3002
+  [RUN] wdcnn_lininterp s=1 f=1 PR=0.3253
+  [RUN] wdcnn_lininterp s=1 f=2 PR=0.3664
+  [RUN] wdcnn_lininterp s=2 f=0 PR=0.2908
+  [RUN] wdcnn_lininterp s=2 f=1 PR=0.3366
+  [RUN] wdcnn_lininterp s=2 f=2 PR=0.3816
+
+=== Self-Attn (hybridattn) with Finardi Native Train-Fit QuantileTransformer (9 cells) ===
+  [RUN] hybridattn_finardi_qt s=0 f=0 PR=0.5532
+  [RUN] hybridattn_finardi_qt s=0 f=1 PR=0.5249
+  [RUN] hybridattn_finardi_qt s=0 f=2 PR=0.5776
+  [RUN] hybridattn_finardi_qt s=1 f=0 PR=0.5396
+  [RUN] hybridattn_finardi_qt s=1 f=1 PR=0.5197
+  [RUN] hybridattn_finardi_qt s=1 f=2 PR=0.5865
+  [RUN] hybridattn_finardi_qt s=2 f=0 PR=0.5243
+  [RUN] hybridattn_finardi_qt s=2 f=1 PR=0.5050
+  [RUN] hybridattn_finardi_qt s=2 f=2 PR=0.5989
+
+--- C7 Tuned Baselines Summary ---
+  backbone  lr_selected  wd_selected  n_cells  ap_mean  ap_ci_lo  ap_ci_hi  roc_mean  f1_mean  mamrd_minus_tuned_dAP  dAP_ci_lo  dAP_ci_hi  wilcoxon_p  mamrd_wins_of_9
+     horln       0.0003       0.0010        9 0.560447  0.532668  0.589789  0.871863 0.525625               0.037014   0.024813   0.048922    0.003906                9
+hybridattn       0.0010       0.0001        9 0.560534  0.543113  0.581567  0.875410 0.520363               0.036928   0.026766   0.046283    0.003906                9
+
+--- C7 WDCNN Linear Interp & Finardi Native QT Summary ---
+                       variant  n_cells  ap_mean  ap_ci_lo  ap_ci_hi  roc_mean  f1_mean
+           wdcnn_linear_interp        9 0.334201  0.315364  0.355827  0.792207 0.359588
+hybridattn_finardi_native_qt10        9 0.547747  0.528658  0.569439  0.879418 0.513892
+
+[DONE] C7 completed in 23.53 min -> ./results/r3_revision/C7_baseline_hpo

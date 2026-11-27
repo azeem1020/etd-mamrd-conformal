@@ -11,14 +11,14 @@ Part A (CPU): Evaluates all 7 detectors + A34_no-miss + 30-feature logistic mask
   plus the isolated 2,114 no-signal subset alone.
 
 Part B (GPU): Retrains MAMRD (a34_generic), A34_no_miss (a34_no_missingness), and
-  HORLN on the clean 40,258-consumer cohort (keep_idx.npy; Folds 0-2 x Seeds 0-2 = 9 cells each).
+  HORLN on the clean 40,258-consumer cohort (keep_idx.npy; Folds 0-4 x Seeds 0-2 = 15 cells each; --folds).
 
 Part C (GPU): True protocol-matched 3-way neural decomposition on full SGCC
-  (Folds 0-2 x Seeds 0-2 = 9 cells each, identical TrainConfig):
+  (Folds 0-4 x Seeds 0-2 = 15 cells each, identical TrainConfig; --folds):
     1. mask_only_neural: observed values set to constant 1.0, NaNs preserved -> a34_generic
     2. consumption_only_linear_interp: in-manifold [0,1] linear interpolation (0 NaNs) -> a34_no_missingness
     3. consumption_only_mean_fill: in-manifold [0,1] per-consumer observed mean fill (0 NaNs) -> a34_no_missingness
-    4. combined_mamrd: loaded read-only from ORIG_RES (a34_cell_{s}_{f}.csv, 0.597 AP)
+    4. combined_mamrd: loaded read-only (Folds 0-2 ORIG_RES, Folds 3-4 raw_folds34; see ref_cell_path)
 """
 from __future__ import annotations
 import sys, os, csv, gc, json, time, argparse, subprocess
@@ -46,6 +46,18 @@ ORIG_REPO = _ROOT
 ORIG_RES = RESULTS_DIR
 R3_RES = _ROOT / "results" / "r3_revision"
 RAW34 = R3_RES / "C1_5fold_and_stats" / "raw_folds34"
+ABL34 = R3_RES / "C9_ablation_folds34"   # Folds 3-4 ablation arms (scripts/r3/run_r3_ablation_folds34.py)
+FOLDS = [0, 1, 2, 3, 4]                  # overridden by --folds
+
+
+def ref_cell_path(orig_pat: str, s: int, f: int) -> Path:
+    """Cell file of a Revision 2 reference arm: Folds 0-2 from ORIG_RES, Folds 3-4 from the R3
+    five-fold extensions (full model and baselines in raw_folds34, ablation arms in C9)."""
+    if f < 3:
+        return ORIG_RES / orig_pat.format(s=s, f=f)
+    if orig_pat.startswith("bu/"):
+        return ABL34 / orig_pat.format(s=s, f=f)
+    return RAW34 / Path(orig_pat).name.format(s=s, f=f)
 OUT = R3_RES / "C2_missingness_sensitivity"
 CELLS_DIR = OUT / "cells"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -186,7 +198,7 @@ def run_part_a_cached_exclusions(raw_arr: np.ndarray, y_all: np.ndarray, log) ->
     assert len(keep_idx) + len(idx_nosig) == len(y_all)
 
     folds = list(KFoldSpec(family="random", n_folds=5, seed=0).iter_folds(y_all))
-    have_5fold = (RAW34 / "a34_cell_0_3.csv").exists() and (RAW34 / "horln_0_4.csv").exists()
+    have_5fold = (RAW34 / "a34_cell_0_3.csv").exists() and (RAW34 / "horln_0_4.csv").exists() and (ABL34 / "bu" / "a34_no_missingness_2_4.csv").exists()
     f_sets = [("3_fold (0-2)", [0, 1, 2])] + ([("5_fold (0-4)", [0, 1, 2, 3, 4])] if have_5fold else [])
 
     # Precompute 30-feature logistic mask baseline
@@ -200,7 +212,7 @@ def run_part_a_cached_exclusions(raw_arr: np.ndarray, y_all: np.ndarray, log) ->
 
     det_specs = [
         ("MAMRD (matched)", "a34_cell_{s}_{f}.csv",             "a34_cell_{s}_{f}.csv",   range(3)),
-        ("A34_no-miss",     "bu/a34_no_missingness_{s}_{f}.csv", None,                    range(3)),
+        ("A34_no-miss",     "bu/a34_no_missingness_{s}_{f}.csv", "bu/a34_no_missingness_{s}_{f}.csv", range(3)),
         ("HORLN",           "baselines/horln_{s}_{f}.csv",      "horln_{s}_{f}.csv",      range(3)),
         ("Self-Attn",       "baselines/hybridattn_{s}_{f}.csv", "hybridattn_{s}_{f}.csv", range(3)),
         ("MSDM",            "baselines/msdm_net_{s}_{f}.csv",   "msdm_net_{s}_{f}.csv",   range(3)),
@@ -233,7 +245,7 @@ def run_part_a_cached_exclusions(raw_arr: np.ndarray, y_all: np.ndarray, log) ->
                 aps, rocs, ns, prevs = [], [], [], []
                 for s in seeds:
                     for f in f_ids:
-                        fp = (ORIG_RES / orig_pat.format(s=s, f=f)) if f < 3 else (RAW34 / raw34_pat.format(s=s, f=f))
+                        fp = ref_cell_path(orig_pat, s, f) if orig_pat.startswith("bu/") else ((ORIG_RES / orig_pat.format(s=s, f=f)) if f < 3 else (RAW34 / raw34_pat.format(s=s, f=f)))
                         r = next(csv.DictReader(open(fp)))
                         yt = np.array(json.loads(r["val_labels_json"]), dtype=int)
                         sc = np.array(json.loads(r["val_scores_json"]), dtype=float)
@@ -331,7 +343,7 @@ def run_variant_9cells(X_grid: np.ndarray, y: np.ndarray, g: np.ndarray, m: np.n
             "pr_auc", "roc_auc", "f1", "map_at_100", "p_at_100", "val_labels_json", "val_scores_json"]
     cell_rows = []
     for s in range(3):
-        for f in range(3):
+        for f in FOLDS:
             fp = CELLS_DIR / f"{variant_label}_{s}_{f}.csv"
             if resume and fp.exists() and fp.stat().st_size > 100:
                 df_c = pd.read_csv(fp)
@@ -386,7 +398,11 @@ def main() -> None:
     ap.add_argument("--epochs", type=int, default=30)
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--resume", action="store_true", default=True)
+    ap.add_argument("--folds", nargs="+", type=int, default=[0, 1, 2, 3, 4],
+                    help="outer folds for Parts B-C (Revision 3 default: all five)")
     args = ap.parse_args()
+    global FOLDS
+    FOLDS = list(args.folds)
 
     if args.self_test:
         assert verify_math_invariants()
@@ -415,7 +431,7 @@ def main() -> None:
     # PART A: Cached Cohort Exclusions (CPU)
     part_a_rows = run_part_a_cached_exclusions(raw_arr, y_full, log)
 
-    # PART B: Clean-Cohort Retrain (keep_idx.npy = 40,258 consumers, Folds 0-2 x Seeds 0-2)
+    # PART B: Clean-Cohort Retrain (keep_idx.npy = 40,258 consumers, --folds x Seeds 0-2)
     log("\n=== PART B: CLEAN-COHORT RETRAINING (N=40,258) ===")
     keep = np.load(ORIG_RES / "keep_idx.npy")
     X_clean, y_clean = X_full[keep], y_full[keep]
@@ -453,8 +469,8 @@ def main() -> None:
     def load_orig_9(pat, vname):
         r_list = []
         for s in range(3):
-            for f in range(3):
-                r = next(csv.DictReader(open(ORIG_RES / pat.format(s=s, f=f))))
+            for f in FOLDS:
+                r = next(csv.DictReader(open(ref_cell_path(pat, s, f))))
                 yt = np.array(json.loads(r["val_labels_json"]), dtype=int)
                 sc = np.array(json.loads(r["val_scores_json"]), dtype=float)
                 m100, p100 = topk_tie_neutral(yt, sc, 100, n_perm=1000, seed=0)

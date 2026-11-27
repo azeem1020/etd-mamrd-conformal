@@ -1,0 +1,80 @@
+{
+  "hpo_winners": {
+    "horln": [
+      0.0003,
+      0.001,
+      0.6131621266934331
+    ],
+    "hybridattn": [
+      0.001,
+      0.0001,
+      0.6172833188615884
+    ]
+  },
+  "tuned_summary": [
+    {
+      "backbone": "horln",
+      "lr_selected": 0.0003,
+      "wd_selected": 0.001,
+      "n_cells": 9,
+      "ap_mean": 0.5604474508072408,
+      "ap_ci_lo": 0.532668297170441,
+      "ap_ci_hi": 0.5897887438284253,
+      "roc_mean": 0.8718634593971881,
+      "f1_mean": 0.5256251445123513,
+      "mamrd_minus_tuned_dAP": 0.03701422131524365,
+      "dAP_ci_lo": 0.024813174122401863,
+      "dAP_ci_hi": 0.04892248167800388,
+      "wilcoxon_p": 0.00390625,
+      "mamrd_wins_of_9": 9
+    },
+    {
+      "backbone": "hybridattn",
+      "lr_selected": 0.001,
+      "wd_selected": 0.0001,
+      "n_cells": 9,
+      "ap_mean": 0.5605340082391016,
+      "ap_ci_lo": 0.5431133278221095,
+      "ap_ci_hi": 0.5815671253505758,
+      "roc_mean": 0.8754100791603556,
+      "f1_mean": 0.5203633598132582,
+      "mamrd_minus_tuned_dAP": 0.03692766388338269,
+      "dAP_ci_lo": 0.026766347662686242,
+      "dAP_ci_hi": 0.0462831784436259,
+      "wilcoxon_p": 0.00390625,
+      "mamrd_wins_of_9": 9
+    }
+  ],
+  "wdcnn_linear_interp": [
+    {
+      "variant": "wdcnn_linear_interp",
+      "n_cells": 9,
+      "ap_mean": 0.334200760899722,
+      "ap_ci_lo": 0.31536422388182317,
+      "ap_ci_hi": 0.3558268165196189,
+      "roc_mean": 0.7922072563764099,
+      "f1_mean": 0.3595884714788884,
+      "mamrd_minus_var_dAP": 0.2632609112227622,
+      "dAP_ci_lo": 0.2411896357640382,
+      "dAP_ci_hi": 0.28090325599403587,
+      "wilcoxon_p": 0.00390625,
+      "mamrd_wins_of_9": 9
+    }
+  ],
+  "finardi_native_9cell": [
+    {
+      "variant": "hybridattn_finardi_native_qt10",
+      "n_cells": 9,
+      "ap_mean": 0.5477470570507339,
+      "ap_ci_lo": 0.5286575467829174,
+      "ap_ci_hi": 0.5694392839727532,
+      "roc_mean": 0.8794181627091588,
+      "f1_mean": 0.5138918210446816,
+      "mamrd_minus_var_dAP": 0.04971461507175032,
+      "dAP_ci_lo": 0.03680070208435653,
+      "dAP_ci_hi": 0.057097133679027155,
+      "wilcoxon_p": 0.00390625,
+      "mamrd_wins_of_9": 9
+    }
+  ]
+}

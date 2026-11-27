@@ -1,100 +1,142 @@
 
 === Running C5 Variant: pad_replicate (pad=replicate) ===
-  [pad_replicate s=0 f=0] PR=0.5800 ROC=0.8796 F1=0.5342 wall=36.5s
-  [pad_replicate s=0 f=1] PR=0.5794 ROC=0.8877 F1=0.5137 wall=25.4s
-  [pad_replicate s=0 f=2] PR=0.6421 ROC=0.8972 F1=0.5823 wall=25.6s
-  [pad_replicate s=1 f=0] PR=0.5935 ROC=0.8904 F1=0.5562 wall=24.8s
-  [pad_replicate s=1 f=1] PR=0.6043 ROC=0.8860 F1=0.5672 wall=25.3s
-  [pad_replicate s=1 f=2] PR=0.6241 ROC=0.9022 F1=0.5720 wall=25.7s
-  [pad_replicate s=2 f=0] PR=0.5594 ROC=0.8820 F1=0.5465 wall=25.1s
-  [pad_replicate s=2 f=1] PR=0.5976 ROC=0.8903 F1=0.5687 wall=25.5s
-  [pad_replicate s=2 f=2] PR=0.6359 ROC=0.9010 F1=0.5858 wall=25.8s
+  [SKIP] pad_replicate_0_0.csv PR=0.5800
+  [SKIP] pad_replicate_0_1.csv PR=0.5794
+  [SKIP] pad_replicate_0_2.csv PR=0.6421
+  [pad_replicate s=0 f=3] PR=0.6602 ROC=0.9059 F1=0.6148 wall=61.3s
+  [pad_replicate s=0 f=4] PR=0.5874 ROC=0.8901 F1=0.5515 wall=36.3s
+  [SKIP] pad_replicate_1_0.csv PR=0.5935
+  [SKIP] pad_replicate_1_1.csv PR=0.6043
+  [SKIP] pad_replicate_1_2.csv PR=0.6241
+  [pad_replicate s=1 f=3] PR=0.6834 ROC=0.9074 F1=0.6042 wall=45.1s
+  [pad_replicate s=1 f=4] PR=0.5741 ROC=0.8833 F1=0.5625 wall=37.2s
+  [SKIP] pad_replicate_2_0.csv PR=0.5594
+  [SKIP] pad_replicate_2_1.csv PR=0.5976
+  [SKIP] pad_replicate_2_2.csv PR=0.6359
+  [pad_replicate s=2 f=3] PR=0.6805 ROC=0.9125 F1=0.6306 wall=39.1s
+  [pad_replicate s=2 f=4] PR=0.5997 ROC=0.8954 F1=0.5597 wall=43.0s
 
 === Running C5 Variant: pad_reflect (pad=reflect) ===
-  [pad_reflect s=0 f=0] PR=0.5882 ROC=0.8815 F1=0.5448 wall=25.1s
-  [pad_reflect s=0 f=1] PR=0.5750 ROC=0.8866 F1=0.5348 wall=25.7s
-  [pad_reflect s=0 f=2] PR=0.6377 ROC=0.9030 F1=0.5818 wall=25.7s
-  [pad_reflect s=1 f=0] PR=0.5974 ROC=0.8859 F1=0.5496 wall=25.2s
-  [pad_reflect s=1 f=1] PR=0.5958 ROC=0.8898 F1=0.5686 wall=25.8s
-  [pad_reflect s=1 f=2] PR=0.6291 ROC=0.9055 F1=0.5499 wall=25.9s
-  [pad_reflect s=2 f=0] PR=0.5901 ROC=0.8887 F1=0.5603 wall=25.2s
-  [pad_reflect s=2 f=1] PR=0.5998 ROC=0.8891 F1=0.5598 wall=25.7s
-  [pad_reflect s=2 f=2] PR=0.6153 ROC=0.9039 F1=0.5762 wall=25.7s
+  [SKIP] pad_reflect_0_0.csv PR=0.5882
+  [SKIP] pad_reflect_0_1.csv PR=0.5750
+  [SKIP] pad_reflect_0_2.csv PR=0.6377
+  [pad_reflect s=0 f=3] PR=0.6533 ROC=0.8985 F1=0.5905 wall=38.1s
+  [pad_reflect s=0 f=4] PR=0.5726 ROC=0.8863 F1=0.5520 wall=43.6s
+  [SKIP] pad_reflect_1_0.csv PR=0.5974
+  [SKIP] pad_reflect_1_1.csv PR=0.5958
+  [SKIP] pad_reflect_1_2.csv PR=0.6291
+  [pad_reflect s=1 f=3] PR=0.6621 ROC=0.9029 F1=0.5949 wall=38.5s
+  [pad_reflect s=1 f=4] PR=0.5847 ROC=0.8901 F1=0.5281 wall=44.9s
+  [SKIP] pad_reflect_2_0.csv PR=0.5901
+  [SKIP] pad_reflect_2_1.csv PR=0.5998
+  [SKIP] pad_reflect_2_2.csv PR=0.6153
+  [pad_reflect s=2 f=3] PR=0.6881 ROC=0.9054 F1=0.6122 wall=38.6s
+  [pad_reflect s=2 f=4] PR=0.6251 ROC=0.9001 F1=0.5861 wall=46.7s
 
 === Running C5 Variant: norm_zscore_user (pad=zeros) ===
-  [norm_zscore_user s=0 f=0] PR=0.5128 ROC=0.8592 F1=0.4718 wall=25.3s
-  [norm_zscore_user s=0 f=1] PR=0.5315 ROC=0.8738 F1=0.4691 wall=25.7s
-  [norm_zscore_user s=0 f=2] PR=0.5773 ROC=0.8747 F1=0.5235 wall=25.8s
-  [norm_zscore_user s=1 f=0] PR=0.5329 ROC=0.8631 F1=0.4960 wall=25.2s
-  [norm_zscore_user s=1 f=1] PR=0.5310 ROC=0.8718 F1=0.4832 wall=25.7s
-  [norm_zscore_user s=1 f=2] PR=0.5463 ROC=0.8766 F1=0.5480 wall=25.9s
-  [norm_zscore_user s=2 f=0] PR=0.5291 ROC=0.8645 F1=0.5048 wall=25.0s
-  [norm_zscore_user s=2 f=1] PR=0.5417 ROC=0.8733 F1=0.4990 wall=25.6s
-  [norm_zscore_user s=2 f=2] PR=0.5707 ROC=0.8807 F1=0.5451 wall=25.5s
+  [SKIP] norm_zscore_user_0_0.csv PR=0.5128
+  [SKIP] norm_zscore_user_0_1.csv PR=0.5315
+  [SKIP] norm_zscore_user_0_2.csv PR=0.5773
+  [norm_zscore_user s=0 f=3] PR=0.6004 ROC=0.8911 F1=0.5698 wall=44.1s
+  [norm_zscore_user s=0 f=4] PR=0.5127 ROC=0.8530 F1=0.4918 wall=36.3s
+  [SKIP] norm_zscore_user_1_0.csv PR=0.5329
+  [SKIP] norm_zscore_user_1_1.csv PR=0.5310
+  [SKIP] norm_zscore_user_1_2.csv PR=0.5463
+  [norm_zscore_user s=1 f=3] PR=0.5859 ROC=0.8826 F1=0.5458 wall=39.8s
+  [norm_zscore_user s=1 f=4] PR=0.5377 ROC=0.8648 F1=0.5261 wall=46.4s
+  [SKIP] norm_zscore_user_2_0.csv PR=0.5291
+  [SKIP] norm_zscore_user_2_1.csv PR=0.5417
+  [SKIP] norm_zscore_user_2_2.csv PR=0.5707
+  [norm_zscore_user s=2 f=3] PR=0.5808 ROC=0.8876 F1=0.5820 wall=34.2s
+  [norm_zscore_user s=2 f=4] PR=0.5158 ROC=0.8597 F1=0.4769 wall=47.2s
 
 === Running C5 Variant: norm_global_log_minmax (pad=zeros) ===
-  [norm_global_log_minmax s=0 f=0] PR=0.6076 ROC=0.8874 F1=0.5769 wall=25.0s
-  [norm_global_log_minmax s=0 f=1] PR=0.5986 ROC=0.9030 F1=0.5390 wall=25.5s
-  [norm_global_log_minmax s=0 f=2] PR=0.6252 ROC=0.9085 F1=0.5739 wall=25.6s
-  [norm_global_log_minmax s=1 f=0] PR=0.6040 ROC=0.8936 F1=0.5628 wall=25.2s
-  [norm_global_log_minmax s=1 f=1] PR=0.5972 ROC=0.8972 F1=0.5437 wall=25.6s
-  [norm_global_log_minmax s=1 f=2] PR=0.6375 ROC=0.9114 F1=0.5812 wall=25.5s
-  [norm_global_log_minmax s=2 f=0] PR=0.6090 ROC=0.8889 F1=0.5672 wall=25.5s
-  [norm_global_log_minmax s=2 f=1] PR=0.5771 ROC=0.8949 F1=0.5300 wall=27.1s
-  [norm_global_log_minmax s=2 f=2] PR=0.6290 ROC=0.9090 F1=0.5589 wall=29.9s
+  [SKIP] norm_global_log_minmax_0_0.csv PR=0.6076
+  [SKIP] norm_global_log_minmax_0_1.csv PR=0.5986
+  [SKIP] norm_global_log_minmax_0_2.csv PR=0.6252
+  [norm_global_log_minmax s=0 f=3] PR=0.6903 ROC=0.9130 F1=0.6376 wall=37.0s
+  [norm_global_log_minmax s=0 f=4] PR=0.6110 ROC=0.9064 F1=0.5660 wall=49.0s
+  [SKIP] norm_global_log_minmax_1_0.csv PR=0.6040
+  [SKIP] norm_global_log_minmax_1_1.csv PR=0.5972
+  [SKIP] norm_global_log_minmax_1_2.csv PR=0.6375
+  [norm_global_log_minmax s=1 f=3] PR=0.6985 ROC=0.9157 F1=0.6352 wall=46.5s
+  [norm_global_log_minmax s=1 f=4] PR=0.6085 ROC=0.9032 F1=0.5857 wall=39.2s
+  [SKIP] norm_global_log_minmax_2_0.csv PR=0.6090
+  [SKIP] norm_global_log_minmax_2_1.csv PR=0.5771
+  [SKIP] norm_global_log_minmax_2_2.csv PR=0.6290
+  [norm_global_log_minmax s=2 f=3] PR=0.7025 ROC=0.9105 F1=0.6495 wall=46.1s
+  [norm_global_log_minmax s=2 f=4] PR=0.6062 ROC=0.9045 F1=0.5664 wall=35.9s
 
 === Running C5 Variant: norm_global_quantile (pad=zeros) ===
-  [norm_global_quantile s=0 f=0] PR=0.6205 ROC=0.8928 F1=0.5761 wall=28.3s
-  [norm_global_quantile s=0 f=1] PR=0.5633 ROC=0.8964 F1=0.5315 wall=29.6s
-  [norm_global_quantile s=0 f=2] PR=0.6246 ROC=0.9100 F1=0.5708 wall=29.6s
-  [norm_global_quantile s=1 f=0] PR=0.6107 ROC=0.8903 F1=0.5664 wall=29.2s
-  [norm_global_quantile s=1 f=1] PR=0.5949 ROC=0.8972 F1=0.5404 wall=29.7s
-  [norm_global_quantile s=1 f=2] PR=0.6352 ROC=0.9101 F1=0.5877 wall=25.8s
-  [norm_global_quantile s=2 f=0] PR=0.6095 ROC=0.8857 F1=0.5661 wall=25.2s
-  [norm_global_quantile s=2 f=1] PR=0.5801 ROC=0.8961 F1=0.5397 wall=25.9s
-  [norm_global_quantile s=2 f=2] PR=0.6236 ROC=0.9080 F1=0.5446 wall=26.0s
+  [SKIP] norm_global_quantile_0_0.csv PR=0.6205
+  [SKIP] norm_global_quantile_0_1.csv PR=0.5633
+  [SKIP] norm_global_quantile_0_2.csv PR=0.6246
+  [norm_global_quantile s=0 f=3] PR=0.6835 ROC=0.9092 F1=0.6296 wall=44.6s
+  [norm_global_quantile s=0 f=4] PR=0.6150 ROC=0.9037 F1=0.5776 wall=35.2s
+  [SKIP] norm_global_quantile_1_0.csv PR=0.6107
+  [SKIP] norm_global_quantile_1_1.csv PR=0.5949
+  [SKIP] norm_global_quantile_1_2.csv PR=0.6352
+  [norm_global_quantile s=1 f=3] PR=0.6927 ROC=0.9127 F1=0.6130 wall=44.6s
+  [norm_global_quantile s=1 f=4] PR=0.5990 ROC=0.9018 F1=0.5500 wall=34.7s
+  [SKIP] norm_global_quantile_2_0.csv PR=0.6095
+  [SKIP] norm_global_quantile_2_1.csv PR=0.5801
+  [SKIP] norm_global_quantile_2_2.csv PR=0.6236
+  [norm_global_quantile s=2 f=3] PR=0.7017 ROC=0.9075 F1=0.6305 wall=42.9s
+  [norm_global_quantile s=2 f=4] PR=0.6126 ROC=0.9054 F1=0.5621 wall=33.6s
 
 === Running C5 Variant: sep18_as_nan (pad=zeros) ===
-  [sep18_as_nan s=0 f=0] PR=0.6030 ROC=0.8779 F1=0.5560 wall=25.3s
-  [sep18_as_nan s=0 f=1] PR=0.5437 ROC=0.8850 F1=0.5192 wall=25.9s
-  [sep18_as_nan s=0 f=2] PR=0.6159 ROC=0.8992 F1=0.5693 wall=25.7s
-  [sep18_as_nan s=1 f=0] PR=0.6013 ROC=0.8787 F1=0.5543 wall=25.5s
-  [sep18_as_nan s=1 f=1] PR=0.5751 ROC=0.8789 F1=0.5366 wall=26.0s
-  [sep18_as_nan s=1 f=2] PR=0.6443 ROC=0.9089 F1=0.5926 wall=25.8s
-  [sep18_as_nan s=2 f=0] PR=0.6039 ROC=0.8791 F1=0.5542 wall=25.3s
-  [sep18_as_nan s=2 f=1] PR=0.5617 ROC=0.8829 F1=0.5217 wall=25.7s
-  [sep18_as_nan s=2 f=2] PR=0.6335 ROC=0.9090 F1=0.5832 wall=25.1s
+  [SKIP] sep18_as_nan_0_0.csv PR=0.6030
+  [SKIP] sep18_as_nan_0_1.csv PR=0.5437
+  [SKIP] sep18_as_nan_0_2.csv PR=0.6159
+  [sep18_as_nan s=0 f=3] PR=0.6709 ROC=0.9065 F1=0.6215 wall=24.2s
+  [sep18_as_nan s=0 f=4] PR=0.5907 ROC=0.8892 F1=0.5689 wall=46.9s
+  [SKIP] sep18_as_nan_1_0.csv PR=0.6013
+  [SKIP] sep18_as_nan_1_1.csv PR=0.5751
+  [SKIP] sep18_as_nan_1_2.csv PR=0.6443
+  [sep18_as_nan s=1 f=3] PR=0.6590 ROC=0.9071 F1=0.6073 wall=45.2s
+  [sep18_as_nan s=1 f=4] PR=0.5904 ROC=0.8921 F1=0.5370 wall=46.4s
+  [SKIP] sep18_as_nan_2_0.csv PR=0.6039
+  [SKIP] sep18_as_nan_2_1.csv PR=0.5617
+  [SKIP] sep18_as_nan_2_2.csv PR=0.6335
+  [sep18_as_nan s=2 f=3] PR=0.6700 ROC=0.9064 F1=0.6012 wall=45.3s
+  [sep18_as_nan s=2 f=4] PR=0.5673 ROC=0.8861 F1=0.5295 wall=46.4s
 
 === Running C5 Variant: sep18_omitted_shifted (pad=zeros) ===
-  [sep18_omitted_shifted s=0 f=0] PR=0.6007 ROC=0.8788 F1=0.5410 wall=24.6s
-  [sep18_omitted_shifted s=0 f=1] PR=0.5474 ROC=0.8882 F1=0.5430 wall=25.1s
-  [sep18_omitted_shifted s=0 f=2] PR=0.6202 ROC=0.9032 F1=0.5839 wall=25.0s
-  [sep18_omitted_shifted s=1 f=0] PR=0.6004 ROC=0.8839 F1=0.5367 wall=24.4s
-  [sep18_omitted_shifted s=1 f=1] PR=0.5786 ROC=0.8845 F1=0.5455 wall=25.1s
-  [sep18_omitted_shifted s=1 f=2] PR=0.6400 ROC=0.9096 F1=0.5788 wall=25.2s
-  [sep18_omitted_shifted s=2 f=0] PR=0.5910 ROC=0.8813 F1=0.5533 wall=24.8s
-  [sep18_omitted_shifted s=2 f=1] PR=0.5764 ROC=0.8895 F1=0.5434 wall=25.3s
-  [sep18_omitted_shifted s=2 f=2] PR=0.6241 ROC=0.9089 F1=0.5902 wall=25.6s
+  [SKIP] sep18_omitted_shifted_0_0.csv PR=0.6007
+  [SKIP] sep18_omitted_shifted_0_1.csv PR=0.5474
+  [SKIP] sep18_omitted_shifted_0_2.csv PR=0.6202
+  [sep18_omitted_shifted s=0 f=3] PR=0.6697 ROC=0.9098 F1=0.5988 wall=45.5s
+  [sep18_omitted_shifted s=0 f=4] PR=0.5898 ROC=0.8896 F1=0.5286 wall=46.6s
+  [SKIP] sep18_omitted_shifted_1_0.csv PR=0.6004
+  [SKIP] sep18_omitted_shifted_1_1.csv PR=0.5786
+  [SKIP] sep18_omitted_shifted_1_2.csv PR=0.6400
+  [sep18_omitted_shifted s=1 f=3] PR=0.6632 ROC=0.9075 F1=0.5908 wall=45.6s
+  [sep18_omitted_shifted s=1 f=4] PR=0.5855 ROC=0.8905 F1=0.5315 wall=45.9s
+  [SKIP] sep18_omitted_shifted_2_0.csv PR=0.5910
+  [SKIP] sep18_omitted_shifted_2_1.csv PR=0.5764
+  [SKIP] sep18_omitted_shifted_2_2.csv PR=0.6241
+  [sep18_omitted_shifted s=2 f=3] PR=0.6724 ROC=0.9106 F1=0.5979 wall=45.6s
+  [sep18_omitted_shifted s=2 f=4] PR=0.5776 ROC=0.8872 F1=0.5245 wall=46.7s
 
 --- C5 Preprocessing, Padding & Sep-18 Sensitivity Summary ---
                variant  n_cells  ap_mean  ap_ci_lo  ap_ci_hi  roc_mean  roc_ci_lo  roc_ci_hi  f1_mean  f1_ci_lo  f1_ci_hi  map100_mean  p100_mean
-        baseline_mamrd        9 0.597462  0.575965  0.618803  0.891724   0.884192   0.900197 0.556631  0.537507  0.576881     0.913280   0.807778
-         pad_replicate        9 0.601819  0.585490  0.620496  0.890717   0.886220   0.896080 0.558511  0.541332  0.571146     0.915409   0.816667
-           pad_reflect        9 0.603143  0.592116  0.617577  0.892672   0.887905   0.898890 0.558435  0.548823  0.568024     0.918356   0.815556
-      norm_zscore_user        9 0.541472  0.530762  0.557211  0.870867   0.866361   0.874849 0.504500  0.488454  0.524231     0.889557   0.748889
-norm_global_log_minmax        9 0.609464  0.597815  0.620330  0.899319   0.893812   0.904888 0.559283  0.546713  0.569065     0.912456   0.815556
-  norm_global_quantile        9 0.606940  0.589705  0.619066  0.898497   0.893319   0.904428 0.558148  0.546470  0.570639     0.917894   0.801111
-          sep18_as_nan        9 0.598044  0.576573  0.617665  0.888847   0.882299   0.898721 0.554121  0.538585  0.569998     0.919363   0.812222
- sep18_omitted_shifted        9 0.597646  0.579240  0.614295  0.891988   0.885802   0.900580 0.557307  0.546660  0.572619     0.915016   0.815556
+        baseline_mamrd       15 0.608104  0.589100  0.627707  0.893661   0.887469   0.899019 0.561977  0.545754  0.577419     0.916132   0.820667
+         pad_replicate       15 0.613440  0.596262  0.632766  0.894075   0.889436   0.898960 0.569986  0.555166  0.585269     0.912724   0.828667
+           pad_reflect       15 0.614275  0.598914  0.631851  0.894490   0.890186   0.898337 0.565984  0.554540  0.577712     0.921013   0.830667
+      norm_zscore_user       15 0.547099  0.534145  0.561705  0.871779   0.866603   0.876842 0.515523  0.498364  0.533100     0.878393   0.756000
+norm_global_log_minmax       15 0.626809  0.610839  0.649344  0.903147   0.898392   0.906980 0.578268  0.562545  0.598015     0.919477   0.829333
+  norm_global_quantile       15 0.624461  0.606771  0.645805  0.901796   0.897419   0.905255 0.572407  0.558017  0.589118     0.922782   0.826000
+          sep18_as_nan       15 0.608714  0.589781  0.628125  0.892465   0.886358   0.898416 0.563506  0.548754  0.579482     0.917457   0.825333
+ sep18_omitted_shifted       15 0.609131  0.591807  0.628376  0.894876   0.889150   0.900573 0.559186  0.546291  0.572960     0.915012   0.826000
 
 --- C5 Paired Contrasts (Variant - Baseline MAMRD) ---
-               variant  ap_variant  ap_baseline  delta_ap     ci_lo     ci_hi   rel_pct  wilcoxon_p  wins_vs_base
-         pad_replicate    0.601819     0.597462  0.004358 -0.010564  0.020149  0.729379    0.425781             6
-           pad_reflect    0.603143     0.597462  0.005681 -0.005568  0.018447  0.950929    0.570312             5
-      norm_zscore_user    0.541472     0.597462 -0.055990 -0.072768 -0.038723 -9.371299    0.003906             0
-norm_global_log_minmax    0.609464     0.597462  0.012002  0.001259  0.028285  2.008883    0.164062             6
-  norm_global_quantile    0.606940     0.597462  0.009478 -0.001981  0.017424  1.586440    0.074219             6
-          sep18_as_nan    0.598044     0.597462  0.000583 -0.009078  0.006167  0.097547    0.496094             6
- sep18_omitted_shifted    0.597646     0.597462  0.000184 -0.007753  0.005162  0.030769    0.734375             5
+               variant  ap_variant  ap_baseline  delta_ap     ci_lo     ci_hi    rel_pct  wilcoxon_p  wins_vs_base
+         pad_replicate    0.613440     0.608104  0.005336 -0.004636  0.016227   0.877551    0.359131             9
+           pad_reflect    0.614275     0.608104  0.006171 -0.003022  0.016617   1.014844    0.359131             9
+      norm_zscore_user    0.547099     0.608104 -0.061005 -0.071393 -0.048062 -10.031965    0.000061             0
+norm_global_log_minmax    0.626809     0.608104  0.018705  0.009648  0.027482   3.075975    0.002625            12
+  norm_global_quantile    0.624461     0.608104  0.016357  0.007700  0.022881   2.689839    0.001526            12
+          sep18_as_nan    0.608714     0.608104  0.000610 -0.005053  0.004408   0.100337    0.252380            11
+ sep18_omitted_shifted    0.609131     0.608104  0.001028 -0.003855  0.004247   0.168973    0.330261            10
 
-[DONE] C5 completed in 30.95 min -> ./results/r3_revision/C5_preprocessing_sensitivity
+[DONE] C5 completed in 33.07 min -> ./results/r3_revision/C5_preprocessing_sensitivity

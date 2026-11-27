@@ -1,0 +1,42 @@
+{
+  "selected_lr": 0.001,
+  "selected_wd": 0.0001,
+  "selected_is_shared_schedule": false,
+  "selected_des_ap": 0.6591900490329937,
+  "n_cells": 15,
+  "tuned_mamrd_ap": 0.6015098803261819,
+  "tuned_mamrd_ci": [
+    0.5830868007110912,
+    0.6213446856172635
+  ],
+  "default_mamrd_ap": 0.6081038148710448,
+  "tuned_baseline_ap": {
+    "horln": 0.5748734784124008,
+    "hybridattn": 0.5843908628165135
+  },
+  "tuned_mamrd_minus_default_mamrd": {
+    "dAP": -0.0065939345448627895,
+    "ci_lo": -0.015405006251478424,
+    "ci_hi": 0.0005238580579031864,
+    "wilcoxon_p": 0.25238037109375,
+    "wins": 5,
+    "n": 15
+  },
+  "tuned_mamrd_minus_tuned_horln": {
+    "dAP": 0.026636401913781287,
+    "ci_lo": 0.012206564265819588,
+    "ci_hi": 0.04056253419403289,
+    "wilcoxon_p": 0.0042724609375,
+    "wins": 13,
+    "n": 15
+  },
+  "tuned_mamrd_minus_tuned_hybridattn": {
+    "dAP": 0.017119017509668443,
+    "ci_lo": 0.005519416602710195,
+    "ci_hi": 0.029985307605049236,
+    "wilcoxon_p": 0.02154541015625,
+    "wins": 11,
+    "n": 15
+  },
+  "minutes": 10.0
+}

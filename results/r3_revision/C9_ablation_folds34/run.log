@@ -1,0 +1,271 @@
+[run] S0 (a34_bu0_core) seed 0 folds [3, 4]
+[device] cuda | backbone=a34_bu0_core | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 2.3s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=0 f=3 kf=0 | PR=0.6115 ROC=0.8983 F1=0.5988 | HD_PR=0.728 HR_PR=0.719 wall=30.2s
+[2/2] s=0 f=4 kf=0 | PR=0.5633 ROC=0.8802 F1=0.5124 | HD_PR=0.568 HR_PR=0.656 wall=11.7s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_bu0_core_manifest_s0.csv
+[run] S0 (a34_bu0_core) seed 1 folds [3, 4]
+[device] cuda | backbone=a34_bu0_core | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.7s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=1 f=3 kf=0 | PR=0.6187 ROC=0.8951 F1=0.5896 | HD_PR=0.720 HR_PR=0.717 wall=36.0s
+[2/2] s=1 f=4 kf=0 | PR=0.5673 ROC=0.8804 F1=0.5251 | HD_PR=0.609 HR_PR=0.575 wall=12.2s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_bu0_core_manifest_s1.csv
+[run] S0 (a34_bu0_core) seed 2 folds [3, 4]
+[device] cuda | backbone=a34_bu0_core | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.7s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=2 f=3 kf=0 | PR=0.6083 ROC=0.8938 F1=0.5977 | HD_PR=0.728 HR_PR=0.718 wall=23.5s
+[2/2] s=2 f=4 kf=0 | PR=0.5320 ROC=0.8716 F1=0.5096 | HD_PR=0.603 HR_PR=0.563 wall=12.7s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_bu0_core_manifest_s2.csv
+[run] S1 (a34_bu1_ccname) seed 0 folds [3, 4]
+[device] cuda | backbone=a34_bu1_ccname | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=0 f=3 kf=0 | PR=0.6530 ROC=0.8997 F1=0.5977 | HD_PR=0.767 HR_PR=0.711 wall=37.3s
+[2/2] s=0 f=4 kf=0 | PR=0.5873 ROC=0.8953 F1=0.5571 | HD_PR=0.615 HR_PR=0.601 wall=21.0s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_bu1_ccname_manifest_s0.csv
+[run] S1 (a34_bu1_ccname) seed 1 folds [3, 4]
+[device] cuda | backbone=a34_bu1_ccname | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=1 f=3 kf=0 | PR=0.6517 ROC=0.9051 F1=0.5878 | HD_PR=0.756 HR_PR=0.706 wall=36.0s
+[2/2] s=1 f=4 kf=0 | PR=0.5753 ROC=0.8905 F1=0.5340 | HD_PR=0.619 HR_PR=0.589 wall=23.2s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_bu1_ccname_manifest_s1.csv
+[run] S1 (a34_bu1_ccname) seed 2 folds [3, 4]
+[device] cuda | backbone=a34_bu1_ccname | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.7s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=2 f=3 kf=0 | PR=0.6408 ROC=0.8954 F1=0.5643 | HD_PR=0.745 HR_PR=0.739 wall=35.2s
+[2/2] s=2 f=4 kf=0 | PR=0.5548 ROC=0.8806 F1=0.5046 | HD_PR=0.596 HR_PR=0.561 wall=23.8s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_bu1_ccname_manifest_s2.csv
+[run] S2 (a34_bu2_mask) seed 0 folds [3, 4]
+[device] cuda | backbone=a34_bu2_mask | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=0 f=3 kf=0 | PR=0.6508 ROC=0.9073 F1=0.5992 | HD_PR=0.752 HR_PR=0.733 wall=41.5s
+[2/2] s=0 f=4 kf=0 | PR=0.5651 ROC=0.8870 F1=0.5314 | HD_PR=0.595 HR_PR=0.633 wall=29.0s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_bu2_mask_manifest_s0.csv
+[run] S2 (a34_bu2_mask) seed 1 folds [3, 4]
+[device] cuda | backbone=a34_bu2_mask | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.8s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=1 f=3 kf=0 | PR=0.6407 ROC=0.9013 F1=0.5969 | HD_PR=0.767 HR_PR=0.692 wall=42.1s
+[2/2] s=1 f=4 kf=0 | PR=0.5650 ROC=0.8894 F1=0.5219 | HD_PR=0.607 HR_PR=0.578 wall=29.4s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_bu2_mask_manifest_s1.csv
+[run] S2 (a34_bu2_mask) seed 2 folds [3, 4]
+[device] cuda | backbone=a34_bu2_mask | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.8s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=2 f=3 kf=0 | PR=0.6517 ROC=0.9052 F1=0.5911 | HD_PR=0.764 HR_PR=0.748 wall=43.2s
+[2/2] s=2 f=4 kf=0 | PR=0.5633 ROC=0.8903 F1=0.5170 | HD_PR=0.593 HR_PR=0.605 wall=29.1s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_bu2_mask_manifest_s2.csv
+[run] S3 (a33_generic) seed 0 folds [3, 4]
+[device] cuda | backbone=a33_generic | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.7s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=0 f=3 kf=0 | PR=0.6669 ROC=0.9076 F1=0.6049 | HD_PR=0.769 HR_PR=0.781 wall=49.6s
+[2/2] s=0 f=4 kf=0 | PR=0.5831 ROC=0.8882 F1=0.5177 | HD_PR=0.621 HR_PR=0.617 wall=39.2s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a33_generic_manifest_s0.csv
+[run] S3 (a33_generic) seed 1 folds [3, 4]
+[device] cuda | backbone=a33_generic | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 3.0s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=1 f=3 kf=0 | PR=0.6590 ROC=0.9039 F1=0.6043 | HD_PR=0.777 HR_PR=0.743 wall=38.2s
+[2/2] s=1 f=4 kf=0 | PR=0.5778 ROC=0.8884 F1=0.5285 | HD_PR=0.630 HR_PR=0.620 wall=19.7s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a33_generic_manifest_s1.csv
+[run] S3 (a33_generic) seed 2 folds [3, 4]
+[device] cuda | backbone=a33_generic | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.6s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=2 f=3 kf=0 | PR=0.6693 ROC=0.9061 F1=0.6245 | HD_PR=0.773 HR_PR=0.776 wall=49.1s
+[2/2] s=2 f=4 kf=0 | PR=0.5652 ROC=0.8849 F1=0.5250 | HD_PR=0.608 HR_PR=0.619 wall=35.7s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a33_generic_manifest_s2.csv
+[run] A34_no-miss (a34_no_missingness) seed 0 folds [3, 4]
+[device] cuda | backbone=a34_no_missingness | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.7s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=0 f=3 kf=0 | PR=0.6119 ROC=0.8986 F1=0.5773 | HD_PR=0.716 HR_PR=0.768 wall=54.3s
+[2/2] s=0 f=4 kf=0 | PR=0.5753 ROC=0.8726 F1=0.5356 | HD_PR=0.597 HR_PR=0.628 wall=40.3s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_no_missingness_manifest_s0.csv
+[run] A34_no-miss (a34_no_missingness) seed 1 folds [3, 4]
+[device] cuda | backbone=a34_no_missingness | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.8s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=1 f=3 kf=0 | PR=0.6292 ROC=0.9012 F1=0.5981 | HD_PR=0.725 HR_PR=0.766 wall=54.5s
+[2/2] s=1 f=4 kf=0 | PR=0.5590 ROC=0.8708 F1=0.5275 | HD_PR=0.595 HR_PR=0.565 wall=43.5s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_no_missingness_manifest_s1.csv
+[run] A34_no-miss (a34_no_missingness) seed 2 folds [3, 4]
+[device] cuda | backbone=a34_no_missingness | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.7s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=2 f=3 kf=0 | PR=0.6099 ROC=0.8931 F1=0.5585 | HD_PR=0.724 HR_PR=0.735 wall=53.9s
+[2/2] s=2 f=4 kf=0 | PR=0.5530 ROC=0.8697 F1=0.5182 | HD_PR=0.623 HR_PR=0.579 wall=41.3s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a34_no_missingness_manifest_s2.csv
+[run] A32 (a32_generic) seed 0 folds [3, 4]
+[device] cuda | backbone=a32_generic | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.8s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=0 f=3 kf=0 | PR=0.6204 ROC=0.9041 F1=0.5665 | HD_PR=0.746 HR_PR=0.737 wall=44.5s
+[2/2] s=0 f=4 kf=0 | PR=0.5559 ROC=0.8720 F1=0.5272 | HD_PR=0.577 HR_PR=0.609 wall=26.2s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a32_generic_manifest_s0.csv
+[run] A32 (a32_generic) seed 1 folds [3, 4]
+[device] cuda | backbone=a32_generic | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.7s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=1 f=3 kf=0 | PR=0.6282 ROC=0.8994 F1=0.5833 | HD_PR=0.733 HR_PR=0.749 wall=44.1s
+[2/2] s=1 f=4 kf=0 | PR=0.5573 ROC=0.8733 F1=0.5110 | HD_PR=0.618 HR_PR=0.552 wall=30.5s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a32_generic_manifest_s1.csv
+[run] A32 (a32_generic) seed 2 folds [3, 4]
+[device] cuda | backbone=a32_generic | lr=0.0003
+[data] Loading ./data/SGCC.csv ...
+  loaded (42372, 1037) in 1.7s  NaN=25.6%  theft=8.5%
+./scripts/run_local_grid.py:103: RuntimeWarning: Mean of empty slice
+  ceiling = np.nanmean(arr, axis=1, keepdims=True) + 2.0 * np.nanstd(arr, axis=1, keepdims=True)
+<conda-env>/lib/python3.11/site-packages/numpy/lib/_nanfunctions_impl.py:1997: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+./scripts/run_local_grid.py:107: RuntimeWarning: All-NaN slice encountered
+  row_min, row_max = np.nanmin(arr, axis=1, keepdims=True), np.nanmax(arr, axis=1, keepdims=True)
+  final shape: (42372, 147, 7)  NaN=25.75%
+[cohort] kept 42372 / 42372  theft%=8.53
+[1/2] s=2 f=3 kf=0 | PR=0.6257 ROC=0.8934 F1=0.5627 | HD_PR=0.735 HR_PR=0.725 wall=45.9s
+[2/2] s=2 f=4 kf=0 | PR=0.5555 ROC=0.8758 F1=0.5253 | HD_PR=0.625 HR_PR=0.619 wall=30.6s
+[done] -> ./results/r3_revision/C9_ablation_folds34/bu/a32_generic_manifest_s2.csv
+[done] ablation folds [3, 4] in 26.0 min -> ./results/r3_revision/C9_ablation_folds34

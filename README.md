@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
-[![Release: v4.0-R3](https://img.shields.io/badge/Release-v4.0--R3-blue.svg)](https://github.com/azeem1020/etd-mamrd-conformal/releases/tag/v4.0-R3)
+[![Release: v4.1-R3](https://img.shields.io/badge/Release-v4.1--R3-blue.svg)](https://github.com/azeem1020/etd-mamrd-conformal/releases/tag/v4.1-R3)
 
 Official code repository and experiment replication suite for:
 
@@ -67,6 +67,8 @@ etd-mamrd-conformal/
 │   │   ├── compute_r3_ecl_tables.py           # Verified ECL Table 2 & Supp. Tables S6-S7
 │   │   ├── run_c5_preprocessing_sensitivity.py # Padding, normalization & Sep-18 sweeps
 │   │   ├── run_c7_baseline_hpo.py             # 6-config HPO, WDCNN-interp, Finardi-QT
+│   │   ├── run_r3_c7_mamrd_hpo.py             # Same 6-config HPO applied to MAMRD
+│   │   ├── run_r3_ablation_folds34.py         # Table 5 ablation arms on Folds 3-4
 │   │   ├── build_r3_5fold_tables_and_figures.py # Authoritative 5-fold ledger, CSVs & PDFs
 │   │   ├── run_c4_conformal_sensitivity.py    # Standalone Folds 0-2 C4 diagnostic
 │   │   ├── run_c6_alt_groupings.py            # Standalone Folds 0-2 C6 diagnostic
@@ -87,15 +89,16 @@ etd-mamrd-conformal/
 ├── results/
 │   ├── r3_revision/                       # Authoritative Revision 3 outputs (see README inside)
 │   │   ├── r3_manuscript_verified_ledger.json # Master 5-fold single-source-of-truth JSON
-│   │   ├── tables/                        # 7 5-fold CSV exports + LaTeX tab_{strata,matched,perstratum}.tex
+│   │   ├── tables/                        # 9 5-fold CSV exports + LaTeX tab_{strata,matched,perstratum}.tex
 │   │   ├── figures/ & fig_previews/       # Regenerated vector PDFs & 220-dpi PNG previews
 │   │   ├── C1_5fold_and_stats/            # Folds 3-4 raw CSVs, Table 3, consumer bootstraps
 │   │   ├── C2_missingness_sensitivity/    # Clean cohort + 3-way neural decomposition
 │   │   ├── C3_ecl_client_disjoint/        # 5-fold client-disjoint ECL cells & verified tables
 │   │   ├── C5_preprocessing_sensitivity/  # Padding, normalization & Sep-18 sweeps
-│   │   ├── C7_baseline_hpo/               # 6-config validation grid, tuned baselines, WDCNN/Finardi
+│   │   ├── C7_baseline_hpo/               # 6-config validation grid, tuned MAMRD/HORLN/Self-Attn, WDCNN/Finardi
+│   │   ├── C9_ablation_folds34/           # Table 5 ablation arms (S0-S3, A34, A32) on Folds 3-4
 │   │   ├── logs/                          # Tier-1 reproduction logs (reproduce_all_r3.log)
-│   │   └── _3fold_diagnostics/            # Early Folds 0-2 standalone C4/C6/C8 diagnostics
+│   │   └── _3fold_diagnostics/            # Earlier Folds 0-2 runs (C2/C5/C7 summaries, C4/C6/C8 diagnostics)
 │   ├── phase_n_retrained/                 # Folds 0-2 SGCC base predictions & S0-S4 ablations
 │   └── _archive_phase_n_pre_retrain/      # Archived pre-retrain audit logs
 │
@@ -105,7 +108,7 @@ etd-mamrd-conformal/
 
 ### Baseline detectors
 
-`scripts/phased/baselines.py` contains our PyTorch re-implementations of six published detectors adapted to the `147 x 7` weekly input grid. All seven models, MAMRD included, are trained and evaluated under one common protocol: consumer-disjoint partitions, per-consumer min-max preprocessing, AdamW ($\text{lr}=3\times 10^{-4}$, $\text{wd}=10^{-4}$, batch size `128`, `30` epochs), class-balanced mini-batches, checkpoint selection by validation PR-AUC on $\mathcal{D}_{\text{es}}$, and native-prevalence test sets. Supplementary Table S8 documents all adaptation details; `scripts/r3/run_c7_baseline_hpo.py` additionally evaluates a 6-configuration `(lr, wd)` validation sweep on $\mathcal{D}_{\text{es}}$ for HORLN and Self-Attention, native neighbor interpolation for WDCNN (`0.334` AP vs. `0.352` zero-fill on matched Folds 0–2, `M=9`), and native train-fit 10-quantile normalization for Self-Attention (`0.548` AP vs. `0.522` common preprocessing on matched Folds 0–2, `M=9`).
+`scripts/phased/baselines.py` contains our PyTorch re-implementations of six published detectors adapted to the `147 x 7` weekly input grid. All seven models, MAMRD included, are trained and evaluated under one common protocol: consumer-disjoint partitions, per-consumer min-max preprocessing, AdamW ($\text{lr}=3\times 10^{-4}$, $\text{wd}=10^{-4}$, batch size `128`, `30` epochs), class-balanced mini-batches, checkpoint selection by validation PR-AUC on $\mathcal{D}_{\text{es}}$, and native-prevalence test sets. Supplementary Table S8 documents all adaptation details; `scripts/r3/run_c7_baseline_hpo.py` additionally evaluates a 6-configuration `(lr, wd)` validation sweep on $\mathcal{D}_{\text{es}}$ for HORLN and Self-Attention, native neighbor interpolation for WDCNN (`0.339` AP), and native train-fit 10-quantile normalization for Self-Attention (`0.566` AP), all on the 15 matched cells (Folds 0–4 x Seeds 0–2); `scripts/r3/run_r3_c7_mamrd_hpo.py` applies the same validation sweep to MAMRD (Supplementary Table S13).
 
 | Detector | Paper | Core Formulation | Re-implementation Notes |
 |---|---|---|---|
@@ -174,7 +177,7 @@ export MAMRD_RESULTS=/path/to/results/phase_n_retrained
 
 ### Tier 1 (Revision 3 Authoritative Suite): CPU Regeneration Without GPU Retraining (~1 min)
 
-Regenerates all authoritative 5-fold statistical ledgers, 7 flat CSV tables, LaTeX Supplementary Tables S2–S4, and all 7 vector PDF figures from the released per-cell predictions in `results/phase_n_retrained/` (Folds 0–2) and `results/r3_revision/` (Folds 3–4, 5-fold client-disjoint ECL, and C2/C5/C7 sensitivity runs) **without GPU retraining** (requires placing `data/SGCC.csv` and `data/LD2011_2014.txt` per Section 4 to compute consumer router magnitudes, weekday/weekend contrasts, and missingness rates):
+Regenerates all authoritative 5-fold statistical ledgers, 9 flat CSV tables, LaTeX Supplementary Tables S2–S4, and all 7 vector PDF figures from the released per-cell predictions in `results/phase_n_retrained/` (Folds 0–2) and `results/r3_revision/` (Folds 3–4, 5-fold client-disjoint ECL, and C2/C5/C7 sensitivity runs) **without GPU retraining** (requires placing `data/SGCC.csv` and `data/LD2011_2014.txt` per Section 4 to compute consumer router magnitudes, weekday/weekend contrasts, and missingness rates):
 
 ```bash
 python scripts/reproduce_all_r3.py
@@ -209,6 +212,8 @@ python scripts/r3/run_c2_missingness_sensitivity.py  # Clean cohort (N=40,258) &
 python scripts/r3/run_c3_ecl_client_disjoint.py      # 5-fold client-disjoint GroupKFold ECL (90 cells)
 python scripts/r3/run_c5_preprocessing_sensitivity.py # Padding, normalization & 2016-09-18 variants
 python scripts/r3/run_c7_baseline_hpo.py             # 6-config (lr, wd) HPO, WDCNN-interp, Finardi-QT
+python scripts/r3/run_r3_c7_mamrd_hpo.py             # Same validation sweep for MAMRD (tuned vs. tuned)
+python scripts/r3/run_r3_ablation_folds34.py         # Table 5 ablation arms on Folds 3-4 (36 cells)
 
 # 3. Tier-1 CPU regeneration of all verified ledgers, tables & vector figures
 python scripts/reproduce_all_r3.py
@@ -223,7 +228,7 @@ python scripts/reproduce_all_r3.py
 | **Table 2** | 5-fold SGCC (`14,420` test consumers, `76` Flat thefts) & 5-fold client-disjoint ECL (`296/26/48` clients) | `scripts/r3/build_r3_partition_manifests.py`, `compute_r3_ecl_tables.py`, `build_r3_5fold_tables_and_figures.py` | `partition_manifests/*_fold_counts.csv`, `results/r3_revision/r3_manuscript_verified_ledger.json` |
 | **Table 3** | 5-fold SGCC main comparison (`15` matched cells per detector + `25`-cell MAMRD); Friedman $\chi^2_6 = 89.26$, Wilcoxon $p = 6.10\times 10^{-5}$; consumer bootstrap ($B=1{,}000$) | `scripts/r3/run_c1_5fold.py` | `results/r3_revision/C1_5fold_and_stats/{table3_5fold_main_results.csv, consumer_bootstrap_3fold_vs_5fold.csv, c1_summary.json}` |
 | **Table 4** | 5-fold retrospective & prospective fixed-FPR (`1%, 5%`) operating points on SGCC (`5` folds) & ECL client-disjoint (`5` folds) | `scripts/r3/build_r3_5fold_tables_and_figures.py` | `results/r3_revision/tables/table4_5fold_prospective.csv` |
-| **Table 5 & Fig. 3** | Controlled Folds 0–2 sequential & subtractive ablations ($M=9$, $\mathcal{S}_0\to\mathcal{S}_4$, $\mathcal{A}_{32}$, $\mathcal{A}_{34,\text{no-miss}}$) + C2 3-way neural decomposition | `scripts/compute_r2_revisions.py`, `scripts/r3/run_c2_missingness_sensitivity.py`, `build_r3_5fold_tables_and_figures.py` | `results/phase_n_retrained/r2_audit/table5_ablation.csv`, `results/r3_revision/C2_missingness_sensitivity/c2c_three_way_neural.csv`, `results/r3_revision/figures/fig3_ablation_bars.pdf` |
+| **Table 5 & Fig. 3** | 5-fold sequential & subtractive ablations ($M=15$, Folds 0–4 x Seeds 0–2; $\mathcal{S}_0\to\mathcal{S}_4$, $\mathcal{A}_{32}$, $\mathcal{A}_{34,\text{no-miss}}$) + C2 clean cohort and 3-way neural decomposition | `scripts/run_master_retrain.py` (Folds 0–2), `scripts/r3/run_r3_ablation_folds34.py` (Folds 3–4), `scripts/r3/run_c2_missingness_sensitivity.py`, `build_r3_5fold_tables_and_figures.py` | `results/r3_revision/tables/table5_ablation_5fold.csv`, `results/r3_revision/C2_missingness_sensitivity/c2_paired_contrasts.csv`, `results/r3_revision/figures/fig3_ablation_bars.pdf` |
 | **Table 6 & Fig. 5** | 5-fold SGCC Mondrian conformal audit ($1-\alpha=0.80$, `500` MAMRD / `300` matched resplits, infinite-quantile fallback when $k_\phi > n_\phi$) | `scripts/r3/build_r3_5fold_tables_and_figures.py` | `results/r3_revision/tables/table6_5fold_conformal.csv`, `results/r3_revision/figures/fig5_conformal_tradeoffs.pdf` |
 | **Fig. 2, Fig. 4, Supp. Figs. S2, S4** | 5-fold SGCC PR/ROC curves; 5-fold constrained recalibration ($w = \exp(\eta) > 0$, `BFGS`, $C=10^4$, `115` fits); metric inflation; Heavy−Flat hit-rate gap | `scripts/r3/build_r3_5fold_tables_and_figures.py` | `results/r3_revision/figures/{fig2_performance_curves,fig4_calibration_reliability,fig1_metric_inflation,fig6_trust_guarantee}.pdf`, `tables/c8_5fold_constrained_cal.csv` |
 | **Supp. Tables S2–S4** | 5-fold SGCC per-stratum detectability, prevalence-matched contrasts ($\chi^2_4$), cross-detector per-group AP | `scripts/r3/build_r3_5fold_tables_and_figures.py` | `results/r3_revision/tables/{tab_strata,tab_matched,tab_perstratum}.tex` |
@@ -232,8 +237,8 @@ python scripts/reproduce_all_r3.py
 | **Supp. Table S9** | Consumer-level paired bootstrap (3-fold vs. 5-fold; single-model mean `+0.034`, 3-seed ensemble `+0.010`) | `scripts/r3/run_c1_5fold.py` | `results/r3_revision/C1_5fold_and_stats/consumer_bootstrap_3fold_vs_5fold.csv` |
 | **Supp. Table S10** | Clean-cohort (`N = 40,258`, excluding `2,114` zero/NaN consumers) evaluation & retraining + 3-way neural decomposition | `scripts/r3/run_c2_missingness_sensitivity.py` | `results/r3_revision/C2_missingness_sensitivity/{c2a_cohort_exclusion_cached.csv, c2b_clean_cohort_retrain.csv, c2c_three_way_neural.csv}` |
 | **Supp. Table S11 & Fig. S6(a)** | 5-fold Flat calibration sweep (`f_cal` $\in \{0.15..0.65\}$, $76$ pooled Flat thefts, $n_{\text{cal}} = 11.1..49.2$); Tibshirani IPW selective inspection (`e(x) = max(0.05, s^\gamma)`) & distribution-shift tests | `scripts/r3/build_r3_5fold_tables_and_figures.py` | `results/r3_revision/tables/{c4_pooled_5fold_flat,c4_ipw_5fold,c4_shift_5fold}.csv`, `results/r3_revision/figures/fig_s6_r3_conformal_robustness.pdf` |
-| **Supp. Table S12** | Preprocessing, Laplacian padding (`replicate`, `reflect`), global normalization, & `2016-09-18` sensitivity (`9` cells each) | `scripts/r3/run_c5_preprocessing_sensitivity.py` | `results/r3_revision/C5_preprocessing_sensitivity/{c5_sensitivity_summary.csv, c5_paired_contrasts.csv}` |
-| **Supp. Table S13** | 6-config `(lr, wd)` HPO grid on Fold 0 Seed 0 $\mathcal{D}_{\text{es}}$, tuned `9`-cell HORLN/Self-Attn, WDCNN interpolation, Finardi 10-quantile | `scripts/r3/run_c7_baseline_hpo.py` | `results/r3_revision/C7_baseline_hpo/{c7_hpo_validation_grid,c7_tuned_baselines_summary,c7_wdcnn_interp_summary,c7_finardi_native_9cell}.csv` |
+| **Supp. Table S12** | Preprocessing, Laplacian padding (`replicate`, `reflect`), global normalization, & `2016-09-18` sensitivity (`15` cells each; Panel A) + two baselines with their original preprocessing (Panel B) | `scripts/r3/run_c5_preprocessing_sensitivity.py`, `scripts/r3/run_c7_baseline_hpo.py` | `results/r3_revision/C5_preprocessing_sensitivity/{c5_sensitivity_summary.csv, c5_paired_contrasts.csv}`, `results/r3_revision/C7_baseline_hpo/{c7_wdcnn_interp_summary,c7_finardi_native_summary}.csv` |
+| **Supp. Table S13** | Same 6-config `(lr, wd)` validation search on Fold 0 Seed 0 $\mathcal{D}_{\text{es}}$ for the three highest-ranked detectors (MAMRD, HORLN, Self-Attention); selected settings evaluated on `15` cells | `scripts/r3/run_c7_baseline_hpo.py`, `scripts/r3/run_r3_c7_mamrd_hpo.py` | `results/r3_revision/C7_baseline_hpo/{c7_hpo_validation_grid,c7_mamrd_tuning_grid,c7_tuned_baselines_summary,c7_mamrd_tuning_summary}.csv`, `results/r3_revision/tables/table_s13_tuning_5fold.csv` |
 | **Supp. Table S14 & Fig. S6(b)** | 5-fold robustness across 4 grouping schemes (`35.5%`, `33.4%`, `24.2%`, `45.3%` workload reduction at $80\%$ target) & constrained calibration (`115` fits, `BFGS` + `L-BFGS-B`) | `scripts/r3/build_r3_5fold_tables_and_figures.py`, `scripts/r3/run_c8_calibration_prospective.py` | `results/r3_revision/tables/{c6_alt_groupings_5fold,c8_5fold_constrained_cal}.csv`, `results/r3_revision/_3fold_diagnostics/C8_calibration_and_prospective/` |
 
 ---
@@ -256,7 +261,7 @@ All 5-fold SGCC and 5-fold ECL conformal audits share `scripts/conformal_common.
   journal   = {Scientific Reports},
   year      = {2026},
   doi       = {10.5281/zenodo.23344738},
-  note      = {Under review (Revision 3, tag v4.0-R3)}
+  note      = {Under review (Revision 3, tag v4.1-R3)}
 }
 ```
 

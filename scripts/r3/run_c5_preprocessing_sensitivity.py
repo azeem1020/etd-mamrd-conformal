@@ -2,8 +2,8 @@
 """Comment 5: Preprocessing, Laplacian Padding, & 2016-09-18 Reconstruction Sensitivity.
 
 Evaluates 7 controlled architectural/preprocessing variants of MAMRD (a34_generic)
-on SGCC Folds 0-2 x Seeds 0-2 = 9 cells each under identical TrainConfig (and exact
-same train/es/cal/test indices as Table 3's 0.597 AP baseline):
+on SGCC Folds 0-4 x Seeds 0-2 = 15 cells each (--folds) under identical TrainConfig (and exact
+same train/es/cal/test indices as the Table 3 MAMRD cells, Folds 3-4 from raw_folds34):
   1. pad_replicate          : padding_mode="replicate" in Branches 2 & 3 Laplacian stencils
   2. pad_reflect            : padding_mode="reflect" in Branches 2 & 3 Laplacian stencils
   3. norm_zscore_user       : per-consumer 2-sigma clip + per-consumer z-score (clipped [-5, 5])
@@ -38,6 +38,7 @@ from repro_config import _ROOT, RESULTS_DIR, SGCC_PATH, scrub_paths
 ORIG_REPO = _ROOT
 ORIG_RES = RESULTS_DIR
 R3_RES = _ROOT / "results" / "r3_revision"
+RAW34 = R3_RES / "C1_5fold_and_stats" / "raw_folds34"   # MAMRD Folds 3-4 (run_c1_5fold.py)
 OUT = R3_RES / "C5_preprocessing_sensitivity"
 CELLS_DIR = OUT / "cells"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -237,6 +238,8 @@ def main() -> None:
     ap.add_argument("--epochs", type=int, default=30)
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--resume", action="store_true", default=True)
+    ap.add_argument("--folds", nargs="+", type=int, default=[0, 1, 2, 3, 4],
+                    help="outer folds (Revision 3 default: all five)")
     args = ap.parse_args()
 
     if args.self_test:
@@ -290,7 +293,7 @@ def main() -> None:
     cols = ["variant", "seed", "fold", "wall_s", "n_test", "n_pos",
             "pr_auc", "roc_auc", "f1", "map_at_100", "p_at_100", "val_labels_json", "val_scores_json"]
 
-    # Cache global-norm per fold so folds 0,1,2 aren't recomputed 3x across seeds
+    # Cache global-norm per fold so each fold is not recomputed for every seed
     fold_cache = {}
     all_dfs = {}
 
@@ -298,7 +301,7 @@ def main() -> None:
         log(f"\n=== Running C5 Variant: {vname} (pad={pad_mode}) ===")
         v_rows = []
         for s in range(3):
-            for f in range(3):
+            for f in args.folds:
                 fp = CELLS_DIR / f"{vname}_{s}_{f}.csv"
                 if args.resume and fp.exists() and fp.stat().st_size > 100:
                     df_c = pd.read_csv(fp)
@@ -321,11 +324,11 @@ def main() -> None:
                 log(f"  [{vname} s={s} f={f}] PR={r['pr_auc']:.4f} ROC={r['roc_auc']:.4f} F1={r['f1']:.4f} wall={r['wall_s']}s")
         all_dfs[vname] = pd.DataFrame(v_rows).sort_values(["seed", "fold"]).reset_index(drop=True)
 
-    # Load Baseline MAMRD (9-cell) read-only for paired contrasts
+    # Load baseline MAMRD cells read-only for paired contrasts (Folds 0-2 R2, Folds 3-4 R3 raw_folds34)
     base_rows = []
     for s in range(3):
-        for f in range(3):
-            r = next(csv.DictReader(open(ORIG_RES / f"a34_cell_{s}_{f}.csv")))
+        for f in args.folds:
+            r = next(csv.DictReader(open((ORIG_RES if f < 3 else RAW34) / f"a34_cell_{s}_{f}.csv")))
             yt = np.array(json.loads(r["val_labels_json"]), dtype=int)
             sc = np.array(json.loads(r["val_scores_json"]), dtype=float)
             m100, p100 = topk_tie_neutral(yt, sc, 100, n_perm=1000, seed=0)

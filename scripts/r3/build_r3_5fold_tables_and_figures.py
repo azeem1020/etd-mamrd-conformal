@@ -6,7 +6,7 @@ Outputs (under results/r3_revision/):
   1. r3_manuscript_verified_ledger.json              (single source of truth for R3 text/tables)
   2. tables/tab_strata.tex, tab_matched.tex, tab_perstratum.tex + 7 authoritative 5-fold CSVs
   3. figures/fig2_performance_curves.pdf             (5-fold SGCC PR/ROC)
-  4. figures/fig3_ablation_bars.pdf                  (S0-S4 M=9 + C2 3-way & clean)
+  4. figures/fig3_ablation_bars.pdf                  (S0-S4 M=15 + C2 3-way & clean, Folds 0-4)
   5. figures/fig4_calibration_reliability.pdf        (5-fold constrained w=exp(eta)>0)
   6. figures/fig5_conformal_tradeoffs.pdf            (5-fold SGCC Mondrian audit)
   7. figures/fig1_metric_inflation.pdf               (5-fold SGCC Fig S2)
@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 from matplotlib import patheffects
 from scipy.optimize import minimize
 from scipy.special import expit
-from scipy.stats import friedmanchisquare, spearmanr
+from scipy.stats import friedmanchisquare, spearmanr, wilcoxon
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     average_precision_score, roc_auc_score, f1_score,
@@ -1055,21 +1055,53 @@ def main() -> None:
     axR.set_title("(b) ROC (5-fold AUC)"); axR.legend(loc="lower right", frameon=True, facecolor="white", edgecolor="#DCE1E7", fontsize=6.8)
     save_fig(fig, "fig2_performance_curves")
 
-    # --- Figure 3: Controlled 3-Fold Ablation (Folds 0-2, M=9) + C2 3-Way Neural Decomposition ---
+    # --- Figure 3 / Table 5: Controlled ablation on all five folds (Folds 0-4 x Seeds 0-2, M=15) ---
+    # Folds 0-2: Revision 2 cells (results/phase_n_retrained/bu, a32_sgcc.csv, a34_cell);
+    # Folds 3-4: Revision 3 extension (results/r3_revision/C9_ablation_folds34/bu, raw_folds34/a34_cell).
+    ABL34 = R3_RES / "C9_ablation_folds34"
     def load_ab_dict(pat):
         d = {}
         for s in (0, 1, 2):
-            for f in (0, 1, 2):
-                r = next(csv.DictReader(open(ORIG_RES / pat.format(s=s, f=f))))
-                d[(s, f)] = float(r["pr_auc"])
+            for f in ALL_FOLDS:
+                fp = (ORIG_RES if f < 3 else ABL34) / pat.format(s=s, f=f)
+                d[(s, f)] = float(next(csv.DictReader(open(fp)))["pr_auc"])
         return d
     s0 = load_ab_dict("bu/a34_bu0_core_{s}_{f}.csv")
     s1 = load_ab_dict("bu/a34_bu1_ccname_{s}_{f}.csv")
     s2 = load_ab_dict("bu/a34_bu2_mask_{s}_{f}.csv")
     s3 = load_ab_dict("bu/a33_generic_{s}_{f}.csv")
-    s4 = {(s, f): float(next(csv.DictReader(open(ORIG_RES / f"a34_cell_{s}_{f}.csv")))["pr_auc"]) for s in range(3) for f in range(3)}
+    s4 = {(s, f): float(next(csv.DictReader(open((ORIG_RES if f < 3 else RAW34) / f"a34_cell_{s}_{f}.csv")))["pr_auc"])
+          for s in range(3) for f in ALL_FOLDS}
     s4_nm = load_ab_dict("bu/a34_no_missingness_{s}_{f}.csv")
     a32_d = {(int(r["seed"]), int(r["fold"])): float(r["pr_auc"]) for r in csv.DictReader(open(ORIG_RES / "a32_sgcc.csv"))}
+    a32_d.update({(s, f): float(next(csv.DictReader(open(ABL34 / f"bu/a32_generic_{s}_{f}.csv")))["pr_auc"])
+                  for s in range(3) for f in ALL_FOLDS if f >= 3})
+    assert all(len(d) == 15 for d in (s0, s1, s2, s3, s4, s4_nm, a32_d)), "Table 5 needs 15 cells per arm"
+
+    # Table 5 Panels A-B (five-fold, paired on identical seed-fold cells)
+    keys15 = sorted(s0.keys())
+    def _ap(d): return np.array([d[k] for k in keys15])
+    def _pair(a, b):
+        diff = _ap(a) - _ap(b)
+        lo, hi = bca_ci(diff)
+        _, pw = wilcoxon(diff, zero_method="wilcox", alternative="two-sided", method="exact")
+        return {"delta": float(diff.mean()), "ci_lo": lo, "ci_hi": hi, "wilcoxon_p": float(pw),
+                "wins": int(np.sum(diff > 0)), "rel_pct": 100.0 * float(diff.mean() / _ap(b).mean()), "n": len(diff)}
+    t5_rows = []
+    stage_list = [("S0", s0), ("S1", s1), ("S2", s2), ("S3", s3), ("S4", s4)]
+    for i, (nm, d) in enumerate(stage_list):
+        lo, hi = bca_ci(_ap(d))
+        row = {"panel": "A", "row": nm, "ap": float(_ap(d).mean()), "ap_ci_lo": lo, "ap_ci_hi": hi}
+        if i:
+            st = _pair(d, stage_list[i - 1][1]); cu = _pair(d, s0)
+            row.update({f"step_{k}": v for k, v in st.items()}); row.update({f"cum_{k}": v for k, v in cu.items()})
+        t5_rows.append(row)
+    for nm, a, b in [("S3 - S4", s3, s4), ("S2 - S4", s2, s4), ("S1 - S2", s1, s2),
+                     ("A34_no-miss - S4", s4_nm, s4), ("A32 - S4", a32_d, s4)]:
+        lo, hi = bca_ci(_ap(a))
+        t5_rows.append({"panel": "B", "row": nm, "ap": float(_ap(a).mean()), "ap_ci_lo": lo, "ap_ci_hi": hi,
+                        "ap_ref": float(_ap(b).mean()), **{f"pair_{k}": v for k, v in _pair(a, b).items()}})
+    ledger["table5_ablation_5fold"] = t5_rows
     df_c2p = pd.read_csv(R3_RES / "C2_missingness_sensitivity" / "c2_paired_contrasts.csv").set_index("contrast")
 
     fig, (axA, axB) = plt.subplots(1, 2, figsize=(7.6, 3.05), gridspec_kw={"width_ratios": [1.0, 1.28]})
@@ -1084,7 +1116,7 @@ def main() -> None:
         axA.text(xi, hi + 0.004, f"{m:.3f}", ha="center", va="bottom", fontsize=6.4, weight="bold")
     axA.set_xticks(np.arange(5)); axA.set_xticklabels([l for l, _ in stages], fontsize=6.4)
     axA.set_ylim(0.45, 0.64); axA.set_ylabel("PR-AUC (Average Precision)")
-    axA.set_title("(a) Sequential addition (Folds 0–2, $M=9$)")
+    axA.set_title("(a) Sequential addition (Folds 0–4, $M=15$)")
 
     def _tup(diffs):
         return (float(np.mean(diffs)), *bca_ci(diffs))
@@ -1115,6 +1147,34 @@ def main() -> None:
     axB.set_title("(b) Controlled ablation & 3-way neural contrasts")
     fig.tight_layout()
     save_fig(fig, "fig3_ablation_bars")
+
+    # --- Supplementary Figure S3 (fig4_ceiling): five-fold cumulative build-up and branch increments ---
+    # Same layout as the Revision 2 make_figures.fig_ceiling, now read from the five-fold Table 5 rows above.
+    from matplotlib.patches import Patch
+    t5a = {r["row"]: r for r in t5_rows if r["panel"] == "A"}
+    fig, (axL, axR) = plt.subplots(1, 2, figsize=(7.16, 2.8), gridspec_kw={"width_ratios": [1, 1.15]})
+    xs = np.arange(5); means_c = [t5a[k]["ap"] for k in ("S0", "S1", "S2", "S3", "S4")]
+    axL.plot(xs, means_c, "-o", color=PAL["blue"], ms=4)
+    axL.fill_between(xs, means_c, min(means_c), alpha=0.12, color=PAL["blue"])
+    axL.set_xticks(xs); axL.set_xticklabels(["S0\ncore", "S1\n+CC-MVI", "S2\n+mask", "S3\n+diff", "S4\n+period"], fontsize=6.5)
+    axL.set_ylabel("PR-AUC"); axL.set_title(f"(a) Cumulative build-up (n={len(keys15)})")
+    axL.text(0.03, 0.97, f"+{means_c[-1] - means_c[0]:.3f} total\n(plateau ≈ bottleneck)",
+             transform=axL.transAxes, ha="left", va="top", fontsize=6.5, color=PAL["dark"])
+    levers = [("CC-MVI front-end (S0→S1)", "S1", "step"), ("2-D mask branch (S1→S2)", "S2", "step"),
+              ("Differencing branch (S2→S3)", "S3", "step"), ("Periodicity branch (S3→S4)", "S4", "step"),
+              ("Full MAMRD vs core (S0→S4)", "S4", "cum")]
+    for i, (lab, v, kind) in enumerate(levers):
+        dlt, lo, hi = (t5a[v][f"{kind}_{c}"] for c in ("delta", "ci_lo", "ci_hi"))
+        c = PAL["red"] if (lo > 0 or hi < 0) else PAL["grey"]
+        axR.plot([lo, hi], [i, i], "-", color=c, lw=1.4); axR.plot(dlt, i, "o", color=c, ms=4)
+    axR.axvline(0, ls="--", lw=0.8, color="k", alpha=0.7); axR.axvspan(-0.01, 0.01, color="k", alpha=0.05)
+    axR.set_yticks(np.arange(len(levers))); axR.set_yticklabels([l[0] for l in levers], fontsize=6.5); axR.invert_yaxis()
+    axR.set_xlabel("Δ PR-AUC (95% BCa CI)"); axR.set_title(f"(b) Branch increments (n={len(keys15)})")
+    axR.legend(handles=[Patch(color=PAL["red"], label="interval excludes 0"), Patch(color=PAL["grey"], label="interval includes 0"),
+                        Patch(color="k", alpha=0.05, label="±0.01 materiality band")],
+               loc="upper center", bbox_to_anchor=(0.5, -0.30), ncol=3, fontsize=6.3)
+    fig.tight_layout()
+    save_fig(fig, "fig4_ceiling")
 
     # --- Figure 4: 5-Fold Constrained Positive Calibration (w = exp(eta) > 0) ---
     raw_all_p = np.concatenate(rel_raw_all); aff_all_p = np.concatenate(rel_aff_all); y_rel = np.concatenate(rel_y_all)
@@ -1287,8 +1347,33 @@ def main() -> None:
     fig.tight_layout()
     save_fig(fig, "fig_s6_r3_conformal_robustness", copy_to_root=True)
 
+    # Sensitivity suites produced by their own drivers (C2, C5, C7): read the 5-fold summaries
+    # into the ledger so every manuscript number has one authoritative source.
+    c2_dir, c5_dir, c7_dir = (R3_RES / "C2_missingness_sensitivity", R3_RES / "C5_preprocessing_sensitivity",
+                              R3_RES / "C7_baseline_hpo")
+    ledger["c2_missingness_5fold"] = pd.read_csv(c2_dir / "c2_paired_contrasts.csv").to_dict("records")
+    ledger["c5_preprocessing_5fold"] = {
+        "summary": pd.read_csv(c5_dir / "c5_sensitivity_summary.csv").to_dict("records"),
+        "contrasts": pd.read_csv(c5_dir / "c5_paired_contrasts.csv").to_dict("records")}
+    c7_tuned = pd.read_csv(c7_dir / "c7_tuned_baselines_summary.csv").to_dict("records")
+    c7_mamrd = json.loads((c7_dir / "c7_mamrd_tuning_summary.json").read_text())
+    ledger["c7_tuning_5fold"] = {
+        "des_grid": pd.concat([pd.read_csv(c7_dir / "c7_hpo_validation_grid.csv")[["backbone", "lr", "wd", "best_val_ap"]],
+                               pd.read_csv(c7_dir / "c7_mamrd_tuning_grid.csv")[["backbone", "lr", "wd", "best_val_ap"]]]
+                              ).to_dict("records"),
+        "tuned_baselines": c7_tuned, "mamrd_tuning": c7_mamrd,
+        "original_preprocessing": (pd.read_csv(c7_dir / "c7_wdcnn_interp_summary.csv").to_dict("records")
+                                   + pd.read_csv(c7_dir / "c7_finardi_native_summary.csv").to_dict("records"))}
+    s13_rows = ([{"detector": "MAMRD", "selected_lr": c7_mamrd["selected_lr"], "selected_wd": c7_mamrd["selected_wd"],
+                  "shared_schedule_ap": c7_mamrd["default_mamrd_ap"], "tuned_ap": c7_mamrd["tuned_mamrd_ap"],
+                  "tuned_ci_lo": c7_mamrd["tuned_mamrd_ci"][0], "tuned_ci_hi": c7_mamrd["tuned_mamrd_ci"][1]}]
+                + [{"detector": r["backbone"], "selected_lr": r["lr_selected"], "selected_wd": r["wd_selected"],
+                    "shared_schedule_ap": None, "tuned_ap": r["ap_mean"], "tuned_ci_lo": r["ap_ci_lo"],
+                    "tuned_ci_hi": r["ap_ci_hi"]} for r in c7_tuned])
+
     # Export authoritative 5-fold flat CSV tables
     csv_exports = [
+        ("table_s13_tuning_5fold.csv", s13_rows),
         ("table4_5fold_prospective.csv", ledger["table4_5fold_prospective"]),
         ("table6_5fold_conformal.csv", ledger["conformal_5fold_full"]),
         ("c4_pooled_5fold_flat.csv", ledger["c4_pooled_5fold_flat"]),
@@ -1296,6 +1381,7 @@ def main() -> None:
         ("c4_shift_5fold.csv", ledger["c4_shift_5fold"]),
         ("c6_alt_groupings_5fold.csv", ledger["c6_alt_groupings_5fold"]),
         ("c8_5fold_constrained_cal.csv", ledger["c8_5fold_constrained_cal"]),
+        ("table5_ablation_5fold.csv", ledger["table5_ablation_5fold"]),
     ]
     for csv_name, rows in csv_exports:
         pd.DataFrame(rows).to_csv(TABLES_DIR / csv_name, index=False)
